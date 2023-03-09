@@ -1,32 +1,18 @@
 import { Outlet } from 'react-router-dom';
 import { Box } from '@mui/material';
-import colorConfigs from '../../configs/colorConfigs';
-import sizeConfigs from '../../configs/sizeConfigs';
 import Sidebar from '../common/Sidebar';
 import TopBar from '../common/TopBar';
 
 function MainLayout() {
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box className="flex">
       <TopBar />
-      <Box
-        component="nav"
-        sx={{
-          width: sizeConfigs.sidebar.width,
-          flexShrink: 0,
-        }}
-      >
+      <Box component="nav" className="w-80 flex-shrink-0">
         <Sidebar />
       </Box>
       <Box
         component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: `calc(100% - ${sizeConfigs.sidebar.width})`,
-          minHeight: '100vh',
-          backgroundColor: colorConfigs.mainBg,
-        }}
+        className="min-h-screen w-full flex-grow bg-gray-50 p-3"
       >
         <div className="mt-16"> </div>
         <Outlet />

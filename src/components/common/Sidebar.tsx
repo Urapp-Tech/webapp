@@ -6,9 +6,7 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import { Drawer, List, Stack, Toolbar } from '@mui/material';
 import { NavLink } from 'react-router-dom';
-import logo from '../../assets/images/ur-laundry-logo.svg';
-import colorConfigs from '../../configs/colorConfigs';
-import sizeConfigs from '../../configs/sizeConfigs';
+import assets from '../../assets';
 
 const links = [
   {
@@ -47,26 +45,18 @@ function Sidebar() {
   return (
     <Drawer
       variant="permanent"
-      sx={{
-        width: sizeConfigs.sidebar.width,
-        flexShrink: 0,
-        '& .MuiDrawer-paper': {
-          width: sizeConfigs.sidebar.width,
-          boxSizing: 'border-box',
-          borderRight: '0px',
-          backgroundColor: colorConfigs.sidebar.bg,
-          color: colorConfigs.sidebar.color,
-        },
+      PaperProps={{
+        className: 'box-border w-80 border-r-0 bg-stone-900 text-gray-50',
       }}
     >
       <List disablePadding>
-        <Toolbar sx={{ marginBottom: '20px' }}>
-          <Stack sx={{ width: '100%' }} direction="row" justifyContent="center">
-            <img src={logo} alt="" />
+        <Toolbar className="mb-5">
+          <Stack className="w-full" direction="row" justifyContent="center">
+            <img src={assets.images.logo} alt="" />
           </Stack>
         </Toolbar>
 
-        <div className="flex w-full flex-col text-base">
+        <div className="flex w-full flex-col text-base ">
           {links.map((link) => {
             return (
               <NavLink
@@ -78,7 +68,7 @@ function Sidebar() {
                 }
                 to={link.path}
               >
-                <div className="flex items-center font-open-sans">
+                <div className="flex items-center font-open-sans text-gray-50">
                   <span className="text-3xl"> {link.icon} </span>
                   <div className="mr-2"> </div>
                   {link.name}
