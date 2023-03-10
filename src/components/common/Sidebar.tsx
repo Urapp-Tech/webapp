@@ -52,7 +52,7 @@ function Sidebar() {
       <List disablePadding>
         <Toolbar className="mb-5">
           <Stack className="w-full" direction="row" justifyContent="center">
-            <img src={assets.images.logo} alt="" />
+            <img src={assets.images.logoWhite} alt="" />
           </Stack>
         </Toolbar>
 
