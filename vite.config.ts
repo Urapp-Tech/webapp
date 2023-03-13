@@ -8,4 +8,10 @@ export default defineConfig({
     react(),
     VitePWA({ registerType: 'autoUpdate', devOptions: { enabled: true } }),
   ],
+  css: {
+    modules: {
+      localsConvention: 'camelCase',
+      generateScopedName: '[name]_[local]_[hash:base64:5]',
+    },
+  },
 });

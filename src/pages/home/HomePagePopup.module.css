@@ -1,0 +1,82 @@
+.Dialog {
+  @apply relative m-0 aspect-[8/5] w-[52rem] overflow-hidden bg-transparent p-6 shadow-none  !important;
+}
+
+.Dialog_CloseButton {
+  @apply absolute -right-0 -top-0 aspect-square w-12 rounded-full bg-neutral-900 text-gray-50 !important;
+}
+
+.Content {
+  @apply h-full w-full rounded-xl   bg-gray-50   shadow-md !important;
+}
+
+.Grid {
+  @apply grid grid-cols-2 !important;
+}
+
+.ItemImage {
+  @apply aspect-[5/3] w-full !important;
+}
+
+.ItemName {
+  @apply mt-2 px-4 font-open-sans text-xl font-semibold text-neutral-900 !important;
+}
+
+.ItemDescription {
+  @apply mt-2 px-4 font-open-sans text-xs font-normal text-neutral-500 !important;
+}
+
+.ItemPrice {
+  @apply mt-2 flex items-center justify-between px-4 !important;
+}
+
+.ItemPrice_Price {
+  @apply font-open-sans text-xl font-bold text-neutral-900 !important;
+}
+
+.ItemPrice_Text {
+  @apply font-open-sans text-sm font-semibold text-neutral-500 !important;
+}
+
+.ItemPrice_ItemCount {
+  @apply flex items-center !important;
+}
+
+.ItemPrice_ItemCount_IconButton {
+  @apply font-open-sans text-xl font-semibold text-neutral-900 !important;
+}
+
+.ItemPrice_ItemCount_Text {
+  @apply px-4 font-open-sans text-xl font-semibold text-neutral-900 !important;
+}
+
+.AddToBasket_Button_Container {
+  @apply mt-2 w-full px-4 text-center;
+}
+
+.AddToBasket_Button {
+  @apply w-full rounded-xl bg-neutral-900 py-2 text-center font-open-sans text-base font-semibold text-gray-50 !important;
+}
+
+.Accordion_Container {
+  @apply overflow-hidden py-6 !important;
+}
+
+.Accordion {
+  @apply m-0 bg-transparent shadow-none !important;
+}
+
+.Accordion_Summary {
+  @apply bg-transparent !important;
+}
+
+.Accordion_Summary_Text {
+  @apply font-open-sans text-xs font-semibold text-neutral-900 !important;
+}
+
+.Accordion_Details {
+  @apply p-0 pb-4 !important;
+}
+.Accordion_Details_Text {
+  @apply px-4 font-open-sans text-xs font-normal text-neutral-500 !important;
+}

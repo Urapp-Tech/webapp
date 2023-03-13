@@ -11,6 +11,7 @@ import jacket from './temp-images/jacket.png';
 import laundry from './temp-images/laundry.png';
 
 import itemPlaceholderImage from './temp-images/item-placeholder-image.png';
+import clothes from './temp-images/clothes.png';
 
 const assets = {
   images: {
@@ -27,6 +28,7 @@ const assets = {
     jacket,
     laundry,
     itemPlaceholderImage,
+    clothes,
   },
 };
 
