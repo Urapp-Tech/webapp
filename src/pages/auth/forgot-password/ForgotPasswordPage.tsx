@@ -1,5 +1,7 @@
 import { NavLink } from 'react-router-dom';
-import { FormControl, InputLabel, Input } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Input from '@mui/material/Input';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import assets from '../../../assets';
 

@@ -1,11 +1,10 @@
-import { VisibilityOff, Visibility } from '@mui/icons-material';
-import {
-  FormControl,
-  InputLabel,
-  Input,
-  InputAdornment,
-  IconButton,
-} from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Input from '@mui/material/Input';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import assets from '../../../assets';

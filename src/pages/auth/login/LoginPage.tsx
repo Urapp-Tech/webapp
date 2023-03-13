@@ -4,13 +4,11 @@ import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import {
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  Input,
-  InputLabel,
-} from '@mui/material';
+import Checkbox from '@mui/material/Checkbox';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Input from '@mui/material/Input';
+import InputLabel from '@mui/material/InputLabel';
 import assets from '../../../assets';
 
 function LoginPage() {

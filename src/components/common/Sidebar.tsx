@@ -4,7 +4,11 @@ import CreditCardRoundedIcon from '@mui/icons-material/CreditCardRounded';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
-import { Drawer, List, Stack, Toolbar } from '@mui/material';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import Stack from '@mui/material/Stack';
+import Toolbar from '@mui/material/Toolbar';
+
 import { NavLink } from 'react-router-dom';
 import assets from '../../assets';
 
