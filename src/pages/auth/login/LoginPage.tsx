@@ -29,22 +29,26 @@ function LoginPage() {
     <div className="h-full w-full">
       <div className="mx-auto flex h-full w-2/5 flex-col items-center justify-center gap-4">
         <img src={assets.images.logoBlack} alt="" />
-        <div className="w-full text-center font-open-sans text-xl font-semibold text-zinc-900">
+        <div className="w-full text-center font-open-sans text-xl font-semibold text-neutral-900">
           Sign in to Customer
         </div>
         <FormControl className="m-1 w-full" variant="standard">
-          <InputLabel className="text-zinc-900" htmlFor="email">
+          <InputLabel className="text-neutral-900" htmlFor="email">
             Email
           </InputLabel>
-          <Input className="after:border-b-zinc-900" id="email" type="email" />
+          <Input
+            className="after:border-b-neutral-900"
+            id="email"
+            type="email"
+          />
         </FormControl>
 
         <FormControl className="m-1 w-full" variant="standard">
-          <InputLabel className="text-zinc-900" htmlFor="password">
+          <InputLabel className="text-neutral-900" htmlFor="password">
             Password
           </InputLabel>
           <Input
-            className="after:border-b-zinc-900"
+            className="after:border-b-neutral-900"
             id="password"
             type={showPassword ? 'text' : 'password'}
             endAdornment={
@@ -65,7 +69,7 @@ function LoginPage() {
           <FormControlLabel
             control={
               <Checkbox
-                className="text-zinc-900"
+                className="text-neutral-900"
                 id="remember-me"
                 name="remember-me"
               />
@@ -84,7 +88,7 @@ function LoginPage() {
         <button
           type="button"
           onClick={submitHandler}
-          className="w-full rounded-xl bg-stone-900 py-2 font-open-sans text-base font-semibold text-gray-50"
+          className="w-full rounded-xl bg-neutral-900 py-2 font-open-sans text-base font-semibold text-gray-50"
         >
           Login
         </button>
@@ -105,7 +109,7 @@ function LoginPage() {
             Don&apos;t have an account yet ?
           </span>
           <NavLink
-            className="font-open-sans text-base font-semibold text-zinc-900"
+            className="font-open-sans text-base font-semibold text-neutral-900"
             to="../sign-up"
           >
             Sign Up

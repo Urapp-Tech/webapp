@@ -22,52 +22,56 @@ function SignUpPage() {
     <div className="h-full w-full">
       <div className="mx-auto flex h-full w-2/5 flex-col items-center justify-center gap-3">
         <img src={assets.images.logoBlack} alt="" />
-        <div className="w-full text-center font-open-sans text-xl font-semibold text-zinc-900">
+        <div className="w-full text-center font-open-sans text-xl font-semibold text-neutral-900">
           Get Registered
         </div>
         <FormControl className="m-1 w-full" variant="standard">
-          <InputLabel className="text-zinc-900" htmlFor="firstName">
+          <InputLabel className="text-neutral-900" htmlFor="firstName">
             First Name
           </InputLabel>
           <Input
-            className="after:border-b-zinc-900"
+            className="after:border-b-neutral-900"
             id="firstName"
             type="firstName"
           />
         </FormControl>
         <FormControl className="m-1 w-full" variant="standard">
-          <InputLabel className="text-zinc-900" htmlFor="lastName">
+          <InputLabel className="text-neutral-900" htmlFor="lastName">
             Last Name
           </InputLabel>
           <Input
-            className="after:border-b-zinc-900"
+            className="after:border-b-neutral-900"
             id="lastName"
             type="lastName"
           />
         </FormControl>
         <FormControl className="m-1 w-full" variant="standard">
-          <InputLabel className="text-zinc-900" htmlFor="phoneNumber">
+          <InputLabel className="text-neutral-900" htmlFor="phoneNumber">
             Phone Number
           </InputLabel>
           <Input
-            className="after:border-b-zinc-900"
+            className="after:border-b-neutral-900"
             id="phoneNumber"
             type="phoneNumber"
           />
         </FormControl>
         <FormControl className="m-1 w-full" variant="standard">
-          <InputLabel className="text-zinc-900" htmlFor="email">
+          <InputLabel className="text-neutral-900" htmlFor="email">
             Email
           </InputLabel>
-          <Input className="after:border-b-zinc-900" id="email" type="email" />
+          <Input
+            className="after:border-b-neutral-900"
+            id="email"
+            type="email"
+          />
         </FormControl>
 
         <FormControl className="m-1 w-full" variant="standard">
-          <InputLabel className="text-zinc-900" htmlFor="password">
+          <InputLabel className="text-neutral-900" htmlFor="password">
             Password
           </InputLabel>
           <Input
-            className="after:border-b-zinc-900"
+            className="after:border-b-neutral-900"
             id="password"
             type={showPassword ? 'text' : 'password'}
             endAdornment={
@@ -84,38 +88,38 @@ function SignUpPage() {
           />
         </FormControl>
         <FormControl className="m-1 w-full" variant="standard">
-          <InputLabel className="text-zinc-900" htmlFor="postalCode">
+          <InputLabel className="text-neutral-900" htmlFor="postalCode">
             Postal Code
           </InputLabel>
           <Input
-            className="after:border-b-zinc-900"
+            className="after:border-b-neutral-900"
             id="postalCode"
             type="postalCode"
           />
         </FormControl>
         <FormControl className="m-1 w-full" variant="standard">
-          <InputLabel className="text-zinc-900" htmlFor="referralCode">
+          <InputLabel className="text-neutral-900" htmlFor="referralCode">
             Referral Code
           </InputLabel>
           <Input
-            className="after:border-b-zinc-900"
+            className="after:border-b-neutral-900"
             id="referralCode"
             type="referralCode"
           />
         </FormControl>
         <button
           type="button"
-          className="w-full rounded-xl bg-stone-900 py-2 font-open-sans text-base font-semibold text-gray-50"
+          className="w-full rounded-xl bg-neutral-900 py-2 font-open-sans text-base font-semibold text-gray-50"
         >
           Sign Up
         </button>
         <div className="font-open-sans text-sm font-normal text-neutral-500">
           By Signing up. you accept our &nbsp;
-          <NavLink className="font-semibold text-zinc-900" to="../login">
+          <NavLink className="font-semibold text-neutral-900" to="../login">
             Terms and Conditions &nbsp;
           </NavLink>
           and &nbsp;
-          <NavLink className="font-semibold text-zinc-900" to="../login">
+          <NavLink className="font-semibold text-neutral-900" to="../login">
             Privacy Policy
           </NavLink>
         </div>
@@ -125,7 +129,7 @@ function SignUpPage() {
             Already Have an Account ?
           </span>
           <NavLink
-            className="font-open-sans text-base font-semibold text-zinc-900"
+            className="font-open-sans text-base font-semibold text-neutral-900"
             to="../login"
           >
             Sign In

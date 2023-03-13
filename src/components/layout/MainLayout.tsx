@@ -12,7 +12,7 @@ function MainLayout() {
       </Box>
       <Box
         component="main"
-        className="min-h-screen w-full flex-grow bg-gray-50 p-3"
+        className="min-h-screen w-full flex-grow bg-neutral-100 p-3"
       >
         <div className="mt-16"> </div>
         <Outlet />

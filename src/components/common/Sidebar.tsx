@@ -46,7 +46,7 @@ function Sidebar() {
     <Drawer
       variant="permanent"
       PaperProps={{
-        className: 'box-border w-80 border-r-0 bg-stone-900 text-gray-50',
+        className: 'box-border w-80 border-r-0 bg-neutral-900 text-gray-50',
       }}
     >
       <List disablePadding>
