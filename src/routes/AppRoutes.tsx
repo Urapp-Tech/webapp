@@ -15,6 +15,7 @@ import OTPVerificationPage from '../pages/auth/otp-verification/OTPVerificationP
 import ResetPasswordPage from '../pages/auth/reset-password/ResetPasswordPage';
 import TermsAndConditionPage from '../pages/terms-and-conditions/TermsAndConditionPage';
 import PrivacyPolicyPage from '../pages/privacy-policy/PrivacyPolicyPage';
+import MyBasketPage from '../pages/my-basket/MyBasketPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -46,6 +47,7 @@ export const routeObjects: RouteObject[] = [
       { path: 'faqs', element: <FAQSPage /> },
       { path: 'terms-and-conditions', element: <TermsAndConditionPage /> },
       { path: 'privacy-policy', element: <PrivacyPolicyPage /> },
+      { path: 'my-basket', element: <MyBasketPage /> },
     ],
   },
 ];
