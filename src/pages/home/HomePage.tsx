@@ -1,9 +1,7 @@
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
 import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
 
 import { useState } from 'react';
@@ -171,22 +169,15 @@ function HomePage() {
           </div>
 
           <FormControl className="w-96 rounded-xl bg-gray-50 shadow-md">
-            <InputLabel
-              className="p-0 font-open-sans text-sm font-normal text-neutral-500"
-              htmlFor="search"
-            >
-              Search
-            </InputLabel>
             <Input
-              className="m-0 p-3 font-open-sans text-base font-semibold text-neutral-900"
+              className="m-0 px-3 py-2 font-open-sans text-base font-semibold text-neutral-900"
               id="search"
               type="text"
+              inputProps={{
+                placeholder: 'Search',
+              }}
               disableUnderline
-              endAdornment={
-                <InputAdornment position="end">
-                  <SearchOutlinedIcon />
-                </InputAdornment>
-              }
+              endAdornment={<SearchOutlinedIcon />}
             />
           </FormControl>
         </div>

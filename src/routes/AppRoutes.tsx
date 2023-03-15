@@ -7,7 +7,7 @@ import DeliveryAddressPage from '../pages/delivery-address/DeliveryAddressPage';
 import FAQSPage from '../pages/faqs/FAQSPage';
 import HomePage from '../pages/home/HomePage';
 import LoginPage from '../pages/auth/login/LoginPage';
-import OrdersPage from '../pages/orders/OrdersPage';
+import OrdersPage from '../pages/orders/OrdersHistoryPage';
 import PaymentSettingPage from '../pages/payment-setting/PaymentSettingPage';
 import SignUpPage from '../pages/auth/sign-up/SignUpPage';
 import ForgotPasswordPage from '../pages/auth/forgot-password/ForgotPasswordPage';
