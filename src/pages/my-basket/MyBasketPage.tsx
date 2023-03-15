@@ -16,6 +16,7 @@ import CreditCardOutlinedIcon from '@mui/icons-material/CreditCardOutlined';
 import dayjs from 'dayjs';
 import assets from '../../assets';
 import DatePickerButton from './DatePickerButton';
+import MyBasketPagePopup from './MyBasketPagePopup';
 
 function MyBasketPage() {
   const [pickUpTime, setPickUpTime] = useState<dayjs.Dayjs | null>(null);
@@ -26,9 +27,15 @@ function MyBasketPage() {
   const handleDropOffTimeChange = (value: dayjs.Dayjs | null) => {
     setDropOffTime(value);
   };
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <MyBasketPagePopup
+        open={dialogOpen}
+        setOpen={setDialogOpen}
+        data={{ amount: 431.2, id: 56482 }}
+      />
       <div className="container px-5 py-5">
         <div className="font-open-sans text-3xl font-semibold text-neutral-900">
           My Basket
@@ -283,6 +290,8 @@ function MyBasketPage() {
               </div>
             </div>
             <Button
+              type="button"
+              onClick={() => setDialogOpen(true)}
               color="inherit"
               className="w-full rounded-lg bg-neutral-900 font-open-sans text-base font-semibold text-gray-50"
             >

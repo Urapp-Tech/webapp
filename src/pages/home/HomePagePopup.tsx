@@ -15,7 +15,7 @@ import HomePagePopupClasses from './HomePagePopup.module.css';
 type Props = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  data: any;
+  data: { test: string };
 };
 
 const itemFAQs = [
@@ -82,6 +82,7 @@ function HomePagePopup({ open, setOpen, data }: Props) {
   const onCloseHandler = (event: object, reason: string) => {
     if (reason === 'backdropClick') {
       setOpen(false);
+      console.error(data.test);
     }
   };
   return (
