@@ -16,6 +16,7 @@ import ResetPasswordPage from '../pages/auth/reset-password/ResetPasswordPage';
 import TermsAndConditionPage from '../pages/terms-and-conditions/TermsAndConditionPage';
 import PrivacyPolicyPage from '../pages/privacy-policy/PrivacyPolicyPage';
 import MyBasketPage from '../pages/my-basket/MyBasketPage';
+import OrderDetailsPage from '../pages/orders/OrderDetailsPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -41,6 +42,7 @@ export const routeObjects: RouteObject[] = [
       { index: true, element: <Navigate to="home" replace /> },
       { path: 'home', element: <HomePage /> },
       { path: 'orders', element: <OrdersPage /> },
+      { path: 'orders/:id', element: <OrderDetailsPage /> },
       { path: 'payment-setting', element: <PaymentSettingPage /> },
       { path: 'delivery-address', element: <DeliveryAddressPage /> },
       { path: 'account', element: <AccountPage /> },
