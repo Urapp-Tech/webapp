@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -5,8 +6,15 @@ import Badge from '@mui/material/Badge';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import IconButton from '@mui/material/IconButton';
+import NotificationPopover from './NotificationPopover';
 
 function TopBar() {
+  const [notificationElement, setNotificationElement] =
+    useState<HTMLButtonElement | null>(null);
+  const notificationIconButtonElement = useRef(null);
+  const handleClick = () => {
+    setNotificationElement(notificationIconButtonElement.current);
+  };
   return (
     <AppBar
       position="fixed"
@@ -24,6 +32,8 @@ function TopBar() {
           }}
         >
           <IconButton
+            ref={notificationIconButtonElement}
+            onClick={handleClick}
             className="p-0 text-gray-50"
             aria-label="notifications-button"
             component="button"
@@ -31,7 +41,11 @@ function TopBar() {
             <NotificationsNoneOutlinedIcon />
           </IconButton>
         </Badge>
-
+        <NotificationPopover
+          notification={notificationElement}
+          setNotification={setNotificationElement}
+          anchorElement={notificationIconButtonElement.current}
+        />
         <div className="ml-7 mr-4 h-7 w-[1px] bg-neutral-300"> </div>
         <NavLink to="./my-basket">
           <Badge

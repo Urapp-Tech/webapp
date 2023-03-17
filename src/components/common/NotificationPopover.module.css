@@ -1,0 +1,27 @@
+.Content {
+  @apply relative w-96 bg-gray-50 p-4 !important;
+}
+.Title {
+  @apply w-full font-open-sans text-base font-semibold text-neutral-900  !important;
+}
+.HorizontalLine {
+  @apply my-2 w-full bg-neutral-200 !important;
+}
+.Notification {
+  @apply flex items-center !important;
+}
+.NotificationIcon {
+  @apply mr-2 !important;
+}
+.Notification > .NotificationContent {
+  @apply flex flex-grow flex-col !important;
+}
+.Notification > .NotificationContent > .NotificationContentText {
+  @apply font-open-sans text-sm font-semibold text-neutral-900 !important;
+}
+.Notification > .NotificationContent > .NotificationContentSubText {
+  @apply font-open-sans text-xs font-normal text-neutral-500 !important;
+}
+.Notification > .NotificationDate {
+  @apply self-baseline font-open-sans text-xs font-normal text-neutral-500 !important;
+}
