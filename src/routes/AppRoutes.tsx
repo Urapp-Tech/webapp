@@ -14,6 +14,7 @@ import ForgotPasswordPage from '../pages/auth/forgot-password/ForgotPasswordPage
 import OTPVerificationPage from '../pages/auth/otp-verification/OTPVerificationPage';
 import ResetPasswordPage from '../pages/auth/reset-password/ResetPasswordPage';
 import TermsAndConditionPage from '../pages/terms-and-conditions/TermsAndConditionPage';
+import PrivacyPolicyPage from '../pages/privacy-policy/PrivacyPolicyPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -44,6 +45,7 @@ export const routeObjects: RouteObject[] = [
       { path: 'account', element: <AccountPage /> },
       { path: 'faqs', element: <FAQSPage /> },
       { path: 'terms-and-conditions', element: <TermsAndConditionPage /> },
+      { path: 'privacy-policy', element: <PrivacyPolicyPage /> },
     ],
   },
 ];
