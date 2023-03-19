@@ -18,6 +18,7 @@ import clothes from './temp-images/clothes.png';
 import wash from './temp-images/wash.png';
 import pants from './temp-images/pants.png';
 import shirt from './temp-images/shirt.png';
+import map from './temp-images/map.png';
 
 const assets = {
   images: {
@@ -41,6 +42,7 @@ const assets = {
     wash,
     pants,
     shirt,
+    map,
   },
 };
 
