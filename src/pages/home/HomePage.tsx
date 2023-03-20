@@ -1,12 +1,11 @@
+import { useState } from 'react';
+import InputAdornment from '@mui/material/InputAdornment';
+import Input from '@mui/material/Input';
+import Button from '@mui/material/Button';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
-import Button from '@mui/material/Button';
-
-import { useState } from 'react';
 import assets from '../../assets';
 import HomePagePopup from './HomePagePopup';
 
