@@ -6,8 +6,8 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
-import assets from '../../assets';
 import HomePagePopup from './HomePagePopup';
+import assets from '../../assets';
 
 const categories = [
   {
@@ -106,23 +106,13 @@ const items = [
 ];
 
 function getCategoryClasses(isActive: boolean) {
-  const classes = [
-    'relative',
-    'flex',
-    'flex-col',
-    'items-center',
-    'justify-center',
-    'rounded-xl',
-    'bg-gray-50',
-    'py-4',
-    'shadow-md',
-  ];
+  const test =
+    'relative flex flex-col items-center justify-center rounded-xl bg-gray-50 py-4 shadow-md';
+
   if (isActive) {
-    classes.push('outline');
-    classes.push('outline-2');
-    classes.push('outline-neutral-900');
+    return `${test} outline outline-2 outline-neutral-900`;
   }
-  return classes.join(' ');
+  return test;
 }
 
 function HomePage() {
