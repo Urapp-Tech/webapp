@@ -1,14 +1,13 @@
+import { useState } from 'react';
+import InputAdornment from '@mui/material/InputAdornment';
+import Input from '@mui/material/Input';
+import Button from '@mui/material/Button';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
-import Button from '@mui/material/Button';
-
-import { useState } from 'react';
-import assets from '../../assets';
 import HomePagePopup from './HomePagePopup';
+import assets from '../../assets';
 
 const categories = [
   {
@@ -107,23 +106,13 @@ const items = [
 ];
 
 function getCategoryClasses(isActive: boolean) {
-  const classes = [
-    'relative',
-    'flex',
-    'flex-col',
-    'items-center',
-    'justify-center',
-    'rounded-xl',
-    'bg-gray-50',
-    'py-4',
-    'shadow-md',
-  ];
+  const test =
+    'relative flex flex-col items-center justify-center rounded-xl bg-gray-50 py-4 shadow-md';
+
   if (isActive) {
-    classes.push('outline');
-    classes.push('outline-2');
-    classes.push('outline-neutral-900');
+    return `${test} outline outline-2 outline-neutral-900`;
   }
-  return classes.join(' ');
+  return test;
 }
 
 function HomePage() {
