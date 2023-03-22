@@ -198,9 +198,3 @@ function HomePagePopup({ open, setOpen, data }: Props) {
 }
 
 export default HomePagePopup;
-
-/* 
-
- 
-        
-        */
