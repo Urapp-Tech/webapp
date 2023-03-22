@@ -1,20 +1,21 @@
 /* eslint-disable import/prefer-default-export */
 import { RouteObject, Navigate } from 'react-router-dom';
 import AuthLayout from '../components/layout/AuthLayout';
-import MainLayout from '../components/layout/MainLayout';
-import AccountPage from '../pages/account/AccountPage';
-import DeliveryAddressPage from '../pages/delivery-address/DeliveryAddressPage';
-import FAQSPage from '../pages/faqs/FAQSPage';
-import HomePage from '../pages/home/HomePage';
 import LoginPage from '../pages/auth/login/LoginPage';
-import OrdersPage from '../pages/orders/OrdersPage';
-import PaymentSettingPage from '../pages/payment-setting/PaymentSettingPage';
 import SignUpPage from '../pages/auth/sign-up/SignUpPage';
 import ForgotPasswordPage from '../pages/auth/forgot-password/ForgotPasswordPage';
 import OTPVerificationPage from '../pages/auth/otp-verification/OTPVerificationPage';
 import ResetPasswordPage from '../pages/auth/reset-password/ResetPasswordPage';
+import MainLayout from '../components/layout/MainLayout';
+import HomePage from '../pages/home/HomePage';
+import OrdersPage from '../pages/orders/OrdersPage';
+import PaymentSettingPage from '../pages/payment-setting/PaymentSettingPage';
+import DeliveryAddressPage from '../pages/delivery-address/DeliveryAddressPage';
+import AccountPage from '../pages/account/AccountPage';
+import FAQSPage from '../pages/faqs/FAQSPage';
 import TermsAndConditionPage from '../pages/terms-and-conditions/TermsAndConditionPage';
 import PrivacyPolicyPage from '../pages/privacy-policy/PrivacyPolicyPage';
+import MyBasketPage from '../pages/my-basket/MyBasketPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -46,6 +47,7 @@ export const routeObjects: RouteObject[] = [
       { path: 'faqs', element: <FAQSPage /> },
       { path: 'terms-and-conditions', element: <TermsAndConditionPage /> },
       { path: 'privacy-policy', element: <PrivacyPolicyPage /> },
+      { path: 'my-basket', element: <MyBasketPage /> },
     ],
   },
 ];
