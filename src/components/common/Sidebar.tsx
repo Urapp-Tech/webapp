@@ -15,7 +15,6 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import MailIcon from '@mui/icons-material/Mail';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-
 import assets from '../../assets';
 
 const links = [
