@@ -1,6 +1,6 @@
 import Dialog from '@mui/material/Dialog';
-import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import Button from '@mui/material/Button';
+import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import MyBasketPagePopupClasses from './MyBasketPagePopup.module.css';
 
 type Props = {

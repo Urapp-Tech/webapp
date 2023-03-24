@@ -14,7 +14,6 @@ function TopBar() {
     >
       <Toolbar className="ml-80">
         <div className="flex-grow"> </div>
-
         <Badge
           badgeContent={20}
           max={99}
