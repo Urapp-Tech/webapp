@@ -8,7 +8,7 @@ import OTPVerificationPage from '../pages/auth/otp-verification/OTPVerificationP
 import ResetPasswordPage from '../pages/auth/reset-password/ResetPasswordPage';
 import MainLayout from '../components/layout/MainLayout';
 import HomePage from '../pages/home/HomePage';
-import OrdersPage from '../pages/orders/OrdersPage';
+import OrdersPage from '../pages/orders/OrdersHistoryPage';
 import PaymentSettingPage from '../pages/payment-setting/PaymentSettingPage';
 import DeliveryAddressPage from '../pages/delivery-address/DeliveryAddressPage';
 import AccountPage from '../pages/account/AccountPage';
