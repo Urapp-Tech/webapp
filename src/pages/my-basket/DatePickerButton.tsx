@@ -15,7 +15,6 @@ const darkTheme = createTheme({
 });
 
 type Props = {
-  // eslint-disable-next-line @typescript-eslint/ban-types
   icon: JSX.Element;
   id: string;
   text: string;

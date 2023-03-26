@@ -1,14 +1,23 @@
+import dayjs from 'dayjs';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import FilterNoneOutlinedIcon from '@mui/icons-material/FilterNoneOutlined';
-import DomainVerificationOutlinedIcon from '@mui/icons-material/DomainVerificationOutlined';
-import CircularProgress from '@mui/material/CircularProgress';
-import dayjs from 'dayjs';
+import TableRow from './TableRow';
 
-const rows = [
+type Row = {
+  id: string;
+  type:
+    | 'PLACE_ORDER'
+    | 'ORDER_PICKED'
+    | 'OUT_FOR_DELIVERY'
+    | 'CANCELLED'
+    | 'DROP_OFF'
+    | 'DELIVERED';
+  date: Date;
+  progress: number;
+  item: number;
+};
+const rows: Row[] = [
   {
     id: 'EZ-45857',
     type: 'PLACE_ORDER',
@@ -88,99 +97,6 @@ const rows = [
   },
 ];
 
-function generateRowsFromData(row: any) {
-  let progressClasses = 'relative mr-4 inline-flex text-blue-500';
-  let icon = <AssignmentTurnedInOutlinedIcon className="text-base" />;
-  let text = 'Place Order';
-  let statusClasses =
-    'inline-block w-32 rounded-md bg-blue-500 py-2 text-center font-open-sans text-xs font-semibold text-gray-50';
-  if (row.type === 'PLACE_ORDER') {
-    progressClasses = 'relative mr-4 inline-flex text-blue-500';
-    icon = <AssignmentTurnedInOutlinedIcon className="text-base" />;
-    text = 'Place Order';
-    statusClasses =
-      'inline-block w-32 rounded-md bg-blue-500 py-2 text-center font-open-sans text-xs font-semibold text-gray-50';
-  }
-  if (row.type === 'ORDER_PICKED') {
-    progressClasses = 'relative mr-4 inline-flex text-purple-500';
-    icon = <FilterNoneOutlinedIcon className="text-base" />;
-    text = 'Order Picked Up';
-    statusClasses =
-      'inline-block w-32 rounded-md bg-purple-500 py-2 text-center font-open-sans text-xs font-semibold text-gray-50';
-  }
-  if (row.type === 'OUT_FOR_DELIVERY') {
-    progressClasses = 'relative mr-4 inline-flex text-green-500';
-    icon = <LocationOnOutlinedIcon className="text-base" />;
-    text = 'Out For Delivery';
-    statusClasses =
-      'inline-block w-32 rounded-md bg-green-500 py-2 text-center font-open-sans text-xs font-semibold text-gray-50';
-  }
-  if (row.type === 'CANCELLED') {
-    progressClasses = 'relative mr-4 inline-flex text-red-500';
-    icon = <DomainVerificationOutlinedIcon className="text-base" />;
-    text = 'Cancelled';
-    statusClasses =
-      'inline-block w-32 rounded-md bg-red-500 py-2 text-center font-open-sans text-xs font-semibold text-gray-50';
-  }
-  if (row.type === 'DROP_OFF') {
-    progressClasses = 'relative mr-4 inline-flex text-orange-500';
-    icon = <LocationOnOutlinedIcon className="text-base" />;
-    text = 'Drop Off';
-    statusClasses =
-      'inline-block w-32 rounded-md bg-orange-500 py-2 text-center font-open-sans text-xs font-semibold text-gray-50';
-  }
-  if (row.type === 'DELIVERED') {
-    progressClasses = 'relative mr-4 inline-flex text-gray-500';
-    icon = <DomainVerificationOutlinedIcon className="text-base" />;
-    text = 'Delivered';
-    statusClasses =
-      'inline-block w-32 rounded-md bg-gray-500 py-2 text-center font-open-sans text-xs font-semibold text-gray-50';
-  }
-
-  return (
-    <tr key={row.id} className="h-16">
-      <td className="text-start">
-        <div className="flex items-center">
-          <div className={progressClasses}>
-            <CircularProgress
-              className="z-10"
-              variant="determinate"
-              value={row.progress}
-              color="inherit"
-            />
-            <CircularProgress
-              className="absolute z-0 text-neutral-200"
-              variant="determinate"
-              value={100}
-              color="inherit"
-            />
-            <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
-              {icon}
-            </div>
-          </div>
-          <div className="font-open-sans text-sm font-semibold text-neutral-900">
-            {row.id}
-          </div>
-        </div>
-      </td>
-      <td className="text-start font-open-sans text-xs font-normal text-neutral-900">
-        {dayjs(row.date).format('HH:mm , DD-MM-YYYY')}
-      </td>
-      <td className="h-full align-middle">
-        <div className="flex h-full w-full items-center justify-center">
-          <div className={statusClasses}>{text}</div>
-        </div>
-      </td>
-      <td className="text-end font-open-sans text-xs font-normal text-neutral-500">
-        {row.item} Items
-      </td>
-      <td className="text-end font-open-sans text-xs font-normal text-neutral-900">
-        Track Order
-      </td>
-    </tr>
-  );
-}
-
 function OrdersPage() {
   return (
     <div className="container px-5 py-5">
@@ -220,7 +136,18 @@ function OrdersPage() {
               </th>
             </tr>
           </thead>
-          <tbody>{rows.map((row) => generateRowsFromData(row))}</tbody>
+          <tbody>
+            {rows.map((row) => (
+              <TableRow
+                key={row.id}
+                id={row.id}
+                type={row.type}
+                date={row.date}
+                progress={row.progress}
+                item={row.item}
+              />
+            ))}
+          </tbody>
         </table>
       </div>
     </div>
