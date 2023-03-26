@@ -3,14 +3,14 @@ import Dialog from '@mui/material/Dialog';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ClearIcon from '@mui/icons-material/Clear';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
-import assets from '../../assets';
 import HomePagePopupClasses from './HomePagePopup.module.css';
+import assets from '../../assets';
 
 type Props = {
   open: boolean;
@@ -20,15 +20,15 @@ type Props = {
 
 const itemFAQs = [
   {
-    question: 'What if there’s no care label on an item ?',
+    question: `What if theres no care label on an item ?`,
     answer: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
 
     It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
     
-    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
+    It was popularized in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
   },
   {
-    question: 'Will my items be hung or folded too ?',
+    question: `Will my items be hung or folded too ?`,
     answer: `  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officia
               culpa est cumque aut unde, soluta aperiam illum. Alias saepe fuga
               corporis nisi vitae asperiores magni, fugit, perferendis inventore
@@ -43,7 +43,7 @@ const itemFAQs = [
               necessitatibus asperiores harum nesciunt.`,
   },
   {
-    question: 'What if there’s no care label on an item ?',
+    question: `What if there’s no care label on an item ?`,
     answer: `  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officia
               culpa est cumque aut unde, soluta aperiam illum. Alias saepe fuga
               corporis nisi vitae asperiores magni, fugit, perferendis inventore
@@ -199,9 +199,3 @@ function HomePagePopup({ open, setOpen, data }: Props) {
 }
 
 export default HomePagePopup;
-
-/* 
-
- 
-        
-        */
