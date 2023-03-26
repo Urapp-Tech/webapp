@@ -13,7 +13,7 @@ type Props = {
 };
 
 function MyBasketPagePopup({ open, setOpen, data }: Props) {
-  const onCloseHandler = (event: object, reason: string) => {
+  const onCloseHandler = (event: unknown, reason: string) => {
     if (reason === 'backdropClick') {
       setOpen(false);
     }
