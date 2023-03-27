@@ -9,7 +9,6 @@ import dryCleaning from './temp-images/dry-cleaning.png';
 import ironing from './temp-images/ironing.png';
 import jacket from './temp-images/jacket.png';
 import laundry from './temp-images/laundry.png';
-
 import itemPlaceholderImage from './temp-images/item-placeholder-image.png';
 import clothes from './temp-images/clothes.png';
 import wash from './temp-images/wash.png';
