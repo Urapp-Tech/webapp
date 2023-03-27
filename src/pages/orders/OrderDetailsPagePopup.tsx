@@ -1,6 +1,6 @@
 import Dialog from '@mui/material/Dialog';
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import Button from '@mui/material/Button';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import OrderDetailsPagePopupClasses from './OrderDetailsPagePopup.module.css';
 
 type Props = {
