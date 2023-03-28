@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import createTheme from '@mui/material/styles/createTheme';
 import Button from '@mui/material/Button';
@@ -22,9 +22,9 @@ type Props = {
 };
 function DatePickerButton({ onChange, text, id, icon }: Props) {
   const [datePicker, setDatePicker] = useState<HTMLButtonElement | null>(null);
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setDatePicker(event.currentTarget);
+  const buttonElement = useRef(null);
+  const handleClick = () => {
+    setDatePicker(buttonElement.current);
   };
   const handleClose = () => {
     setDatePicker(null);
@@ -41,6 +41,7 @@ function DatePickerButton({ onChange, text, id, icon }: Props) {
   return (
     <>
       <Button
+        ref={buttonElement}
         className="border-none px-1 font-open-sans text-xs font-semibold text-neutral-900"
         variant="outlined"
         color="inherit"
