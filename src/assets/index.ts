@@ -2,6 +2,9 @@ import logoBlack from './images/ur-laundry-logo-black.svg';
 import logoWhite from './images/ur-laundry-logo-white.svg';
 import bubbleBackground from './images/bubble-background.png';
 import facebook from './images/facebook.svg';
+import cash from './images/logo-cash.png';
+import mastercard from './images/logo-mastercard.png';
+import paypal from './images/logo-paypal.png';
 
 import carpet from './temp-images/carpet.png';
 import curtain from './temp-images/curtain.png';
@@ -21,6 +24,9 @@ const assets = {
     logoWhite,
     bubbleBackground,
     facebook,
+    cash,
+    mastercard,
+    paypal,
   },
   tempImages: {
     carpet,
