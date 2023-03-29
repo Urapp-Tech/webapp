@@ -1,6 +1,6 @@
+import dayjs from 'dayjs';
 import Popover from '@mui/material/Popover';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
-import dayjs from 'dayjs';
 import NotificationPopoverClasses from './NotificationPopover.module.css';
 
 type Props = {
