@@ -17,6 +17,7 @@ import TermsAndConditionPage from '../pages/terms-and-conditions/TermsAndConditi
 import PrivacyPolicyPage from '../pages/privacy-policy/PrivacyPolicyPage';
 import MyBasketPage from '../pages/my-basket/MyBasketPage';
 import OrderDetailsPage from '../pages/orders/OrderDetailsPage';
+import AccountProfilePage from '../pages/account/AccountProfilePage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -45,7 +46,14 @@ export const routeObjects: RouteObject[] = [
       { path: 'orders/:id', element: <OrderDetailsPage /> },
       { path: 'payment-setting', element: <PaymentSettingPage /> },
       { path: 'delivery-address', element: <DeliveryAddressPage /> },
-      { path: 'account', element: <AccountPage /> },
+      {
+        path: 'account',
+        element: <AccountPage />,
+        children: [
+          { index: true, element: <Navigate to="profile" replace /> },
+          { path: 'profile', element: <AccountProfilePage /> },
+        ],
+      },
       { path: 'faqs', element: <FAQSPage /> },
       { path: 'terms-and-conditions', element: <TermsAndConditionPage /> },
       { path: 'privacy-policy', element: <PrivacyPolicyPage /> },

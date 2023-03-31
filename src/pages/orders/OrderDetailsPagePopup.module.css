@@ -1,5 +1,5 @@
 .Dialog {
-  @apply relative m-0 aspect-[7/6] w-80 overflow-hidden bg-transparent shadow-none  !important;
+  @apply relative m-0 aspect-[7/6] w-80 overflow-hidden bg-transparent shadow-none !important;
 }
 .Content {
   @apply flex h-full w-full flex-col items-center justify-evenly rounded-xl bg-gray-50 px-4 shadow-md !important;
