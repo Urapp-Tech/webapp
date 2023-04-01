@@ -18,6 +18,9 @@ import PrivacyPolicyPage from '../pages/privacy-policy/PrivacyPolicyPage';
 import MyBasketPage from '../pages/my-basket/MyBasketPage';
 import OrderDetailsPage from '../pages/orders/OrderDetailsPage';
 import AccountProfilePage from '../pages/account/AccountProfilePage';
+import AccountChatPage from '../pages/account/AccountChatPage';
+import AccountHelpPage from '../pages/account/AccountHelpPage';
+import AccountSettingsPage from '../pages/account/AccountSettingPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -52,6 +55,9 @@ export const routeObjects: RouteObject[] = [
         children: [
           { index: true, element: <Navigate to="profile" replace /> },
           { path: 'profile', element: <AccountProfilePage /> },
+          { path: 'chat', element: <AccountChatPage /> },
+          { path: 'settings', element: <AccountSettingsPage /> },
+          { path: 'help-center', element: <AccountHelpPage /> },
         ],
       },
       { path: 'faqs', element: <FAQSPage /> },

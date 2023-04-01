@@ -19,7 +19,7 @@ function AccountPage() {
                   ? 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-semibold text-neutral-900'
                   : 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-normal text-neutral-500'
               }
-              to="../account"
+              to="profile"
             >
               <PersonOutlineOutlinedIcon className="mr-2" /> <div>Profile</div>
             </NavLink>
@@ -29,7 +29,7 @@ function AccountPage() {
                   ? 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-semibold text-neutral-900'
                   : 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-normal text-neutral-500'
               }
-              to="../settings"
+              to="settings"
             >
               <SettingsOutlinedIcon className="mr-2" /> <div>Settings</div>
             </NavLink>
@@ -39,7 +39,7 @@ function AccountPage() {
                   ? 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-semibold text-neutral-900'
                   : 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-normal text-neutral-500'
               }
-              to="../help-center"
+              to="help-center"
             >
               <HeadphonesOutlinedIcon className="mr-2" /> <div>Help Center</div>
             </NavLink>
@@ -49,7 +49,7 @@ function AccountPage() {
                   ? 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-semibold text-neutral-900'
                   : 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-normal text-neutral-500'
               }
-              to="../chat"
+              to="chat"
             >
               <CommentOutlinedIcon className="mr-2" /> <div>Chat With Us</div>
             </NavLink>

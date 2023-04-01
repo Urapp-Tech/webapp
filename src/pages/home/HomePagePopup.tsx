@@ -29,7 +29,7 @@ const itemFAQs = [
   },
   {
     question: `Will my items be hung or folded too ?`,
-    answer: `  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officia
+    answer: `Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officia
               culpa est cumque aut unde, soluta aperiam illum. Alias saepe fuga
               corporis nisi vitae asperiores magni, fugit, perferendis inventore
               aspernatur quisquam veritatis voluptates sed amet atque ullam,
@@ -44,7 +44,7 @@ const itemFAQs = [
   },
   {
     question: `What if there’s no care label on an item ?`,
-    answer: `  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officia
+    answer: `Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officia
               culpa est cumque aut unde, soluta aperiam illum. Alias saepe fuga
               corporis nisi vitae asperiores magni, fugit, perferendis inventore
               aspernatur quisquam veritatis voluptates sed amet atque ullam,
