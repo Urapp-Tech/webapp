@@ -3,9 +3,9 @@ import { NavLink } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Badge from '@mui/material/Badge';
+import IconButton from '@mui/material/IconButton';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
-import IconButton from '@mui/material/IconButton';
 import NotificationPopover from './NotificationPopover';
 
 function TopBar() {
@@ -22,7 +22,6 @@ function TopBar() {
     >
       <Toolbar className="ml-80">
         <div className="flex-grow"> </div>
-
         <Badge
           badgeContent={20}
           max={99}

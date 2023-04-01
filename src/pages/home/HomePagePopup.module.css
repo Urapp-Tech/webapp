@@ -1,5 +1,5 @@
 .Dialog {
-  @apply relative m-0 aspect-[8/5] w-[52rem] overflow-hidden bg-transparent p-6 shadow-none  !important;
+  @apply relative m-0 aspect-[8/5] w-[52rem] overflow-hidden bg-transparent p-6 shadow-none !important;
 }
 
 .Dialog_CloseButton {

@@ -16,8 +16,8 @@ function AccountPage() {
             <NavLink
               className={({ isActive }) =>
                 isActive
-                  ? 'flex w-full items-center border border-b border-t-0 border-l-0  border-r-0 border-neutral-500 py-3 font-open-sans text-base font-semibold text-neutral-900'
-                  : 'flex w-full items-center border border-b border-t-0 border-l-0  border-r-0 border-neutral-500 py-3 font-open-sans text-base font-normal text-neutral-500'
+                  ? 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-semibold text-neutral-900'
+                  : 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-normal text-neutral-500'
               }
               to="profile"
             >
@@ -26,8 +26,8 @@ function AccountPage() {
             <NavLink
               className={({ isActive }) =>
                 isActive
-                  ? 'flex w-full items-center border border-b border-t-0 border-l-0  border-r-0 border-neutral-500 py-3 font-open-sans text-base font-semibold text-neutral-900'
-                  : 'flex w-full items-center border border-b border-t-0 border-l-0  border-r-0 border-neutral-500 py-3 font-open-sans text-base font-normal text-neutral-500'
+                  ? 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-semibold text-neutral-900'
+                  : 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-normal text-neutral-500'
               }
               to="settings"
             >
@@ -36,8 +36,8 @@ function AccountPage() {
             <NavLink
               className={({ isActive }) =>
                 isActive
-                  ? 'flex w-full items-center border border-b border-t-0 border-l-0  border-r-0 border-neutral-500 py-3 font-open-sans text-base font-semibold text-neutral-900'
-                  : 'flex w-full items-center border border-b border-t-0 border-l-0  border-r-0 border-neutral-500 py-3 font-open-sans text-base font-normal text-neutral-500'
+                  ? 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-semibold text-neutral-900'
+                  : 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-normal text-neutral-500'
               }
               to="help-center"
             >
@@ -46,8 +46,8 @@ function AccountPage() {
             <NavLink
               className={({ isActive }) =>
                 isActive
-                  ? 'flex w-full items-center border border-b border-t-0 border-l-0  border-r-0 border-neutral-500 py-3 font-open-sans text-base font-semibold text-neutral-900'
-                  : 'flex w-full items-center border border-b border-t-0 border-l-0  border-r-0 border-neutral-500 py-3 font-open-sans text-base font-normal text-neutral-500'
+                  ? 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-semibold text-neutral-900'
+                  : 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-normal text-neutral-500'
               }
               to="chat"
             >
