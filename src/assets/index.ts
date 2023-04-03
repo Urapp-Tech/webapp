@@ -19,6 +19,16 @@ import pants from './temp-images/pants.png';
 import shirt from './temp-images/shirt.png';
 import map from './temp-images/map.png';
 
+import frocks1 from './temp-images/frocks-1.png';
+import jacket1 from './temp-images/jacket-1.png';
+import neckScarf1 from './temp-images/neck-scarf-1.png';
+import neckScarf2 from './temp-images/neck-scarf-2.png';
+import pants1 from './temp-images/pants-1.png';
+import printedTShirt1 from './temp-images/printed-t-shirt-1.png';
+import printedTShirt2 from './temp-images/printed-t-shirt-2.png';
+import shirt2 from './temp-images/shirt-2.png';
+import shirt1 from './temp-images/shirt-1.png';
+
 const assets = {
   images: {
     logoBlack,
@@ -42,6 +52,15 @@ const assets = {
     pants,
     shirt,
     map,
+    jacket1,
+    frocks1,
+    neckScarf1,
+    neckScarf2,
+    pants1,
+    printedTShirt1,
+    printedTShirt2,
+    shirt2,
+    shirt1,
   },
 };
 

@@ -14,11 +14,14 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import CreditCardOutlinedIcon from '@mui/icons-material/CreditCardOutlined';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import DatePickerButton from './DatePickerButton';
 import MyBasketPagePopup from './MyBasketPagePopup';
-import assets from '../../assets';
+import { removeFromCart } from '../../redux/features/cartStateSlice';
 
 function MyBasketPage() {
+  const { cartItems } = useAppSelector((state) => state.cartState);
+  const dispatch = useAppDispatch();
   const [pickUpTime, setPickUpTime] = useState<dayjs.Dayjs | null>(null);
   const [dropOffTime, setDropOffTime] = useState<dayjs.Dayjs | null>(null);
   const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
@@ -29,12 +32,18 @@ function MyBasketPage() {
   };
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
+  const total = cartItems.reduce(
+    (previousValue, currentValue) =>
+      previousValue + currentValue.price * currentValue.quantity,
+    0
+  );
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <MyBasketPagePopup
         open={dialogOpen}
         setOpen={setDialogOpen}
-        data={{ amount: 431.2, id: 56482 }}
+        data={{ amount: total + (total / 100) * 13, id: 56482 }}
       />
       <div className="container px-5 py-5">
         <div className="font-open-sans text-3xl font-semibold text-neutral-900">
@@ -60,93 +69,40 @@ function MyBasketPage() {
                 </tr>
               </thead>
               <tbody>
-                <tr className="h-16 border-b border-b-neutral-200">
-                  <td className="text-start">
-                    <div className="flex items-center">
-                      <IconButton
-                        className="p-0 text-neutral-900"
-                        onClick={() => null}
-                      >
-                        <DeleteOutlineOutlinedIcon className="text-3xl" />
-                      </IconButton>
-                      <img
-                        className="mx-4 aspect-square w-11 rounded-full object-cover"
-                        src={assets.tempImages.wash}
-                        alt=""
-                      />
-                      <div className="font-open-sans text-sm font-normal text-neutral-900">
-                        Wash & Fold
+                {cartItems.map((item) => (
+                  <tr
+                    key={item.id}
+                    className="h-16 border-b border-b-neutral-200"
+                  >
+                    <td className="text-start">
+                      <div className="flex items-center">
+                        <IconButton
+                          className="p-0 text-neutral-900"
+                          onClick={() => dispatch(removeFromCart(item.id))}
+                        >
+                          <DeleteOutlineOutlinedIcon className="text-3xl" />
+                        </IconButton>
+                        <img
+                          className="mx-4 aspect-square w-11 rounded-full object-cover outline outline-2 outline-neutral-900"
+                          src={item.image}
+                          alt=""
+                        />
+                        <div className="font-open-sans text-sm font-normal text-neutral-900">
+                          {item.name}
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td className="text-end font-open-sans text-xs font-normal text-neutral-900">
-                    $50.00
-                  </td>
-                  <td className="text-end font-open-sans text-xs font-normal text-neutral-900">
-                    03
-                  </td>
-                  <td className="text-end font-open-sans text-sm font-semibold text-neutral-900">
-                    $150.00
-                  </td>
-                </tr>
-                <tr className="h-16 border-b border-b-neutral-200">
-                  <td className="text-start">
-                    <div className="flex items-center">
-                      <IconButton
-                        className="p-0 text-neutral-900"
-                        onClick={() => null}
-                      >
-                        <DeleteOutlineOutlinedIcon className="text-3xl" />
-                      </IconButton>
-                      <img
-                        className="mx-4 aspect-square w-11 rounded-full object-cover"
-                        src={assets.tempImages.shirt}
-                        alt=""
-                      />
-                      <div className="font-open-sans text-sm font-normal text-neutral-900">
-                        Shirts
-                      </div>
-                    </div>
-                  </td>
-                  <td className="text-end font-open-sans text-xs font-normal text-neutral-900 ">
-                    $50.00
-                  </td>
-                  <td className="text-end font-open-sans text-xs font-normal text-neutral-900 ">
-                    13
-                  </td>
-                  <td className="text-end font-open-sans text-sm font-semibold text-neutral-900">
-                    $50.00
-                  </td>
-                </tr>
-                <tr className="h-16 border-b border-b-neutral-200">
-                  <td className="text-start">
-                    <div className="flex items-center">
-                      <IconButton
-                        className="p-0 text-neutral-900"
-                        onClick={() => null}
-                      >
-                        <DeleteOutlineOutlinedIcon className="text-3xl" />
-                      </IconButton>
-                      <img
-                        className="mx-4 aspect-square w-11 rounded-full object-cover"
-                        src={assets.tempImages.pants}
-                        alt=""
-                      />
-                      <div className="font-open-sans text-sm font-normal text-neutral-900">
-                        Pants
-                      </div>
-                    </div>
-                  </td>
-                  <td className="text-end font-open-sans text-xs font-normal text-neutral-900">
-                    $20.00
-                  </td>
-                  <td className="text-end font-open-sans text-xs font-normal text-neutral-900">
-                    09
-                  </td>
-                  <td className="text-end font-open-sans text-sm font-semibold text-neutral-900">
-                    $200.00
-                  </td>
-                </tr>
+                    </td>
+                    <td className="text-end font-open-sans text-xs font-normal text-neutral-900">
+                      ${item.price.toFixed(2)}
+                    </td>
+                    <td className="text-end font-open-sans text-xs font-normal text-neutral-900">
+                      {item.quantity}
+                    </td>
+                    <td className="text-end font-open-sans text-sm font-semibold text-neutral-900">
+                      ${(item.price * item.quantity).toFixed(2)}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
             <div className="flex w-full items-center p-4">
@@ -260,7 +216,7 @@ function MyBasketPage() {
                   Total Amount
                 </div>
                 <div className="font-open-sans text-sm font-bold text-neutral-900">
-                  $400.00
+                  ${total.toFixed(2)}
                 </div>
               </div>
               <div className="flex items-center justify-between py-2">
@@ -276,7 +232,7 @@ function MyBasketPage() {
                   HST 13%
                 </div>
                 <div className="font-open-sans text-sm font-bold text-neutral-900">
-                  $31.20
+                  ${((total / 100) * 13).toFixed(2)}
                 </div>
               </div>
             </div>
@@ -286,7 +242,7 @@ function MyBasketPage() {
                 Grand Total
               </div>
               <div className="font-open-sans text-sm font-bold text-neutral-900">
-                $431.20
+                ${(total + (total / 100) * 13).toFixed(2)}
               </div>
             </div>
             <Button
