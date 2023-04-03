@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -7,6 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import NotificationPopover from './NotificationPopover';
+import { useAppSelector } from '../../redux/redux-hooks';
 
 function TopBar() {
   const [notificationElement, setNotificationElement] =
@@ -15,6 +16,7 @@ function TopBar() {
   const handleClick = () => {
     setNotificationElement(notificationIconButtonElement.current);
   };
+  const { cartItems } = useAppSelector((state) => state.cartState);
   return (
     <AppBar
       position="fixed"
@@ -48,7 +50,7 @@ function TopBar() {
         <div className="ml-7 mr-4 h-7 w-[1px] bg-neutral-300"> </div>
         <NavLink to="./my-basket">
           <Badge
-            badgeContent={10}
+            badgeContent={cartItems.length}
             max={99}
             classes={{
               badge:

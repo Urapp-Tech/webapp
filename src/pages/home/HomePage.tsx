@@ -43,86 +43,90 @@ const categories = [
 const items = [
   {
     id: 1,
-    name: 'Baseball Jacket',
-    price: 15.0,
-    image: assets.tempImages.itemPlaceholderImage,
+    name: 'Jacket',
+    price: 12.0,
+    image: assets.tempImages.jacket1,
   },
   {
     id: 2,
-    name: 'Seven Star Jacket',
-    price: 15.0,
-    image: assets.tempImages.itemPlaceholderImage,
+    name: 'Pants',
+    price: 14.0,
+    image: assets.tempImages.pants1,
   },
   {
     id: 3,
-    name: 'Pants',
-    price: 15.0,
-    image: assets.tempImages.itemPlaceholderImage,
+    name: 'Shirt',
+    price: 16.0,
+    image: assets.tempImages.shirt1,
   },
   {
     id: 4,
-    name: 'Grey Neck Scarf',
-    price: 15.0,
-    image: assets.tempImages.itemPlaceholderImage,
+    name: 'Neck Scarf',
+    price: 18.0,
+    image: assets.tempImages.neckScarf1,
   },
   {
     id: 5,
     name: 'Printed T-shirt',
-    price: 15.0,
-    image: assets.tempImages.itemPlaceholderImage,
+    price: 20.0,
+    image: assets.tempImages.printedTShirt1,
   },
   {
     id: 6,
-    name: 'White Fairy Blouse',
-    price: 15.0,
-    image: assets.tempImages.itemPlaceholderImage,
+    name: 'Neck Scarf 2',
+    price: 18.0,
+    image: assets.tempImages.neckScarf1,
   },
   {
     id: 7,
-    name: 'Baseball Jacket',
-    price: 15.0,
-    image: assets.tempImages.itemPlaceholderImage,
+    name: 'Printed T-shirt 2',
+    price: 16.0,
+    image: assets.tempImages.printedTShirt1,
   },
   {
     id: 8,
-    name: 'Seven Star Jacket',
-    price: 15.0,
-    image: assets.tempImages.itemPlaceholderImage,
+    name: 'Jacket 2',
+    price: 14.0,
+    image: assets.tempImages.jacket1,
   },
   {
     id: 9,
-    name: 'Pants',
-    price: 15.0,
-    image: assets.tempImages.itemPlaceholderImage,
+    name: 'Pants 2',
+    price: 16.0,
+    image: assets.tempImages.pants1,
   },
   {
     id: 10,
-    name: 'Grey Neck Scarf',
-    price: 15.0,
-    image: assets.tempImages.itemPlaceholderImage,
+    name: 'Shirt 2',
+    price: 18.0,
+    image: assets.tempImages.shirt1,
   },
 ];
 
 function getCategoryClasses(isActive: boolean) {
-  const test =
+  const classes =
     'relative flex flex-col items-center justify-center rounded-xl bg-gray-50 py-4 shadow-md';
 
   if (isActive) {
-    return `${test} outline outline-2 outline-neutral-900`;
+    return `${classes} outline outline-2 outline-neutral-900`;
   }
-  return test;
+  return classes;
 }
 
 function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-
+  const [selectedItem, setSelectedItem] = useState(null);
+  const addItemHandler = (item: any) => {
+    setSelectedItem(item);
+    setDialogOpen(true);
+  };
   return (
     <>
       <HomePagePopup
         open={dialogOpen}
         setOpen={setDialogOpen}
-        data={{ test: 'abcd' }}
+        data={selectedItem}
       />
       <div className="container px-5 py-5">
         <div className="font-open-sans text-2xl font-semibold text-neutral-900">
@@ -170,11 +174,11 @@ function HomePage() {
             />
           </FormControl>
         </div>
-        <div className="mt-5 mb-10 grid w-full grid-cols-[repeat(auto-fill,_16rem)] gap-4">
+        <div className="mt-5 mb-10 grid  w-full grid-cols-[repeat(auto-fill,_16rem)] gap-4">
           {items.map((item) => (
             <div key={item.id} className="relative rounded-xl bg-gray-50">
               <img
-                className="mb-2 w-full object-contain"
+                className="mb-2 aspect-[4/3] w-full object-contain p-4"
                 src={item.image}
                 alt=""
               />
@@ -189,7 +193,7 @@ function HomePage() {
                   className="rounded-xl bg-neutral-900 font-open-sans text-sm font-semibold text-gray-50"
                   variant="contained"
                   endIcon={<ShoppingBagOutlinedIcon />}
-                  onClick={() => setDialogOpen(true)}
+                  onClick={() => addItemHandler(item)}
                 >
                   Add
                 </Button>

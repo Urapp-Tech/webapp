@@ -11,11 +11,13 @@ import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOu
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
 import HomePagePopupClasses from './HomePagePopup.module.css';
 import assets from '../../assets';
+import { useAppDispatch } from '../../redux/redux-hooks';
+import { addToCart } from '../../redux/features/cartStateSlice';
 
 type Props = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  data: { test: string };
+  data: any;
 };
 
 const itemFAQs = [
@@ -78,11 +80,21 @@ function HomePagePopup({ open, setOpen, data }: Props) {
       return previousCount - 1;
     });
   };
-
+  const dispatch = useAppDispatch();
+  const addToBasketHandler = () => {
+    const cartItem = {
+      id: data.id,
+      image: data.image,
+      name: data.name,
+      price: data.price,
+      quantity: count,
+    };
+    dispatch(addToCart(cartItem));
+    setOpen(false);
+  };
   const onCloseHandler = (event: object, reason: string) => {
     if (reason === 'backdropClick') {
       setOpen(false);
-      console.error(data.test);
     }
   };
   return (
@@ -105,10 +117,10 @@ function HomePagePopup({ open, setOpen, data }: Props) {
           <div>
             <img
               className={HomePagePopupClasses.ItemImage}
-              src={assets.tempImages.clothes}
+              src={data?.image}
               alt=""
             />
-            <div className={HomePagePopupClasses.ItemName}>Blazers</div>
+            <div className={HomePagePopupClasses.ItemName}>{data?.name}</div>
             <div className={HomePagePopupClasses.ItemDescription}>
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry. Lorem Ipsum has been the industry&apos;s standard dummy
@@ -118,11 +130,10 @@ function HomePagePopup({ open, setOpen, data }: Props) {
             <div className={HomePagePopupClasses.ItemPrice}>
               <div>
                 <span className={HomePagePopupClasses.ItemPrice_Price}>
-                  $ 15.00
+                  $ {data?.price.toFixed(2)}
                 </span>
                 <span className={HomePagePopupClasses.ItemPrice_Text}>
-                  {' '}
-                  / items
+                  &nbsp;/ items
                 </span>
               </div>
               <div className={HomePagePopupClasses.ItemPrice_ItemCount}>
@@ -150,6 +161,7 @@ function HomePagePopup({ open, setOpen, data }: Props) {
             <div className={HomePagePopupClasses.AddToBasket_Button_Container}>
               <Button
                 type="button"
+                onClick={addToBasketHandler}
                 className={HomePagePopupClasses.AddToBasket_Button}
               >
                 Add to Basket
