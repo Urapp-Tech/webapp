@@ -5,6 +5,7 @@ import facebook from './images/facebook.svg';
 import cash from './images/logo-cash.png';
 import mastercard from './images/logo-mastercard.png';
 import paypal from './images/logo-paypal.png';
+import googleMapMarker from './images/google-map-marker.png';
 
 import carpet from './temp-images/carpet.png';
 import curtain from './temp-images/curtain.png';
@@ -38,6 +39,7 @@ const assets = {
     cash,
     mastercard,
     paypal,
+    googleMapMarker,
   },
   tempImages: {
     carpet,
