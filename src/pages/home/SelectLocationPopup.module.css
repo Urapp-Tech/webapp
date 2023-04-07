@@ -1,0 +1,56 @@
+.Dialog {
+  @apply relative m-0  w-[38rem] overflow-hidden bg-transparent p-6 shadow-none !important;
+}
+
+.Dialog_CloseButton {
+  @apply absolute -right-0 -top-0 z-10 aspect-square w-12 rounded-full bg-neutral-900 text-gray-50 !important;
+}
+
+.Content {
+  @apply h-full w-full rounded-xl bg-gray-50 p-2 shadow-md !important;
+}
+
+.Flex {
+  @apply flex flex-col !important;
+}
+
+.Map {
+  @apply aspect-[5/3] w-full !important;
+}
+
+.Details {
+  @apply bg-gray-50 !important;
+}
+.Details_Title {
+  @apply mt-4 mb-2 font-open-sans text-lg font-bold text-neutral-900 !important;
+}
+.Details_FormControl {
+  @apply mb-4 w-full !important;
+}
+.Details_FormControl_InputLabel {
+  @apply font-open-sans text-sm font-normal text-neutral-500 !important;
+}
+.Details_FormControl_Input {
+  @apply font-open-sans text-base font-semibold text-neutral-900 after:border-b-neutral-900 !important;
+}
+.Details_SaveText {
+  @apply mb-4 font-open-sans text-sm font-normal text-neutral-500 !important;
+}
+.Details_Grid {
+  @apply grid w-full grid-cols-3 gap-4 !important;
+}
+.Details_Badge {
+  @apply flex w-full items-center rounded-xl bg-neutral-200 p-2 !important;
+}
+.Details_Badge_Icon_Wrapper {
+  @apply mr-2 flex aspect-square w-8 items-center justify-center rounded-full bg-neutral-300 !important;
+}
+.Details_Badge_Icon {
+  @apply text-lg !important;
+}
+.Details_Badge_Text {
+  @apply font-open-sans text-sm font-normal text-neutral-900 !important;
+}
+.Details_Button {
+  @apply mt-4 w-full rounded-xl bg-neutral-900 py-4 font-open-sans text-xl font-semibold text-gray-50 !important;
+}

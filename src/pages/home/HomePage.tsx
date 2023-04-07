@@ -6,6 +6,7 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import HomePagePopup from './HomePagePopup';
 import assets from '../../assets';
+import SelectLocationPopup from './SelectLocationPopup';
 
 const categories = [
   {
@@ -116,6 +117,8 @@ function getCategoryClasses(isActive: boolean) {
 function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [selectLocationDialogOpen, setSelectLocationDialogOpen] =
+    useState<boolean>(true);
   const [selectedItem, setSelectedItem] = useState(null);
   const addItemHandler = (item: any) => {
     setSelectedItem(item);
@@ -127,6 +130,10 @@ function HomePage() {
         open={dialogOpen}
         setOpen={setDialogOpen}
         data={selectedItem}
+      />
+      <SelectLocationPopup
+        open={selectLocationDialogOpen}
+        setOpen={setSelectLocationDialogOpen}
       />
       <div className="container px-5 py-5">
         <div className="font-open-sans text-2xl font-semibold text-neutral-900">
