@@ -7,6 +7,7 @@ import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import HomePagePopup from './HomePagePopup';
 import assets from '../../assets';
 import SelectLocationPopup from './SelectLocationPopup';
+import LocationPopup from './LocationPopup';
 
 const categories = [
   {
@@ -131,7 +132,7 @@ function HomePage() {
         setOpen={setDialogOpen}
         data={selectedItem}
       />
-      <SelectLocationPopup
+      <LocationPopup
         open={selectLocationDialogOpen}
         setOpen={setSelectLocationDialogOpen}
       />

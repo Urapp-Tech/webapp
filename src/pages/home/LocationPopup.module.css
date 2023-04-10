@@ -1,0 +1,33 @@
+.Dialog {
+  @apply relative m-0  w-[38rem] overflow-hidden bg-transparent p-6 shadow-none !important;
+}
+
+.Dialog_CloseButton {
+  @apply absolute -right-0 -top-0 z-10 aspect-square w-12 rounded-full bg-neutral-900 text-gray-50 !important;
+}
+
+.Content {
+  @apply h-full w-full rounded-xl bg-gray-50 p-2 shadow-md !important;
+}
+
+.Map {
+  @apply aspect-[1/1] w-full !important;
+}
+.SC {
+  @apply absolute bottom-0 left-6 w-[35rem] overflow-hidden !important;
+}
+.Slider {
+  @apply bg-gray-50 p-4 !important;
+}
+.SlideItem {
+  @apply flex w-96 flex-col items-center rounded-xl p-4 outline outline-2 outline-neutral-300 !important;
+}
+.SlideItem_Head {
+  @apply flex w-full font-open-sans text-sm font-normal text-neutral-500 !important;
+}
+.SlideItem_Head_Name {
+  @apply flex-grow !important;
+}
+.SlideItem_Body {
+  @apply w-full font-open-sans text-base font-bold text-neutral-900 !important;
+}

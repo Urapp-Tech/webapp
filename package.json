@@ -24,7 +24,8 @@
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.8.2",
-    "react18-otp-input": "^1.0.3"
+    "react18-otp-input": "^1.0.3",
+    "swiper": "^9.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",
