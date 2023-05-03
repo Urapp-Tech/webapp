@@ -1,0 +1,12 @@
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+
+function Loader() {
+  return (
+    <Backdrop open sx={{ color: '#f9fafb', zIndex: 9999 }}>
+      <CircularProgress color="inherit" />
+    </Backdrop>
+  );
+}
+
+export default Loader;
