@@ -8,55 +8,70 @@ function OTPVerificationPage() {
   const [OTP, setOTP] = useState('');
 
   return (
-    <div className="relative h-full w-full">
-      <NavLink
-        to="../login"
-        className="absolute left-20 top-16 flex aspect-square w-8 items-center justify-center rounded-full border-2 border-solid border-neutral-900 text-neutral-900"
-      >
-        <ArrowBackRoundedIcon className="m-0 p-0" />
-      </NavLink>
-
-      <div className="mx-auto flex h-full w-2/5 flex-col items-center justify-center gap-8">
-        <img src={assets.images.logoBlack} alt="" />
-        <div className="w-full text-center font-open-sans text-xl font-semibold text-neutral-900">
-          OTP Verification
-        </div>
-
-        <OTPInput
-          containerStyle="flex items-center gap-4"
-          inputStyle={{
-            width: '3.5rem',
-            aspectRatio: '1/1',
-            borderRadius: '0.75rem',
-            outlineStyle: 'solid',
-            outlineWidth: '2px',
-            outlineColor: '#e5e5e5',
-            fontFamily: 'Open Sans',
-            fontSize: '1.25rem',
-            lineHeight: '1.75rem',
-            fontWeight: 600,
-            color: '#18181b',
-          }}
-          focusStyle={{ outlineColor: '#18181b' }}
-          numInputs={4}
-          onChange={(value: string) => setOTP(value)}
-          separator={<span> </span>}
-          isInputNum
-          shouldAutoFocus
-          value={OTP}
-        />
-        <div className="w-full text-center font-open-sans text-sm font-normal text-neutral-500">
-          An 4 digit code has been sent to Vincent-bo@gmail.com
-        </div>
-
-        <button
-          type="button"
-          className="w-full rounded-xl bg-neutral-900 py-2 font-open-sans text-base font-semibold text-gray-50"
+    <>
+      <div className='fixed-at-top-left'>
+        <NavLink
+          to="../login"
+          className="go-back"
         >
-          Submit
-        </button>
+          <ArrowBackRoundedIcon className="icon-arrow" />
+        </NavLink>
+        <img className='logo' src={assets.images.logo} alt="" />
       </div>
-    </div>
+      <div className="auth-form">
+        <div className="custom-width">
+          <h4 className='heading'>
+            OTP Verification
+          </h4>
+          <p className='desc'>
+            An 4 digit code has been sent to Vincent-bo@gmail.com
+          </p>
+          <OTPInput
+            containerStyle="otp-container"
+            inputStyle={{
+              width: '3rem',
+              aspectRatio: '1/1',
+              borderRadius: '0.625rem',
+              outlineStyle: 'solid',
+              outlineWidth: '1px',
+              outlineColor: '#e5e5e5',
+              fontFamily: 'Open Sans',
+              fontSize: '1.25rem',
+              lineHeight: '1.5rem',
+              fontWeight: 600,
+              color: '#000000',
+            }}
+            focusStyle={{ outlineColor: '#000000' }}
+            numInputs={4}
+            onChange={(value: string) => setOTP(value)}
+            separator={<span> </span>}
+            isInputNum
+            shouldAutoFocus
+            value={OTP}
+          />
+          <button type="button" className="btn-submit mt-8 lg:mt-10">
+            Submit
+          </button>
+        </div>
+      </div>
+
+      <div className="join-community forgot-pass-community">
+        <div className="content-container">
+          <div className="content">
+            <h1 className="heading">Join Our Community</h1>
+            <p className="desc">
+              Lorem ipusm dolor sit amet, coectetuer adipiscing elit sed diam
+              nonummy et nibh euismod
+            </p>
+          </div>
+          <img
+            className=""
+            src={assets.images.forgotPassImage}
+            alt=""
+          />
+        </div>
+      </div>
+    </>
   );
 }
 

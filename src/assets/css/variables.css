@@ -1,0 +1,51 @@
+:root {
+
+/* Colors */
+--white: #ffffff;
+--light-100: #f0f0f0;
+--light-200: #f8f8f8;
+--light-300: #e1e1e1;
+--light-300: #e2e2e2;
+--light-400: #C9C9C9;
+--light-500: #ECECEC;
+
+--dark-100: #1a1a1a;
+--dark-200: #1d1d1d;
+--dark-300: #6a6a6a;
+
+--grey-100: #6a6a6a;
+--grey-200: #6a6a6a;
+--grey-300: #6a6a6a;
+--grey-400: #6a6a6a;
+--grey-500: #6a6a6a;
+
+--green-200: #0AB39C;
+--green-100: rgba(10, 179, 156, 0.1);
+
+--danger-200: #FC3945;
+--danger-300: #F80808;
+--danger-100: rgba(252, 57, 69, 0.1);
+
+--warning-200: #FFA63D;
+--warning-100: rgba(255, 166, 61, 0.1);
+
+/* Font Sizes */
+--fs-10: 0.625rem;
+--fs-12: 0.75rem;
+--fs-14: 0.875rem;
+--fs-16: 1rem;
+--fs-18: 1.125rem;
+--fs-20: 1.25rem;
+--fs-22: 1.25rem;
+--fs-24: 1.5rem;
+--fs-26: 1.25rem;
+--fs-28: 1.25rem;
+--fs-30: 1.25rem;
+--fs-32: 2rem;
+
+/* Font Weight */
+--fw-400: 400;
+--fw-600: 600;
+--fw-700: 700;
+
+}

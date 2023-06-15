@@ -27,69 +27,88 @@ function ResetPasswordPage() {
     event.preventDefault();
   };
   return (
-    <div className="relative h-full w-full">
-      <NavLink
-        to="../login"
-        className="absolute left-20 top-16 flex aspect-square w-8 items-center justify-center rounded-full border-2 border-solid border-neutral-900 text-neutral-900"
-      >
-        <ArrowBackRoundedIcon className="m-0 p-0" />
-      </NavLink>
-
-      <div className="mx-auto flex h-full w-2/5 flex-col items-center justify-center gap-8">
-        <img src={assets.images.logoBlack} alt="" />
-        <div className="w-full text-center font-open-sans text-xl font-semibold text-neutral-900">
-          Create Password
-        </div>
-        <FormControl className="m-1 w-full" variant="standard">
-          <InputLabel className="text-neutral-900" htmlFor="password">
-            Password
-          </InputLabel>
-          <Input
-            className="after:border-b-neutral-900"
-            id="password"
-            type={showPassword ? 'text' : 'password'}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-        </FormControl>
-        <FormControl className="m-1 w-full" variant="standard">
-          <InputLabel className="text-neutral-900" htmlFor="confirm-password">
-            Confirm Password
-          </InputLabel>
-          <Input
-            className="after:border-b-neutral-900"
-            id="confirm-password"
-            type={showConfirmPassword ? 'text' : 'password'}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle confirm-password visibility"
-                  onClick={handleClickShowConfirmPassword}
-                  onMouseDown={handleMouseDownConfirmPassword}
-                >
-                  {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-        </FormControl>
-        <button
-          type="button"
-          className="w-full rounded-xl bg-neutral-900 py-2 font-open-sans text-base font-semibold text-gray-50"
+    <>
+      <div className='fixed-at-top-left'>
+        <NavLink
+          to="../login"
+          className="go-back"
         >
-          Submit
-        </button>
+          <ArrowBackRoundedIcon className="icon-arrow" />
+        </NavLink>
+        <img className='logo' src={assets.images.logo} alt="" />
       </div>
-    </div>
+      <div className="auth-form">
+        <div className="custom-width">
+          <h4 className='heading'>
+            Create Password
+          </h4>
+          <FormControl className="field mt-8 lg:mt-10" variant="standard">
+            <InputLabel className="label" htmlFor="password">
+              New Password
+            </InputLabel>
+            <Input
+              className="input-container"
+              id="password"
+              type={showPassword ? 'text' : 'password'}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    className='field-icon'
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
+          <FormControl className="field mb-0" variant="standard">
+            <InputLabel className="label" htmlFor="confirm-password">
+              Confirm new Password
+            </InputLabel>
+            <Input
+              className="input-container"
+              id="confirm-password"
+              type={showConfirmPassword ? 'text' : 'password'}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    className='field-icon'
+                    aria-label="toggle confirm-password visibility"
+                    onClick={handleClickShowConfirmPassword}
+                    onMouseDown={handleMouseDownConfirmPassword}
+                  >
+                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
+          <button type="button" className="btn-submit mt-8 lg:mt-10">
+            Submit
+          </button>
+        </div>
+      </div>
+
+      <div className="join-community forgot-pass-community">
+        <div className="content-container">
+          <div className="content">
+            <h1 className="heading">Join Our Community</h1>
+            <p className="desc">
+              Lorem ipusm dolor sit amet, coectetuer adipiscing elit sed diam
+              nonummy et nibh euismod
+            </p>
+          </div>
+          <img
+            className=""
+            src={assets.images.forgotPassImage}
+            alt=""
+          />
+        </div>
+      </div>
+    </>
   );
 }
 

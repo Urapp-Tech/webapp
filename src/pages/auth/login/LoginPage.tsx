@@ -24,97 +24,118 @@ function LoginPage() {
     navigate('/dashboard');
   };
   return (
-    <div className="h-full w-full">
-      <div className="mx-auto flex h-full w-2/5 flex-col items-center justify-center gap-4">
-        <img src={assets.images.logoBlack} alt="" />
-        <div className="w-full text-center font-open-sans text-xl font-semibold text-neutral-900">
-          Sign in to Customer
-        </div>
-        <FormControl className="m-1 w-full" variant="standard">
-          <InputLabel className="text-neutral-900" htmlFor="email">
-            Email
-          </InputLabel>
-          <Input
-            className="after:border-b-neutral-900"
-            id="email"
-            type="email"
-          />
-        </FormControl>
+    <>
+      <div className='fixed-at-top-left'>
+        <img className='logo' src={assets.images.logo} alt="" />
+      </div>
+      <div className="auth-form">
+        <div className="custom-width">
+          <h4 className='heading'>
+            Sign in to Customer
+          </h4>
+          <FormControl className="field mt-8 lg:mt-10" variant="standard">
+            <InputLabel className="label" htmlFor="email">
+              Email
+            </InputLabel>
+            <Input
+              className="input-container"
+              id="email"
+              type="email"
+            />
+          </FormControl>
 
-        <FormControl className="m-1 w-full" variant="standard">
-          <InputLabel className="text-neutral-900" htmlFor="password">
-            Password
-          </InputLabel>
-          <Input
-            className="after:border-b-neutral-900"
-            id="password"
-            type={showPassword ? 'text' : 'password'}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-        </FormControl>
+          <FormControl className="field" variant="standard">
+            <InputLabel className="label" htmlFor="password">
+              Password
+            </InputLabel>
+            <Input
+              className="input-container"
+              id="password"
+              type={showPassword ? 'text' : 'password'}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    className="field-icon"
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
 
-        <div className="flex w-full items-center">
-          <FormControlLabel
-            control={
-              <Checkbox
-                className="text-neutral-900"
-                id="remember-me"
-                name="remember-me"
-              />
-            }
-            label="Remember me"
-            className="font-open-sans text-sm font-normal text-neutral-500"
-          />
-          <div className="flex-grow"> </div>
-          <NavLink
-            className="font-open-sans text-sm font-semibold"
-            to="../forgot-password"
+          <div className="flex items-center justify-between mt-2">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  className="checkbox"
+                  id="remember-me"
+                  name="remember-me"
+                />
+              }
+              label="Remember me"
+              className="remember-me"
+            />
+            <NavLink
+              className="forgot-pass-link"
+              to="../forgot-password"
+            >
+              Forgot Password ?
+            </NavLink>
+          </div>
+          <button
+            type="button"
+            onClick={submitHandler}
+            className="btn-submit mt-8 lg:mt-10"
           >
-            Forgot Password ?
-          </NavLink>
-        </div>
-        <button
-          type="button"
-          onClick={submitHandler}
-          className="w-full rounded-xl bg-neutral-900 py-2 font-open-sans text-base font-semibold text-gray-50"
-        >
-          Login
-        </button>
-        <button
-          type="button"
-          className="flex w-full items-center justify-center rounded-xl bg-cyan-700 py-2 font-open-sans text-base font-semibold text-gray-50"
-        >
-          <img
-            className="mr-2 aspect-[1/2] w-3"
-            src={assets.images.facebook}
-            alt=""
-          />
-          Login with Facebook
-        </button>
-        <div className="my-10"> </div>
-        <div className="flex w-full items-center justify-between">
-          <span className="font-open-sans text-sm font-normal text-neutral-500">
-            Don&apos;t have an account yet ?
-          </span>
-          <NavLink
-            className="font-open-sans text-base font-semibold text-neutral-900"
-            to="../sign-up"
+            Login
+          </button>
+          <button
+            type="button"
+            className="btn-login-fb"
           >
-            Sign Up
-          </NavLink>
+            <img
+              className="mr-2.5 w-2.5"
+              src={assets.images.facebook}
+              alt=""
+            />
+            Login with Facebook
+          </button>
+          <div className="login-other-options mt-8 lg:mt-10">
+            <p className="text">
+              Don't have an account yet ?
+              <NavLink
+                className="signup-link"
+                to="../sign-up"
+              >
+                Sign Up
+              </NavLink>
+            </p>
+          </div>
+
         </div>
       </div>
-    </div>
+
+      <div className="join-community login-community">
+        <div className="content-container">
+          <div className="content">
+            <h1 className="heading">Join Our Community</h1>
+            <p className="desc">
+              Lorem ipusm dolor sit amet, coectetuer adipiscing elit sed diam
+              nonummy et nibh euismod
+            </p>
+          </div>
+          <img
+            className=""
+            src={assets.images.loginImage}
+            alt=""
+          />
+        </div>
+      </div>
+    </>
   );
 }
 

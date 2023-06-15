@@ -1,5 +1,13 @@
+import authCss from './css/auth.css';
+import topbarCss from './css/topbar.css';
+import sidebarCss from './css/sidebar.css';
+
+import logo from './images/logo.svg';
 import logoBlack from './images/ur-laundry-logo-black.svg';
 import logoWhite from './images/ur-laundry-logo-white.svg';
+import loginImage from './images/login-screen-img.svg';
+import registerImage from './images/register-screen-img.svg';
+import forgotPassImage from './images/forgotPass-screen-img.svg';
 import bubbleBackground from './images/bubble-background.png';
 import facebook from './images/facebook.svg';
 import cash from './images/logo-cash.png';
@@ -31,9 +39,19 @@ import shirt2 from './temp-images/shirt-2.png';
 import shirt1 from './temp-images/shirt-1.png';
 
 const assets = {
+  css: {
+    authCss,
+    topbarCss,
+    sidebarCss
+  }
+  ,
   images: {
+    logo,
     logoBlack,
     logoWhite,
+    loginImage,
+    registerImage,
+    forgotPassImage,
     bubbleBackground,
     facebook,
     cash,

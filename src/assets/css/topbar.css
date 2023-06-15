@@ -1,0 +1,7 @@
+.topbar{
+    @apply w-full shadow-none;
+    background-color: var(--dark-200) !important;
+}
+.topbar .MuiToolbar-regular{
+    @apply flex items-center justify-between px-14 py-7;
+}
