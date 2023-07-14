@@ -121,6 +121,7 @@ function Sidebar() {
           <NavLink
             className="px-4 font-open-sans text-base font-normal text-neutral-200"
             to="/auth"
+            // onClick={}
           >
             <LogoutOutlinedIcon className="mr-2 rotate-180" />
             Logout
