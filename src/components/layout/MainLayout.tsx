@@ -7,14 +7,12 @@ function MainLayout() {
   return (
     <Box className="flex">
       <TopBar />
-      <Box component="nav" className="w-80 flex-shrink-0">
-        <Sidebar />
-      </Box>
+      <Sidebar />
+      <div className="sidebar-backdrop"></div>
       <Box
         component="main"
-        className="min-h-screen w-full flex-grow bg-neutral-200 p-3"
+        className="main"
       >
-        <div className="mt-16"> </div>
         <Outlet />
       </Box>
     </Box>

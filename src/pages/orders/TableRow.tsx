@@ -23,26 +23,26 @@ type Props = {
 };
 
 function getProgressClasses(type: Status) {
-  const temp = 'relative mr-4 inline-flex';
+  const temp = 'relative inline-flex';
   if (type === 'PLACE_ORDER') {
-    return `${temp} text-blue-500`;
+    return `${temp} icon-order-placed`;
   }
   if (type === 'ORDER_PICKED') {
-    return `${temp} text-purple-500`;
+    return `${temp} icon-order-picked-up`;
   }
   if (type === 'OUT_FOR_DELIVERY') {
-    return `${temp} text-green-500`;
+    return `${temp} icon-order-out-for-delivery`;
   }
   if (type === 'CANCELLED') {
-    return `${temp} text-red-500`;
+    return `${temp} icon-order-cancelled`;
   }
   if (type === 'DROP_OFF') {
-    return `${temp} text-orange-500`;
+    return `${temp} icon-order-drop-off`;
   }
   if (type === 'DELIVERED') {
-    return `${temp} text-gray-500`;
+    return `${temp} icon-order-delivered`;
   }
-  return `${temp} text-blue-500`;
+  return `${temp} icon-order-delivered`;
 }
 
 function getIcon(type: Status) {
@@ -89,35 +89,33 @@ function getStatusText(type: Status) {
   return 'Place Order';
 }
 function getStatusClasses(type: Status) {
-  const classes1 = 'inline-block w-32 rounded-md ';
-  const classes2 =
-    'py-2 text-center font-open-sans text-xs font-semibold text-gray-50';
+  const statusClass = 'order-status';
   if (type === 'PLACE_ORDER') {
-    return `${classes1} bg-blue-500 ${classes2}`;
+    return `${statusClass} bg-order-placed`;
   }
   if (type === 'ORDER_PICKED') {
-    return `${classes1} bg-purple-500 ${classes2}`;
+    return `${statusClass} bg-order-picked-up`;
   }
   if (type === 'OUT_FOR_DELIVERY') {
-    return `${classes1} bg-green-500 ${classes2}`;
+    return `${statusClass} bg-order-out-for-delivery`;
   }
   if (type === 'CANCELLED') {
-    return `${classes1} bg-red-500 ${classes2}`;
+    return `${statusClass} bg-order-cancelled`;
   }
   if (type === 'DROP_OFF') {
-    return `${classes1} bg-orange-500 ${classes2}`;
+    return `${statusClass} bg-order-drop-off`;
   }
   if (type === 'DELIVERED') {
-    return `${classes1} bg-gray-500 ${classes2}`;
+    return `${statusClass} bg-order-delivered`;
   }
-  return `${classes1} bg-blue-500 ${classes2}`;
+  return `${statusClass} bg-order-delivered`;
 }
 
 function TableRow({ id, type, date, progress, item }: Props) {
   return (
-    <tr className="h-16">
-      <td className="text-start">
-        <div className="flex items-center">
+    <tr>
+      <td>
+        <div className="flex items-center gap-x-10">
           <div className={getProgressClasses(type)}>
             <CircularProgress
               className="z-10"
@@ -131,28 +129,24 @@ function TableRow({ id, type, date, progress, item }: Props) {
               value={100}
               color="inherit"
             />
-            <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
+            <div className="absolute inset-0 flex items-center justify-center">
               {getIcon(type)}
             </div>
           </div>
-          <div className="font-open-sans text-sm font-semibold text-neutral-900">
-            {id}
-          </div>
+          <NavLink to={id} className="order-id">{id}</NavLink>
         </div>
       </td>
-      <td className="text-start font-open-sans text-xs font-normal text-neutral-900">
+      <td>
         {dayjs(date).format('HH:mm , DD-MM-YYYY')}
       </td>
-      <td className="h-full align-middle">
-        <div className="flex h-full w-full items-center justify-center">
-          <div className={getStatusClasses(type)}>{getStatusText(type)}</div>
-        </div>
+      <td>
+        <div className={getStatusClasses(type)}>{getStatusText(type)}</div>
       </td>
-      <td className="text-end font-open-sans text-xs font-normal text-neutral-500">
+      <td>
         {item} Items
       </td>
-      <td className="cursor-pointer text-end font-open-sans text-xs font-normal text-neutral-900">
-        <NavLink to={id}>Track Order</NavLink>
+      <td>
+        <NavLink to={id} className='link'>Track Order</NavLink>
       </td>
     </tr>
   );

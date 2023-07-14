@@ -3,5 +3,80 @@
     background-color: var(--dark-200) !important;
 }
 .topbar .MuiToolbar-regular{
-    @apply flex items-center justify-between px-14 py-7;
+    @apply flex items-center justify-between px-4 lg:px-14 py-4 lg:py-7;
+}
+.topbar .logo img{
+    width: 160px;
+}
+.custom-badge{
+    @apply top-1 right-1 h-5 w-5 rounded-full pointer-events-none !important;
+    font-family: var(--ff-open-sans) !important;
+    background-color: #FF4848 !important;
+    font-size: var(--fs-10) !important;
+    font-weight: var(--fw-600) !important;
+    color: var(--white) !important;
+}
+
+.notification-popover .css-3bmhjh-MuiPaper-root-MuiPopover-paper{
+    max-width: calc(100% - 32px);
+    width: 400px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+.notification-popover .css-3bmhjh-MuiPaper-root-MuiPopover-paper::before{
+    content: '';
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    transform: rotate(90deg);
+    position: absolute;
+    top: -15px;
+    right: 20px;
+}
+.notification-popover .all-notifications{
+    @apply px-4 pb-5;
+}
+.notification-popover .all-notifications .day{
+    @apply mt-4 mb-3 leading-tight;
+    font-size: var(--fs-16);
+    font-weight: var(--fw-600);
+    color: var(--dark-100);
+}
+.notification-popover .all-notifications .item{
+    @apply flex items-center gap-x-4 py-4;
+    border-top: 0.5px solid var(--light-400);
+}
+.notification-popover .all-notifications .item:last-child{
+    border-bottom: 0.5px solid var(--light-400);
+}
+.notification-popover .all-notifications .item .content{
+    @apply grow;
+}
+.notification-popover .all-notifications .item .content .text{
+    @apply flex items-center justify-between mb-1;
+}
+.notification-popover .all-notifications .item .title{
+    @apply flex-1 whitespace-nowrap overflow-hidden text-ellipsis mb-0 leading-tight;
+    max-width: 200px;
+    font-size: var(--fs-14);
+    font-weight: var(--fw-600);
+    color: var(--dark-100);
+}
+.notification-popover .all-notifications .item .date{
+    @apply mb-0 leading-tight whitespace-nowrap;
+    font-size: var(--fs-12);
+    font-weight: var(--fw-400);
+    color: var(--dark-300);
+}
+.notification-popover .all-notifications .item .desc{
+    @apply mb-0 leading-tight;
+    font-size: var(--fs-12);
+    font-weight: var(--fw-400);
+    color: var(--dark-300);
+}
+
+@media only screen and (max-width: 639.98px) {
+    .selected-categories .search-sub-cats{
+        max-width: 100%;
+    }
 }

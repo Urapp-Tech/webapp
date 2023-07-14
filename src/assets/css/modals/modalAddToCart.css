@@ -1,0 +1,159 @@
+.modal-add-to-cart .css-1t1j96h-MuiPaper-root-MuiDialog-paper{
+    max-width: 900px !important;
+    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.06) !important;
+    border-radius: 10px !important;
+    overflow-y: initial;
+}
+.modal-add-to-cart .btn-close{
+    @apply absolute -right-0 -top-0 w-11 h-11 flex items-center justify-center rounded-full;
+    top: -12px;
+    right: -15px;
+    background-color: var(--dark-200);
+    font-size: var(--fs-20);
+    font-weight: var(--fw-600);
+    color: var(--white);
+    z-index: 1;
+}
+.modal-add-to-cart .btn-close:hover{
+    background-color: var(--dark-200);
+}
+.modal-add-to-cart .main-grid{
+    @apply grid grid-cols-1 md:grid-cols-2;
+}
+.modal-add-to-cart .modal-content{
+    @apply p-0;
+}
+.modal-add-to-cart .product-img{
+    @apply w-full overflow-hidden;
+    border-top-left-radius: 10px;
+}
+.modal-add-to-cart .product-img img{
+    @apply w-full;
+}
+.modal-add-to-cart .p-4{
+    @apply pl-4 pt-4 pr-4 md:pr-0;
+}
+.modal-add-to-cart .product-name{
+    @apply mb-2 leading-tight;
+    font-size: var(--fs-20);
+    font-weight: var(--fw-600);
+    color: var(--dark-100);
+}
+.modal-add-to-cart .product-desc{
+    @apply mb-3 md:mb-5;
+    font-size: var(--fs-14);
+    font-weight: var(--fw-400);
+    color: var(--dark-300);
+}
+.modal-add-to-cart .flex-container{
+    @apply flex items-center justify-between;
+}
+.modal-add-to-cart .price{
+    @apply flex items-center;
+}
+.modal-add-to-cart .price .number{
+    @apply mb-0 leading-none;
+    font-size: var(--fs-20);
+    font-weight: var(--fw-700);
+    color: var(--dark-100);
+}
+.modal-add-to-cart .price .text{
+    @apply mb-0 leading-none;
+    font-size: var(--fs-14);
+    font-weight: var(--fw-400);
+    color: var(--dark-300);
+}
+.modal-add-to-cart .count{
+    @apply flex items-center gap-x-1.5;
+}
+.modal-add-to-cart .count .number{
+    @apply mb-0 leading-none;
+    font-family: var(--ff-kumbh-sans);
+    font-size: var(--fs-20);
+    font-weight: var(--fw-700);
+    color: var(--dark-100);
+}
+.modal-add-to-cart .btn-increment,
+.modal-add-to-cart .btn-decrement{
+    color: var(--dark-200);
+}
+.modal-add-to-cart .btn-increment .icon,
+.modal-add-to-cart .btn-decrement .icon{
+    font-size: var(--fs-20);
+}
+
+.modal-add-to-cart .product-accordion{
+    @apply px-4 md:px-5 lg:px-6 pt-4 md:pt-6;
+}
+.product-accordion .accordion-item{
+    @apply shadow-none;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    margin: 0 !important;
+    border-top: 0.5px solid var(--light-400);
+}
+.product-accordion .accordion-item:last-of-type{
+    border-bottom: 0.5px solid var(--light-400);
+}
+.product-accordion .accordion-item:first-of-type {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+.product-accordion .accordion-item:before {
+    display: none;
+}
+.product-accordion .accordion-item:last-of-type {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.product-accordion .accordion-item .accordion-header{
+    @apply px-0 md:px-2;
+}
+.product-accordion .accordion-item .accordion-header.Mui-expanded {
+    min-height: auto;
+}
+.product-accordion .accordion-item .accordion-header .css-o4b71y-MuiAccordionSummary-content{
+    @apply my-4;
+}
+.product-accordion .accordion-item .accordion-header .css-o4b71y-MuiAccordionSummary-content.Mui-expanded{
+    @apply my-4;
+    min-height: auto !important;
+}
+.product-accordion .accordion-item .accordion-header .heading{
+    @apply mb-0 leading-none;
+    font-size: var(--fs-14);
+    font-weight: var(--fw-600);
+    color: var(--dark-100);
+}
+.product-accordion .accordion-item .accordion-body{
+    @apply pt-0 px-0 md:px-2 pb-4;
+}
+.product-accordion .accordion-item .accordion-body .desc{
+    @apply mb-0;
+    font-size: var(--fs-14);
+    font-weight: var(--fw-400);
+    color: var(--dark-300);
+}
+
+.modal-add-to-cart .modal-footer{
+    @apply justify-start px-4 py-4;
+}
+.modal-add-to-cart .modal-footer .btn-add{
+    @apply w-full md:w-1/2 capitalize;
+    font-family: var(--ff-kumbh-sans);
+    font-size: var(--fs-16);
+    font-weight: var(--fw-600);
+    color: var(--white);
+    background-color: var(--dark-200);
+    border-radius: 10px;
+}
+
+@media only screen and (max-width: 767.98px) {
+    .modal-add-to-cart .css-1t1j96h-MuiPaper-root-MuiDialog-paper{
+        max-height: calc(100% - 32px);
+        margin: 16px;
+    }
+    .modal-add-to-cart .product-img {
+        padding: 30px 30px 10px 30px;
+    }
+}

@@ -27,11 +27,11 @@ function TopBar() {
         </NavLink>
         <div className='flex items-center'>
           <IconButton
+            className='flex lg:hidden mr-2'
             size="large"
             edge="start"
             color="inherit"
             aria-label="menu"
-            sx={{ mr: 2 }}
           >
             <MenuIcon />
           </IconButton>
@@ -40,7 +40,7 @@ function TopBar() {
             max={99}
             classes={{
               badge:
-                'bg-red-500 font-open-sans text-xs font-semibold leading-none text-gray-50',
+                'custom-badge',
             }}
           >
             <IconButton
@@ -58,14 +58,14 @@ function TopBar() {
             setNotification={setNotificationElement}
             anchorElement={notificationIconButtonElement.current}
           />
-          <div className="ml-7 mr-4 h-7 w-[1px] bg-neutral-300"> </div>
+          <div className="ml-4 md:ml-5 mr-3 md:mr-4 h-7 w-[1px] bg-neutral-300"> </div>
           <NavLink to="./my-basket">
             <Badge
               badgeContent={cartItems.length}
               max={99}
               classes={{
                 badge:
-                  'bg-red-500 font-open-sans text-xs font-semibold leading-none text-gray-50',
+                  'custom-badge',
               }}
             >
               <IconButton
