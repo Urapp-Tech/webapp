@@ -7,8 +7,10 @@ import CircularProgress from '@mui/material/CircularProgress';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import CreditCardOutlinedIcon from '@mui/icons-material/CreditCardOutlined';
+import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import DatePickerButton from '../my-basket/DatePickerButton';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
@@ -22,395 +24,418 @@ function OrderDetailsPage() {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const navigate = useNavigate();
   const params = useParams();
+  const [pickUpTime, setPickUpTime] = useState<dayjs.Dayjs | null>(null);
+  const [dropOffTime, setDropOffTime] = useState<dayjs.Dayjs | null>(null);
+  const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
+    setPickUpTime(value);
+  };
+  const handleDropOffTimeChange = (value: dayjs.Dayjs | null) => {
+    setDropOffTime(value);
+  };
   return (
     <>
       <OrderDetailsPagePopup open={dialogOpen} setOpen={setDialogOpen} />
-      <div className="container px-5 py-5">
-        <div className="flex items-center">
+
+      <div className="p-4 sm:p-5 xl:p-7 order-details-page">
+        <div className="flex items-center mb-4 md:mb-6">
           <IconButton
             onClick={() => navigate(-1)}
             color="inherit"
-            className="text-2xl text-neutral-900"
+            className="p-1"
           >
             <ArrowBackIcon />
           </IconButton>
-          <div className="font-open-sans text-2xl font-semibold text-neutral-900">
+          <h4 className="page-heading">
             Order Details
-          </div>
+          </h4>
         </div>
-        <div className="grid w-full grid-cols-2 gap-2">
-          <div className="my-4 mb-auto rounded-xl bg-gray-50 shadow-md">
-            <div className="p-4">
-              <div className="flex items-center">
-                <div className="relative mr-2 inline-flex text-green-500">
-                  <CircularProgress
-                    thickness={1.5}
-                    className="z-10"
-                    size="4rem"
-                    variant="determinate"
-                    value={80}
-                    color="inherit"
-                  />
-                  <CircularProgress
-                    thickness={1.5}
-                    className="absolute z-0 text-neutral-200"
-                    size="4rem"
-                    variant="determinate"
-                    value={100}
-                    color="inherit"
-                  />
-                  <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
-                    <LocationOnOutlinedIcon className="text-3xl" />
+
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-x-5">
+          <div className="order-details-card">
+            <div className="px-5 pt-6 pb-1">
+              <div className="sm:flex items-center justify-between gap-x-5">
+                <div className="flex items-center gap-x-3 mb-5 sm:mb-0">
+                  <div className="relative inline-flex icon-order-out-for-delivery">
+                    <CircularProgress
+                      thickness={1.5}
+                      className="z-10"
+                      size="4rem"
+                      variant="determinate"
+                      value={80}
+                      color="inherit"
+                    />
+                    <CircularProgress
+                      thickness={1.5}
+                      className="absolute z-0 text-neutral-200"
+                      size="4rem"
+                      variant="determinate"
+                      value={100}
+                      color="inherit"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <LocationOnOutlinedIcon className="text-3xl" />
+                    </div>
+                  </div>
+                  <div className="basic-details">
+                    <p className='order-id'>
+                      Order Id:&nbsp;<span>{params.id}</span>
+                    </p>
+                    <p className="order-date-time">
+                      08:35 , 05-01-2020
+                    </p>
+                    <h6 className="order-status order-out-for-delivery">
+                      Out For Delivery
+                    </h6>
                   </div>
                 </div>
-                <div className="flex flex-col gap-1">
-                  <div>
-                    <span className="font-open-sans text-xs font-normal text-neutral-900">
-                      Order Id:&nbsp;
-                    </span>
-                    <span className="font-open-sans text-sm font-semibold text-neutral-900">
-                      {params.id}
-                    </span>
-                  </div>
-                  <div className="font-open-sans text-xs font-normal text-neutral-500">
-                    08:35 , 05-01-2020
-                  </div>
-                  <div className="font-open-sans text-sm font-semibold text-green-500">
-                    Out For Delivery
-                  </div>
-                </div>
-                <div className="flex-grow" />
+
                 <Button
                   type="button"
                   onClick={() => setDialogOpen(true)}
-                  className="rounded-xl bg-neutral-900 py-2 px-12 font-open-sans text-sm font-semibold text-gray-50"
+                  className="btn-cancel-order"
                   color="inherit"
                 >
                   Cancel Order
                 </Button>
               </div>
-              <hr className="my-4 h-[1px] w-full bg-neutral-200" />
-              <div className="grid grid-cols-2">
-                <div className="flex flex-col">
-                  <div className="font-open-sans text-sm font-semibold text-neutral-900">
-                    Pick Up Time
+              <hr className="my-4" />
+              <div className="grid grid-cols-1 sm:grid-cols-2">
+                <div className="edit-date-time sm:pr-4 mb-5">
+                  <div className="flex items-center justify-between mb-3.5">
+                    <p className='label'>Pick Up Time</p>
+                    <DatePickerButton 
+                      onChange={handlePickUpTimeChange}
+                      id=""
+                      icon={<ModeEditOutlineOutlinedIcon />}
+                      text=""
+                    />
                   </div>
-                  <div className="mt-2 flex items-center gap-2">
-                    <DateRangeIcon className="mr-2 text-xl text-neutral-900" />
-                    <div className="font-open-sans text-xs font-normal text-neutral-500">
-                      {dayjs()?.format('ddd, MMM MM, YYYY')}
-                    </div>
+                  <div className="flex items-center gap-3 mb-3">
+                    <DateRangeIcon className="text-xl" />
+                    <p className='selected-value'>{dayjs()?.format('ddd, MMM MM, YYYY')}</p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <AccessTimeIcon className="mr-2 text-xl text-neutral-900" />
-                    <div className="font-open-sans text-xs font-normal text-neutral-500">
+                  <div className="flex items-center gap-3 mb-5 sm:mb-0">
+                    <AccessTimeIcon className="text-xl" />
+                    <p className="selected-value">
                       {dayjs()?.format('HH:mm')} -
                       {dayjs()?.add(1, 'hours').format('HH:mm')}
-                    </div>
+                    </p>
                   </div>
                 </div>
-                <div className="flex flex-col">
-                  <div className="font-open-sans text-sm font-semibold text-neutral-900">
-                    Drop Off Time
+                <div className="edit-date-time sm:pl-6">
+                  <div className="flex items-center justify-between mb-3.5">
+                    <p className='label'>Drop Off Time</p>
+                    <DatePickerButton
+                      onChange={handleDropOffTimeChange}
+                      id=""
+                      icon={<ModeEditOutlineOutlinedIcon />}
+                      text=""
+                    />
                   </div>
-                  <div className="mt-2 flex items-center gap-2">
-                    <DateRangeIcon className="mr-2 text-xl text-neutral-900" />
-                    <div className="font-open-sans text-xs font-normal text-neutral-500">
-                      {dayjs()?.format('ddd, MMM MM, YYYY')}
-                    </div>
+                  <div className="flex items-center gap-3 mb-3">
+                    <DateRangeIcon className="text-xl" />
+                    <p className='selected-value'>{dayjs()?.format('ddd, MMM MM, YYYY')}</p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <AccessTimeIcon className="mr-2 text-xl text-neutral-900" />
-                    <div className="font-open-sans text-xs font-normal text-neutral-500">
+                  <div className="flex items-center gap-3">
+                    <AccessTimeIcon className="text-xl" />
+                    <p className="selected-value">
                       {dayjs()?.format('HH:mm')} -
                       {dayjs()?.add(1, 'hours').format('HH:mm')}
-                    </div>
+                    </p>
                   </div>
                 </div>
               </div>
-              <hr className="my-3 h-[1px] w-full bg-neutral-200" />
-              <div className="flex items-center">
-                <LocationOnOutlinedIcon className="mr-2 text-xl text-neutral-900" />
-                <div className="font-open-sans text-sm font-normal text-neutral-500">
-                  2003 | 750 Bay Street
+
+              <div className='overflow-x-auto'>
+                <table className='ordered-items-table'>
+                  <tr>
+                    <td colSpan={3}>
+                      <div className="flex items-center gap-x-2">
+                        <LocationOnOutlinedIcon className="text-xl" />
+                        <p className="adress">
+                          2003 | 750 Bay Street
+                        </p>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colSpan={3}>
+                      <div className="flex items-center gap-x-2">
+                        <CreditCardOutlinedIcon className="text-xl" />
+                        <p className='card-number'>**** **** **** 6584</p>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div className="flex items-center gap-x-2 sm:gap-x-4">
+                        <img
+                          className="order-pic"
+                          src={assets.tempImages.wash}
+                          alt=""
+                        />
+                        <p className="name">
+                          Wash & Fold 15 Lbs
+                        </p>
+                      </div>
+                    </td>
+                    <td>3 Items</td>
+                    <td>
+                      <p className="price">
+                          $150.00
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div className="flex items-center gap-x-2 sm:gap-x-4">
+                        <img
+                          className="order-pic"
+                          src={assets.tempImages.shirt}
+                          alt=""
+                        />
+                        <p className="name">Shirts</p>
+                      </div>
+                    </td>
+                    <td>5 Items</td>
+                    <td>
+                      <p className="price">$150.00</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div className="flex items-center gap-x-2 sm:gap-x-4">
+                        <img
+                          className="order-pic"
+                          src={assets.tempImages.pants}
+                          alt=""
+                        />
+                        <p className="name">
+                        Blazers
+                        </p>
+                      </div>
+                    </td>
+                    <td>1 Items</td>
+                    <td>
+                      <p className="price">$200.00</p>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+
+              <div className="sub-total">
+                <div className="flex items-center justify-between mb-2.5">
+                  <p className='key'>Total Amount</p>
+                  <p className='value'>$400.00</p>
+                </div>
+                <div className="flex items-center justify-between mb-2.5">
+                  <p className='key'>Discount</p>
+                  <p className='value'>$18.00</p>
+                </div>
+                <div className="flex items-center justify-between mb-2.5">
+                  <p className='key'>HST 13%</p>
+                  <p className='value'>$31.20</p>
                 </div>
               </div>
-              <hr className="my-3 h-[1px] w-full bg-neutral-200" />
-              <div className="flex items-center">
-                <CreditCardOutlinedIcon className="mr-2 text-xl text-neutral-900" />
-                <div className="font-open-sans text-sm font-normal text-neutral-500">
-                  **** **** **** 6584
-                </div>
-              </div>
-              <hr className="my-2 h-[1px] w-full bg-neutral-200" />
-              {/* item */}
-              <div className="flex items-center">
-                <img
-                  className="mr-2 aspect-square w-11 rounded-full"
-                  src={assets.tempImages.wash}
-                  alt=""
-                />
-                <div className="flex-grow font-open-sans text-xs font-semibold text-neutral-900">
-                  Wash & Fold 15 Lbs
-                </div>
-                <div className="mx-4 text-right font-open-sans text-xs font-normal text-neutral-500">
-                  3 Items
-                </div>
-                <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
-                  $150.00
-                </div>
-              </div>
-              <hr className="my-2 h-[1px] w-full bg-neutral-200" />
-              <div className="flex items-center">
-                <img
-                  className="mr-2 aspect-square w-11 rounded-full"
-                  src={assets.tempImages.shirt}
-                  alt=""
-                />
-                <div className="flex-grow font-open-sans text-xs font-semibold text-neutral-900">
-                  Shirts
-                </div>
-                <div className="mx-4 text-right font-open-sans text-xs font-normal text-neutral-500">
-                  5 Items
-                </div>
-                <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
-                  $150.00
-                </div>
-              </div>
-              <hr className="my-2 h-[1px] w-full bg-neutral-200" />
-              <div className="flex items-center">
-                <img
-                  className="mr-2 aspect-square w-11 rounded-full"
-                  src={assets.tempImages.pants}
-                  alt=""
-                />
-                <div className="flex-grow font-open-sans text-xs font-semibold text-neutral-900">
-                  Blazers
-                </div>
-                <div className="mx-4 text-right font-open-sans text-xs font-normal text-neutral-500">
-                  1 Items
-                </div>
-                <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
-                  $200.00
-                </div>
-              </div>
-              <hr className="my-2 h-[1px] w-full bg-neutral-200" />
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center justify-between">
-                  <div className="font-open-sans text-sm font-normal text-neutral-500">
-                    Total Amount
-                  </div>
-                  <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
-                    $400.00
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="font-open-sans text-sm font-normal text-neutral-500">
-                    Discount
-                  </div>
-                  <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
-                    $18.00
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="font-open-sans text-sm font-normal text-neutral-500">
-                    HST 13%
-                  </div>
-                  <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
-                    $31.20
-                  </div>
-                </div>
-              </div>
+              
             </div>
-            <div className="flex items-center justify-between rounded-b-xl bg-neutral-300 py-2 px-4">
-              <div className="font-open-sans text-sm font-semibold text-neutral-900">
+
+            <div className="grand-total">
+              <div className="key">
                 Grand Total
               </div>
-              <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
+              <div className="value">
                 $449.00
               </div>
             </div>
+
           </div>
-          <div className="my-4 mb-auto rounded-xl bg-gray-50 shadow-md">
-            <div className="rounded-t-xl bg-neutral-300 py-2 px-4">
-              <div className="flex items-center">
-                <div className="mr-2 flex aspect-square w-9 items-center justify-center rounded-full bg-neutral-400 text-gray-50">
+
+          <div className="order-progress-card">
+            <div className="header">
+                <div className="icon">
                   <LocalShippingOutlinedIcon className="text-xl" />
                 </div>
-                <div className="font-open-sans text-base font-semibold text-neutral-900">
+                <h6 className="heading">
                   Your order is in progress...
-                </div>
-              </div>
+                </h6>
             </div>
-            <div className="flex flex-col gap-4 px-4 py-4">
-              <div className="flex items-center">
-                <CheckCircleOutlineOutlinedIcon />
-                <div className="relative mx-2 inline-flex text-blue-500">
+            <div className="body">
+
+            <div className="timeline-item">
+                <div className='dot'>
+                  <CheckCircleOutlineOutlinedIcon />
+                </div>
+                <div className="relative inline-flex order-placed">
                   <CircularProgress
                     thickness={1.5}
-                    className="z-10"
-                    size="3rem"
+                    className="circular-icon"
                     variant="determinate"
                     value={100}
                     color="inherit"
                   />
-                  <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
-                    <AssignmentTurnedInOutlinedIcon className="text-xl" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <AssignmentTurnedInOutlinedIcon className="text-base md:text-xl" />
                   </div>
                 </div>
-                <div>
-                  <div className="font-open-sans text-base font-semibold text-blue-500">
+                <div className="flex-grow">
+                  <h6 className="status-title order-placed">
                     Placed Order
-                  </div>
-                  <div className="font-open-sans text-sm font-normal text-neutral-500">
+                  </h6>
+                  <p className="status-desc">
                     We have received your order
-                  </div>
+                  </p>
                 </div>
-                <div className="flex-grow" />
-                <div className="font-open-sans text-sm font-normal text-neutral-500">
+                <p className="date">
                   {dayjs().format('HH:mm, MMM DD, YY')}
-                </div>
+                </p>
               </div>
-              <div className="flex items-center">
-                <CheckCircleOutlineOutlinedIcon />
-                <div className="relative mx-2 inline-flex text-purple-500">
+
+              <div className="timeline-item">
+                <div className='dot'>
+                  <CheckCircleOutlineOutlinedIcon />
+                </div>
+                <div className="relative inline-flex order-picked-up">
                   <CircularProgress
                     thickness={1.5}
-                    className="z-10"
-                    size="3rem"
+                    className="circular-icon"
                     variant="determinate"
                     value={100}
                     color="inherit"
                   />
-                  <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
-                    <FilterNoneOutlinedIcon className="text-xl" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                  <FilterNoneOutlinedIcon className="text-base md:text-xl" />
                   </div>
                 </div>
-                <div>
-                  <div className="font-open-sans text-base font-semibold text-purple-500">
+                <div className="flex-grow">
+                  <h6 className="status-title order-picked-up">
                     Order Picked Up
-                  </div>
-                  <div className="font-open-sans text-sm font-normal text-neutral-500">
+                  </h6>
+                  <p className="status-desc">
                     Your order has been collected
-                  </div>
+                  </p>
                 </div>
-                <div className="flex-grow" />
-                <div className="font-open-sans text-sm font-normal text-neutral-500">
+                <p className="date">
                   {dayjs().format('HH:mm, MMM DD, YY')}
-                </div>
+                </p>
               </div>
-              <div className="flex items-center">
-                <CheckCircleOutlineOutlinedIcon />
-                <div className="relative mx-2 inline-flex text-green-500">
+
+              <div className="timeline-item">
+                <div className='dot'>
+                  <CheckCircleOutlineOutlinedIcon />
+                </div>
+                <div className="relative inline-flex order-out-for-delivery">
                   <CircularProgress
                     thickness={1.5}
-                    className="z-10"
-                    size="3rem"
+                    className="circular-icon"
                     variant="determinate"
                     value={100}
                     color="inherit"
                   />
-                  <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
-                    <LocationOnOutlinedIcon className="text-xl" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                  <LocationOnOutlinedIcon className="text-base md:text-xl" />
                   </div>
                 </div>
-                <div>
-                  <div className="font-open-sans text-base font-semibold text-green-500">
-                    Order In Progress
-                  </div>
-                  <div className="font-open-sans text-sm font-normal text-neutral-500">
-                    Your order is in progress
-                  </div>
+                <div className="flex-grow">
+                  <h6 className="status-title order-out-for-delivery">
+                    Order Out For Delivery
+                  </h6>
+                  <p className="status-desc">
+                    Your order is out for delivery
+                  </p>
                 </div>
-                <div className="flex-grow" />
-                <div className="font-open-sans text-sm font-normal text-neutral-500">
+                <p className="date">
                   {dayjs().format('HH:mm, MMM DD, YY')}
-                </div>
+                </p>
               </div>
-              <div className="flex items-center opacity-25">
-                <CircleOutlinedIcon className="text-neutral-500" />
-                <div className="relative mx-2 inline-flex text-neutral-500">
+
+              <div className="timeline-item disabled">
+                <div className='dot'>
+                  <CircleOutlinedIcon />
+                </div>
+                <div className="relative inline-flex order-drop-off">
                   <CircularProgress
                     thickness={1.5}
-                    className="z-10"
-                    size="3rem"
+                    className="circular-icon"
                     variant="determinate"
                     value={100}
                     color="inherit"
                   />
-                  <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
-                    <DomainVerificationOutlinedIcon className="text-xl" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                  <DomainVerificationOutlinedIcon className="text-base md:text-xl" />
                   </div>
                 </div>
-                <div>
-                  <div className="font-open-sans text-base font-semibold text-neutral-500">
+                <div className="flex-grow">
+                  <h6 className="status-title order-drop-off">
                     Order Drop Off
-                  </div>
-                  <div className="font-open-sans text-sm font-normal text-neutral-500">
+                  </h6>
+                  <p className="status-desc">
                     Your order has been dropped
-                  </div>
+                  </p>
                 </div>
-                <div className="flex-grow" />
-                <div className="font-open-sans text-sm font-normal text-neutral-500">
+                <p className="date">
                   {dayjs().format('HH:mm, MMM DD, YY')}
-                </div>
+                </p>
               </div>
-              <div className="flex items-center opacity-25">
-                <CircleOutlinedIcon className="text-neutral-500" />
-                <div className="relative mx-2 inline-flex text-neutral-500">
+
+              <div className="timeline-item disabled">
+                <div className='dot'>
+                  <CircleOutlinedIcon />
+                </div>
+                <div className="relative inline-flex order-delivered">
                   <CircularProgress
                     thickness={1.5}
-                    className="z-10"
-                    size="3rem"
+                    className="circular-icon"
                     variant="determinate"
                     value={100}
                     color="inherit"
                   />
-                  <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
-                    <AccessTimeIcon className="text-xl" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                  <AccessTimeIcon className="text-base md:text-xl" />
                   </div>
                 </div>
-                <div>
-                  <div className="font-open-sans text-base font-semibold text-neutral-500">
+                <div className="flex-grow">
+                  <h6 className="status-title order-delivered">
                     Order Delivered
-                  </div>
-                  <div className="font-open-sans text-sm font-normal text-neutral-500">
+                  </h6>
+                  <p className="status-desc">
                     Your order has been delivered
-                  </div>
+                  </p>
                 </div>
-                <div className="flex-grow" />
-                <div className="font-open-sans text-sm font-normal text-neutral-500">
+                <p className="date">
                   {dayjs().format('HH:mm, MMM DD, YY')}
-                </div>
+                </p>
               </div>
-              <div className="flex items-center opacity-25">
-                <CircleOutlinedIcon className="text-neutral-500" />
-                <div className="relative mx-2 inline-flex text-neutral-500">
+
+              <div className="timeline-item disabled">
+                <div className='dot'>
+                  <CircleOutlinedIcon />
+                </div>
+                <div className="relative inline-flex order-cancelled">
                   <CircularProgress
                     thickness={1.5}
-                    className="z-10"
-                    size="3rem"
+                    className="circular-icon"
                     variant="determinate"
                     value={100}
                     color="inherit"
                   />
-                  <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
-                    <DomainVerificationOutlinedIcon className="text-xl" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                  <DomainVerificationOutlinedIcon className="text-base md:text-xl" />
                   </div>
                 </div>
-                <div>
-                  <div className="font-open-sans text-base font-semibold text-neutral-500">
+                <div className="flex-grow">
+                  <h6 className="status-title order-cancelled">
                     Order Cancelled
-                  </div>
-                  <div className="font-open-sans text-sm font-normal text-neutral-500">
+                  </h6>
+                  <p className="status-desc">
                     Your order has been cancelled
-                  </div>
+                  </p>
                 </div>
-                <div className="flex-grow" />
-                <div className="font-open-sans text-sm font-normal text-neutral-500">
+                <p className="date">
                   {dayjs().format('HH:mm, MMM DD, YY')}
-                </div>
+                </p>
               </div>
+
             </div>
           </div>
         </div>

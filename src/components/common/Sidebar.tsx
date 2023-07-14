@@ -21,32 +21,32 @@ const links = [
   {
     name: 'Home',
     path: 'home',
-    icon: <HomeOutlinedIcon fontSize="inherit" />,
+    icon: <HomeOutlinedIcon className='aside-list-icon' fontSize="inherit" />,
   },
   {
     name: 'Orders',
     path: 'orders',
-    icon: <AssignmentOutlinedIcon fontSize="inherit" />,
+    icon: <AssignmentOutlinedIcon className='aside-list-icon' fontSize="inherit" />,
   },
   {
     name: 'Payment Setting',
     path: 'payment-setting',
-    icon: <CreditCardRoundedIcon fontSize="inherit" />,
+    icon: <CreditCardRoundedIcon className='aside-list-icon' fontSize="inherit" />,
   },
   {
     name: 'Delivery Address',
     path: 'delivery-address',
-    icon: <LocationOnOutlinedIcon fontSize="inherit" />,
+    icon: <LocationOnOutlinedIcon className='aside-list-icon' fontSize="inherit" />,
   },
   {
     name: 'Account',
     path: 'account',
-    icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
+    icon: <PersonOutlineOutlinedIcon className='aside-list-icon' fontSize="inherit" />,
   },
   {
     name: 'FAQs',
     path: 'faqs',
-    icon: <HelpOutlineOutlinedIcon fontSize="inherit" />,
+    icon: <HelpOutlineOutlinedIcon className='aside-list-icon' fontSize="inherit" />,
   },
 ];
 
@@ -55,78 +55,62 @@ function Sidebar() {
     <Drawer
       variant="permanent"
       PaperProps={{
-        className: 'box-border w-80 border-r-0 bg-neutral-900 text-gray-50',
+        className: 'left-sidebar' 
       }}
     >
-      <List disablePadding>
-        <Toolbar className="mb-5">
-          <Stack className="w-full" direction="row" justifyContent="center">
-            <img src={assets.images.logoWhite} alt="" />
-          </Stack>
-        </Toolbar>
-
-        <div className="flex h-full w-full flex-col text-base ">
-          {links.map((link) => {
-            return (
-              <NavLink
-                key={link.path}
-                className={({ isActive }) =>
-                  isActive
-                    ? 'w-full bg-gray-50 bg-opacity-5 px-4 py-3 text-gray-50'
-                    : 'w-full px-4 py-3 text-neutral-400'
-                }
-                to={link.path}
-              >
-                <div className="flex items-center font-open-sans ">
-                  <span className="text-3xl"> {link.icon} </span>
-                  <div className="mr-2"> </div>
-                  {link.name}
-                </div>
-              </NavLink>
-            );
-          })}
-          <div className="flex-grow"> </div>
-          <div className="mb-2 w-full px-4 font-open-sans text-base font-semibold text-gray-50">
+      <div className="sidebar-links">
+        {links.map((link) => {
+          return (
+            <NavLink
+              key={link.path}
+              className={({ isActive }) =>
+                isActive
+                  ? 'item active'
+                  : 'item'
+              }
+              to={link.path}
+            >
+                {link.icon}
+                <span>{link.name}</span>
+            </NavLink>
+          );
+        })}
+      </div>
+      <div className="sidebar-footer-content">
+        <div className="share-via">
+          <h6 className="heading">
             Share
-          </div>
-          <div className="mb-4 flex items-center gap-4 px-4">
-            <IconButton className="p-0 text-gray-50" onClick={() => null}>
+          </h6>
+          <div className="social-icons">
+            <IconButton className="social-btn" onClick={() => null}>
               <FacebookIcon className="text-3xl" />
             </IconButton>
-            <IconButton className="p-0 text-gray-50" onClick={() => null}>
+            <IconButton className="social-btn" onClick={() => null}>
               <TwitterIcon className="text-3xl" />
             </IconButton>
-            <IconButton className="p-0 text-gray-50" onClick={() => null}>
+            <IconButton className="social-btn" onClick={() => null}>
               <InstagramIcon className="text-3xl" />
             </IconButton>
-            <IconButton className="p-0 text-gray-50" onClick={() => null}>
+            <IconButton className="social-btn" onClick={() => null}>
               <MailIcon className="text-3xl" />
             </IconButton>
           </div>
-          <hr className="mb-2 mr-32 ml-4 bg-neutral-200" />
-          <NavLink
-            className="px-4 font-open-sans text-sm font-normal text-neutral-200"
-            to="./terms-and-conditions"
-          >
+          <hr className="mb-4" />
+          <NavLink className="link mb-2" to="./terms-and-conditions">
             Terms & Conditions
           </NavLink>
-          <NavLink
-            className="mb-2 px-4 font-open-sans text-sm font-normal text-neutral-200"
-            to="./privacy-policy"
-          >
+          <NavLink className="link" to="./privacy-policy">
             Privacy Policy
           </NavLink>
-          <hr className="mb-6 mr-32 ml-4 bg-neutral-200" />
-
-          <NavLink
-            className="px-4 font-open-sans text-base font-normal text-neutral-200"
-            to="/auth"
-          >
-            <LogoutOutlinedIcon className="mr-2 rotate-180" />
-            Logout
-          </NavLink>
+          <hr className="mt-4" />
         </div>
-      </List>
+        
+        <NavLink className="logout-link" to="/auth">
+          <LogoutOutlinedIcon className="icon" />
+          Logout
+        </NavLink>
+      </div>
+        
     </Drawer>
   );
 }

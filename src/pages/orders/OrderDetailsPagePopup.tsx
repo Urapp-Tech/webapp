@@ -1,5 +1,7 @@
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import ClearIcon from '@mui/icons-material/Clear';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import OrderDetailsPagePopupClasses from './OrderDetailsPagePopup.module.css';
 
@@ -23,6 +25,12 @@ function OrderDetailsPagePopup({ open, setOpen }: Props) {
         style: { maxWidth: '100%', maxHeight: 'auto' },
       }}
     >
+      <IconButton
+          onClick={() => setOpen(false)}
+          className='btn-close'
+        >
+          <ClearIcon />
+      </IconButton>
       <div className={OrderDetailsPagePopupClasses.Content}>
         <SentimentVeryDissatisfiedIcon
           className={OrderDetailsPagePopupClasses.Icon}

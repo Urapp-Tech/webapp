@@ -99,14 +99,14 @@ const rows: Row[] = [
 
 function OrdersPage() {
   return (
-    <div className="container px-5 py-5">
-      <div className="flex items-center justify-between">
-        <div className="font-open-sans text-2xl font-semibold text-neutral-900">
+    <div className="p-4 sm:p-5 xl:p-7 orders-page">
+      <div className="sm:flex items-center justify-between mb-3">
+        <h4 className="page-heading">
           Order History
-        </div>
-        <FormControl className="w-96 rounded-xl bg-gray-50 shadow-md">
+        </h4>
+        <FormControl className="search-orders">
           <Input
-            className="m-0 px-3 py-2 font-open-sans text-base font-semibold text-neutral-900"
+            className="field"
             id="search"
             type="text"
             disableUnderline
@@ -115,25 +115,15 @@ function OrdersPage() {
           />
         </FormControl>
       </div>
-      <div className="my-4 rounded-xl bg-gray-50 px-4 py-4 shadow-md">
-        <table className="w-full table-auto">
-          <thead className="">
-            <tr className="h-10">
-              <th className="text-start font-open-sans text-base font-semibold text-neutral-900">
-                Order ID
-              </th>
-              <th className="text-start font-open-sans text-base font-semibold text-neutral-900">
-                Date & Time
-              </th>
-              <th className="text-center font-open-sans text-base font-semibold text-neutral-900">
-                Status
-              </th>
-              <th className="text-end font-open-sans text-base font-semibold text-neutral-900">
-                Items
-              </th>
-              <th className="text-end font-open-sans text-base font-semibold text-neutral-900">
-                Action
-              </th>
+      <div className="orders-card">
+        <table className="orders-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Date & Time</th>
+              <th>Status</th>
+              <th>Items</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>

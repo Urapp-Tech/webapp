@@ -1,0 +1,220 @@
+.auth-main {
+  @apply relative md:grid md:grid-cols-1 lg:grid-cols-2;
+  min-height: 100vh !important;
+  /* background-color: green; */
+  background-color: var(--dark-200);
+}
+.auth-main .fixed-at-top-left{
+  @apply flex items-start gap-x-9 absolute;
+  top: 60px;
+  left: 80px;
+}
+.auth-main .fixed-at-top-left .go-back{
+  @apply w-7 h-7 flex items-center justify-center rounded-full border-2 border-solid border-white;
+}
+.auth-main .fixed-at-top-left .go-back .icon-arrow{
+  @apply w-5;
+  color: var(--white);
+}
+.auth-main .fixed-at-top-left .logo{
+  width: 180px;
+}
+
+/* Left Side - Forms */
+
+.auth-main .auth-form{
+  @apply flex items-center justify-center;
+}
+.auth-main .auth-form .custom-width{
+  width: 100%;
+  max-width: 22rem;
+}
+.auth-main .auth-form .heading{
+  @apply text-center mb-0;
+  font-size: var(--fs-24);
+  font-weight: var(--fw-700);
+  color: var(--white);
+  line-height: 1.2;
+}
+.auth-main .auth-form .desc{
+  @apply text-center mt-6 mb-0 mx-auto;
+  width: 75%;
+  font-size: var(--fs-14);
+  font-weight: var(--fw-400);
+  color: var(--white);
+  line-height: 1.5;
+}
+.auth-main .auth-form .otp-container{
+  @apply flex items-center justify-center gap-x-5 mt-8;
+}
+.auth-main .auth-form .field{
+  @apply w-full mb-6;
+}
+.auth-main .auth-form .field .label{
+  font-family: var(--ff-open-sans);
+  font-size: var(--fs-12);
+  font-weight: var(--fw-400);
+  color: var(--white);
+  line-height: 1.2;
+}
+.auth-main .auth-form .field .input-container::before{
+  border-bottom: 1px solid rgb(255 255 255);
+}
+.auth-main .auth-form .field .input-container::after{
+  border-bottom: 2px solid rgb(255 255 255);
+}
+.auth-main .auth-form .field .input-container input{
+  color: var(--white);
+}
+.auth-main .auth-form .field .input-container input:-webkit-autofill,
+.auth-main .auth-form .field .input-container input:-webkit-autofill:hover, 
+.auth-main .auth-form .field .input-container input:-webkit-autofill:focus, 
+.auth-main .auth-form .field .input-container input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px var(--dark-200) inset !important;
+}
+.auth-main .auth-form .field .input-container input:-webkit-autofill{
+    -webkit-text-fill-color: var(--white) !important;
+}
+.auth-main .auth-form .field .input-container .field-icon{
+  color: var(--white);
+}
+.auth-main .auth-form .remember-me{
+  @apply gap-x-1.5 ml-0 mr-0;
+  font-size: var(--fs-14);
+  font-weight: var(--fw-400);
+  color: var(--white);
+}
+.auth-main .auth-form .remember-me .checkbox{
+  @apply p-0;
+  color: var(--white);
+}
+.auth-main .auth-form .forgot-pass-link{
+  font-size: var(--fs-14);
+  font-weight: var(--fw-600);
+  color: var(--white);
+}
+.auth-main .auth-form .btn-submit{
+  @apply w-full outline-0 shadow-none;
+  min-height: 40px;
+  font-size: var(--fs-16);
+  font-weight: var(--fw-600);
+  color: var(--dark-100);
+  background-color: var(--white);
+  border-radius: 10px;
+}
+.auth-main .auth-form .btn-login-fb{
+  @apply w-full flex items-center justify-center mt-5 outline-0 shadow-none;
+  min-height: 40px;
+  font-size: var(--fs-16);
+  font-weight: var(--fw-600);
+  color: var(--white);
+  background-color: #255D9A;
+  border-radius: 10px;
+}
+
+.auth-main .auth-form .login-other-options .text{
+  @apply flex items-center justify-center gap-x-2;
+  font-size: var(--fs-14);
+  font-weight: var(--fw-400);
+  color: var(--white);
+}
+.auth-main .auth-form .login-other-options .signup-link{
+  @apply no-underline;
+  font-size: var(--fs-16);
+  font-weight: var(--fw-600);
+  color: var(--white);
+}
+.auth-main .auth-form .t-n-c{
+  font-size: var(--fs-14);
+  font-weight: var(--fw-400);
+  color: var(--white);
+  line-height: 1.5;
+}
+.auth-main .auth-form .t-n-c a{
+  font-weight: var(--fw-600);
+  color: var(--white);
+}
+
+/* Right Side - Join Community */
+
+.auth-main .join-community{
+  @apply relative hidden md:block;
+}
+.auth-main .join-community .content-container{
+  @apply absolute top-0 right-16 bottom-14 left-0 flex flex-col items-center justify-end text-center;
+  border-radius: 0 0 50% 50%;
+}
+.auth-main .join-community.login-community .content-container{
+  background-color: #D4E2D4;
+}
+.auth-main .join-community.register-community .content-container{
+  background-color: #C8D9EB;
+}
+.auth-main .join-community.forgot-pass-community .content-container{
+  @apply overflow-hidden;
+  background-color: #F4EFD3;
+}
+.auth-main .join-community .content-container .content{
+  @apply lg:px-8 xl:px-20 2xl:px-24;
+}
+.auth-main .join-community .content-container .content .heading{
+  @apply mb-3;
+  font-size: var(--fs-40);
+  font-weight: var(--fw-700);
+  color: var(--dark-200);
+  line-height: 1.2;
+}
+.auth-main .join-community .content-container .content .desc{
+  @apply mb-6;
+  font-size: var(--fs-18);
+  font-weight: var(--fw-400);
+  color: var(--dark-200);
+  line-height: 1.4;
+}
+.auth-main .login-community .content-container img{
+  max-width: 70%;
+  margin-bottom: 5px;
+}
+.auth-main .forgot-pass-community .content-container img{
+  max-width: 80%;
+  margin-bottom: -5px;
+}
+.auth-main .register-community .content-container img{
+  max-width: 80%;
+  margin-bottom: -30px;
+}
+
+@media only screen and (max-width: 1535.98px) and (min-width: 1280px)  {
+  .auth-main .join-community .content-container{
+    border-radius: 0 0 325px 325px;
+  }
+}
+@media only screen and (max-width: 1279.98px) and (min-width: 1024px)  {
+  .auth-main .auth-form .custom-width{
+    max-width: 20rem;
+  }
+  .auth-main .join-community .content-container{
+    border-radius: 0 0 325px 325px;
+  }
+}
+@media only screen and (max-width: 1023.98px) and (min-width: 768px)  {
+  .auth-main .auth-form .custom-width{
+    max-width: 18rem;
+  }
+}
+@media only screen and (max-width: 767.98px) {
+  .auth-main{
+    @apply flex flex-col items-center justify-center;
+    padding: 30px 0;
+  }
+  .auth-main .fixed-at-top-left {
+    @apply justify-between grow-0;
+    position: initial;
+  }
+  .auth-main .auth-form{
+    @apply grow;
+  }
+  .auth-main .auth-form .custom-width{
+    max-width: 85%;
+  }
+}
