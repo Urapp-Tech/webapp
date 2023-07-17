@@ -8,6 +8,8 @@ import { useAppDispatch } from '../../../redux/redux-hooks';
 import { tenantId } from '../../../utilities/constant';
 import authService from '../../../services/Auth';
 import { login } from '../../../redux/features/authStateSlice';
+import dayjs from 'dayjs';
+
 
 function OTPVerificationPage() {
   const [OTP, setOTP] = useState('');
@@ -15,7 +17,12 @@ function OTPVerificationPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const onsubmit = () => {
-    let code = Object.assign(signupData, { otp: OTP, tenant: tenantId });
+    let code = Object.assign(signupData, {
+      otp: OTP,
+      tenant: tenantId,
+      createdDate: dayjs().format(),
+      updatedDate: dayjs().format(),
+    });
     authService
       .signupService(code)
       .then((response) => {

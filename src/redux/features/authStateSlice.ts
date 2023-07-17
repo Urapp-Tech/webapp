@@ -11,6 +11,8 @@ type RegisteredUser = {
   tenant: string
   token: string
   userType: string
+  createdDate: string
+  updatedDate: string
 }
 
 type AuthState = {
@@ -18,7 +20,7 @@ type AuthState = {
 }
 
 function getUser() {
-  const user = localStorage.getItem('SignupData')
+  const user = localStorage.getItem('user')
   if (user) {
     return JSON.parse(user)
   }
@@ -39,10 +41,10 @@ export const authStateSlice = createSlice({
     },
     logout: (state) => {
       state.user = null
-      localStorage.removeItem('user')
+      localStorage.clear()
     },
   },
 })
 
-export const { login } = authStateSlice.actions
+export const { login, logout } = authStateSlice.actions
 export default authStateSlice.reducer

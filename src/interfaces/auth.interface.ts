@@ -15,3 +15,8 @@ export interface OTPPayload {
 export interface OTPCodePayload {
   code: string
 }
+
+export interface LoginPayload {
+  email: string
+  password: string
+}
