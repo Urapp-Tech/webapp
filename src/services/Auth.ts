@@ -1,5 +1,9 @@
 import network from '../utilities/network'
-import { OTPPayload, SignupPayload } from '../interfaces/auth.interface'
+import {
+  LoginPayload,
+  OTPPayload,
+  SignupPayload,
+} from '../interfaces/auth.interface'
 import { APP_USER_PREFIXES } from '../utilities/constant'
 
 const signupService = (signupData: SignupPayload) => {
@@ -9,7 +13,12 @@ const signupService = (signupData: SignupPayload) => {
 const otpService = (data: OTPPayload) => {
   return network.post(`${APP_USER_PREFIXES}/get-otp`, data)
 }
+
+const LoginService = (data: LoginPayload) => {
+  return network.post(`${APP_USER_PREFIXES}/sign-in/app`, data)
+}
 export default {
   signupService,
   otpService,
+  LoginService,
 }

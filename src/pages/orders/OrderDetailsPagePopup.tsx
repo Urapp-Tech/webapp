@@ -25,11 +25,8 @@ function OrderDetailsPagePopup({ open, setOpen }: Props) {
         style: { maxWidth: '100%', maxHeight: 'auto' },
       }}
     >
-      <IconButton
-          onClick={() => setOpen(false)}
-          className='btn-close'
-        >
-          <ClearIcon />
+      <IconButton onClick={() => setOpen(false)} className="btn-close">
+        <ClearIcon />
       </IconButton>
       <div className={OrderDetailsPagePopupClasses.Content}>
         <SentimentVeryDissatisfiedIcon

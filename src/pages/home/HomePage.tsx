@@ -8,6 +8,8 @@ import HomePagePopup from './HomePagePopup';
 import assets from '../../assets';
 import SelectLocationPopup from './SelectLocationPopup';
 import LocationPopup from './LocationPopup';
+import SnackBar from '../../components/common/SnackBar';
+import { AlertColor } from '@mui/material';
 
 const categories = [
   {
@@ -39,7 +41,7 @@ const categories = [
     id: 6,
     name: 'Wash & Fold',
     image: assets.tempImages.laundry,
-  }
+  },
 ];
 
 const items = [
@@ -106,8 +108,7 @@ const items = [
 ];
 
 function getCategoryClasses(isActive: boolean) {
-  const classes =
-    'item';
+  const classes = 'item';
 
   if (isActive) {
     return `${classes} active shadow-lg`;
@@ -127,7 +128,7 @@ function HomePage() {
   };
   return (
     <>
-      <HomePagePopup
+      {/* <HomePagePopup
         open={dialogOpen}
         setOpen={setDialogOpen}
         data={selectedItem}
@@ -135,12 +136,10 @@ function HomePage() {
       <LocationPopup
         open={selectLocationDialogOpen}
         setOpen={setSelectLocationDialogOpen}
-      />
-      <div className="pt-6 sm:pt-4 px-4 sm:px-5 xl:px-7">
+      /> */}
+      <div className="px-4 pt-6 sm:px-5 sm:pt-4 xl:px-7">
         <div className="all-categories">
-          <h4 className="heading">
-            Categories
-          </h4>
+          <h4 className="heading">Categories</h4>
           <div className="categories-list">
             {categories.map((category) => (
               <button
@@ -151,25 +150,17 @@ function HomePage() {
                   category.id === selectedCategory.id
                 )}
               >
-                <h3 className="cat-name">
-                  {category.name}
-                </h3>
-                <div className='grow'>
-                  <img
-                    src={category.image}
-                    alt=""
-                    className="cat-img"
-                  />
+                <h3 className="cat-name">{category.name}</h3>
+                <div className="grow">
+                  <img src={category.image} alt="" className="cat-img" />
                 </div>
               </button>
             ))}
           </div>
         </div>
         <div className="selected-categories">
-          <div className="sm:flex items-center justify-between mb-4">
-            <h4 className="heading">
-              {selectedCategory.name}
-            </h4>
+          <div className="mb-4 items-center justify-between sm:flex">
+            <h4 className="heading">{selectedCategory.name}</h4>
             <FormControl className="search-sub-cats">
               <Input
                 className="field"
@@ -187,17 +178,13 @@ function HomePage() {
             {items.map((item) => (
               <div key={item.id} className="item">
                 <img
-                  className="mb-4 md:mb-6 aspect-[4/3] w-full object-contain"
+                  className="mb-4 aspect-[4/3] w-full object-contain md:mb-6"
                   src={item.image}
                   alt=""
                 />
                 <div className="flex flex-wrap items-center justify-between">
-                  <h5 className="name">
-                    {item.name}
-                  </h5>
-                  <h6 className="price">
-                    $ {item.price.toFixed(2)}
-                  </h6>
+                  <h5 className="name">{item.name}</h5>
+                  <h6 className="price">$ {item.price.toFixed(2)}</h6>
                   <Button
                     className="btn-add"
                     variant="contained"
