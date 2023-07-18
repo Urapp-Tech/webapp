@@ -61,6 +61,7 @@ const AccountHelpPage = lazy(() => import('../pages/account/AccountHelpPage'));
 const AccountSettingsPage = lazy(
   () => import('../pages/account/AccountSettingPage')
 );
+
 export const routeObjects: RouteObject[] = [
   {
     index: true,

@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Stack from '@mui/material/Stack';
@@ -16,46 +16,67 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import MailIcon from '@mui/icons-material/Mail';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import assets from '../../assets';
+import { useAppDispatch } from '../../redux/redux-hooks';
+import { logout } from '../../redux/features/authStateSlice';
 
 const links = [
   {
     name: 'Home',
     path: 'home',
-    icon: <HomeOutlinedIcon className='aside-list-icon' fontSize="inherit" />,
+    icon: <HomeOutlinedIcon className="aside-list-icon" fontSize="inherit" />,
   },
   {
     name: 'Orders',
     path: 'orders',
-    icon: <AssignmentOutlinedIcon className='aside-list-icon' fontSize="inherit" />,
+    icon: (
+      <AssignmentOutlinedIcon className="aside-list-icon" fontSize="inherit" />
+    ),
   },
   {
     name: 'Payment Setting',
     path: 'payment-setting',
-    icon: <CreditCardRoundedIcon className='aside-list-icon' fontSize="inherit" />,
+    icon: (
+      <CreditCardRoundedIcon className="aside-list-icon" fontSize="inherit" />
+    ),
   },
   {
     name: 'Delivery Address',
     path: 'delivery-address',
-    icon: <LocationOnOutlinedIcon className='aside-list-icon' fontSize="inherit" />,
+    icon: (
+      <LocationOnOutlinedIcon className="aside-list-icon" fontSize="inherit" />
+    ),
   },
   {
     name: 'Account',
     path: 'account',
-    icon: <PersonOutlineOutlinedIcon className='aside-list-icon' fontSize="inherit" />,
+    icon: (
+      <PersonOutlineOutlinedIcon
+        className="aside-list-icon"
+        fontSize="inherit"
+      />
+    ),
   },
   {
     name: 'FAQs',
     path: 'faqs',
-    icon: <HelpOutlineOutlinedIcon className='aside-list-icon' fontSize="inherit" />,
+    icon: (
+      <HelpOutlineOutlinedIcon className="aside-list-icon" fontSize="inherit" />
+    ),
   },
 ];
 
 function Sidebar() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const logOut = () => {
+    dispatch(logout());
+    navigate('/auth/login');
+  };
   return (
     <Drawer
       variant="permanent"
       PaperProps={{
-        className: 'left-sidebar' 
+        className: 'left-sidebar',
       }}
     >
       <div className="sidebar-links">
@@ -63,24 +84,18 @@ function Sidebar() {
           return (
             <NavLink
               key={link.path}
-              className={({ isActive }) =>
-                isActive
-                  ? 'item active'
-                  : 'item'
-              }
+              className={({ isActive }) => (isActive ? 'item active' : 'item')}
               to={link.path}
             >
-                {link.icon}
-                <span>{link.name}</span>
+              {link.icon}
+              <span>{link.name}</span>
             </NavLink>
           );
         })}
       </div>
       <div className="sidebar-footer-content">
         <div className="share-via">
-          <h6 className="heading">
-            Share
-          </h6>
+          <h6 className="heading">Share</h6>
           <div className="social-icons">
             <IconButton className="social-btn" onClick={() => null}>
               <FacebookIcon className="text-3xl" />
@@ -104,13 +119,16 @@ function Sidebar() {
           </NavLink>
           <hr className="mt-4" />
         </div>
-        
-        <NavLink className="logout-link" to="/auth">
+
+        <NavLink
+          className="logout-link"
+          to="/auth/login"
+          onClick={() => logOut()}
+        >
           <LogoutOutlinedIcon className="icon" />
           Logout
         </NavLink>
       </div>
-        
     </Drawer>
   );
 }
