@@ -7,17 +7,17 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import AuthLayout from './AuthLayout';
 
 function MainLayout() {
-  const auth = useAppSelector((state) => state.authState);
-  const navigate = useNavigate();
+  // const auth = useAppSelector((state) => state.authState);
+  // const navigate = useNavigate();
 
-  useEffect(() => {
-    if (auth.user) {
-      navigate('/dashboard');
-    }
-    if (!auth.user) {
-      navigate('/auth/login');
-    }
-  }, [auth.user]);
+  // useEffect(() => {
+  //   if (auth.user) {
+  //     navigate('/dashboard');
+  //   }
+  //   if (!auth.user) {
+  //     navigate('/auth/login');
+  //   }
+  // }, [auth.user]);
   return (
     <Box className="flex">
       <TopBar />

@@ -1,48 +1,23 @@
-import { useState } from 'react';
-import Input from '@mui/material/Input';
-import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
-import HomePagePopup from './HomePagePopup';
-import assets from '../../assets';
-import SelectLocationPopup from './SelectLocationPopup';
-import LocationPopup from './LocationPopup';
-import SnackBar from '../../components/common/SnackBar';
-import { AlertColor } from '@mui/material';
-
-const categories = [
-  {
-    id: 1,
-    name: 'Dry Cleaning',
-    image: assets.tempImages.dryCleaning,
-  },
-  {
-    id: 2,
-    name: 'Commercial',
-    image: assets.tempImages.curtain,
-  },
-  {
-    id: 3,
-    name: 'Outdoor Wear',
-    image: assets.tempImages.jacket,
-  },
-  {
-    id: 4,
-    name: 'Iron',
-    image: assets.tempImages.ironing,
-  },
-  {
-    id: 5,
-    name: 'Home',
-    image: assets.tempImages.home,
-  },
-  {
-    id: 6,
-    name: 'Wash & Fold',
-    image: assets.tempImages.laundry,
-  },
-];
+import { useEffect, useState } from 'react'
+import Input from '@mui/material/Input'
+import Button from '@mui/material/Button'
+import FormControl from '@mui/material/FormControl'
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
+import HomePagePopup from './HomePagePopup'
+import assets from '../../assets'
+import SelectLocationPopup from './SelectLocationPopup'
+import LocationPopup from './LocationPopup'
+import SnackBar from '../../components/common/SnackBar'
+import { AlertColor } from '@mui/material'
+import tenantService from '../../services/tenant'
+import { tenantId } from '../../utilities/constant'
+import { v4 as uuidv4 } from 'uuid'
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks'
+import categoryService from '../../services/Category'
+import { setId } from '../../redux/features/deviceState'
+import { category } from '../../redux/features/categorySlice'
+import { CategoryPayload } from '../../interfaces/Category'
 
 const items = [
   {
@@ -105,27 +80,104 @@ const items = [
     price: 18.0,
     image: assets.tempImages.shirt1,
   },
-];
+]
 
 function getCategoryClasses(isActive: boolean) {
-  const classes = 'item';
+  const classes = 'item'
 
   if (isActive) {
-    return `${classes} active shadow-lg`;
+    return `${classes} active shadow-lg`
   }
-  return classes;
+  return classes
 }
 
 function HomePage() {
-  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [selectLocationDialogOpen, setSelectLocationDialogOpen] =
-    useState<boolean>(true);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState<any>(null)
+  const [subCategory, setSubCategory] = useState<any>([])
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false)
+  const [selectLocationDialogOpen, setSelectLocationDialogOpen] = useState<
+    boolean
+  >(true)
+  const [selectedItem, setSelectedItem] = useState(null)
+  const [DeviceId, setDeviceId] = useState(uuidv4())
+  const [searchName, setSearchName] = useState('')
+  const [filteredSubCategory, setFilteredSubCategory] = useState<any[]>([])
+  const agent = navigator.userAgent
+  const dispatch = useAppDispatch()
+
   const addItemHandler = (item: any) => {
-    setSelectedItem(item);
-    setDialogOpen(true);
-  };
+    setSelectedItem(item)
+    setDialogOpen(true)
+  }
+
+  const fetchIp = async () => {
+    const url = 'https://api.ipify.org/?format=json'
+    try {
+      const response = await fetch(url)
+      let address = await response.json()
+      return address.ip
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    tenantService.getTenantConfig().then((response) => {
+      fetchIp().then((ip) => {
+        // Combine agent, IP address, and DeviceId to form nameValue
+        const nameValue = agent.slice(0, 11) + '-' + ip + '-' + DeviceId
+        tenantService
+          .deviceRegisteration({
+            deviceId: DeviceId,
+            deviceType: 'Android',
+            isNotificationAllowed: true,
+            name: nameValue,
+            tenant: response.data.data.id,
+            token: ' ',
+          })
+          .then((response) => {
+            dispatch(setId(response.data.data.deviceId))
+          })
+          .catch((err) => console.log(err))
+      })
+    })
+    categoryService
+      .CategoryList()
+      .then((response) => {
+        setSelectedCategory(response.data.data)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }, [])
+
+  const onClickButton = (item: any) => {
+    categoryService
+      .SubCategory(item.id)
+      .then((response) => setSubCategory(response.data.data))
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+  const searchSubCategory = () => {
+    if (!searchName) {
+      setFilteredSubCategory(subCategory.homeCatItems)
+    } else {
+      const filteredItems = subCategory.homeCatItems.filter((item: any) => {
+        const priceString = item?.price?.toString() || ''
+        return (
+          item.name.toLowerCase().includes(searchName.toLowerCase()) ||
+          priceString.includes(searchName)
+        )
+      })
+      setFilteredSubCategory(filteredItems)
+    }
+  }
+  useEffect(() => {
+    if (subCategory?.homeCatItems?.length > 0) {
+      searchSubCategory()
+    }
+  }, [searchName, subCategory])
+
   return (
     <>
       {/* <HomePagePopup
@@ -141,26 +193,29 @@ function HomePage() {
         <div className="all-categories">
           <h4 className="heading">Categories</h4>
           <div className="categories-list">
-            {categories.map((category) => (
-              <button
-                type="button"
-                onClick={() => setSelectedCategory(category)}
-                key={category.id}
-                className={getCategoryClasses(
-                  category.id === selectedCategory.id
-                )}
-              >
-                <h3 className="cat-name">{category.name}</h3>
-                <div className="grow">
-                  <img src={category.image} alt="" className="cat-img" />
-                </div>
-              </button>
-            ))}
+            {selectedCategory &&
+              selectedCategory.map((category: any) => (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClickButton(category)
+                  }}
+                  key={category.id}
+                  className={getCategoryClasses(
+                    category.id === selectedCategory?.id,
+                  )}
+                >
+                  <h3 className="cat-name">{category.name}</h3>
+                  <div className="grow">
+                    <img src={category.icon} alt="" className="cat-img" />
+                  </div>
+                </button>
+              ))}
           </div>
         </div>
         <div className="selected-categories">
           <div className="mb-4 items-center justify-between sm:flex">
-            <h4 className="heading">{selectedCategory.name}</h4>
+            <h4 className="heading">{selectedCategory?.name}</h4>
             <FormControl className="search-sub-cats">
               <Input
                 className="field"
@@ -171,15 +226,17 @@ function HomePage() {
                 }}
                 disableUnderline
                 endAdornment={<SearchOutlinedIcon />}
+                value={searchName}
+                onChange={(e) => setSearchName(e.target.value)}
               />
             </FormControl>
           </div>
           <div className="categories-list">
-            {items.map((item) => (
+            {filteredSubCategory.map((item: any) => (
               <div key={item.id} className="item">
                 <img
                   className="mb-4 aspect-[4/3] w-full object-contain md:mb-6"
-                  src={item.image}
+                  src={item.icon}
                   alt=""
                 />
                 <div className="flex flex-wrap items-center justify-between">
@@ -200,7 +257,7 @@ function HomePage() {
         </div>
       </div>
     </>
-  );
+  )
 }
 
-export default HomePage;
+export default HomePage
