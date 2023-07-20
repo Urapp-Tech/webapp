@@ -8,7 +8,7 @@ function AuthLayout() {
   const auth = useAppSelector((state) => state.authState);
   const navigate = useNavigate();
   useEffect(() => {
-    if (auth.user) {
+    if (!auth.user) {
       navigate('/dashboard');
     }
   }, [auth.user]);

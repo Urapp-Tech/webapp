@@ -1,23 +1,23 @@
-import { NavLink, useNavigate } from 'react-router-dom';
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import Stack from '@mui/material/Stack';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
-import CreditCardRoundedIcon from '@mui/icons-material/CreditCardRounded';
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import MailIcon from '@mui/icons-material/Mail';
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import assets from '../../assets';
-import { useAppDispatch } from '../../redux/redux-hooks';
-import { logout } from '../../redux/features/authStateSlice';
+import { NavLink, useNavigate } from 'react-router-dom'
+import Drawer from '@mui/material/Drawer'
+import List from '@mui/material/List'
+import Stack from '@mui/material/Stack'
+import Toolbar from '@mui/material/Toolbar'
+import IconButton from '@mui/material/IconButton'
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined'
+import CreditCardRoundedIcon from '@mui/icons-material/CreditCardRounded'
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
+import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined'
+import FacebookIcon from '@mui/icons-material/Facebook'
+import TwitterIcon from '@mui/icons-material/Twitter'
+import InstagramIcon from '@mui/icons-material/Instagram'
+import MailIcon from '@mui/icons-material/Mail'
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
+import assets from '../../assets'
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks'
+import { logout } from '../../redux/features/authStateSlice'
 
 const links = [
   {
@@ -63,15 +63,16 @@ const links = [
       <HelpOutlineOutlinedIcon className="aside-list-icon" fontSize="inherit" />
     ),
   },
-];
+]
 
 function Sidebar() {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const auth = useAppSelector((state) => state.authState)
   const logOut = () => {
-    dispatch(logout());
-    navigate('/auth/login');
-  };
+    dispatch(logout())
+    navigate('/auth/login')
+  }
   return (
     <Drawer
       variant="permanent"
@@ -90,7 +91,7 @@ function Sidebar() {
               {link.icon}
               <span>{link.name}</span>
             </NavLink>
-          );
+          )
         })}
       </div>
       <div className="sidebar-footer-content">
@@ -119,18 +120,21 @@ function Sidebar() {
           </NavLink>
           <hr className="mt-4" />
         </div>
-
-        <NavLink
-          className="logout-link"
-          to="/auth/login"
-          onClick={() => logOut()}
-        >
-          <LogoutOutlinedIcon className="icon" />
-          Logout
-        </NavLink>
+        {auth.user ? (
+          <NavLink
+            className="logout-link"
+            to="/auth/login"
+            onClick={() => logOut()}
+          >
+            <LogoutOutlinedIcon className="icon" />
+            Logout
+          </NavLink>
+        ) : (
+          ''
+        )}
       </div>
     </Drawer>
-  );
+  )
 }
 
-export default Sidebar;
+export default Sidebar
