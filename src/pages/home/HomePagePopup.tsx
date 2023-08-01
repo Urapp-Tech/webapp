@@ -1,26 +1,28 @@
-import { useState } from 'react';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ClearIcon from '@mui/icons-material/Clear';
-import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
-import HomePagePopupClasses from './HomePagePopup.module.css';
-import assets from '../../assets';
-import { useAppDispatch } from '../../redux/redux-hooks';
-import { addToCart } from '../../redux/features/cartStateSlice';
+import { useCallback, useEffect, useState } from 'react'
+import Dialog from '@mui/material/Dialog'
+import DialogContent from '@mui/material/DialogContent'
+import DialogActions from '@mui/material/DialogActions'
+import Accordion from '@mui/material/Accordion'
+import AccordionSummary from '@mui/material/AccordionSummary'
+import AccordionDetails from '@mui/material/AccordionDetails'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import ClearIcon from '@mui/icons-material/Clear'
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined'
+import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined'
+import HomePagePopupClasses from './HomePagePopup.module.css'
+import assets from '../../assets'
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks'
+import { addToCart, Cart } from '../../redux/features/cartStateSlice'
+import cartService from '../../services/cart'
+import { getItem } from '../../utilities/local-storage'
 
 type Props = {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  data: any;
-};
+  open: boolean
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  data: any
+}
 
 const itemFAQs = [
   {
@@ -61,242 +63,150 @@ const itemFAQs = [
               temporibus ex porro sint ut at dolorum quo aut odit officia? Sunt
               necessitatibus asperiores harum nesciunt.`,
   },
-];
+]
 
 function HomePagePopup({ open, setOpen, data }: Props) {
-  const [expanded, setExpanded] = useState<string | false>(false);
+  const [expanded, setExpanded] = useState<string | false>(false)
+  const dispatch = useAppDispatch()
+  const [count, setCount] = useState(1)
+  const Cartdata = getItem('RegisteredCart')
+  let arr: any = []
 
-  const handleChange =
-    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-      setExpanded(isExpanded ? panel : false);
-    };
-  const [count, setCount] = useState(1);
+  const handleChange = (panel: string) => (
+    event: React.SyntheticEvent,
+    isExpanded: boolean,
+  ) => {
+    setExpanded(isExpanded ? panel : false)
+  }
   const incrementCount = () => {
-    setCount((previousCount) => previousCount + 1);
-  };
+    setCount((previousCount) => previousCount + 1)
+  }
   const decrementCount = () => {
     setCount((previousCount) => {
       if (previousCount <= 1) {
-        return 0;
+        return 1
       }
-      return previousCount - 1;
-    });
-  };
-  const dispatch = useAppDispatch();
-  const addToBasketHandler = () => {
-    const cartItem = {
-      id: data.id,
-      image: data.image,
-      name: data.name,
-      price: data.price,
-      quantity: count,
-    };
-    dispatch(addToCart(cartItem));
-    setOpen(false);
-  };
+      return previousCount - 1
+    })
+  }
+
+  const addToBasketHandler = (CartData: any) => {
+    dispatch(addToCart(CartData))
+    arr.push(...arr, { id: CartData.id, quantity: CartData.quantity })
+    console.log(arr)
+    const reqBody = {
+      appUser: Cartdata?.appUser,
+      appUserAddress: Cartdata?.appUserAddres,
+      appUserDevice: Cartdata?.appUserDevice,
+      cartId: Cartdata?.id,
+      dropDateTime: Cartdata?.dropDateTime,
+      pickupDateTime: Cartdata?.pickupDateTime,
+      promoCode: Cartdata?.promoCode,
+      tenant: Cartdata?.tenant,
+      products: arr,
+    }
+    cartService
+      .updateCart(reqBody)
+      .then((response) => dispatch(Cart(response.data.data.cart)))
+      .catch((error) => console.log(error))
+    setOpen(false)
+    setCount(0)
+  }
   const onCloseHandler = (event: object, reason: string) => {
     if (reason === 'backdropClick') {
-      setOpen(false);
+      setOpen(false)
     }
-  };
+  }
   return (
+    <Dialog open={open} onClose={onCloseHandler} className="modal-add-to-cart">
+      <IconButton onClick={() => setOpen(false)} className="btn-close">
+        <ClearIcon />
+      </IconButton>
+      <DialogContent className="modal-content">
+        <div className="main-grid">
+          <div>
+            <div className="product-img">
+              <img src={data?.icon} alt="" />
+            </div>
+            <div className="p-4">
+              <h4 className="product-name">{data?.name}</h4>
+              <p className="product-desc">
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s, when an unknown printer took a galley
+                of type and scrambled it to make a type specimen book.
+              </p>
+              <div className="flex-container flex items-center justify-between">
+                <div className="price">
+                  <h3 className="number">
+                    $ <span>{data?.price.toFixed(2)}</span>
+                  </h3>
+                  <p className="text">&nbsp;/ item</p>
+                </div>
+                <div className="count">
+                  <IconButton
+                    onClick={decrementCount}
+                    className="btn-decrement"
+                  >
+                    <RemoveCircleOutlineOutlinedIcon className="icon" />
+                  </IconButton>
 
-    <Dialog
-        open={open}
-        onClose={onCloseHandler}
-        className='modal-add-to-cart'
-      >
-        <IconButton
-          onClick={() => setOpen(false)}
-          className='btn-close'
-        >
-          <ClearIcon />
-        </IconButton>
-        <DialogContent className='modal-content'>
-          <div className='main-grid'>
-            <div>
-              <div className='product-img'>
-                <img src={data?.image} alt=""/>
-              </div>
-              <div className='p-4'>
-                <h4 className="product-name">{data?.name}</h4>
-                <p className="product-desc">
-                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum 
-                  has been the industry's standard dummy text ever since the 1500s, when an unknown printer 
-                  took a galley of type and scrambled it to make a type specimen book.
-                </p>
-                <div className='flex-container flex items-center justify-between'>
-                  <div className='price'>
-                    <h3 className='number'>$ <span>{data?.price.toFixed(2)}</span></h3>
-                    <p className='text'>&nbsp;/ item</p>
-                  </div>
-                  <div className='count'>
-                    <IconButton
-                      onClick={decrementCount}
-                      className='btn-decrement'
-                    >
-                      <RemoveCircleOutlineOutlinedIcon className='icon' />
-                    </IconButton>
-                    
-                    <div className='number'>
-                      {count}
-                    </div>
-                    <IconButton
-                      onClick={incrementCount}
-                      className='btn-increment'
-                    >
-                      <AddCircleOutlineOutlinedIcon className='icon' />
-                    </IconButton>
-                  </div>
+                  <div className="number">{count}</div>
+                  <IconButton
+                    onClick={incrementCount}
+                    className="btn-increment"
+                  >
+                    <AddCircleOutlineOutlinedIcon className="icon" />
+                  </IconButton>
                 </div>
               </div>
             </div>
-            <div className='product-accordion'>
+          </div>
+          <div className="product-accordion">
             {itemFAQs.map((faq, index) => {
               return (
                 <Accordion
                   key={index}
-                  className='accordion-item'
+                  className="accordion-item"
                   expanded={expanded === `panel-${index}`}
                   onChange={handleChange(`panel-${index}`)}
                 >
                   <AccordionSummary
-                    className='accordion-header'
+                    className="accordion-header"
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls={`panel-${index}-content`}
                     id={`panel-${index}-header`}
                   >
-                    <p className='heading'>
-                      {faq.question}
-                    </p>
+                    <p className="heading">{faq.question}</p>
                   </AccordionSummary>
-                  <AccordionDetails className='accordion-body'>
-                    <p className='desc'>
-                      {faq.answer}
-                    </p>
+                  <AccordionDetails className="accordion-body">
+                    <p className="desc">{faq.answer}</p>
                   </AccordionDetails>
                 </Accordion>
-              );
+              )
             })}
-            </div>
           </div>
-        </DialogContent>
-        <DialogActions className='modal-footer'>
-          <Button className='btn-add' onClick={addToBasketHandler}>Add to Basket</Button>
-        </DialogActions>
-      </Dialog>
-
-
-    // <Dialog
-    //   onClose={onCloseHandler}
-    //   open={open}
-    //   PaperProps={{
-    //     className: HomePagePopupClasses.Dialog,
-    //     style: { maxWidth: '100%', maxHeight: 'auto' },
-    //   }}
-    // >
-    //   <IconButton
-    //     onClick={() => setOpen(false)}
-    //     className={HomePagePopupClasses.Dialog_CloseButton}
-    //   >
-    //     <ClearIcon />
-    //   </IconButton>
-    //   <div className={HomePagePopupClasses.Content}>
-    //     <div className={HomePagePopupClasses.Grid}>
-    //       <div>
-    //         <img
-    //           className={HomePagePopupClasses.ItemImage}
-    //           src={data?.image}
-    //           alt=""
-    //         />
-    //         <div className={HomePagePopupClasses.ItemName}>{data?.name}</div>
-    //         <div className={HomePagePopupClasses.ItemDescription}>
-    //           Lorem Ipsum is simply dummy text of the printing and typesetting
-    //           industry. Lorem Ipsum has been the industry&apos;s standard dummy
-    //           text ever since the 1500s, when an unknown printer took a galley
-    //           of type and scrambled it to make a type specimen book.
-    //         </div>
-    //         <div className={HomePagePopupClasses.ItemPrice}>
-    //           <div>
-    //             <span className={HomePagePopupClasses.ItemPrice_Price}>
-    //               $ {data?.price.toFixed(2)}
-    //             </span>
-    //             <span className={HomePagePopupClasses.ItemPrice_Text}>
-    //               &nbsp;/ items
-    //             </span>
-    //           </div>
-    //           <div className={HomePagePopupClasses.ItemPrice_ItemCount}>
-    //             <IconButton
-    //               onClick={incrementCount}
-    //               className={
-    //                 HomePagePopupClasses.ItemPrice_ItemCount_IconButton
-    //               }
-    //             >
-    //               <AddCircleOutlineOutlinedIcon />
-    //             </IconButton>
-    //             <div className={HomePagePopupClasses.ItemPrice_ItemCount_Text}>
-    //               {count}
-    //             </div>
-    //             <IconButton
-    //               onClick={decrementCount}
-    //               className={
-    //                 HomePagePopupClasses.ItemPrice_ItemCount_IconButton
-    //               }
-    //             >
-    //               <RemoveCircleOutlineOutlinedIcon />
-    //             </IconButton>
-    //           </div>
-    //         </div>
-    //         <div className={HomePagePopupClasses.AddToBasket_Button_Container}>
-    //           <Button
-    //             type="button"
-    //             onClick={addToBasketHandler}
-    //             className={HomePagePopupClasses.AddToBasket_Button}
-    //           >
-    //             Add to Basket
-    //           </Button>
-    //         </div>
-    //       </div>
-    //       <div className={HomePagePopupClasses.Accordion_Container}>
-    //         {itemFAQs.map((faq, index) => {
-    //           return (
-    //             <Accordion
-    //               key={index}
-    //               className={HomePagePopupClasses.Accordion}
-    //               expanded={expanded === `panel-${index}`}
-    //               onChange={handleChange(`panel-${index}`)}
-    //             >
-    //               <AccordionSummary
-    //                 className={HomePagePopupClasses.Accordion_Summary}
-    //                 expandIcon={<ExpandMoreIcon />}
-    //                 aria-controls={`panel-${index}-content`}
-    //                 id={`panel-${index}-header`}
-    //               >
-    //                 <div
-    //                   className={
-    //                     HomePagePopupClasses.Accordion_Summary_Question
-    //                   }
-    //                 >
-    //                   {faq.question}
-    //                 </div>
-    //               </AccordionSummary>
-    //               <AccordionDetails
-    //                 className={HomePagePopupClasses.Accordion_Details}
-    //               >
-    //                 <div
-    //                   className={HomePagePopupClasses.Accordion_Details_Text}
-    //                 >
-    //                   {faq.answer}
-    //                 </div>
-    //               </AccordionDetails>
-    //             </Accordion>
-    //           );
-    //         })}
-    //       </div>
-    //     </div>
-    //   </div>
-    // </Dialog>
-  );
+        </div>
+      </DialogContent>
+      <DialogActions className="modal-footer">
+        <Button
+          className="btn-add"
+          onClick={() => {
+            const cartItem = {
+              id: data?.id,
+              image: data?.icon,
+              name: data?.name,
+              price: data?.price,
+              quantity: count,
+            }
+            addToBasketHandler(cartItem)
+          }}
+        >
+          Add to Basket
+        </Button>
+      </DialogActions>
+    </Dialog>
+  )
 }
 
-export default HomePagePopup;
+export default HomePagePopup
