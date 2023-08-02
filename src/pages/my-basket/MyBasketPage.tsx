@@ -1,45 +1,113 @@
-import { useState } from 'react';
-import dayjs from 'dayjs';
-import IconButton from '@mui/material/IconButton';
-import FormControl from '@mui/material/FormControl';
-import InputAdornment from '@mui/material/InputAdornment';
-import Input from '@mui/material/Input';
-import Button from '@mui/material/Button';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import DiscountIcon from '@mui/icons-material/Discount';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
-import DateRangeIcon from '@mui/icons-material/DateRange';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import CreditCardOutlinedIcon from '@mui/icons-material/CreditCardOutlined';
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import DatePickerButton from './DatePickerButton';
-import MyBasketPagePopup from './MyBasketPagePopup';
-import { removeFromCart } from '../../redux/features/cartStateSlice';
+import { useState } from 'react'
+import dayjs from 'dayjs'
+import IconButton from '@mui/material/IconButton'
+import FormControl from '@mui/material/FormControl'
+import InputAdornment from '@mui/material/InputAdornment'
+import Input from '@mui/material/Input'
+import Button from '@mui/material/Button'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import DiscountIcon from '@mui/icons-material/Discount'
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
+import DateRangeIcon from '@mui/icons-material/DateRange'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
+import CreditCardOutlinedIcon from '@mui/icons-material/CreditCardOutlined'
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks'
+import DatePickerButton from './DatePickerButton'
+import MyBasketPagePopup from './MyBasketPagePopup'
+import { removeFromCart } from '../../redux/features/cartStateSlice'
+import MarkersMap from '../../components/common/MarkerMap'
+import { Marker } from '../../interfaces/map.interface'
+import { getItem } from '../../utilities/local-storage'
+import cartService from '../../services/cart'
+import { Cart } from '../../redux/features/cartStateSlice'
+import { useNavigate } from 'react-router-dom'
+import AlertBox from '../../components/common/SnackBar'
 
 function MyBasketPage() {
-  const { cartItems } = useAppSelector((state) => state.cartState);
-  const dispatch = useAppDispatch();
-  const [pickUpTime, setPickUpTime] = useState<dayjs.Dayjs | null>(null);
-  const [dropOffTime, setDropOffTime] = useState<dayjs.Dayjs | null>(null);
+  const { cartItems } = useAppSelector((state) => state.cartState)
+  const dispatch = useAppDispatch()
+  const [pickUpTime, setPickUpTime] = useState<dayjs.Dayjs | null>(null)
+  const [dropOffTime, setDropOffTime] = useState<dayjs.Dayjs | null>(null)
+  const Cartdata = getItem('RegisteredCart')
+  const userAddress = useAppSelector((state) => state.deviceStates.Address)
+  const [promocode, setPromocode] = useState('')
   const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
-    setPickUpTime(value);
-  };
+    setPickUpTime(value)
+  }
   const handleDropOffTimeChange = (value: dayjs.Dayjs | null) => {
-    setDropOffTime(value);
-  };
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-
+    setDropOffTime(value)
+  }
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false)
+  const auth = useAppSelector((state) => state.deviceStates)
+  const navigate = useNavigate()
   const total = cartItems.reduce(
     (previousValue, currentValue) =>
       previousValue + currentValue.price * currentValue.quantity,
-    0
-  );
+    0,
+  )
+  const [alertMsg, setAlertMsg] = useState('')
+  const [showAlert, setShowAlert] = useState(false)
+  const [alertSeverity, setAlertSeverity] = useState('')
+  console.log(cartItems)
+  let arr: any = []
+  cartItems.forEach((el) => {
+    let abc = {
+      id: el.id,
+      quantity: el.quantity,
+    }
+    arr.push(abc)
+  })
+  const onCheckout = () => {
+    const reqBody: any = {
+      appUser: Cartdata?.appUser,
+      appUserAddress: null,
+      appUserDevice: Cartdata?.appUserDevice,
+      cartId: Cartdata?.id,
+      dropDateTime: dropOffTime,
+      pickupDateTime: pickUpTime,
+      promoCode: promocode,
+      tenant: Cartdata?.tenant,
+      products: arr,
+    }
+    if (auth.DeviceData) {
+      if (pickUpTime && dropOffTime) {
+        cartService
+          .updateCart(reqBody)
+          .then((response) => {
+            console.log(response)
+            dispatch(Cart(response.data.data.cart))
+            navigate('/auth/login')
+          })
+          .catch((error) => console.log(error))
+      } else {
+        setAlertMsg('Pickup and Drop-off time Required')
+        setShowAlert(true)
+        setAlertSeverity('error')
+      }
+    } else {
+      cartService
+        .updateCart(reqBody)
+        .then((response) => {
+          console.log(response)
+          // dispatch(Cart(response.data.data.cart))
+        })
+        .catch((error) => console.log(error))
+    }
+  }
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
+      {showAlert && (
+        <AlertBox
+          msg={alertMsg}
+          setSeverty={alertSeverity}
+          alertOpen={showAlert}
+          setAlertOpen={setShowAlert}
+        />
+      )}
       <MyBasketPagePopup
         open={dialogOpen}
         setOpen={setDialogOpen}
@@ -93,7 +161,7 @@ function MyBasketPage() {
                       </div>
                     </td>
                     <td className="text-end font-open-sans text-xs font-normal text-neutral-900">
-                      ${item.price.toFixed(2)}
+                      ${item?.price?.toFixed(2)}
                     </td>
                     <td className="text-end font-open-sans text-xs font-normal text-neutral-900">
                       {item.quantity}
@@ -117,6 +185,8 @@ function MyBasketPage() {
                   inputProps={{
                     placeholder: 'Enter Promo Code',
                   }}
+                  value={promocode}
+                  onChange={(e) => setPromocode(e.target.value)}
                   startAdornment={
                     <InputAdornment
                       className="text-orange-100"
@@ -188,7 +258,7 @@ function MyBasketPage() {
             <div className="flex items-center py-2">
               <LocationOnOutlinedIcon className="mr-2 text-xl text-neutral-900" />
               <div className="font-open-sans text-xs font-normal text-neutral-500">
-                2003 | 750 Bay Street
+                {userAddress}
               </div>
               <div className="flex-grow"> </div>
               <div className="font-open-sans text-sm font-normal text-neutral-900">
@@ -196,7 +266,7 @@ function MyBasketPage() {
               </div>
             </div>
             <hr className="h-[1px] rounded-lg bg-neutral-200" />
-            <div className="flex items-center py-2">
+            {/* <div className="flex items-center py-2">
               <CreditCardOutlinedIcon className="mr-2 text-xl text-neutral-900" />
               <div className="font-open-sans text-xs font-normal text-neutral-500">
                 **** **** **** 6584
@@ -206,7 +276,7 @@ function MyBasketPage() {
                 Change
               </div>
             </div>
-            <hr className="h-[1px] rounded-lg bg-neutral-200" />
+            <hr className="h-[1px] rounded-lg bg-neutral-200" /> */}
             <div className="my-4">
               <div className="font-open-sans text-lg font-semibold text-neutral-900">
                 Total Amount
@@ -247,7 +317,7 @@ function MyBasketPage() {
             </div>
             <Button
               type="button"
-              onClick={() => setDialogOpen(true)}
+              onClick={() => onCheckout()}
               color="inherit"
               className="w-full rounded-lg bg-neutral-900 font-open-sans text-base font-semibold text-gray-50"
             >
@@ -257,7 +327,7 @@ function MyBasketPage() {
         </div>
       </div>
     </LocalizationProvider>
-  );
+  )
 }
 
-export default MyBasketPage;
+export default MyBasketPage

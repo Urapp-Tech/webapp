@@ -5,82 +5,16 @@ import FormControl from '@mui/material/FormControl'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
 import HomePagePopup from './HomePagePopup'
-import assets from '../../assets'
-import SelectLocationPopup from './SelectLocationPopup'
 import LocationPopup from './LocationPopup'
-import SnackBar from '../../components/common/SnackBar'
-import { AlertColor } from '@mui/material'
 import tenantService from '../../services/tenant'
-import { tenantId } from '../../utilities/constant'
-import { v4 as uuidv4 } from 'uuid'
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks'
 import categoryService from '../../services/Category'
-import { setId } from '../../redux/features/deviceState'
-import { category } from '../../redux/features/categorySlice'
-import { CategoryPayload } from '../../interfaces/Category'
-
-const items = [
-  {
-    id: 1,
-    name: 'Jacket',
-    price: 12.0,
-    image: assets.tempImages.jacket1,
-  },
-  {
-    id: 2,
-    name: 'Pants',
-    price: 14.0,
-    image: assets.tempImages.pants1,
-  },
-  {
-    id: 3,
-    name: 'Shirt',
-    price: 16.0,
-    image: assets.tempImages.shirt1,
-  },
-  {
-    id: 4,
-    name: 'Neck Scarf',
-    price: 18.0,
-    image: assets.tempImages.neckScarf1,
-  },
-  {
-    id: 5,
-    name: 'Printed T-shirt',
-    price: 20.0,
-    image: assets.tempImages.printedTShirt1,
-  },
-  {
-    id: 6,
-    name: 'Neck Scarf 2',
-    price: 18.0,
-    image: assets.tempImages.neckScarf1,
-  },
-  {
-    id: 7,
-    name: 'Printed T-shirt 2',
-    price: 16.0,
-    image: assets.tempImages.printedTShirt1,
-  },
-  {
-    id: 8,
-    name: 'Jacket 2',
-    price: 14.0,
-    image: assets.tempImages.jacket1,
-  },
-  {
-    id: 9,
-    name: 'Pants 2',
-    price: 16.0,
-    image: assets.tempImages.pants1,
-  },
-  {
-    id: 10,
-    name: 'Shirt 2',
-    price: 18.0,
-    image: assets.tempImages.shirt1,
-  },
-]
+import { setDeviceData } from '../../redux/features/deviceState'
+import { ClientJS } from 'clientjs'
+import cartService from '../../services/cart'
+import { getCart } from '../../redux/features/cartStateSlice'
+import { getItem } from '../../utilities/local-storage'
+import Address from '../../services/Address'
 
 function getCategoryClasses(isActive: boolean) {
   const classes = 'item'
@@ -99,17 +33,21 @@ function HomePage() {
     boolean
   >(true)
   const [selectedItem, setSelectedItem] = useState(null)
-  const [DeviceId, setDeviceId] = useState(uuidv4())
   const [searchName, setSearchName] = useState('')
   const [filteredSubCategory, setFilteredSubCategory] = useState<any[]>([])
-  const agent = navigator.userAgent
+  const RegisteredDevice = useAppSelector(
+    (state) => state.deviceStates.DeviceData?.deviceId,
+  )
   const dispatch = useAppDispatch()
-
-  const addItemHandler = (item: any) => {
+  const [location, setLocation] = useState<any>()
+  const userAddress = useAppSelector((state) => state.deviceStates.Address)
+   const addItemHandler = (item: any) => {
     setSelectedItem(item)
     setDialogOpen(true)
   }
-
+  const client = new ClientJS()
+  const fingerprint = client.getFingerprint()
+  const agent = client.getUserAgent()
   const fetchIp = async () => {
     const url = 'https://api.ipify.org/?format=json'
     try {
@@ -121,28 +59,58 @@ function HomePage() {
     }
   }
   useEffect(() => {
-    tenantService.getTenantConfig().then((response) => {
-      fetchIp().then((ip) => {
-        // Combine agent, IP address, and DeviceId to form nameValue
-        const nameValue = agent.slice(0, 11) + '-' + ip + '-' + DeviceId
-        tenantService
-          .deviceRegisteration({
-            deviceId: DeviceId,
-            deviceType: 'Android',
-            isNotificationAllowed: true,
-            name: nameValue,
-            tenant: response.data.data.id,
-            token: ' ',
-          })
-          .then((response) => {
-            dispatch(setId(response.data.data.deviceId))
-          })
-          .catch((err) => console.log(err))
+    const persistedDeviceData: any = getItem('deviceData')
+    if (persistedDeviceData) {
+      dispatch(setDeviceData(JSON.parse(persistedDeviceData)))
+    }
+    navigator.geolocation.getCurrentPosition(function (position) {
+      return setLocation({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
       })
+    })
+
+    fetchIp().then((ip) => {
+      const nameValue = agent.slice(0, 11) + '-' + ip + '-' + fingerprint
+      if (persistedDeviceData === null) {
+        // Address.userAddress({
+        //   address: userAddress,
+        //   latitude: location?.lat,
+        //   longitude: location?.lng,
+        //   name: nameValue,
+        //   type: 'home',
+        // })
+        //   .then((response) => console.log(response))
+        //   .catch((error) => console.log(error))
+        tenantService.getTenantConfig().then((response) => {
+          tenantService
+            .deviceRegisteration({
+              deviceId: fingerprint.toString(),
+              deviceType: 'Android',
+              isNotificationAllowed: true,
+              name: nameValue,
+              tenant: response.data.data.id,
+              token: 'undefined',
+            })
+            .then((response) => {
+              dispatch(setDeviceData(response.data.data))
+              cartService
+                .AnonyomousCart({
+                  tenant: response.data.data?.tenant,
+                  appUserDevice: response.data.data?.id,
+                })
+                .then((response) => {
+                  dispatch(getCart(response.data.data.cart))
+                })
+            })
+            .catch((err) => console.log(err))
+        })
+      }
     })
     categoryService
       .CategoryList()
       .then((response) => {
+        onClickButton(response.data.data[0])
         setSelectedCategory(response.data.data)
       })
       .catch((error) => {
@@ -180,7 +148,7 @@ function HomePage() {
 
   return (
     <>
-      {/* <HomePagePopup
+      <HomePagePopup
         open={dialogOpen}
         setOpen={setDialogOpen}
         data={selectedItem}
@@ -188,7 +156,7 @@ function HomePage() {
       <LocationPopup
         open={selectLocationDialogOpen}
         setOpen={setSelectLocationDialogOpen}
-      /> */}
+      />
       <div className="px-4 pt-6 sm:px-5 sm:pt-4 xl:px-7">
         <div className="all-categories">
           <h4 className="heading">Categories</h4>
@@ -207,7 +175,13 @@ function HomePage() {
                 >
                   <h3 className="cat-name">{category.name}</h3>
                   <div className="grow">
-                    <img src={category.icon} alt="" className="cat-img" />
+                    <img
+                      src={category.icon}
+                      alt=""
+                      className="cat-img"
+                      width={100}
+                      height={100}
+                    />
                   </div>
                 </button>
               ))}
@@ -215,7 +189,7 @@ function HomePage() {
         </div>
         <div className="selected-categories">
           <div className="mb-4 items-center justify-between sm:flex">
-            <h4 className="heading">{selectedCategory?.name}</h4>
+            <h4 className="heading">{subCategory?.name}</h4>
             <FormControl className="search-sub-cats">
               <Input
                 className="field"

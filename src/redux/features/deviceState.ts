@@ -1,22 +1,38 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { setItem } from '../../utilities/local-storage'
 
-type DeviceState = {
+type DevicePayload = {
   deviceId: string
+  deviceType: string
+  id: string
+  isNotificationAllowed: boolean
+  name: string
+  tenant: string
+  token: string
 }
 
+type DeviceState = {
+  DeviceData: DevicePayload | null
+  Address: string
+}
 const initialState: DeviceState = {
-  deviceId: '',
+  DeviceData: null,
+  Address: '',
 }
 
 export const deviceStateSlice = createSlice({
   name: 'device',
   initialState,
   reducers: {
-    setId: (state, action: PayloadAction<string>) => {
-      state.deviceId = action.payload
+    setDeviceData: (state, action: PayloadAction<DevicePayload>) => {
+      state.DeviceData = action.payload
+      setItem('deviceData', JSON.stringify(action.payload))
+    },
+    setUserAddress: (state, action: PayloadAction<string>) => {
+      state.Address = action.payload
     },
   },
 })
 
-export const { setId } = deviceStateSlice.actions
+export const { setDeviceData, setUserAddress } = deviceStateSlice.actions
 export default deviceStateSlice.reducer
