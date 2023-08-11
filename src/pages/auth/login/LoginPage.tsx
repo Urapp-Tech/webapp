@@ -16,6 +16,7 @@ import { useAppDispatch } from '../../../redux/redux-hooks'
 import authService from '../../../services/Auth'
 import { login } from '../../../redux/features/authStateSlice'
 import AlertBox from '../../../components/common/SnackBar'
+import { setToken } from '../../../utilities/constant'
 
 function LoginPage() {
   const navigate = useNavigate()
@@ -25,6 +26,7 @@ function LoginPage() {
   const [alertSeverity, setAlertSeverity] = useState('')
   const dispatch = useAppDispatch()
   const handleClickShowPassword = () => setShowPassword((show) => !show)
+
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
@@ -35,13 +37,15 @@ function LoginPage() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginPayload>()
+
   const submitHandler = (data: LoginPayload) => {
     authService
       .LoginService(data)
       .then((response) => {
         if (response.data.success) {
           dispatch(login(response.data.data))
-          // navigate('/dashboard');
+          setToken(response.data.data.token)
+          navigate('/dashboard/my-basket')
         }
       })
       .catch((err) => {

@@ -8,10 +8,14 @@ export interface AddressPayload {
   longitude: number
 }
 
+const getUserAddress = () => {
+  return devNetwork.get('appUserAddress/list')
+}
 const userAddress = (data: AddressPayload) => {
   return devNetwork.post(`appUserAddress/add`, data)
 }
 
 export default {
   userAddress,
+  getUserAddress,
 }

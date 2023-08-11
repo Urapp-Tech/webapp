@@ -93,7 +93,6 @@ function HomePagePopup({ open, setOpen, data }: Props) {
   const addToBasketHandler = (CartData: any) => {
     dispatch(addToCart(CartData))
     arr.push(...arr, { id: CartData.id, quantity: CartData.quantity })
-    console.log(arr)
     const reqBody = {
       appUser: Cartdata?.appUser,
       appUserAddress: Cartdata?.appUserAddres,

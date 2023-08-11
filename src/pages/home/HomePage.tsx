@@ -14,7 +14,6 @@ import { ClientJS } from 'clientjs'
 import cartService from '../../services/cart'
 import { getCart } from '../../redux/features/cartStateSlice'
 import { getItem } from '../../utilities/local-storage'
-import Address from '../../services/Address'
 
 function getCategoryClasses(isActive: boolean) {
   const classes = 'item'
@@ -29,6 +28,7 @@ function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<any>(null)
   const [subCategory, setSubCategory] = useState<any>([])
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
+  const auth = useAppSelector((state) => state.authState)
   const [selectLocationDialogOpen, setSelectLocationDialogOpen] = useState<
     boolean
   >(true)
@@ -41,7 +41,7 @@ function HomePage() {
   const dispatch = useAppDispatch()
   const [location, setLocation] = useState<any>()
   const userAddress = useAppSelector((state) => state.deviceStates.Address)
-   const addItemHandler = (item: any) => {
+  const addItemHandler = (item: any) => {
     setSelectedItem(item)
     setDialogOpen(true)
   }
@@ -73,15 +73,6 @@ function HomePage() {
     fetchIp().then((ip) => {
       const nameValue = agent.slice(0, 11) + '-' + ip + '-' + fingerprint
       if (persistedDeviceData === null) {
-        // Address.userAddress({
-        //   address: userAddress,
-        //   latitude: location?.lat,
-        //   longitude: location?.lng,
-        //   name: nameValue,
-        //   type: 'home',
-        // })
-        //   .then((response) => console.log(response))
-        //   .catch((error) => console.log(error))
         tenantService.getTenantConfig().then((response) => {
           tenantService
             .deviceRegisteration({
@@ -152,10 +143,6 @@ function HomePage() {
         open={dialogOpen}
         setOpen={setDialogOpen}
         data={selectedItem}
-      />
-      <LocationPopup
-        open={selectLocationDialogOpen}
-        setOpen={setSelectLocationDialogOpen}
       />
       <div className="px-4 pt-6 sm:px-5 sm:pt-4 xl:px-7">
         <div className="all-categories">

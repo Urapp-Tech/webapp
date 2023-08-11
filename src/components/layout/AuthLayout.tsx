@@ -7,11 +7,11 @@ import { useEffect } from 'react'
 function AuthLayout() {
   const auth = useAppSelector((state) => state.authState)
   const navigate = useNavigate()
-  useEffect(() => {
-    if (auth.user) {
-      navigate('/dashboard')
-    }
-  }, [!auth.user])
+  // useEffect(() => {
+  //   if (auth.user) {
+  //     navigate('/dashboard')
+  //   }
+  // }, [auth.user])
   return (
     <div className="auth-main">
       <Outlet />
