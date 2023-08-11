@@ -14,10 +14,12 @@ type DevicePayload = {
 type DeviceState = {
   DeviceData: DevicePayload | null
   Address: string
+  AddressList: []
 }
 const initialState: DeviceState = {
   DeviceData: null,
   Address: '',
+  AddressList: [],
 }
 
 export const deviceStateSlice = createSlice({
@@ -31,8 +33,15 @@ export const deviceStateSlice = createSlice({
     setUserAddress: (state, action: PayloadAction<string>) => {
       state.Address = action.payload
     },
+    setUserAddressList: (state, action: PayloadAction<[]>) => {
+      state.AddressList = action.payload
+    },
   },
 })
 
-export const { setDeviceData, setUserAddress } = deviceStateSlice.actions
+export const {
+  setDeviceData,
+  setUserAddress,
+  setUserAddressList,
+} = deviceStateSlice.actions
 export default deviceStateSlice.reducer

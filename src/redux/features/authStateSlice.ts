@@ -36,7 +36,6 @@ export const authStateSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action: PayloadAction<RegisteredUser>) => {
-      console.log(action.payload)
       state.user = action.payload
       localStorage.setItem('user', JSON.stringify(action.payload))
     },

@@ -68,10 +68,10 @@ const links = [
 function Sidebar() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const auth = useAppSelector((state) => state.authState)
+  const auth = localStorage.getItem('token')
+
   const logOut = () => {
     dispatch(logout())
-    navigate('/auth/login')
   }
   return (
     <Drawer
@@ -120,10 +120,10 @@ function Sidebar() {
           </NavLink>
           <hr className="mt-4" />
         </div>
-        {auth.user ? (
+        {auth ? (
           <NavLink
             className="logout-link"
-            to="/auth/login"
+            to="/dashboard"
             onClick={() => logOut()}
           >
             <LogoutOutlinedIcon className="icon" />

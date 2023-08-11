@@ -14,4 +14,3 @@ export const setToken = (data: string) => {
 export const setSignUpData = (data: SignupPayload) => {
   setItem('SignupData', data)
 }
-  

@@ -31,15 +31,17 @@ export interface CartState {
   cartItems: CartItem[]
   getCart: GetCart | null
   cartData: null
+  newOrder: [] | null
 }
 
 const initialState: CartState = {
   cartItems: [],
   getCart: null,
   cartData: null,
+  newOrder: null,
 }
 
-export const cartSlice = createSlice({
+export const cartSlice: any = createSlice({
   name: 'cart',
   initialState,
   reducers: {
@@ -48,7 +50,6 @@ export const cartSlice = createSlice({
       state.getCart = action.payload
     },
     Cart: (state, action: PayloadAction<null>) => {
-      console.log(action.payload)
       state.cartData = action.payload
     },
     setInitialCart: (state) => {
@@ -93,6 +94,9 @@ export const cartSlice = createSlice({
       state.cartItems[cartItemIndex].quantity -= 1
       localStorage.setItem('CART_ITEMS', JSON.stringify(state.cartItems))
     },
+    newOrder: (state, action: PayloadAction<[]>) => {
+      state.newOrder = action.payload
+    },
   },
 })
 
@@ -105,6 +109,7 @@ export const {
   setInitialCart,
   getCart,
   Cart,
+  newOrder,
 } = cartSlice.actions
 
 export default cartSlice.reducer
