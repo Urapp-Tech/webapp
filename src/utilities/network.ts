@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { BASE_URL, token } from '../utilities/constant'
+import { DEV_URL, token } from '../utilities/constant'
 
 const post = (endPoint: string, data: any) => {
-  return axios.post(`${BASE_URL}${endPoint}`, data, {
+  return axios.post(`${DEV_URL}${endPoint}`, data, {
     headers: {
       'Content-Type': 'application/json',
       Authorization: token,
@@ -11,7 +11,7 @@ const post = (endPoint: string, data: any) => {
 }
 
 const get = (endPoint: string) => {
-  return axios.get(`${BASE_URL}${endPoint}`, {
+  return axios.get(`${DEV_URL}${endPoint}`, {
     headers: {
       'Content-Type': 'application/json',
       Authorization: token,
