@@ -6,20 +6,20 @@ import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import MyBasketPagePopupClasses from './MyBasketPagePopup.module.css';
 
 type Props = {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  open: boolean
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
   data: {
-    amount: number;
-    id: number;
-  };
-};
+    amount: number
+    id: number
+  }
+}
 
 function MyBasketPagePopup({ open, setOpen, data }: Props) {
   const onCloseHandler = (event: unknown, reason: string) => {
     if (reason === 'backdropClick') {
-      setOpen(false);
+      setOpen(false)
     }
-  };
+  }
   return (
     <Dialog
       onClose={onCloseHandler}
@@ -44,7 +44,7 @@ function MyBasketPagePopup({ open, setOpen, data }: Props) {
         </Button>
       </DialogActions>
     </Dialog>
-  );
+  )
 }
 
-export default MyBasketPagePopup;
+export default MyBasketPagePopup

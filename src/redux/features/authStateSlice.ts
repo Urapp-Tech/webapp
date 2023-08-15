@@ -28,7 +28,7 @@ function getUser() {
 }
 
 const initialState: AuthState = {
-  user: getUser(),
+  user: null,
 }
 
 export const authStateSlice = createSlice({

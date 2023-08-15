@@ -1,50 +1,139 @@
-import { useState } from 'react';
-import dayjs from 'dayjs';
-import IconButton from '@mui/material/IconButton';
-import FormControl from '@mui/material/FormControl';
-import InputAdornment from '@mui/material/InputAdornment';
-import Input from '@mui/material/Input';
-import Button from '@mui/material/Button';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import DiscountIcon from '@mui/icons-material/Discount';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
-import DateRangeIcon from '@mui/icons-material/DateRange';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import CreditCardOutlinedIcon from '@mui/icons-material/CreditCardOutlined';
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import DatePickerButton from './DatePickerButton';
-import MyBasketPagePopup from './MyBasketPagePopup';
-import { removeFromCart } from '../../redux/features/cartStateSlice';
+import { useEffect, useState } from 'react'
+import dayjs from 'dayjs'
+import IconButton from '@mui/material/IconButton'
+import FormControl from '@mui/material/FormControl'
+import InputAdornment from '@mui/material/InputAdornment'
+import Input from '@mui/material/Input'
+import { Link } from "react-router-dom";
+import Button from '@mui/material/Button'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import DiscountIcon from '@mui/icons-material/Discount'
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
+import DateRangeIcon from '@mui/icons-material/DateRange'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
+import CreditCardOutlinedIcon from '@mui/icons-material/CreditCardOutlined'
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks'
+import DatePickerButton from './DatePickerButton'
+import MyBasketPagePopup from './MyBasketPagePopup'
+import { newOrder, removeFromCart } from '../../redux/features/cartStateSlice'
+import MarkersMap from '../../components/common/MarkerMap'
+import { Marker } from '../../interfaces/map.interface'
+import { getItem } from '../../utilities/local-storage'
+import cartService from '../../services/cart'
+import { Cart } from '../../redux/features/cartStateSlice'
+import { useNavigate } from 'react-router-dom'
+import AlertBox from '../../components/common/SnackBar'
+import OrderService from '../../services/Order'
+import { setUserAddressList } from '../../redux/features/deviceState'
+import AddressService from '../../services/Address'
+import { setToken } from '../../utilities/constant'
 
 function MyBasketPage() {
-  const { cartItems } = useAppSelector((state) => state.cartState);
-  const dispatch = useAppDispatch();
-  const [pickUpTime, setPickUpTime] = useState<dayjs.Dayjs | null>(null);
-  const [dropOffTime, setDropOffTime] = useState<dayjs.Dayjs | null>(null);
-  const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
-    setPickUpTime(value);
-  };
-  const handleDropOffTimeChange = (value: dayjs.Dayjs | null) => {
-    setDropOffTime(value);
-  };
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const { cartItems } = useAppSelector((state) => state.cartState)
+  const dispatch = useAppDispatch()
+  const [pickUpTime, setPickUpTime] = useState<dayjs.Dayjs | null>()
+  const [dropOffTime, setDropOffTime] = useState<dayjs.Dayjs | null>()
+  const Cartdata = getItem('RegisteredCart')
+  const [promocode, setPromocode] = useState('')
+  const auth = useAppSelector((state) => state.deviceStates)
+  const navigate = useNavigate()
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false)
+  const [alertMsg, setAlertMsg] = useState('')
+  const [showAlert, setShowAlert] = useState(false)
+  const [alertSeverity, setAlertSeverity] = useState('')
+  const authUser = useAppSelector((state) => state.authState)
+  const [addressPopup, setAddressPopup] = useState(false)
+  const user = JSON.parse(localStorage.getItem('user')!)
+  const token = localStorage.getItem('token')
+  const userAddress: any = useAppSelector(
+    (state) => state.deviceStates.AddressList,
+  )
 
+  const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
+    setPickUpTime(value)
+  }
+  const handleDropOffTimeChange = (value: dayjs.Dayjs | null) => {
+    setDropOffTime(value)
+  }
   const total = cartItems.reduce(
-    (previousValue, currentValue) =>
+    (previousValue: any, currentValue: any) =>
       previousValue + currentValue.price * currentValue.quantity,
-    0
-  );
+    0,
+  )
+  useEffect(() => {
+    if (user) {
+      AddressService.getUserAddress()
+        .then((response) => {
+          console.log(response.data.data)
+          dispatch(setUserAddressList(response.data.data))
+        })
+        .catch((error) => console.log(error))
+    }
+  }, [])
+
+  let arr: any = []
+  cartItems.forEach((el: any) => {
+    let abc = {
+      id: el.id,
+      quantity: el.quantity,
+    }
+    arr.push(abc)
+  })
+
+  setToken(user?.token)
+
+  const onCheckout = () => {
+    const reqBody: any = {
+      appUser: user?.id,
+      appUserAddress: userAddress[0]?.id,
+      appUserDevice: Cartdata?.appUserDevice,
+      cartId: Cartdata?.id,
+      dropDateTime: dropOffTime,
+      pickupDateTime: pickUpTime,
+      promoCode: promocode,
+      tenant: Cartdata?.tenant,
+      products: arr,
+    }
+    if (!user) {
+      return navigate('/auth/login')
+    } else {
+      if (pickUpTime && dropOffTime) {
+        cartService
+          .updateCart(reqBody)
+          .then((response) => {
+            dispatch(Cart(response.data.data.cart))
+            OrderService.addOrder({ cartId: response.data.data.cart.id })
+              .then((response) => dispatch(newOrder(response.data)))
+              .catch((error) => console.log(error))
+          })
+          .catch((error) => {
+            console.log(error)
+            setAlertMsg(error.message)
+            setShowAlert(true)
+            setAlertSeverity('error')
+          })
+      } else {
+        setAlertMsg('Pickup Date & Drop off time is Required')
+        setShowAlert(true)
+        setAlertSeverity('error')
+      }
+    }
+  }
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <MyBasketPagePopup
-        open={dialogOpen}
-        setOpen={setDialogOpen}
-        data={{ amount: total + (total / 100) * 13, id: 56482 }}
-      />
+      {showAlert && (
+        <AlertBox
+          msg={alertMsg}
+          setSeverty={alertSeverity}
+          alertOpen={showAlert}
+          setAlertOpen={setShowAlert}
+        />
+      )}
+
       <div className="p-4 sm:p-5 xl:p-7 cart-page">
         <div className="flex items-center justify-start mb-4 md:mb-6">
           <h4 className="page-heading">
@@ -56,8 +145,8 @@ function MyBasketPage() {
             <div className="cart-products-card">
               <div className='overflow-x-auto'>
                 <table className="cart-products-table">
-                  <thead>
-                    <tr>
+                  <thead className="border-b border-b-neutral-200 ">
+                    <tr className="h-10">
                       <th>Products</th>
                       <th>Price</th>
                       <th>Items</th>
@@ -81,7 +170,7 @@ function MyBasketPage() {
                             </div>
                           </div>
                         </td>
-                        <td>${item.price.toFixed(2)}</td>
+                        <td>${item?.price?.toFixed(2)}</td>
                         <td>{item.quantity}</td>
                         <td>${(item.price * item.quantity).toFixed(2)}</td>
                       </tr>
@@ -97,11 +186,12 @@ function MyBasketPage() {
                   <FormControl variant="standard" size="small">
                     <Input
                       className="promo-field"
-                      id="input-with-icon-adornment"
                       disableUnderline
                       inputProps={{
                         placeholder: 'Enter Promo Code',
                       }}
+                      value={promocode}
+                      onChange={(e) => setPromocode(e.target.value)}
                       startAdornment={
                         <InputAdornment
                           className="text-orange-100"
@@ -119,6 +209,7 @@ function MyBasketPage() {
               </div>
             </div>
           </div>
+
           <div className="col-span-2">
             <div className="cart-checkout-card">
               <div className="grid grid-cols-1 sm:grid-cols-2 mb-5">
@@ -165,13 +256,17 @@ function MyBasketPage() {
                   </div>
                 </div>
               </div>
-              <div className="address-card">
-                <div className="key">
-                  <LocationOnOutlinedIcon className="mr-2 text-xl" />
-                  <p className="text">2003 | 750 Bay Street</p>
+              {user ? (
+                <div className="address-card">
+                  <div className="key">
+                    <LocationOnOutlinedIcon className="mr-2 text-xl" />
+                    <p className="text">{userAddress[0]?.address}</p>
+                  </div>
+                  <Link className="value" to={''}>Change</Link>
                 </div>
-                <a href='#' className="value">Change</a>
-              </div>
+              ) : (
+                ''
+              )}
               <div className="address-card">
                 <div className="key">
                   <CreditCardOutlinedIcon className="mr-2 text-xl" />
@@ -180,9 +275,9 @@ function MyBasketPage() {
                 <a href='#' className="value">Change</a>
               </div>
               <div className="total-amount">
-                <div className="heading">
+                <h5 className="heading">
                   Total Amount
-                </div>
+                </h5>
                 <div className="flex items-center justify-between mb-4">
                   <p className="key">
                     Total Amount
@@ -208,29 +303,26 @@ function MyBasketPage() {
                   </p>
                 </div>
               </div>
-              <hr/>
               <div className="grand-total">
-                <div className="key">
-                  Grand Total
-                </div>
-                <div className="value">
+                <p className="key">Grand Total</p>
+                <p className="value">
                   ${(total + (total / 100) * 13).toFixed(2)}
-                </div>
+                </p>
               </div>
               <Button
                 type="button"
-                onClick={() => setDialogOpen(true)}
+                onClick={() => onCheckout()}
                 color="inherit"
                 className="btn-checkout"
               >
-                Checkout
+                {user ? 'Checkout' : 'Proceed'}
               </Button>
             </div>
           </div>
         </div>
       </div>
     </LocalizationProvider>
-  );
+  )
 }
 
-export default MyBasketPage;
+export default MyBasketPage

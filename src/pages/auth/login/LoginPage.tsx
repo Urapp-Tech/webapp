@@ -1,56 +1,59 @@
-import { useEffect, useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import Checkbox from '@mui/material/Checkbox';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Input from '@mui/material/Input';
-import InputLabel from '@mui/material/InputLabel';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import assets from '../../../assets';
-import { useForm } from 'react-hook-form';
-import { LoginPayload } from '../../../interfaces/auth.interface';
-import { useAppDispatch } from '../../../redux/redux-hooks';
-import authService from '../../../services/Auth';
-import { login } from '../../../redux/features/authStateSlice';
-import AlertBox from '../../../components/common/SnackBar';
-
+import { useEffect, useState } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
+import IconButton from '@mui/material/IconButton'
+import InputAdornment from '@mui/material/InputAdornment'
+import Checkbox from '@mui/material/Checkbox'
+import FormControl from '@mui/material/FormControl'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Input from '@mui/material/Input'
+import InputLabel from '@mui/material/InputLabel'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
+import assets from '../../../assets'
+import { useForm } from 'react-hook-form'
+import { LoginPayload } from '../../../interfaces/auth.interface'
+import { useAppDispatch } from '../../../redux/redux-hooks'
+import authService from '../../../services/Auth'
+import { login } from '../../../redux/features/authStateSlice'
+import AlertBox from '../../../components/common/SnackBar'
+import { setToken } from '../../../utilities/constant'
 
 function LoginPage() {
-  const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
-  const [showAlert, setShowAlert] = useState<boolean>(false);
-  const [alertMessage, setAlertMessage] = useState('');
-  const [alertSeverity, setAlertSeverity] = useState('');
-  const dispatch = useAppDispatch();
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const navigate = useNavigate()
+  const [showPassword, setShowPassword] = useState(false)
+  const [showAlert, setShowAlert] = useState<boolean>(false)
+  const [alertMessage, setAlertMessage] = useState('')
+  const [alertSeverity, setAlertSeverity] = useState('')
+  const dispatch = useAppDispatch()
+  const handleClickShowPassword = () => setShowPassword((show) => !show)
+
   const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ) => {
-    event.preventDefault();
-  };
+    event.preventDefault()
+  }
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginPayload>();
+  } = useForm<LoginPayload>()
+
   const submitHandler = (data: LoginPayload) => {
     authService
       .LoginService(data)
       .then((response) => {
         if (response.data.success) {
-          dispatch(login(response.data.data));
-          navigate('/dashboard');
+          dispatch(login(response.data.data))
+          setToken(response.data.data.token)
+          navigate('/dashboard/my-basket')
         }
       })
       .catch((err) => {
-        setShowAlert(true);
-        setAlertMessage(err.message);
-        setAlertSeverity('error');
-      });
-  };
+        setShowAlert(true)
+        setAlertMessage(err.message)
+        setAlertSeverity('error')
+      })
+  }
 
   return (
     <>
@@ -162,7 +165,7 @@ function LoginPage() {
         />
       )}
     </>
-  );
+  )
 }
 
-export default LoginPage;
+export default LoginPage

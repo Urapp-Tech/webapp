@@ -1,16 +1,21 @@
-import { useState, useCallback, useMemo } from 'react';
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import IconButton from '@mui/material/IconButton';
-import Dialog from '@mui/material/Dialog';
-import ClearIcon from '@mui/icons-material/Clear';
-import LocationPopupClasses from './LocationPopup.module.css';
-import assets from '../../assets';
+import { useState, useCallback, useMemo, useEffect } from 'react'
+import {
+  DirectionsRenderer,
+  GoogleMap,
+  useJsApiLoader,
+} from '@react-google-maps/api'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import IconButton from '@mui/material/IconButton'
+import Dialog from '@mui/material/Dialog'
+import ClearIcon from '@mui/icons-material/Clear'
+import LocationPopupClasses from './LocationPopup.module.css'
+import assets from '../../assets'
+import Map from '../../components/common/Map'
 
 type Props = {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
+  open: boolean
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
 
 const googleMapsStyles = [
   {
@@ -187,82 +192,58 @@ const googleMapsStyles = [
       },
     ],
   },
-];
+]
 
 const containerStyle = {
   width: '100%',
   height: '100%',
-};
+}
 
 function LocationPopup({ open, setOpen }: Props) {
-  const [renderMap, setRenderMap] = useState<google.maps.Map | null>(null);
-  const [directionsService, setDirectionsService] =
-    useState<google.maps.DirectionsService | null>(null);
-  const [directionsRenderer, setDirectionsRenderer] =
-    useState<google.maps.DirectionsRenderer | null>(null);
+  const [location, setLocation] = useState<any>()
+  const [
+    directionsService,
+    setDirectionsService,
+  ] = useState<google.maps.DirectionsService | null>(null)
+  const [
+    directionsRenderer,
+    setDirectionsRenderer,
+  ] = useState<google.maps.DirectionsRenderer | null>(null)
 
-  const center = useMemo(
-    () => ({
-      lat: 24.87859,
-      lng: 67.064085,
-    }),
-    []
-  );
   const onCloseHandler = (event: object, reason: string) => {
     if (reason === 'backdropClick') {
-      setOpen(false);
+      setOpen(false)
     }
-  };
+  }
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: 'AIzaSyCQ_g14OfzLkLOD6MGp4iJPuau2mbnjwvw',
-  });
-
+  })
   const calculateRoute = useCallback(
     function callback(start: google.maps.LatLng, end: google.maps.LatLng) {
       const request: google.maps.DirectionsRequest = {
         origin: start,
         destination: end,
         travelMode: google.maps.TravelMode.DRIVING,
-      };
+      }
       directionsService?.route(request, (result, status) => {
         if (status === 'OK') {
-          directionsRenderer?.setDirections(result);
+          directionsRenderer?.setDirections(result)
+          console.log(result)
         }
-      });
+      })
     },
-    [directionsService, directionsRenderer]
-  );
+    [directionsService, directionsRenderer],
+  )
 
-  const onLoad = useCallback(
-    function callback(map: google.maps.Map) {
-      setDirectionsService(new window.google.maps.DirectionsService());
-      const rendererOptions: google.maps.DirectionsRendererOptions = {
-        map,
-        suppressMarkers: false,
-        polylineOptions: {
-          strokeColor: '#171717',
-        },
-        markerOptions: {
-          animation: google.maps.Animation.DROP,
-          icon: assets.images.googleMapMarker,
-        },
-      };
-      setDirectionsRenderer(
-        new window.google.maps.DirectionsRenderer(rendererOptions)
-      );
-      map.setZoom(15);
-      map.setCenter(center);
-      setRenderMap(map);
-    },
-    [center]
-  );
-
-  const onUnmount = useCallback(function callback(map: google.maps.Map) {
-    setRenderMap(null);
-    setDirectionsService(null);
-    setDirectionsRenderer(null);
-  }, []);
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      return setLocation({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      })
+    })
+  }, [])
 
   return (
     <Dialog
@@ -281,17 +262,7 @@ function LocationPopup({ open, setOpen }: Props) {
       </IconButton>
       <div className={LocationPopupClasses.Content}>
         <div className={LocationPopupClasses.Map}>
-          {isLoaded ? (
-            <GoogleMap
-              mapContainerStyle={containerStyle}
-              options={{
-                disableDefaultUI: true,
-                styles: googleMapsStyles,
-              }}
-              onLoad={onLoad}
-              onUnmount={onUnmount}
-            />
-          ) : null}
+          {isLoaded ? <Map center={location} zoom={17} /> : null}
         </div>
         <div className={LocationPopupClasses.SC}>
           <Swiper
@@ -307,9 +278,9 @@ function LocationPopup({ open, setOpen }: Props) {
                   new google.maps.LatLng({
                     lat: 24.882,
                     lng: 67.067,
-                  })
-                );
-                return;
+                  }),
+                )
+                return
               }
               if (e.activeIndex === 1) {
                 calculateRoute(
@@ -320,9 +291,9 @@ function LocationPopup({ open, setOpen }: Props) {
                   new google.maps.LatLng({
                     lat: 24.876,
                     lng: 67.067,
-                  })
-                );
-                return;
+                  }),
+                )
+                return
               }
               if (e.activeIndex === 2) {
                 calculateRoute(
@@ -333,8 +304,8 @@ function LocationPopup({ open, setOpen }: Props) {
                   new google.maps.LatLng({
                     lat: 24.875,
                     lng: 67.062,
-                  })
-                );
+                  }),
+                )
               }
             }}
           >
@@ -384,7 +355,7 @@ function LocationPopup({ open, setOpen }: Props) {
         </div>
       </div>
     </Dialog>
-  );
+  )
 }
 
-export default LocationPopup;
+export default LocationPopup
