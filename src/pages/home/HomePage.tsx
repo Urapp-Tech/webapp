@@ -180,12 +180,12 @@ function HomePage() {
 
   return (
     <>
-      {/* <HomePagePopup
+      <HomePagePopup
         open={dialogOpen}
         setOpen={setDialogOpen}
         data={selectedItem}
       />
-      <LocationPopup
+      {/* <LocationPopup
         open={selectLocationDialogOpen}
         setOpen={setSelectLocationDialogOpen}
       /> */}
@@ -206,8 +206,8 @@ function HomePage() {
                   )}
                 >
                   <h3 className="cat-name">{category.name}</h3>
-                  <div className="grow">
-                    <img src={category.icon} alt="" className="cat-img" />
+                  <div className="cat-img">
+                    <img src={category.icon} alt="" />
                   </div>
                 </button>
               ))}

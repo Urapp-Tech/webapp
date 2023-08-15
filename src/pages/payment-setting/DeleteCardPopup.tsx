@@ -2,17 +2,14 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import ClearIcon from '@mui/icons-material/Clear';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
-import OrderDetailsPagePopupClasses from './OrderDetailsPagePopup.module.css';
 
 type Props = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function OrderDetailsPagePopup({ open, setOpen }: Props) {
+function DeleteCardPopup({ open, setOpen }: Props) {
   const onCloseHandler = (event: object, reason: string) => {
     if (reason === 'backdropClick') {
       setOpen(false);
@@ -22,13 +19,13 @@ function OrderDetailsPagePopup({ open, setOpen }: Props) {
     <Dialog
       onClose={onCloseHandler}
       open={open}
-      className='modal-cancel-order'
+      className='modal-delete-card'
     >
       <DialogContent className='modal-content'>
         <SentimentVeryDissatisfiedIcon className="icon" />
         <h2 className="heading">Hey Wait!</h2>
         <p className="desc">
-          Are you sure you want to Cancel this Order
+          Are you sure you want to Delete this Card
         </p>
       </DialogContent>
       <DialogActions className='modal-footer'>
@@ -43,4 +40,4 @@ function OrderDetailsPagePopup({ open, setOpen }: Props) {
   );
 }
 
-export default OrderDetailsPagePopup;
+export default DeleteCardPopup;

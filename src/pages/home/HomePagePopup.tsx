@@ -116,7 +116,7 @@ function HomePagePopup({ open, setOpen, data }: Props) {
           <div className='main-grid'>
             <div>
               <div className='product-img'>
-                <img src={data?.image} alt=""/>
+                <img src={data?.icon} alt=""/>
               </div>
               <div className='p-4'>
                 <h4 className="product-name">{data?.name}</h4>
@@ -166,9 +166,9 @@ function HomePagePopup({ open, setOpen, data }: Props) {
                     aria-controls={`panel-${index}-content`}
                     id={`panel-${index}-header`}
                   >
-                    <p className='heading'>
+                    <h6 className='heading'>
                       {faq.question}
-                    </p>
+                    </h6>
                   </AccordionSummary>
                   <AccordionDetails className='accordion-body'>
                     <p className='desc'>

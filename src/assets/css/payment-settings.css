@@ -1,0 +1,157 @@
+/* Payment Settings Page CSS */
+.payment-settings-page .main-heading{
+    @apply mb-5;
+    font-size: var(--fs-24);
+    font-weight: var(--fw-600);
+    color: var(--dark-100);
+    line-height: 1.1;
+}
+.payment-settings-page .payments-tab-header .tab-item{
+    @apply relative flex items-center py-5 pl-8 outline-none;
+    background-color: var(--white);
+    box-shadow: 2px 4px 6px 0px rgba(0, 0, 0, 0.06);
+    border-radius: 10px;
+    border: 1px solid transparent;
+}
+.payment-settings-page .payments-tab-header .tab-item.active{
+    border: 1px solid var(--dark-200);
+}
+
+/* Saved Cards */
+.payment-settings-page .saved-cards{
+    @apply h-full pt-6 px-5 pb-5;
+    background: var(--white);
+    box-shadow: 2px 4px 6px 0px rgba(0, 0, 0, 0.06);
+    border-radius: 10px;
+    overflow-x: auto;
+}
+.payment-settings-page .saved-cards .heading{
+    @apply mb-5;
+    font-size: var(--fs-20);
+    font-weight: var(--fw-600);
+    color: var(--dark-100);
+    line-height: 1.1;
+}
+.payment-settings-page .saved-cards .cards-list{
+    @apply flex flex-col gap-y-2.5;
+}
+.cards-list .item{
+    @apply p-5 flex w-full items-center cursor-pointer;
+    border: 1px solid var(--light-600);
+    border-radius: 10px;
+}
+.cards-list .item.active{
+    border: 1px solid var(--dark-200);
+}
+.cards-list .item .icon{
+    @apply w-5 h-5 mr-5;
+}
+.cards-list .item .checked{
+    @apply hidden;
+}
+.cards-list .item.active .checked{
+    @apply block;
+}
+.cards-list .item.active .unchecked{
+    @apply hidden;
+}
+.cards-list .item .details{
+    @apply flex-grow;
+}
+.cards-list .item .details .platform{
+    @apply flex items-center gap-x-2.5 mb-1;
+}
+.cards-list .item .details .platform .logo{
+    max-height: 25px;
+    width: auto;
+}
+.cards-list .item .details .platform .title{
+    @apply mb-0;
+    font-size: var(--fs-16);
+    font-weight: var(--fw-400);
+    color: var(--dark-300);
+    line-height: 1.1;
+}
+.cards-list .item .details .number{
+    @apply mb-0;
+    font-size: var(--fs-16);
+    font-weight: var(--fw-600);
+    color: var(--dark-100);
+    line-height: 1.1;
+}
+.cards-list .item .btn-del{
+    color: var(--dark-200);
+}
+/* Saved Cards */
+
+
+/* Delete Card Modal */
+.modal-delete-card .MuiModal-backdrop {
+    backdrop-filter: blur(25px) !important;
+}
+.modal-delete-card .MuiDialog-paper{
+    @apply m-4;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 2px 4px 6px 0px rgba(0, 0, 0, 0.06);
+    border-radius: 10px;
+}
+.modal-delete-card .modal-content{
+    @apply pt-11 px-5 pb-5 text-center;
+}
+.modal-delete-card .modal-content .icon{
+    @apply w-14 h-14 mb-2;
+}
+.modal-delete-card .modal-content .heading{
+    @apply mb-3 leading-none;
+    font-size: var(--fs-30);
+    font-weight: var(--fw-600);
+    color: var(--dark-100);
+}
+.modal-delete-card .modal-content .desc{
+    @apply mb-0 px-10 sm:px-24;
+    font-size: var(--fs-16);
+    font-weight: var(--fw-600);
+    color: var(--dark-100);
+}
+.modal-delete-card .modal-footer {
+    @apply p-5 gap-x-5;
+}
+.modal-delete-card .modal-footer .btn-yes{
+    @apply w-full capitalize m-0;
+    min-height: 50px;
+    background-color: transparent;
+    border: 1px solid var(--dark-200);
+    font-family: var(--ff-open-sans);
+    font-size: var(--fs-18);
+    font-weight: var(--fw-600);
+    color: var(--dark-200);
+    border-radius: 10px;
+}
+.modal-delete-card .modal-footer .btn-no{
+    @apply w-full capitalize m-0;
+    min-height: 50px;
+    background-color: var(--dark-200);
+    border: 1px solid var(--dark-200);
+    font-family: var(--ff-open-sans);
+    font-size: var(--fs-18);
+    font-weight: var(--fw-600);
+    color: var(--white);
+    border-radius: 10px;
+}
+/* Delete Card Modal */
+
+/* Saved Addresses Card */
+
+
+/* Select Address Card */
+
+/* Delivery Address Page CSS */
+
+@media only screen and (max-width: 1535.98px) and (min-width: 1280px)  {
+    
+}
+
+@media only screen and (max-width: 639.98px) {
+   
+}

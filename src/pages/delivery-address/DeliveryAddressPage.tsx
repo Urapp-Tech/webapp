@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import FormControl from '@mui/material/FormControl';
@@ -9,125 +10,128 @@ import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import MyLocationIcon from '@mui/icons-material/MyLocation';
+import DeleteAddressPopup from './DeleteAddressPopup';
 import assets from '../../assets';
 
 function DeliveryAddressPage() {
+  const [delAddress, setDelAddress] = useState<boolean>(false);
   return (
-    <div className="container px-5 py-5">
-      <div className="font-open-sans text-3xl font-semibold text-neutral-900">
-        Delivery Address
-      </div>
-      <div className="my-4 grid grid-cols-2 gap-4">
-        <div className="h-full rounded-xl bg-gray-50 p-4 shadow-md">
-          <div className="font-open-sans text-xl font-semibold text-neutral-900">
-            Saved Addresses
-          </div>
-          <div className="mt-2 flex flex-col gap-4">
-            <div className="flex w-full items-center rounded-xl p-4 outline outline-2 outline-neutral-900">
-              <CheckCircleOutlinedIcon className="mr-4" />
-              <div className="flex-grow">
-                <div className="font-open-sans text-sm font-normal text-neutral-500">
-                  Home
+    <>
+      <DeleteAddressPopup open={delAddress} setOpen={setDelAddress} />
+      <div className="p-4 sm:p-5 xl:p-7 delivery-address-page">
+        <h4 className="main-heading">Delivery Address</h4>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <div className="saved-addresses">
+              <h5 className="heading">Saved Addresses</h5>
+              <div className="addresses-list">
+                <div className="item active">
+                  <CheckCircleOutlinedIcon className="icon checked" />
+                  <CircleOutlinedIcon className="icon unchecked" />
+                  <div className="address">
+                    <p className="location">Home</p>
+                    <h6 className="detailed">
+                      917 Davie St, Vancouver, British Columbia.
+                    </h6>
+                  </div>
+                  <IconButton className="btn-del" onClick={() => setDelAddress(true)}>
+                    <DeleteOutlineOutlinedIcon />
+                  </IconButton>
                 </div>
-                <div className="font-open-sans text-base font-bold text-neutral-900">
-                  917 Davie St, Vancouver, British Columbia.
+                <div className="item">
+                  <CheckCircleOutlinedIcon className="icon checked" />
+                  <CircleOutlinedIcon className="icon unchecked" />
+                  <div className="address">
+                    <p className="location">Office</p>
+                    <h6 className="detailed">
+                      6200 N Shepherd Dr, Houston, Texas.
+                    </h6>
+                  </div>
+                  <IconButton className="btn-del" onClick={() => setDelAddress(true)}>
+                    <DeleteOutlineOutlinedIcon />
+                  </IconButton>
+                </div>
+                <div className="item">
+                  <CheckCircleOutlinedIcon className="icon checked" />
+                  <CircleOutlinedIcon className="icon unchecked" />
+                  <div className="address">
+                    <p className="location">Office</p>
+                    <h6 className="detailed">
+                      6200 N Shepherd Dr, Houston, Texas.
+                    </h6>
+                  </div>
+                  <IconButton className="btn-del" onClick={() => setDelAddress(true)}>
+                    <DeleteOutlineOutlinedIcon />
+                  </IconButton>
                 </div>
               </div>
-              <IconButton>
-                <DeleteOutlineOutlinedIcon className="text-neutral-900" />
-              </IconButton>
-            </div>
-            <div className="flex w-full items-center rounded-xl p-4 outline outline-2 outline-neutral-300">
-              <CircleOutlinedIcon className="mr-4" />
-              <div className="flex-grow">
-                <div className="font-open-sans text-sm font-normal text-neutral-500">
-                  Office
-                </div>
-                <div className="font-open-sans text-base font-bold text-neutral-900">
-                  6200 N Shepherd Dr, Houston, Texas.
-                </div>
-              </div>
-              <IconButton>
-                <DeleteOutlineOutlinedIcon className="text-neutral-900" />
-              </IconButton>
-            </div>
-            <div className="flex w-full items-center rounded-xl p-4 outline outline-2 outline-neutral-300">
-              <CircleOutlinedIcon className="mr-4" />
-              <div className="flex-grow">
-                <div className="font-open-sans text-sm font-normal text-neutral-500">
-                  Other
-                </div>
-                <div className="font-open-sans text-base font-bold text-neutral-900">
-                  6200 N Shepherd Dr, Houston, Texas.
-                </div>
-              </div>
-              <IconButton>
-                <DeleteOutlineOutlinedIcon className="text-neutral-900" />
-              </IconButton>
             </div>
           </div>
-          <div className="py-32"> </div>
+          <div className="select-location">
+            <div className='header'>
+              <img
+                src={assets.tempImages.map}
+                alt=""
+                className="aspect-video w-full object-cover"
+              />
+            </div>
+            <div className='body'>
+              <h5 className="title">Select Location</h5>
+              <FormControl className="location-address" variant="standard">
+                <InputLabel
+                  className="font-open-sans text-sm font-normal text-neutral-500"
+                  htmlFor="location"
+                >
+                  Your Location
+                </InputLabel>
+                <Input
+                  className="font-open-sans text-base font-semibold text-neutral-900 after:border-b-neutral-900"
+                  id="location"
+                  type="location"
+                />
+                <IconButton className="btn-current-location">
+                  <MyLocationIcon />
+                </IconButton>
+              </FormControl>
+              <p className="location-label">Save As</p>
+              <div className="grid grid-cols-3 gap-3 all-locations">
+                <div className="item">
+                  <input type="radio" name='location'/>
+                  <div className='content'>
+                    <div className="icon">
+                      <HomeOutlinedIcon />
+                    </div>
+                    <p className="text">Home</p>
+                  </div>
+                </div>
+                <div className="item">
+                  <input type="radio" name='location' />
+                  <div className='content'>
+                    <div className="icon">
+                      <WorkOutlineOutlinedIcon />
+                    </div>
+                    <p className="text">Office</p>
+                  </div>
+                </div>
+                <div className="item">
+                  <input type="radio" name='location' />
+                  <div className='content'>
+                    <div className="icon">
+                      <LocationOnOutlinedIcon />
+                    </div>
+                    <p className="text">Others</p>
+                  </div>
+                </div>
+              </div>
+              <Button color="inherit" className="btn-add-address">
+                Add Address
+              </Button>
+            </div>
+          </div>
         </div>
-        <div className="mb-auto rounded-xl bg-gray-50 p-4 shadow-md">
-          <img
-            src={assets.tempImages.map}
-            alt=""
-            className="aspect-video w-full object-cover"
-          />
-          <div className="my-2 font-open-sans text-lg font-bold text-neutral-900">
-            Select Location
-          </div>
-          <FormControl className="mb-4 w-full" variant="standard">
-            <InputLabel
-              className="font-open-sans text-sm font-normal text-neutral-500"
-              htmlFor="location"
-            >
-              Your Location
-            </InputLabel>
-            <Input
-              className="font-open-sans text-base font-semibold text-neutral-900 after:border-b-neutral-900"
-              id="location"
-              type="location"
-            />
-          </FormControl>
-          <div className="mb-4 font-open-sans text-sm font-normal text-neutral-500">
-            Save As
-          </div>
-          <div className="grid w-full grid-cols-3 gap-4">
-            <div className="flex w-full items-center rounded-xl bg-neutral-200 p-2">
-              <div className="mr-2 flex aspect-square w-8 items-center justify-center rounded-full bg-neutral-300">
-                <HomeOutlinedIcon className="text-lg" />
-              </div>
-              <div className="font-open-sans text-sm font-normal text-neutral-900">
-                Home
-              </div>
-            </div>
-            <div className="flex w-full items-center rounded-xl bg-neutral-200 p-2">
-              <div className="mr-2 flex aspect-square w-8 items-center justify-center rounded-full bg-neutral-300">
-                <WorkOutlineOutlinedIcon className="text-lg" />
-              </div>
-              <div className="font-open-sans text-sm font-normal text-neutral-900">
-                Office
-              </div>
-            </div>
-            <div className="flex w-full items-center rounded-xl bg-neutral-200 p-2">
-              <div className="mr-2 flex aspect-square w-8 items-center justify-center rounded-full bg-neutral-300">
-                <LocationOnOutlinedIcon className="text-base" />
-              </div>
-              <div className="font-open-sans text-sm font-normal text-neutral-900">
-                Others
-              </div>
-            </div>
-          </div>
-          <Button
-            color="inherit"
-            className="mt-4 w-full rounded-xl bg-neutral-900 py-4 font-open-sans text-xl font-semibold text-gray-50"
-          >
-            Add Address
-          </Button>
-        </div>
       </div>
-    </div>
+    </>
   );
 }
 

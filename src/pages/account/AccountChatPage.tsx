@@ -3,42 +3,28 @@ import Button from '@mui/material/Button';
 function AccountChatPage() {
   return (
     <>
-      <div className="mb-4 font-open-sans text-3xl font-semibold text-neutral-900">
+      <h4 className="main-heading">
         Chat With Us
-      </div>
-      <div className="rounded-xl bg-gray-50 p-4 shadow-md">
-        <div className="flex flex-col gap-3">
-          <label htmlFor="issue" className="flex w-1/2 flex-col gap-1">
-            <div className="font-open-sans text-sm font-normal text-neutral-500">
-              Select An Issue
-            </div>
-            <select
-              id="issue"
-              name="issue"
-              className="rounded-md bg-gray-50 px-2 py-1 font-open-sans text-sm font-semibold text-neutral-900 outline outline-1 outline-neutral-300 focus:outline-neutral-900"
-              defaultValue="DROP_OFF"
-            >
-              <option value="DROP_OFF">Drop Off</option>
-            </select>
-          </label>
-          <label htmlFor="message" className="flex flex-col gap-1">
-            <div className="font-open-sans text-sm font-normal text-neutral-500">
-              Your Message
-            </div>
-            <textarea
-              rows={5}
-              id="message"
-              name="message"
-              className="rounded-md bg-gray-50 px-2 py-1 font-open-sans text-sm font-semibold text-neutral-900 outline outline-1 outline-neutral-300 focus:outline-neutral-900"
-            />
-          </label>
-          <div className="flex w-full justify-end">
-            <Button
-              color="inherit"
-              className="mt-3 rounded-xl bg-neutral-900 px-32 py-2 font-open-sans text-base font-semibold text-gray-50"
-            >
-              Send
-            </Button>
+      </h4>
+      <div className="tab-content-card">
+        <div className="flex mb-4">
+          <div className="w-4/12">
+            <label htmlFor="issue" className="block">
+              <p className="label">Select An Issue</p>
+              <select id="issue" name="issue" className="field" defaultValue="DROP_OFF">
+                <option value="DROP_OFF">Drop Off</option>
+              </select>
+            </label>
+          </div>
+        </div>
+        <label htmlFor="message" className="block mb-4">
+          <p className="label">Your Message</p>
+          <textarea rows={5} id="message" name="message" className="field"
+          />
+        </label>
+        <div className="flex justify-end">
+          <div className="w-6/12">
+            <Button color="inherit" className="btn-submit">Send</Button>
           </div>
         </div>
       </div>

@@ -1,0 +1,87 @@
+/* Account Page CSS */
+
+.account-page .tab-pills{
+    @apply h-full;
+    border-right: 1px solid var(--light-400);
+}
+.account-page .tab-pills .main-heading{
+    @apply mb-6;
+    font-size: var(--fs-24);
+    font-weight: var(--fw-600);
+    color: var(--dark-100);
+    line-height: 1.1;
+}
+.account-page .tab-pills .item{
+    @apply flex items-center justify-start gap-x-5 py-5;
+    font-size: var(--fs-16);
+    font-weight: var(--fw-400);
+    color: var(--dark-300);
+    border-bottom: 1px solid var(--light-400);
+    transition: all 0.3s ease;
+}
+.account-page .tab-pills .item.active{
+    font-weight: var(--fw-600);
+    color: var(--dark-100);
+}
+
+.account-page .tab-content .main-heading{
+    @apply mb-6;
+    font-size: var(--fs-24);
+    font-weight: var(--fw-600);
+    color: var(--dark-100);
+    line-height: 1.1;
+}
+.account-page .tab-content .tab-content-card{
+    @apply p-5;
+    background: var(--white);
+    box-shadow: 2px 4px 6px 0px rgba(0, 0, 0, 0.06);
+    border-radius: 10px;
+}
+.tab-content-card .heading-sm{
+    @apply mb-8;
+    font-size: var(--fs-20);
+    font-weight: var(--fw-600);
+    color: var(--dark-100);
+    line-height: 1.1;
+}
+.tab-content-card .label{
+    @apply mb-2 select-none;
+    font-size: var(--fs-14);
+    font-weight: var(--fw-400);
+    color: var(--dark-300);
+    line-height: 1.1;
+}
+.tab-content-card .field{
+    @apply w-full shadow-none outline-none;
+    min-height: 30px;
+    padding: 5px 12px;
+    font-size: var(--fs-14);
+    font-weight: var(--fw-400);
+    color: var(--dark-100);
+    border: 1px solid var(--light-400);
+    border-radius: 5px;
+}
+.tab-content-card .btn-submit{
+    @apply w-full;
+    min-height: 40px;
+    padding: 6px 30px;
+    font-size: var(--fs-16);
+    font-weight: var(--fw-600);
+    color: var(--white);
+    text-transform: capitalize;
+    background-color: var(--dark-200);
+    border-radius: 10px;
+}
+.tab-content-card .btn-submit:hover{
+    background-color: var(--dark-200);
+}
+
+/* Account Page CSS */
+
+@media only screen and (max-width: 1535.98px) and (min-width: 1280px)  {
+    
+}
+
+@media only screen and (max-width: 639.98px) {
+   
+}
