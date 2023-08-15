@@ -1,4 +1,4 @@
-.Dialog {
+/* .Dialog {
   @apply relative m-0 aspect-[7/6] w-80 overflow-hidden bg-transparent shadow-none !important;
 }
 .Content {
@@ -21,4 +21,4 @@
 }
 .ButtonFilled {
   @apply flex-grow rounded-xl bg-neutral-900 text-center font-open-sans text-base font-semibold text-gray-50 !important;
-}
+} */

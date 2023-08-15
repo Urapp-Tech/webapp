@@ -3,6 +3,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import assets from '../../assets';
 
 const faqs = [
   {
@@ -135,15 +136,15 @@ function FAQSPage() {
       setExpanded(isExpanded ? panel : false);
     };
   return (
-    <div className="container px-5 py-5">
-      <div className="font-open-sans text-3xl font-semibold text-neutral-900">
-        FAQ&apos;s
-      </div>
-      <div className="my-4 rounded-xl bg-gray-50 px-4 py-4 shadow-md">
-        <div className="mb-2 font-open-sans text-base font-semibold text-neutral-900">
+    <div className="p-4 sm:p-5 xl:p-7 general-page">
+      <h4 className="page-heading mb-5">
+        FAQ's
+      </h4>
+      <div className="general-card">
+        <h6 className="heading-sm">
           Can you clean items with leather, velvet, suede or fur ?
-        </div>
-        <div className="mb-5 font-open-sans text-sm font-normal text-neutral-500">
+        </h6>
+        <p className="text">
           Lorem Ipsum is simply dummy text of the printing and typesetting
           industry. Lorem Ipsum has been the industry&apos;s standard dummy text
           ever since the 1500s, when an unknown printer took a galley of type
@@ -152,8 +153,10 @@ function FAQSPage() {
           remaining essentially unchanged. It was popularised in the 1960s with
           the release of Letraset sheets containing Lorem Ipsum passages, and
           more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum. <br /> <br /> It is a long
-          established fact that a reader will be distracted by the readable
+          including versions of Lorem Ipsum.
+        </p>
+        <p className="text">
+          It is a long established fact that a reader will be distracted by the readable
           content of a page when looking at its layout. The point of using Lorem
           Ipsum is that it has a more-or-less normal distribution of letters, as
           opposed to using &apos;Content here, content here&apos;, making it
@@ -163,33 +166,35 @@ function FAQSPage() {
           in their infancy. Various versions have evolved over the years,
           sometimes by accident, sometimes on purpose (injected humour and the
           like).
-        </div>
-        {faqs.map((faq, index) => {
-          return (
-            <Accordion
-              key={index}
-              className="m-0 bg-transparent shadow-none"
-              expanded={expanded === `panel-${index}`}
-              onChange={handleChange(`panel-${index}`)}
-            >
-              <AccordionSummary
-                className="bg-transparent"
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls={`panel-${index}-content`}
-                id={`panel-${index}-header`}
+        </p>
+        <div className='faqs-accordion'>
+          {faqs.map((faq, index) => {
+            return (
+              <Accordion
+                key={index}
+                className="accordion-item"
+                expanded={expanded === `panel-${index}`}
+                onChange={handleChange(`panel-${index}`)}
               >
-                <div className="font-open-sans text-base font-medium text-neutral-900">
-                  {faq.question}
-                </div>
-              </AccordionSummary>
-              <AccordionDetails className="p-0 pb-4">
-                <div className=" px-4 font-open-sans text-sm font-normal text-neutral-500">
-                  {faq.answer}
-                </div>
-              </AccordionDetails>
-            </Accordion>
-          );
-        })}
+                <AccordionSummary
+                  className="accordion-header"
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls={`panel-${index}-content`}
+                  id={`panel-${index}-header`}
+                >
+                  <h6 className="heading">
+                    {faq.question}
+                  </h6>
+                </AccordionSummary>
+                <AccordionDetails className="accordion-body">
+                  <p className="desc">
+                    {faq.answer}
+                  </p>
+                </AccordionDetails>
+              </Accordion>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

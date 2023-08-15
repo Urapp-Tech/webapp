@@ -1,0 +1,245 @@
+/* Delivery Address Page CSS */
+
+.delivery-address-page .main-heading{
+    @apply mb-5;
+    font-size: var(--fs-24);
+    font-weight: var(--fw-600);
+    color: var(--dark-100);
+    line-height: 1.1;
+}
+
+/* Saved Addresses Card */
+.delivery-address-page .saved-addresses{
+    @apply pt-6 px-5 pb-5;
+    background: var(--white);
+    box-shadow: 2px 4px 6px 0px rgba(0, 0, 0, 0.06);
+    border-radius: 10px;
+    overflow-x: auto;
+}
+.delivery-address-page .saved-addresses .heading{
+    @apply mb-5;
+    font-size: var(--fs-20);
+    font-weight: var(--fw-600);
+    color: var(--dark-100);
+    line-height: 1.1;
+}
+.delivery-address-page .saved-addresses .addresses-list{
+    @apply flex flex-col gap-y-2.5;
+}
+.addresses-list .item{
+    @apply p-5 flex w-full items-center cursor-pointer;
+    border: 1px solid var(--light-600);
+    border-radius: 10px;
+}
+.addresses-list .item.active{
+    border: 1px solid var(--dark-200);
+}
+.addresses-list .item .icon{
+    @apply w-5 h-5 mr-5;
+}
+.addresses-list .item .checked{
+    @apply hidden;
+}
+.addresses-list .item.active .checked{
+    @apply block;
+}
+.addresses-list .item.active .unchecked{
+    @apply hidden;
+}
+.addresses-list .item .address{
+    @apply flex-grow;
+}
+.addresses-list .item .address .location{
+    @apply mb-1.5;
+    font-size: var(--fs-16);
+    font-weight: var(--fw-400);
+    color: var(--dark-300);
+    line-height: 1.1;
+}
+.addresses-list .item .address .detailed{
+    @apply mb-0;
+    font-size: var(--fs-16);
+    font-weight: var(--fw-600);
+    color: var(--dark-100);
+    line-height: 1.1;
+}
+.addresses-list .item .btn-del{
+    color: var(--dark-200);
+}
+
+/* Delete Address Modal */
+.modal-delete-address .MuiModal-backdrop {
+    backdrop-filter: blur(25px) !important;
+}
+.modal-delete-address .MuiDialog-paper{
+    @apply m-4;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 2px 4px 6px 0px rgba(0, 0, 0, 0.06);
+    border-radius: 10px;
+}
+.modal-delete-address .modal-content{
+    @apply pt-11 px-5 pb-5 text-center;
+}
+.modal-delete-address .modal-content .icon{
+    @apply w-14 h-14 mb-2;
+}
+.modal-delete-address .modal-content .heading{
+    @apply mb-3 leading-none;
+    font-size: var(--fs-30);
+    font-weight: var(--fw-600);
+    color: var(--dark-100);
+}
+.modal-delete-address .modal-content .desc{
+    @apply mb-0 px-10 sm:px-24;
+    font-size: var(--fs-16);
+    font-weight: var(--fw-600);
+    color: var(--dark-100);
+}
+.modal-delete-address .modal-footer {
+    @apply p-5 gap-x-5;
+}
+.modal-delete-address .modal-footer .btn-yes{
+    @apply w-full capitalize m-0;
+    min-height: 50px;
+    background-color: transparent;
+    border: 1px solid var(--dark-200);
+    font-family: var(--ff-open-sans);
+    font-size: var(--fs-18);
+    font-weight: var(--fw-600);
+    color: var(--dark-200);
+    border-radius: 10px;
+}
+.modal-delete-address .modal-footer .btn-no{
+    @apply w-full capitalize m-0;
+    min-height: 50px;
+    background-color: var(--dark-200);
+    border: 1px solid var(--dark-200);
+    font-family: var(--ff-open-sans);
+    font-size: var(--fs-18);
+    font-weight: var(--fw-600);
+    color: var(--white);
+    border-radius: 10px;
+}
+/* Cancel Order Modal */
+
+/* Saved Addresses Card */
+
+
+/* Select Address Card */
+.delivery-address-page .cart-checkout-card{
+    @apply p-5;
+    background: var(--white);
+    box-shadow: 2px 4px 6px 0px rgba(0, 0, 0, 0.06);
+    border-radius: 10px;
+    overflow-x: auto;
+}
+.select-location{
+    @apply overflow-hidden;
+    border-radius: 10px;
+}
+.select-location .body{
+    @apply relative p-5 z-10 overflow-hidden;
+    background: var(--white);
+    box-shadow: 2px 4px 6px 0px rgba(0, 0, 0, 0.06);
+    border-radius: 10px;
+    margin-top: -10px;
+}
+.select-location .title{
+    @apply mb-4;
+    font-size: var(--fs-18);
+    font-weight: var(--fw-600);
+    color: var(--dark-200);
+    line-height: 1.1;
+}
+.select-location .location-address{
+    @apply relative mb-5 w-full;
+}
+.select-location .location-address .btn-current-location{
+    @apply absolute right-0 top-4 p-1.5;
+}
+.select-location .location-address .btn-current-location svg{
+    font-size: var(--fs-16);
+    color: var(--dark-200);
+}
+.select-location .location-label{
+    @apply mb-2.5;
+    font-size: var(--fs-12);
+    font-weight: var(--fw-400);
+    color: #9D9D9D;
+    line-height: 1.1;
+}
+.select-location .all-locations .item{
+    @apply relative overflow-hidden;
+    border-radius: 10px;
+}
+.all-locations .item input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+.all-locations .item .content{
+    @apply w-full h-full flex items-center gap-x-2.5 px-2.5 py-2;
+    background-color: #ededed;
+    transition: .3s ease;
+}
+.all-locations .item .content .icon{
+    @apply w-6 h-6 flex items-center justify-center overflow-hidden;
+    background-color: #d8d8d8;
+    border-radius: 24px;
+    transition: .3s ease;
+}
+.all-locations .item .content .icon svg{
+    @apply w-4;
+    color: var(--dark-200);
+}
+.all-locations .item .content .text{
+    @apply mb-0;
+    font-size: var(--fs-14);
+    font-weight: var(--fw-400);
+    color: var(--dark-200);
+    line-height: 1.1;
+}
+.all-locations .item input:checked + .content{
+    background-color: var(--dark-200);
+}
+.all-locations .item input:checked + .content .icon{
+    background-color: #343434;
+}
+.all-locations .item input:checked + .content .icon svg{
+    color: var(--white);
+}
+.all-locations .item input:checked + .content .text{
+    color: var(--white);
+}
+
+.select-location .btn-add-address{
+    @apply w-full mt-7;
+    min-height: 40px;
+    padding: 6px 30px;
+    font-family: var(--ff-kumbh-sans);
+    font-size: var(--fs-20);
+    font-weight: var(--fw-600);
+    color: var(--white);
+    text-transform: capitalize;
+    background-color: var(--dark-200);
+    border-radius: 10px;
+}
+.select-location .btn-add-address:hover{
+    background-color: var(--dark-200);
+}
+/* Select Address Card */
+
+/* Delivery Address Page CSS */
+
+@media only screen and (max-width: 1535.98px) and (min-width: 1280px)  {
+    
+}
+
+@media only screen and (max-width: 639.98px) {
+   
+}

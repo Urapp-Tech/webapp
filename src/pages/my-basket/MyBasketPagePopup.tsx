@@ -1,7 +1,9 @@
-import Dialog from '@mui/material/Dialog'
-import Button from '@mui/material/Button'
-import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined'
-import MyBasketPagePopupClasses from './MyBasketPagePopup.module.css'
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
+import MyBasketPagePopupClasses from './MyBasketPagePopup.module.css';
 
 type Props = {
   open: boolean
@@ -22,26 +24,25 @@ function MyBasketPagePopup({ open, setOpen, data }: Props) {
     <Dialog
       onClose={onCloseHandler}
       open={open}
-      PaperProps={{
-        className: MyBasketPagePopupClasses.Dialog,
-        style: { maxWidth: '100%', maxHeight: 'auto' },
-      }}
+      className='modal-order-success'
     >
-      <div className={MyBasketPagePopupClasses.Content}>
-        <ThumbUpAltOutlinedIcon className={MyBasketPagePopupClasses.Icon} />
-        <div className={MyBasketPagePopupClasses.Amount}>$ {data.amount}</div>
-        <div className={MyBasketPagePopupClasses.Id}>
+      <DialogContent className='modal-content'>
+        <ThumbUpAltOutlinedIcon className="icon" />
+        <h2 className="heading">$ {data.amount}</h2>
+        <p className="desc">
           Payment has been done on behalf of ID: {data.id}
-        </div>
-        <Button
+        </p>
+      </DialogContent>
+      <DialogActions className='modal-footer'>
+      <Button
           onClick={() => setOpen(false)}
-          className={MyBasketPagePopupClasses.Button}
+          className="btn-close"
           type="button"
           color="inherit"
         >
           Close
         </Button>
-      </div>
+      </DialogActions>
     </Dialog>
   )
 }

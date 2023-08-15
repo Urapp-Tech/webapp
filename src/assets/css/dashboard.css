@@ -46,9 +46,12 @@
     line-height: 1.2;
 }
 .all-categories .categories-list .item .cat-img{
-    @apply relative ml-auto;
+    @apply relative;
+    width: 100px;
     right: -10px;
-
+}
+.all-categories .categories-list .item .cat-img img{
+    @apply w-full h-auto;
 }
 
 

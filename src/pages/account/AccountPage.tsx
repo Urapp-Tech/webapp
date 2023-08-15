@@ -6,56 +6,56 @@ import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 
 function AccountPage() {
   return (
-    <div className="container p-4">
-      <div className="grid grid-cols-5 gap-4">
-        <div className="col-span-1 h-full border border-solid border-r-neutral-500">
-          <div className="mb-4 font-open-sans text-3xl font-semibold text-neutral-900">
+    <div className="p-4 sm:p-5 xl:p-7 account-page">
+      <div className="grid grid-cols-5 gap-5">
+        <div className="tab-pills col-span-1 h-full">
+          <h4 className="main-heading">
             Account
-          </div>
+          </h4>
           <div className="flex flex-col">
             <NavLink
               className={({ isActive }) =>
                 isActive
-                  ? 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-semibold text-neutral-900'
-                  : 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-normal text-neutral-500'
+                  ? 'item active'
+                  : 'item'
               }
               to="profile"
             >
-              <PersonOutlineOutlinedIcon className="mr-2" /> <div>Profile</div>
+              <PersonOutlineOutlinedIcon /> <span>Profile</span>
             </NavLink>
             <NavLink
               className={({ isActive }) =>
                 isActive
-                  ? 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-semibold text-neutral-900'
-                  : 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-normal text-neutral-500'
+                  ? 'item active'
+                  : 'item'
               }
               to="settings"
             >
-              <SettingsOutlinedIcon className="mr-2" /> <div>Settings</div>
+              <SettingsOutlinedIcon /> <span>Settings</span>
             </NavLink>
             <NavLink
               className={({ isActive }) =>
                 isActive
-                  ? 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-semibold text-neutral-900'
-                  : 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-normal text-neutral-500'
+                  ? 'item active'
+                  : 'item'
               }
               to="help-center"
             >
-              <HeadphonesOutlinedIcon className="mr-2" /> <div>Help Center</div>
+              <HeadphonesOutlinedIcon /> <span>Help Center</span>
             </NavLink>
             <NavLink
               className={({ isActive }) =>
                 isActive
-                  ? 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-semibold text-neutral-900'
-                  : 'flex w-full items-center border border-b border-t-0 border-l-0 border-r-0 border-neutral-500 py-3 font-open-sans text-base font-normal text-neutral-500'
+                  ? 'item active'
+                  : 'item'
               }
               to="chat"
             >
-              <CommentOutlinedIcon className="mr-2" /> <div>Chat With Us</div>
+              <CommentOutlinedIcon /> <span>Chat With Us</span>
             </NavLink>
           </div>
         </div>
-        <div className="col-span-4">
+        <div className="tab-content col-span-4">
           <Outlet />
         </div>
       </div>

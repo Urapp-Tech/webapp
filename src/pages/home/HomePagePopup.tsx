@@ -176,7 +176,9 @@ function HomePagePopup({ open, setOpen, data }: Props) {
                     aria-controls={`panel-${index}-content`}
                     id={`panel-${index}-header`}
                   >
-                    <p className="heading">{faq.question}</p>
+                    <h6 className='heading'>
+                      {faq.question}
+                    </h6>
                   </AccordionSummary>
                   <AccordionDetails className="accordion-body">
                     <p className="desc">{faq.answer}</p>

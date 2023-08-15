@@ -1,22 +1,28 @@
-import authCss from './css/auth.css'
-import topbarCss from './css/topbar.css'
-import sidebarCss from './css/sidebar.css'
-import dashboardCss from './css/dashboard.css'
-import modalAddToCartCss from './css/modals/modalAddToCart.css'
-import ordersCss from './css/orders.css'
+import authCss from './css/auth.css';
+import topbarCss from './css/topbar.css';
+import sidebarCss from './css/sidebar.css';
+import dashboardCss from './css/dashboard.css';
+import modalAddToCartCss from './css/modals/modalAddToCart.css';
+import ordersCss from './css/orders.css';
+import generalCss from './css/general.css';
+import accountCss from './css/account.css';
+import cartCss from './css/cart.css';
+import deliveryAddressCss from './css/delivery-address.css';
+import paymentSettingsCss from './css/payment-settings.css';
 
-import logo from './images/logo.svg'
-import logoBlack from './images/ur-laundry-logo-black.svg'
-import logoWhite from './images/ur-laundry-logo-white.svg'
-import loginImage from './images/login-screen-img.svg'
-import registerImage from './images/register-screen-img.svg'
-import forgotPassImage from './images/forgotPass-screen-img.svg'
-import bubbleBackground from './images/bubble-background.png'
-import facebook from './images/facebook.svg'
-import cash from './images/logo-cash.png'
-import mastercard from './images/logo-mastercard.png'
-import paypal from './images/logo-paypal.png'
-import googleMapMarker from './images/google-map-marker.png'
+import logo from './images/logo.svg';
+import logoBlack from './images/ur-laundry-logo-black.svg';
+import logoWhite from './images/ur-laundry-logo-white.svg';
+import loginImage from './images/login-screen-img.svg';
+import registerImage from './images/register-screen-img.svg';
+import forgotPassImage from './images/forgotPass-screen-img.svg';
+import bubbleBackground from './images/bubble-background.png';
+import facebook from './images/facebook.svg';
+import cash from './images/logo-cash.png';
+import mastercard from './images/logo-mastercard.png';
+import visa from './images/logo-visa.svg';
+import paypal from './images/logo-paypal.png';
+import googleMapMarker from './images/google-map-marker.png';
 
 import home from './temp-images/main-cat-img-home.svg'
 import curtain from './temp-images/main-cat-img-commercial.svg'
@@ -50,7 +56,13 @@ const assets = {
     dashboardCss,
     modalAddToCartCss,
     ordersCss,
-  },
+    generalCss,
+    accountCss,
+    cartCss,
+    deliveryAddressCss,
+    paymentSettingsCss,
+  }
+  ,
   images: {
     logo,
     logoBlack,
@@ -62,6 +74,7 @@ const assets = {
     facebook,
     cash,
     mastercard,
+    visa,
     paypal,
     googleMapMarker,
     iconMap,
