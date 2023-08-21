@@ -169,7 +169,10 @@ function DeliveryAddressPage() {
           <div>
             <div className="saved-addresses">
               <h5 className="heading">Saved Addresses</h5>
-              <div className="addresses-list">
+              <div
+                className="addresses-list"
+                style={{ maxHeight: '850px', overflow: 'auto' }}
+              >
                 {addressList.map((item: any, index: any) => (
                   <div
                     className={`item ${
