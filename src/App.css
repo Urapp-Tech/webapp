@@ -8,61 +8,60 @@
 @import './assets/css/sidebar.css';
 
 * {
-    -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent;
 }
 
 :root {
-    /* Colors */
-    --white: #ffffff;
+  /* Colors */
+  --white: #ffffff;
 
-    --light-100: #f0f0f0;
-    --light-200: #f8f8f8;
-    --light-300: #e1e1e1;
-    --light-400: #e2e2e2;
-    --light-500: #ECECEC;
-    --light-600: #c9c9c9;
-    --light-700: #c4c4c4;
-    
-    --dark: #000000;
-    --dark-100: #1a1a1a;
-    --dark-200: #1d1d1d;
-    --dark-300: #6a6a6a;
-    --dark-400: #555555;
-    
-    /* Font Family */
-    --ff-open-sans: "Open Sans", sans-serif;
-    --ff-kumbh-sans: 'Kumbh Sans', sans-serif;
+  --light-100: #f0f0f0;
+  --light-200: #f8f8f8;
+  --light-300: #e1e1e1;
+  --light-400: #e2e2e2;
+  --light-500: #ececec;
+  --light-600: #c9c9c9;
+  --light-700: #c4c4c4;
 
-    /* Font Sizes */
-    --fs-10: 0.625rem;
-    --fs-12: 0.75rem;
-    --fs-14: 0.875rem;
-    --fs-16: 1rem;
-    --fs-18: 1.125rem;
-    --fs-20: 1.25rem;
-    --fs-22: 1.375rem;
-    --fs-24: 1.5rem;
-    --fs-26: 1.625rem;
-    --fs-28: 1.75rem;
-    --fs-30: 1.875rem;
-    --fs-32: 2rem;
-    --fs-36: 2.25rem;
-    --fs-40: 2.5rem;
-    
-    /* Font Weight */
-    --fw-400: 400;
-    --fw-500: 500;
-    --fw-600: 600;
-    --fw-700: 700;
-    --fw-800: 800;
-    
-    }
+  --dark: #000000;
+  --dark-100: #1a1a1a;
+  --dark-200: #1d1d1d;
+  --dark-300: #6a6a6a;
+  --dark-400: #555555;
 
-body {
-  font-family: "Open Sans", sans-serif !important;
+  /* Font Family */
+  --ff-open-sans: 'Open Sans', sans-serif;
+  --ff-kumbh-sans: 'Kumbh Sans', sans-serif;
+
+  /* Font Sizes */
+  --fs-10: 0.625rem;
+  --fs-12: 0.75rem;
+  --fs-14: 0.875rem;
+  --fs-16: 1rem;
+  --fs-18: 1.125rem;
+  --fs-20: 1.25rem;
+  --fs-22: 1.375rem;
+  --fs-24: 1.5rem;
+  --fs-26: 1.625rem;
+  --fs-28: 1.75rem;
+  --fs-30: 1.875rem;
+  --fs-32: 2rem;
+  --fs-36: 2.25rem;
+  --fs-40: 2.5rem;
+
+  /* Font Weight */
+  --fw-400: 400;
+  --fw-500: 500;
+  --fw-600: 600;
+  --fw-700: 700;
+  --fw-800: 800;
 }
 
-.main{
+body {
+  font-family: 'Open Sans', sans-serif !important;
+}
+
+.main {
   @apply min-h-screen w-full;
   background-color: var(--light-100);
   padding-top: 86px;
@@ -70,13 +69,52 @@ body {
   transition: all 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  padding-left: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  padding-left: 50px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #c4c4c4;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #b5b5b5;
+}
+.no-map-location {
+  @apply flex items-center justify-center;
+  /* min-height: calc(100vh - 100px); */
+  height: 100%;
+}
+.no-map-location .content {
+  @apply flex flex-col items-center;
+}
+.no-map-location .content .icon {
+  width: 110px;
+}
+.no-map-location .content .text {
+  @apply mb-0;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: rgb(0 0 0 / 30%);
+}
+
 @media only screen and (max-width: 1023.98px) {
-  .main{
+  .main {
     padding-top: 80px;
     padding-left: 0;
     transition: all 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   }
-  .sidebar-backdrop{
+  .sidebar-backdrop {
     position: fixed;
     inset: 0px;
     background-color: rgba(0, 0, 0, 0.5);
@@ -84,15 +122,15 @@ body {
     z-index: -1;
     opacity: 0;
     transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  } 
-  body.sidebar-opened .sidebar-backdrop{
-      opacity: 1;
-      z-index: 9;
+  }
+  body.sidebar-opened .sidebar-backdrop {
+    opacity: 1;
+    z-index: 9;
   }
 }
 
 @media only screen and (max-width: 767.98px) {
-  .main{
+  .main {
     padding-top: 80px;
   }
 }
