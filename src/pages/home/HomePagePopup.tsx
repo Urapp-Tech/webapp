@@ -109,7 +109,7 @@ function HomePagePopup({ open, setOpen, data }: Props) {
       .then((response) => dispatch(Cart(response.data.data.cart)))
       .catch((error) => console.log(error))
     setOpen(false)
-    setCount(0)
+    setCount(1)
   }
   const onCloseHandler = (event: object, reason: string) => {
     if (reason === 'backdropClick') {
@@ -176,9 +176,7 @@ function HomePagePopup({ open, setOpen, data }: Props) {
                     aria-controls={`panel-${index}-content`}
                     id={`panel-${index}-header`}
                   >
-                    <h6 className='heading'>
-                      {faq.question}
-                    </h6>
+                    <h6 className="heading">{faq.question}</h6>
                   </AccordionSummary>
                   <AccordionDetails className="accordion-body">
                     <p className="desc">{faq.answer}</p>
