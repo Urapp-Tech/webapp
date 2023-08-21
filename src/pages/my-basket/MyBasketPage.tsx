@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton'
 import FormControl from '@mui/material/FormControl'
 import InputAdornment from '@mui/material/InputAdornment'
 import Input from '@mui/material/Input'
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom'
 import Button from '@mui/material/Button'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
@@ -21,7 +21,7 @@ import MyBasketPagePopup from './MyBasketPagePopup'
 import { newOrder, removeFromCart } from '../../redux/features/cartStateSlice'
 import MarkersMap from '../../components/common/MarkerMap'
 import { Marker } from '../../interfaces/map.interface'
-import { getItem } from '../../utilities/local-storage'
+import { getItem, setItem } from '../../utilities/local-storage'
 import cartService from '../../services/cart'
 import { Cart } from '../../redux/features/cartStateSlice'
 import { useNavigate } from 'react-router-dom'
@@ -32,7 +32,7 @@ import AddressService from '../../services/Address'
 import { setToken } from '../../utilities/constant'
 
 function MyBasketPage() {
-  const { cartItems } = useAppSelector((state) => state.cartState)
+  const { cartItems }: any = useAppSelector((state) => state.cartState)
   const dispatch = useAppDispatch()
   const [pickUpTime, setPickUpTime] = useState<dayjs.Dayjs | null>()
   const [dropOffTime, setDropOffTime] = useState<dayjs.Dayjs | null>()
@@ -40,14 +40,10 @@ function MyBasketPage() {
   const [promocode, setPromocode] = useState('')
   const auth = useAppSelector((state) => state.deviceStates)
   const navigate = useNavigate()
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false)
   const [alertMsg, setAlertMsg] = useState('')
   const [showAlert, setShowAlert] = useState(false)
   const [alertSeverity, setAlertSeverity] = useState('')
-  const authUser = useAppSelector((state) => state.authState)
-  const [addressPopup, setAddressPopup] = useState(false)
   const user = JSON.parse(localStorage.getItem('user')!)
-  const token = localStorage.getItem('token')
   const userAddress: any = useAppSelector(
     (state) => state.deviceStates.AddressList,
   )
@@ -67,8 +63,8 @@ function MyBasketPage() {
     if (user) {
       AddressService.getUserAddress()
         .then((response) => {
-          console.log(response.data.data)
           dispatch(setUserAddressList(response.data.data))
+          setItem('Address', response.data.data)
         })
         .catch((error) => console.log(error))
     }
@@ -106,7 +102,10 @@ function MyBasketPage() {
           .then((response) => {
             dispatch(Cart(response.data.data.cart))
             OrderService.addOrder({ cartId: response.data.data.cart.id })
-              .then((response) => dispatch(newOrder(response.data)))
+              .then((response) => {
+                dispatch(newOrder(response.data.data))
+                window.location.replace(response.data.data.paymentUrl)
+              })
               .catch((error) => console.log(error))
           })
           .catch((error) => {
@@ -136,14 +135,12 @@ function MyBasketPage() {
 
       <div className="p-4 sm:p-5 xl:p-7 cart-page">
         <div className="flex items-center justify-start mb-4 md:mb-6">
-          <h4 className="page-heading">
-            My Basket
-          </h4>
+          <h4 className="page-heading">My Basket</h4>
         </div>
         <div className="grid grid-cols-5 gap-4">
           <div className="col-span-3">
             <div className="cart-products-card">
-              <div className='overflow-x-auto'>
+              <div className="overflow-x-auto">
                 <table className="cart-products-table">
                   <thead className="border-b border-b-neutral-200 ">
                     <tr className="h-10">
@@ -154,7 +151,7 @@ function MyBasketPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {cartItems.map((item) => (
+                    {cartItems.map((item: any) => (
                       <tr key={item.id}>
                         <td>
                           <div className="flex items-center gap-x-5">
@@ -180,9 +177,7 @@ function MyBasketPage() {
               </div>
               <div className="flex items-center justify-between my-2.5 px-5">
                 <div className="flex items-center">
-                  <p className="promo-label">
-                    Add Promo Code
-                  </p>
+                  <p className="promo-label">Add Promo Code</p>
                   <FormControl variant="standard" size="small">
                     <Input
                       className="promo-field"
@@ -203,7 +198,12 @@ function MyBasketPage() {
                     />
                   </FormControl>
                 </div>
-                <Button className="btn-add-more" variant="outlined" color="inherit" startIcon={<ShoppingBagOutlinedIcon />}>
+                <Button
+                  className="btn-add-more"
+                  variant="outlined"
+                  color="inherit"
+                  startIcon={<ShoppingBagOutlinedIcon />}
+                >
                   Add More to Basket
                 </Button>
               </div>
@@ -234,7 +234,7 @@ function MyBasketPage() {
                     </p>
                   </div>
                 </div>
-                <div className='select-date-time sm:pl-4 lg:pl-7'>
+                <div className="select-date-time sm:pl-4 lg:pl-7">
                   <DatePickerButton
                     onChange={handleDropOffTimeChange}
                     id="drop-off-date-time-picker"
@@ -262,45 +262,26 @@ function MyBasketPage() {
                     <LocationOnOutlinedIcon className="mr-2 text-xl" />
                     <p className="text">{userAddress[0]?.address}</p>
                   </div>
-                  <Link className="value" to={''}>Change</Link>
+                  <Link className="value" to="/dashboard/delivery-address">
+                    Change
+                  </Link>
                 </div>
               ) : (
                 ''
               )}
-              <div className="address-card">
-                <div className="key">
-                  <CreditCardOutlinedIcon className="mr-2 text-xl" />
-                  <p className="text">**** **** **** 6584</p>
-                </div>
-                <a href='#' className="value">Change</a>
-              </div>
               <div className="total-amount">
-                <h5 className="heading">
-                  Total Amount
-                </h5>
+                <h5 className="heading">Total Amount</h5>
                 <div className="flex items-center justify-between mb-4">
-                  <p className="key">
-                    Total Amount
-                  </p>
-                  <p className="value">
-                    ${total.toFixed(2)}
-                  </p>
+                  <p className="key">Total Amount</p>
+                  <p className="value">${total.toFixed(2)}</p>
                 </div>
                 <div className="flex items-center justify-between mb-4">
-                  <p className="key">
-                    Discount
-                  </p>
-                  <p className="value">
-                    $0.00
-                  </p>
+                  <p className="key">Discount</p>
+                  <p className="value">$0.00</p>
                 </div>
                 <div className="flex items-center justify-between mb-4">
-                  <p className="key">
-                    HST 13%
-                  </p>
-                  <p className="value">
-                    ${((total / 100) * 13).toFixed(2)}
-                  </p>
+                  <p className="key">HST 13%</p>
+                  <p className="value">${((total / 100) * 13).toFixed(2)}</p>
                 </div>
               </div>
               <div className="grand-total">
