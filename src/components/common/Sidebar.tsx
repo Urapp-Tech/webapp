@@ -68,11 +68,10 @@ const links = [
 function Sidebar() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const user = JSON.parse(localStorage.getItem('user')!)
+  const auth = localStorage.getItem('token')
 
   const logOut = () => {
     dispatch(logout())
-    navigate('/dashboard')
   }
   return (
     <Drawer
@@ -121,7 +120,7 @@ function Sidebar() {
           </NavLink>
           <hr className="mt-4" />
         </div>
-        {user ? (
+        {auth ? (
           <NavLink
             className="logout-link"
             to="/dashboard"
