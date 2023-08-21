@@ -14,7 +14,7 @@ type DevicePayload = {
 type DeviceState = {
   DeviceData: DevicePayload | null
   Address: string
-  AddressList: string[]
+  AddressList: []
 }
 const initialState: DeviceState = {
   DeviceData: null,
