@@ -90,6 +90,23 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #b5b5b5;
 }
+.no-map-location {
+  @apply flex items-center justify-center;
+  /* min-height: calc(100vh - 100px); */
+  height: 100%;
+}
+.no-map-location .content {
+  @apply flex flex-col items-center;
+}
+.no-map-location .content .icon {
+  width: 110px;
+}
+.no-map-location .content .text {
+  @apply mb-0;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: rgb(0 0 0 / 30%);
+}
 
 @media only screen and (max-width: 1023.98px) {
   .main {

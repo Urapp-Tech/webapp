@@ -8,6 +8,8 @@ import { setUserAddress } from '../../redux/features/deviceState'
 type Props = {
   center: google.maps.LatLngLiteral
   zoom: number
+  handleDragged: (newPosition: google.maps.LatLngLiteral) => void
+  // onAddressChange: (data: string) => void
 }
 
 const loader = new Loader({
@@ -15,12 +17,18 @@ const loader = new Loader({
   version: 'weekly',
 })
 
-function Map({ center, zoom }: Props) {
+function Map({
+  center,
+  zoom,
+  handleDragged,
+  // onAddressChange,
+  ...props
+}: Props) {
   const mapRef = useRef<HTMLDivElement>(null)
   const [map, setMap] = useState<google.maps.Map | undefined>()
   const [geoCoder, setGeoCoder] = useState<google.maps.Geocoder | null>(null)
   const [address, setAddress] = useState<string | any>('')
-  const markerRef = useRef<google.maps.Marker | undefined>(undefined)
+  const markerRef: any = useRef<google.maps.Marker | undefined>(undefined)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -75,11 +83,6 @@ function Map({ center, zoom }: Props) {
                           setAddress(results[0].formatted_address)
                           dispatch(setUserAddress(results[0].formatted_address))
                         }
-                      } else {
-                        console.error(
-                          'Geocode was not successful for the following reason:',
-                          status,
-                        )
                       }
                     },
                   )
@@ -107,14 +110,30 @@ function Map({ center, zoom }: Props) {
               setAddress(results[0].formatted_address)
               dispatch(setUserAddress(results[0].formatted_address))
             }
-          } else {
-            console.error(
-              'Geocode was not successful for the following reason:',
-              status,
-            )
           }
         },
       )
+      google.maps.event.addListener(markerRef.current, 'dragend', function () {
+        const newPosition = markerRef.current?.getPosition()
+        if (newPosition) {
+          handleDragged(newPosition.toJSON())
+          geoCoder.geocode(
+            { location: newPosition },
+            (
+              results: google.maps.GeocoderResult[] | null,
+              status: google.maps.GeocoderStatus,
+            ) => {
+              if (status === google.maps.GeocoderStatus.OK) {
+                if (results && results[0]) {
+                  const newFormattedAddress: string =
+                    results[0].formatted_address
+                  // onAddressChange(newFormattedAddress) // Call the callback to update the address in DeliveryAddressPage
+                }
+              }
+            },
+          )
+        }
+      })
     }
   }, [map, geoCoder, center])
 
