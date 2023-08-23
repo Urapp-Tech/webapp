@@ -2,10 +2,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import ClearIcon from '@mui/icons-material/Clear';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
-import OrderDetailsPagePopupClasses from './OrderDetailsPagePopup.module.css';
 
 type Props = {
   open: boolean;
@@ -19,23 +16,27 @@ function OrderDetailsPagePopup({ open, setOpen }: Props) {
     }
   };
   return (
-    <Dialog
-      onClose={onCloseHandler}
-      open={open}
-      className='modal-cancel-order'
-    >
-      <DialogContent className='modal-content'>
+    <Dialog onClose={onCloseHandler} open={open} className="modal-cancel-order">
+      <DialogContent className="modal-content">
         <SentimentVeryDissatisfiedIcon className="icon" />
         <h2 className="heading">Hey Wait!</h2>
-        <p className="desc">
-          Are you sure you want to Cancel this Order
-        </p>
+        <p className="desc">Are you sure you want to Cancel this Order</p>
       </DialogContent>
-      <DialogActions className='modal-footer'>
-        <Button onClick={() => setOpen(false)} className="btn-yes" type="button" color="inherit">
+      <DialogActions className="modal-footer">
+        <Button
+          onClick={() => setOpen(false)}
+          className="btn-yes"
+          type="button"
+          color="inherit"
+        >
           Yes
         </Button>
-        <Button onClick={() => setOpen(false)} className="btn-no" type="button" color="inherit">
+        <Button
+          onClick={() => setOpen(false)}
+          className="btn-no"
+          type="button"
+          color="inherit"
+        >
           No
         </Button>
       </DialogActions>

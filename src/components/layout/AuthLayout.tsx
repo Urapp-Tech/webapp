@@ -1,17 +1,6 @@
-import { Navigate, Outlet, useNavigate } from 'react-router-dom'
-import assets from '../../assets'
-import { useAppSelector } from '../../redux/redux-hooks'
-import MainLayout from './MainLayout'
-import { useEffect } from 'react'
+import { Outlet } from 'react-router-dom';
 
 function AuthLayout() {
-  const auth = useAppSelector((state) => state.authState)
-  const navigate = useNavigate()
-  // useEffect(() => {
-  //   if (auth.user) {
-  //     navigate('/dashboard')
-  //   }
-  // }, [auth.user])
   return (
     <div className="auth-main">
       <Outlet />
@@ -32,7 +21,7 @@ function AuthLayout() {
         </div>
       </div> */}
     </div>
-  )
+  );
 }
 
-export default AuthLayout
+export default AuthLayout;

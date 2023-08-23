@@ -19,20 +19,28 @@ function DeleteAddressPopup({ open, setOpen }: Props) {
     <Dialog
       onClose={onCloseHandler}
       open={open}
-      className='modal-delete-address'
+      className="modal-delete-address"
     >
-      <DialogContent className='modal-content'>
+      <DialogContent className="modal-content">
         <SentimentVeryDissatisfiedIcon className="icon" />
         <h2 className="heading">Hey Wait!</h2>
-        <p className="desc">
-          Are you sure you want to Delete this Address
-        </p>
+        <p className="desc">Are you sure you want to Delete this Address</p>
       </DialogContent>
-      <DialogActions className='modal-footer'>
-        <Button onClick={() => setOpen(false)} className="btn-yes" type="button" color="inherit">
+      <DialogActions className="modal-footer">
+        <Button
+          onClick={() => setOpen(false)}
+          className="btn-yes"
+          type="button"
+          color="inherit"
+        >
           Yes
         </Button>
-        <Button onClick={() => setOpen(false)} className="btn-no" type="button" color="inherit">
+        <Button
+          onClick={() => setOpen(false)}
+          className="btn-no"
+          type="button"
+          color="inherit"
+        >
           No
         </Button>
       </DialogActions>

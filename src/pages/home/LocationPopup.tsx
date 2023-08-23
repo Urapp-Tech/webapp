@@ -1,249 +1,57 @@
-import { useState, useCallback, useMemo, useEffect } from 'react'
-import {
-  DirectionsRenderer,
-  GoogleMap,
-  useJsApiLoader,
-} from '@react-google-maps/api'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import IconButton from '@mui/material/IconButton'
-import Dialog from '@mui/material/Dialog'
-import ClearIcon from '@mui/icons-material/Clear'
-import LocationPopupClasses from './LocationPopup.module.css'
-import assets from '../../assets'
-import Map from '../../components/common/Map'
+import { useState, useCallback, useEffect } from 'react';
+import { useJsApiLoader } from '@react-google-maps/api';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import IconButton from '@mui/material/IconButton';
+import Dialog from '@mui/material/Dialog';
+import ClearIcon from '@mui/icons-material/Clear';
+import LocationPopupClasses from './LocationPopup.module.css';
+import Map from '../../components/common/Map';
 
 type Props = {
-  open: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
-}
-
-const googleMapsStyles = [
-  {
-    elementType: 'geometry',
-    stylers: [
-      {
-        color: '#f5f5f5',
-      },
-    ],
-  },
-  {
-    elementType: 'labels',
-    stylers: [
-      {
-        visibility: 'off',
-      },
-    ],
-  },
-  {
-    elementType: 'labels.icon',
-    stylers: [
-      {
-        visibility: 'off',
-      },
-    ],
-  },
-  {
-    elementType: 'labels.text.fill',
-    stylers: [
-      {
-        color: '#52525B',
-      },
-    ],
-  },
-  {
-    elementType: 'labels.text.stroke',
-    stylers: [
-      {
-        color: '#f5f5f5',
-      },
-    ],
-  },
-  {
-    featureType: 'administrative.land_parcel',
-    elementType: 'labels.text.fill',
-    stylers: [
-      {
-        color: '#D6D3D1',
-      },
-    ],
-  },
-  {
-    featureType: 'administrative.neighborhood',
-    stylers: [
-      {
-        visibility: 'off',
-      },
-    ],
-  },
-  {
-    featureType: 'poi',
-    elementType: 'geometry',
-    stylers: [
-      {
-        color: '#F4F4F5',
-      },
-    ],
-  },
-  {
-    featureType: 'poi',
-    elementType: 'labels.text.fill',
-    stylers: [
-      {
-        color: '#737373',
-      },
-    ],
-  },
-  {
-    featureType: 'poi.park',
-    elementType: 'geometry',
-    stylers: [
-      {
-        color: '#e5e5e5',
-      },
-    ],
-  },
-  {
-    featureType: 'poi.park',
-    elementType: 'labels.text.fill',
-    stylers: [
-      {
-        color: '#A3A3A3',
-      },
-    ],
-  },
-  {
-    featureType: 'road',
-    elementType: 'geometry',
-    stylers: [
-      {
-        color: '#ffffff',
-      },
-    ],
-  },
-  {
-    featureType: 'road.arterial',
-    elementType: 'labels.text.fill',
-    stylers: [
-      {
-        color: '#737373',
-      },
-    ],
-  },
-  {
-    featureType: 'road.highway',
-    elementType: 'geometry',
-    stylers: [
-      {
-        color: '#D4D4D8',
-      },
-    ],
-  },
-  {
-    featureType: 'road.highway',
-    elementType: 'labels.text.fill',
-    stylers: [
-      {
-        color: '#52525B',
-      },
-    ],
-  },
-  {
-    featureType: 'road.local',
-    elementType: 'labels.text.fill',
-    stylers: [
-      {
-        color: '#A3A3A3',
-      },
-    ],
-  },
-  {
-    featureType: 'transit.line',
-    elementType: 'geometry',
-    stylers: [
-      {
-        color: '#e5e5e5',
-      },
-    ],
-  },
-  {
-    featureType: 'transit.station',
-    elementType: 'geometry',
-    stylers: [
-      {
-        color: '#F4F4F5',
-      },
-    ],
-  },
-  {
-    featureType: 'water',
-    elementType: 'geometry',
-    stylers: [
-      {
-        color: '#D6D3D1',
-      },
-    ],
-  },
-  {
-    featureType: 'water',
-    elementType: 'labels.text.fill',
-    stylers: [
-      {
-        color: '#A3A3A3',
-      },
-    ],
-  },
-]
-
-const containerStyle = {
-  width: '100%',
-  height: '100%',
-}
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 function LocationPopup({ open, setOpen }: Props) {
-  const [location, setLocation] = useState<any>()
-  const [
-    directionsService,
-    setDirectionsService,
-  ] = useState<google.maps.DirectionsService | null>(null)
-  const [
-    directionsRenderer,
-    setDirectionsRenderer,
-  ] = useState<google.maps.DirectionsRenderer | null>(null)
+  const [location, setLocation] = useState<any>();
+  const [directionsService, setDirectionsService] =
+    useState<google.maps.DirectionsService | null>(null);
+  const [directionsRenderer, setDirectionsRenderer] =
+    useState<google.maps.DirectionsRenderer | null>(null);
 
   const onCloseHandler = (event: object, reason: string) => {
     if (reason === 'backdropClick') {
-      setOpen(false)
+      setOpen(false);
     }
-  }
+  };
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: 'AIzaSyCQ_g14OfzLkLOD6MGp4iJPuau2mbnjwvw',
-  })
+  });
   const calculateRoute = useCallback(
     function callback(start: google.maps.LatLng, end: google.maps.LatLng) {
       const request: google.maps.DirectionsRequest = {
         origin: start,
         destination: end,
         travelMode: google.maps.TravelMode.DRIVING,
-      }
+      };
       directionsService?.route(request, (result, status) => {
         if (status === 'OK') {
-          directionsRenderer?.setDirections(result)
-          console.log(result)
+          directionsRenderer?.setDirections(result);
         }
-      })
+      });
     },
-    [directionsService, directionsRenderer],
-  )
+    [directionsService, directionsRenderer]
+  );
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(function (position) {
+    navigator.geolocation.getCurrentPosition((position) => {
       return setLocation({
         lat: position.coords.latitude,
         lng: position.coords.longitude,
-      })
-    })
-  }, [])
+      });
+    });
+  }, []);
 
   return (
     <Dialog
@@ -278,9 +86,9 @@ function LocationPopup({ open, setOpen }: Props) {
                   new google.maps.LatLng({
                     lat: 24.882,
                     lng: 67.067,
-                  }),
-                )
-                return
+                  })
+                );
+                return;
               }
               if (e.activeIndex === 1) {
                 calculateRoute(
@@ -291,9 +99,9 @@ function LocationPopup({ open, setOpen }: Props) {
                   new google.maps.LatLng({
                     lat: 24.876,
                     lng: 67.067,
-                  }),
-                )
-                return
+                  })
+                );
+                return;
               }
               if (e.activeIndex === 2) {
                 calculateRoute(
@@ -304,8 +112,8 @@ function LocationPopup({ open, setOpen }: Props) {
                   new google.maps.LatLng({
                     lat: 24.875,
                     lng: 67.062,
-                  }),
-                )
+                  })
+                );
               }
             }}
           >
@@ -355,7 +163,7 @@ function LocationPopup({ open, setOpen }: Props) {
         </div>
       </div>
     </Dialog>
-  )
+  );
 }
 
-export default LocationPopup
+export default LocationPopup;

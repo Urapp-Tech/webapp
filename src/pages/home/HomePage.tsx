@@ -1,77 +1,80 @@
-import { useEffect, useState } from 'react'
-import Input from '@mui/material/Input'
-import Button from '@mui/material/Button'
-import FormControl from '@mui/material/FormControl'
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
-import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
-import HomePagePopup from './HomePagePopup'
-import LocationPopup from './LocationPopup'
-import tenantService from '../../services/tenant'
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks'
-import categoryService from '../../services/Category'
-import { setDeviceData } from '../../redux/features/deviceState'
-import { ClientJS } from 'clientjs'
-import cartService from '../../services/cart'
-import { getCart } from '../../redux/features/cartStateSlice'
-import { getItem } from '../../utilities/local-storage'
+import { useCallback, useEffect, useState } from 'react';
+import Input from '@mui/material/Input';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
+import { ClientJS } from 'clientjs';
+import HomePagePopup from './HomePagePopup';
+import tenantService from '../../services/tenant';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import categoryService from '../../services/Category';
+import { setDeviceData } from '../../redux/features/deviceState';
+import cartService from '../../services/cart';
+import { getCart } from '../../redux/features/cartStateSlice';
+import { getItem } from '../../utilities/local-storage';
+import AlertBox from '../../components/common/SnackBar';
 
 function getCategoryClasses(isActive: boolean) {
-  const classes = 'item'
+  const classes = 'item';
 
   if (isActive) {
-    return `${classes} active shadow-lg`
+    return `${classes} active shadow-lg`;
   }
-  return classes
+  return classes;
 }
 
 function HomePage() {
-  const [selectedCategory, setSelectedCategory] = useState<any>(null)
-  const [subCategory, setSubCategory] = useState<any>([])
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false)
-  const auth = useAppSelector((state) => state.authState)
-  const [selectLocationDialogOpen, setSelectLocationDialogOpen] = useState<
-    boolean
-  >(true)
-  const [selectedItem, setSelectedItem] = useState(null)
-  const [searchName, setSearchName] = useState('')
-  const [filteredSubCategory, setFilteredSubCategory] = useState<any[]>([])
-  const RegisteredDevice = useAppSelector(
-    (state) => state.deviceStates.DeviceData?.deviceId,
-  )
-  const dispatch = useAppDispatch()
-  const [location, setLocation] = useState<any>()
-  const userAddress = useAppSelector((state) => state.deviceStates.Address)
+  const [selectedCategory, setSelectedCategory] = useState<any>(null);
+  const [subCategory, setSubCategory] = useState<any>([]);
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [searchName, setSearchName] = useState('');
+  const [filteredSubCategory, setFilteredSubCategory] = useState<any[]>([]);
+  const dispatch = useAppDispatch();
+  const [location, setLocation] = useState<any>();
   const addItemHandler = (item: any) => {
-    setSelectedItem(item)
-    setDialogOpen(true)
-  }
-  const client = new ClientJS()
-  const fingerprint = client.getFingerprint()
-  const agent = client.getUserAgent()
+    setSelectedItem(item);
+    setDialogOpen(true);
+  };
+  const client = new ClientJS();
+  const [alertMsg, setAlertMsg] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState('');
+  const fingerprint = client.getFingerprint();
+  const agent = client.getUserAgent();
   const fetchIp = async () => {
-    const url = 'https://api.ipify.org/?format=json'
+    const url = 'https://api.ipify.org/?format=json';
     try {
-      const response = await fetch(url)
-      let address = await response.json()
-      return address.ip
+      const response = await fetch(url);
+      const address = await response.json();
+      return address.ip;
     } catch (error) {
-      console.log(error)
+      setAlertMsg('Error Occurred');
+      setShowAlert(true);
+      setAlertSeverity('error');
+      return null; // Return a value even in case of an error
     }
-  }
+  };
+  const onClickButton = (item: any) => {
+    categoryService
+      .SubCategory(item.id)
+      .then((response) => setSubCategory(response.data.data));
+  };
   useEffect(() => {
-    const persistedDeviceData: any = getItem('deviceData')
+    const persistedDeviceData: any = getItem('deviceData');
     if (persistedDeviceData) {
-      dispatch(setDeviceData(JSON.parse(persistedDeviceData)))
+      dispatch(setDeviceData(JSON.parse(persistedDeviceData)));
     }
-    navigator.geolocation.getCurrentPosition(function (position) {
+    navigator.geolocation.getCurrentPosition((position) => {
       return setLocation({
         lat: position.coords.latitude,
         lng: position.coords.longitude,
-      })
-    })
+      });
+    });
 
     fetchIp().then((ip) => {
-      const nameValue = agent.slice(0, 11) + '-' + ip + '-' + fingerprint
+      const nameValue = `${agent.slice(0, 11)}-${ip}-${fingerprint}`;
       if (persistedDeviceData === null) {
         tenantService.getTenantConfig().then((response) => {
           tenantService
@@ -83,62 +86,57 @@ function HomePage() {
               tenant: response.data.data.id,
               token: 'undefined',
             })
-            .then((response) => {
-              dispatch(setDeviceData(response.data.data))
+            .then((newResponse) => {
+              dispatch(setDeviceData(newResponse.data.data));
               cartService
                 .AnonyomousCart({
-                  tenant: response.data.data?.tenant,
-                  appUserDevice: response.data.data?.id,
+                  tenant: newResponse.data.data?.tenant,
+                  appUserDevice: newResponse.data.data?.id,
                 })
-                .then((response) => {
-                  dispatch(getCart(response.data.data.cart))
-                })
-            })
-            .catch((err) => console.log(err))
-        })
+                .then((cartResponse) => {
+                  dispatch(getCart(cartResponse.data.data.cart));
+                });
+            });
+        });
       }
-    })
-    categoryService
-      .CategoryList()
-      .then((response) => {
-        onClickButton(response.data.data[0])
-        setSelectedCategory(response.data.data)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  }, [])
-
-  const onClickButton = (item: any) => {
-    categoryService
-      .SubCategory(item.id)
-      .then((response) => setSubCategory(response.data.data))
-      .catch((error) => {
-        console.log(error)
-      })
-  }
-  const searchSubCategory = () => {
+    });
+    categoryService.CategoryList().then((response) => {
+      onClickButton(response.data.data[0]);
+      setSelectedCategory(response.data.data);
+    });
+  }, [agent, dispatch, fingerprint]);
+  const searchSubCategory = useCallback(() => {
     if (!searchName) {
-      setFilteredSubCategory(subCategory.homeCatItems)
+      setFilteredSubCategory(subCategory.homeCatItems);
     } else {
       const filteredItems = subCategory.homeCatItems.filter((item: any) => {
-        const priceString = item?.price?.toString() || ''
+        const priceString = item?.price?.toString() || '';
         return (
           item.name.toLowerCase().includes(searchName.toLowerCase()) ||
           priceString.includes(searchName)
-        )
-      })
-      setFilteredSubCategory(filteredItems)
+        );
+      });
+      setFilteredSubCategory(filteredItems);
     }
-  }
+  }, [searchName, subCategory]);
+
   useEffect(() => {
     if (subCategory?.homeCatItems?.length > 0) {
-      searchSubCategory()
+      searchSubCategory();
     }
-  }, [searchName, subCategory])
+  }, [searchSubCategory, subCategory]);
 
   return (
     <>
+      {showAlert && (
+        <AlertBox
+          msg={alertMsg}
+          setSeverty={alertSeverity}
+          alertOpen={showAlert}
+          setAlertOpen={setShowAlert}
+        />
+      )}
+
       <HomePagePopup
         open={dialogOpen}
         setOpen={setDialogOpen}
@@ -153,11 +151,11 @@ function HomePage() {
                 <button
                   type="button"
                   onClick={() => {
-                    onClickButton(category)
+                    onClickButton(category);
                   }}
                   key={category.id}
                   className={getCategoryClasses(
-                    category.id === selectedCategory?.id,
+                    category.id === selectedCategory?.id
                   )}
                 >
                   <h3 className="cat-name">{category.name}</h3>
@@ -212,7 +210,7 @@ function HomePage() {
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default HomePage
+export default HomePage;

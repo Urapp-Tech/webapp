@@ -3,7 +3,6 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import assets from '../../assets';
 
 const faqs = [
   {
@@ -136,10 +135,8 @@ function FAQSPage() {
       setExpanded(isExpanded ? panel : false);
     };
   return (
-    <div className="p-4 sm:p-5 xl:p-7 general-page">
-      <h4 className="page-heading mb-5">
-        FAQ's
-      </h4>
+    <div className="general-page p-4 sm:p-5 xl:p-7">
+      <h4 className="page-heading mb-5">FAQ&apos;s</h4>
       <div className="general-card">
         <h6 className="heading-sm">
           Can you clean items with leather, velvet, suede or fur ?
@@ -156,18 +153,18 @@ function FAQSPage() {
           including versions of Lorem Ipsum.
         </p>
         <p className="text">
-          It is a long established fact that a reader will be distracted by the readable
-          content of a page when looking at its layout. The point of using Lorem
-          Ipsum is that it has a more-or-less normal distribution of letters, as
-          opposed to using &apos;Content here, content here&apos;, making it
-          look like readable English. Many desktop publishing packages and web
-          page editors now use Lorem Ipsum as their default model text, and a
-          search for &apos;lorem ipsum&apos; will uncover many web sites still
-          in their infancy. Various versions have evolved over the years,
+          It is a long established fact that a reader will be distracted by the
+          readable content of a page when looking at its layout. The point of
+          using Lorem Ipsum is that it has a more-or-less normal distribution of
+          letters, as opposed to using &apos;Content here, content here&apos;,
+          making it look like readable English. Many desktop publishing packages
+          and web page editors now use Lorem Ipsum as their default model text,
+          and a search for &apos;lorem ipsum&apos; will uncover many web sites
+          still in their infancy. Various versions have evolved over the years,
           sometimes by accident, sometimes on purpose (injected humour and the
           like).
         </p>
-        <div className='faqs-accordion'>
+        <div className="faqs-accordion">
           {faqs.map((faq, index) => {
             return (
               <Accordion
@@ -182,14 +179,10 @@ function FAQSPage() {
                   aria-controls={`panel-${index}-content`}
                   id={`panel-${index}-header`}
                 >
-                  <h6 className="heading">
-                    {faq.question}
-                  </h6>
+                  <h6 className="heading">{faq.question}</h6>
                 </AccordionSummary>
                 <AccordionDetails className="accordion-body">
-                  <p className="desc">
-                    {faq.answer}
-                  </p>
+                  <p className="desc">{faq.answer}</p>
                 </AccordionDetails>
               </Accordion>
             );

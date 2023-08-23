@@ -42,48 +42,36 @@ function NotificationPopover({
           <NotificationsNoneOutlinedIcon className="icon" />
           <div className="content">
             <div className="text">
-              <h5 className="title">
-                Your order is in process now
-              </h5>
+              <h5 className="title">Your order is in process now</h5>
               <p className="date">
                 {dayjs().subtract(1, 'day').format('ddd, DD MMM, YYYY')}
               </p>
             </div>
-            <p className="desc">
-              Wait at least 24 minutes
-            </p>
+            <p className="desc">Wait at least 24 minutes</p>
           </div>
         </div>
         <div className="item">
           <NotificationsNoneOutlinedIcon className="icon" />
           <div className="content">
             <div className="text">
-              <h5 className="title">
-                Your order is in process now
-              </h5>
+              <h5 className="title">Your order is in process now</h5>
               <p className="date">
                 {dayjs().subtract(1, 'day').format('ddd, DD MMM, YYYY')}
               </p>
             </div>
-            <p className="desc">
-              Wait at least 24 minutes
-            </p>
+            <p className="desc">Wait at least 24 minutes</p>
           </div>
         </div>
         <div className="item">
           <NotificationsNoneOutlinedIcon className="icon" />
           <div className="content">
             <div className="text">
-              <h5 className="title">
-                Your order is in process now
-              </h5>
+              <h5 className="title">Your order is in process now</h5>
               <p className="date">
                 {dayjs().subtract(1, 'day').format('ddd, DD MMM, YYYY')}
               </p>
             </div>
-            <p className="desc">
-              Wait at least 24 minutes
-            </p>
+            <p className="desc">Wait at least 24 minutes</p>
           </div>
         </div>
         <h3 className="day">Yesterday</h3>
@@ -91,32 +79,24 @@ function NotificationPopover({
           <NotificationsNoneOutlinedIcon className="icon" />
           <div className="content">
             <div className="text">
-              <h5 className="title">
-                Your order is in process now
-              </h5>
+              <h5 className="title">Your order is in process now</h5>
               <p className="date">
                 {dayjs().subtract(1, 'day').format('ddd, DD MMM, YYYY')}
               </p>
             </div>
-            <p className="desc">
-              Wait at least 24 minutes
-            </p>
+            <p className="desc">Wait at least 24 minutes</p>
           </div>
         </div>
         <div className="item">
           <NotificationsNoneOutlinedIcon className="icon" />
           <div className="content">
             <div className="text">
-              <h5 className="title">
-                Your order is in process now
-              </h5>
+              <h5 className="title">Your order is in process now</h5>
               <p className="date">
                 {dayjs().subtract(1, 'day').format('ddd, DD MMM, YYYY')}
               </p>
             </div>
-            <p className="desc">
-              Wait at least 24 minutes
-            </p>
+            <p className="desc">Wait at least 24 minutes</p>
           </div>
         </div>
       </div>

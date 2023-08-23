@@ -1,8 +1,5 @@
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import Drawer from '@mui/material/Drawer'
-import List from '@mui/material/List'
-import Stack from '@mui/material/Stack'
-import Toolbar from '@mui/material/Toolbar'
 import IconButton from '@mui/material/IconButton'
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined'
@@ -15,8 +12,7 @@ import TwitterIcon from '@mui/icons-material/Twitter'
 import InstagramIcon from '@mui/icons-material/Instagram'
 import MailIcon from '@mui/icons-material/Mail'
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
-import assets from '../../assets'
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks'
+import { useAppDispatch } from '../../redux/redux-hooks'
 import { logout } from '../../redux/features/authStateSlice'
 
 const links = [
@@ -67,8 +63,7 @@ const links = [
 
 function Sidebar() {
   const dispatch = useAppDispatch()
-  const navigate = useNavigate()
-  const auth = localStorage.getItem('token')
+  const user = JSON.parse(localStorage.getItem('user')!)
 
   const logOut = () => {
     dispatch(logout())
@@ -120,7 +115,7 @@ function Sidebar() {
           </NavLink>
           <hr className="mt-4" />
         </div>
-        {auth ? (
+        {user ? (
           <NavLink
             className="logout-link"
             to="/dashboard"

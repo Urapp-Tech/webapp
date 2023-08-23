@@ -19,6 +19,7 @@ import { getItem } from '../../utilities/local-storage'
 import AddressService from '../../services/Address'
 import { setToken } from '../../utilities/constant'
 import noLocation from '../../assets/images/icon-noMapLocation.svg'
+import AlertBox from '../../components/common/SnackBar'
 
 const typeData = [
   {
@@ -51,6 +52,9 @@ function DeliveryAddressPage() {
   const [name, setName] = useState('')
   const [addressObj, setAddressObj] = useState<any>('')
   const geoCoder = new google.maps.Geocoder()
+  const [alertMsg, setAlertMsg] = useState<any>('')
+  const [showAlert, setShowAlert] = useState(false)
+  const [alertSeverity, setAlertSeverity] = useState('')
   const draggedAddress: any = useAppSelector(
     (state) => state.deviceStates.Address,
   )
@@ -65,7 +69,11 @@ function DeliveryAddressPage() {
     }
     AddressService.getUserAddress()
       .then((response) => dispatch(setUserAddressList(response.data.data)))
-      .catch((error) => console.log(error))
+      .catch((error) => {
+        setAlertMsg(error.message)
+        setShowAlert(true)
+        setAlertSeverity('error')
+      })
   }, [draggedAddress])
 
   const handleAddressClick = (index: number) => {
@@ -122,20 +130,23 @@ function DeliveryAddressPage() {
                 })
                 setNewAddress(formattedAddress) // Update the input field with the current location's address
               } else {
-                console.error(
-                  'Geocode was not successful for the following reason:',
-                  status,
-                )
+                setAlertMsg(status)
+                setShowAlert(true)
+                setAlertSeverity('error')
               }
             },
           )
         },
         (error) => {
-          console.error('Error getting current location:', error)
+          setAlertMsg(error)
+          setShowAlert(true)
+          setAlertSeverity('error')
         },
       )
     } else {
-      console.error('Geolocation is not supported by this browser.')
+      setAlertMsg('Geolocation is not supported by this browser.')
+      setShowAlert(true)
+      setAlertSeverity('error')
     }
   }
   const addNewAddress = () => {
@@ -151,12 +162,22 @@ function DeliveryAddressPage() {
         // dispatch()
       })
       .catch((error) => {
-        console.log(error)
+        setAlertMsg(error.message)
+        setShowAlert(true)
+        setAlertSeverity('error')
       })
   }
 
   return (
     <>
+      {showAlert && (
+        <AlertBox
+          msg={alertMsg}
+          setSeverty={alertSeverity}
+          alertOpen={showAlert}
+          setAlertOpen={setShowAlert}
+        />
+      )}
       <DeleteAddressPopup open={delAddress} setOpen={setDelAddress} />
       <div className="p-4 sm:p-5 xl:p-7 delivery-address-page">
         <h4 className="main-heading">Delivery Address</h4>
