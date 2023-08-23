@@ -8,7 +8,7 @@ import { setUserAddress } from '../../redux/features/deviceState'
 type Props = {
   center: google.maps.LatLngLiteral
   zoom: number
-  handleDragged: (newPosition: google.maps.LatLngLiteral) => void
+  handleDragged?: (newPosition: google.maps.LatLngLiteral) => void
   // onAddressChange: (data: string) => void
 }
 
@@ -113,10 +113,10 @@ function Map({
           }
         },
       )
-      google.maps.event.addListener(markerRef.current, 'dragend', function () {
+      google.maps.event.addListener(markerRef.current, 'dragend', () => {
         const newPosition = markerRef.current?.getPosition()
         if (newPosition) {
-          handleDragged(newPosition.toJSON())
+          handleDragged?.(newPosition.toJSON())
           geoCoder.geocode(
             { location: newPosition },
             (

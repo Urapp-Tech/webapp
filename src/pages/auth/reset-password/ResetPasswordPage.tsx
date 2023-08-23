@@ -28,20 +28,15 @@ function ResetPasswordPage() {
   };
   return (
     <>
-      <div className='fixed-at-top-left'>
-        <NavLink
-          to="../login"
-          className="go-back"
-        >
+      <div className="fixed-at-top-left">
+        <NavLink to="../login" className="go-back">
           <ArrowBackRoundedIcon className="icon-arrow" />
         </NavLink>
-        <img className='logo' src={assets.images.logo} alt="" />
+        <img className="logo" src={assets.images.logo} alt="" />
       </div>
       <div className="auth-form">
         <div className="custom-width">
-          <h4 className='heading'>
-            Create Password
-          </h4>
+          <h4 className="heading">Create Password</h4>
           <FormControl className="field mt-8 lg:mt-10" variant="standard">
             <InputLabel className="label" htmlFor="password">
               New Password
@@ -53,7 +48,7 @@ function ResetPasswordPage() {
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
-                    className='field-icon'
+                    className="field-icon"
                     aria-label="toggle password visibility"
                     onClick={handleClickShowPassword}
                     onMouseDown={handleMouseDownPassword}
@@ -75,7 +70,7 @@ function ResetPasswordPage() {
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
-                    className='field-icon'
+                    className="field-icon"
                     aria-label="toggle confirm-password visibility"
                     onClick={handleClickShowConfirmPassword}
                     onMouseDown={handleMouseDownConfirmPassword}
@@ -101,11 +96,7 @@ function ResetPasswordPage() {
               nonummy et nibh euismod
             </p>
           </div>
-          <img
-            className=""
-            src={assets.images.forgotPassImage}
-            alt=""
-          />
+          <img className="" src={assets.images.forgotPassImage} alt="" />
         </div>
       </div>
     </>

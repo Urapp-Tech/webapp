@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
@@ -8,12 +9,11 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import assets from '../../../assets';
 import { useForm } from 'react-hook-form';
+import assets from '../../../assets';
 import { OTPPayload, SignupPayload } from '../../../interfaces/auth.interface';
 import authService from '../../../services/Auth';
 import { setSignUpData } from '../../../utilities/constant';
-import { setItem } from '../../../utilities/local-storage';
 
 function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -29,21 +29,18 @@ function SignUpPage() {
   ) => {
     event.preventDefault();
   };
+
+  const OtpVerification = (data: OTPPayload) => {
+    authService.otpService(data).then((response) => {
+      if (response.data.success) {
+        navigate('../otp-verification');
+      }
+    });
+  };
   const onsubmit = (data: SignupPayload) => {
     setSignUpData(data);
     const dataOtp = { email: data.email };
     OtpVerification(dataOtp);
-  };
-
-  const OtpVerification = (data: OTPPayload) => {
-    authService
-      .otpService(data)
-      .then((response) => {
-        if (response.data.success) {
-          navigate('../otp-verification');
-        }
-      })
-      .catch((err) => console.log('err', err));
   };
   return (
     <>

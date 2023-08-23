@@ -10,8 +10,7 @@ import assets from '../../assets';
 type PaymentOptions = 'MASTER_CARD' | 'PAYPAL' | 'CASH';
 
 function genButtonClasses(isActive: boolean) {
-  const classes =
-    'tab-item';
+  const classes = 'tab-item';
   if (isActive) {
     return `${classes} active`;
   }
@@ -25,13 +24,15 @@ function PaymentSettingPage() {
   return (
     <>
       <DeleteCardPopup open={delCard} setOpen={setDelCard} />
-      <div className="p-4 sm:p-5 xl:p-7 payment-settings-page">
+      <div className="payment-settings-page p-4 sm:p-5 xl:p-7">
         <h4 className="main-heading">Payment Setting</h4>
-        <div className="grid grid-cols-2 gap-4 mb-5 payments-tab-header">
+        <div className="payments-tab-header mb-5 grid grid-cols-2 gap-4">
           <button
             type="button"
             onClick={() => setSelectedPaymentOption('MASTER_CARD')}
-            className={genButtonClasses(selectedPaymentOption === 'MASTER_CARD')}
+            className={genButtonClasses(
+              selectedPaymentOption === 'MASTER_CARD'
+            )}
           >
             <img
               src={assets.images.mastercard}
@@ -114,14 +115,19 @@ function PaymentSettingPage() {
                 <CircleOutlinedIcon className="icon unchecked" />
                 <div className="details">
                   <div className="platform">
-                    <img className='logo' src={assets.images.mastercard} alt="Payment Logo" />
+                    <img
+                      className="logo"
+                      src={assets.images.mastercard}
+                      alt="Payment Logo"
+                    />
                     <p className="title">Card 1</p>
                   </div>
-                  <h6 className="number">
-                    xxxx xxxx xxxx 3802
-                  </h6>
+                  <h6 className="number">xxxx xxxx xxxx 3802</h6>
                 </div>
-                <IconButton className="btn-del" onClick={() => setDelCard(true)}>
+                <IconButton
+                  className="btn-del"
+                  onClick={() => setDelCard(true)}
+                >
                   <DeleteOutlineOutlinedIcon />
                 </IconButton>
               </div>
@@ -130,14 +136,19 @@ function PaymentSettingPage() {
                 <CircleOutlinedIcon className="icon unchecked" />
                 <div className="details">
                   <div className="platform">
-                    <img className='logo' src={assets.images.visa} alt="Payment Logo" />
+                    <img
+                      className="logo"
+                      src={assets.images.visa}
+                      alt="Payment Logo"
+                    />
                     <p className="title">Card 2</p>
                   </div>
-                  <h6 className="number">
-                    xxxx xxxx xxxx 9974
-                  </h6>
+                  <h6 className="number">xxxx xxxx xxxx 9974</h6>
                 </div>
-                <IconButton className="btn-del" onClick={() => setDelCard(true)}>
+                <IconButton
+                  className="btn-del"
+                  onClick={() => setDelCard(true)}
+                >
                   <DeleteOutlineOutlinedIcon />
                 </IconButton>
               </div>
@@ -146,14 +157,19 @@ function PaymentSettingPage() {
                 <CircleOutlinedIcon className="icon unchecked" />
                 <div className="details">
                   <div className="platform">
-                    <img className='logo' src={assets.images.mastercard} alt="Payment Logo" />
+                    <img
+                      className="logo"
+                      src={assets.images.mastercard}
+                      alt="Payment Logo"
+                    />
                     <p className="title">Card 3</p>
                   </div>
-                  <h6 className="number">
-                    xxxx xxxx xxxx 1298
-                  </h6>
+                  <h6 className="number">xxxx xxxx xxxx 1298</h6>
                 </div>
-                <IconButton className="btn-del" onClick={() => setDelCard(true)}>
+                <IconButton
+                  className="btn-del"
+                  onClick={() => setDelCard(true)}
+                >
                   <DeleteOutlineOutlinedIcon />
                 </IconButton>
               </div>
@@ -225,7 +241,6 @@ function PaymentSettingPage() {
             </div>
           </div>
         </div>
-
       </div>
     </>
   );

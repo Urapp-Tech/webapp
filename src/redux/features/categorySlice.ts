@@ -1,28 +1,25 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { CategoryPayload } from '../../interfaces/Category'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { CategoryPayload } from '../../interfaces/Category';
 
 type CategoryState = {
-  CategoryList: CategoryPayload[]
-  subCategory: []
-}
+  CategoryList: CategoryPayload[];
+  subCategory: [];
+};
 
 const initialState: CategoryState = {
   CategoryList: [],
   subCategory: [],
-}
+};
 
 export const CategorySliceReducer = createSlice({
   name: 'category',
   initialState,
   reducers: {
     category: (state, action: PayloadAction<CategoryPayload[]>) => {
-      state.CategoryList = action.payload
-    },
-    subCategory: (state, action: PayloadAction<[]>) => {
-      console.log(action.payload)
+      state.CategoryList = action.payload;
     },
   },
-})
+});
 
-export const { category } = CategorySliceReducer.actions
-export default CategorySliceReducer.reducer
+export const { category } = CategorySliceReducer.actions;
+export default CategorySliceReducer.reducer;

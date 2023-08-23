@@ -1,13 +1,9 @@
 function PrivacyPolicyPage() {
   return (
-    <div className="p-4 sm:p-5 xl:p-7 general-page">
-      <h4 className="page-heading mb-5">
-        Privacy Policy
-      </h4>
+    <div className="general-page p-4 sm:p-5 xl:p-7">
+      <h4 className="page-heading mb-5">Privacy Policy</h4>
       <div className="general-card">
-        <h6 className="heading-sm">
-          Last Update: 1 April, 2019
-        </h6>
+        <h6 className="heading-sm">Last Update: 1 April, 2019</h6>
         <p className="text">
           The purpose of this privacy statement (the &apos;Privacy
           Statement&apos;) is to inform you about the types of personal
@@ -37,15 +33,11 @@ function PrivacyPolicyPage() {
           How do we collect your personal information? Where do we store your
           personal information ?
         </p>
-        <p className="text">
-          How do we use your personal information ?
-        </p>
+        <p className="text">How do we use your personal information ?</p>
         <p className="text">
           To whom do we provided your personal information ?
         </p>
-        <p className="text">
-          When and how do we obtain your consent ?
-        </p>
+        <p className="text">When and how do we obtain your consent ?</p>
         <p className="text">
           How do we ensure the privacy of your personal information when dealing
           with our and other third parties ?
@@ -74,7 +66,8 @@ function PrivacyPolicyPage() {
           How last will we respond to your written requests ?
         </p>
         <p className="text">
-          How do we know that it is really you requesting your personal information ?
+          How do we know that it is really you requesting your personal
+          information ?
         </p>
       </div>
     </div>

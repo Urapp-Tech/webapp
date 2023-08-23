@@ -51,7 +51,7 @@ function SelectLocationPopup({ open, setOpen }: Props) {
     [center]
   );
 
-  const onUnmount = useCallback(function callback(map: google.maps.Map) {
+  const onUnmount = useCallback(function callback() {
     setRenderMap(null);
   }, []);
 

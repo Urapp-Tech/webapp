@@ -4,7 +4,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 function Loader() {
   return (
     <>
-      <div className="h-full w-full"></div>
+      <div className="h-full w-full" />
       <Backdrop open sx={{ color: '#f9fafb', zIndex: 9999 }}>
         <CircularProgress color="inherit" />
       </Backdrop>

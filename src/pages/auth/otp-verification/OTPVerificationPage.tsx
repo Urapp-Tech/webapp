@@ -2,14 +2,13 @@ import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import OTPInput from 'react18-otp-input';
+import dayjs from 'dayjs';
 import assets from '../../../assets';
 import { getItem } from '../../../utilities/local-storage';
 import { useAppDispatch } from '../../../redux/redux-hooks';
 import { tenantId } from '../../../utilities/constant';
 import authService from '../../../services/Auth';
 import { login } from '../../../redux/features/authStateSlice';
-import dayjs from 'dayjs';
-
 
 function OTPVerificationPage() {
   const [OTP, setOTP] = useState('');
@@ -17,21 +16,16 @@ function OTPVerificationPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const onsubmit = () => {
-    let code = Object.assign(signupData, {
+    const code = Object.assign(signupData, {
       otp: OTP,
       tenant: tenantId,
       createdDate: dayjs().format(),
       updatedDate: dayjs().format(),
     });
-    authService
-      .signupService(code)
-      .then((response) => {
-        dispatch(login(response.data.data));
-        navigate('../../dashboard/home');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    authService.signupService(code).then((response) => {
+      dispatch(login(response.data.data));
+      navigate('../../dashboard/home');
+    });
   };
 
   return (

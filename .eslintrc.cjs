@@ -29,5 +29,8 @@ module.exports = {
     'react/no-array-index-key': 0,
     'react/require-default-props': 0,
     'no-param-reassign': 0,
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
   },
 };

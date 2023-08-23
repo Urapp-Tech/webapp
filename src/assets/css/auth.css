@@ -5,12 +5,12 @@
   background-color: var(--dark-200);
 }
 .auth-main .fixed-at-top-left {
-  @apply flex items-start gap-x-9 absolute;
+  @apply absolute flex items-start gap-x-9;
   top: 60px;
   left: 80px;
 }
 .auth-main .fixed-at-top-left .go-back {
-  @apply w-7 h-7 flex items-center justify-center rounded-full border-2 border-solid border-white;
+  @apply flex h-7 w-7 items-center justify-center rounded-full border-2 border-solid border-white;
 }
 .auth-main .fixed-at-top-left .go-back .icon-arrow {
   @apply w-5;
@@ -30,14 +30,14 @@
   max-width: 22rem;
 }
 .auth-main .auth-form .heading {
-  @apply text-center mb-0;
+  @apply mb-0 text-center;
   font-size: var(--fs-24);
   font-weight: var(--fw-700);
   color: var(--white);
   line-height: 1.2;
 }
 .auth-main .auth-form .desc {
-  @apply text-center mt-6 mb-0 mx-auto;
+  @apply mx-auto mt-6 mb-0 text-center;
   width: 75%;
   font-size: var(--fs-14);
   font-weight: var(--fw-400);
@@ -45,10 +45,10 @@
   line-height: 1.5;
 }
 .auth-main .auth-form .otp-container {
-  @apply flex items-center justify-center gap-x-5 mt-8;
+  @apply mt-8 flex items-center justify-center gap-x-5;
 }
 .auth-main .auth-form .field {
-  @apply w-full mb-6;
+  @apply mb-6 w-full;
 }
 .auth-main .auth-form .field .label {
   font-family: var(--ff-open-sans);
@@ -79,7 +79,7 @@
   color: var(--white);
 }
 .auth-main .auth-form .remember-me {
-  @apply gap-x-1.5 ml-0 mr-0;
+  @apply ml-0 mr-0 gap-x-1.5;
   font-size: var(--fs-14);
   font-weight: var(--fw-400);
   color: var(--white);
@@ -94,7 +94,7 @@
   color: var(--white);
 }
 .auth-main .auth-form .btn-submit {
-  @apply w-full outline-0 shadow-none;
+  @apply w-full shadow-none outline-0;
   min-height: 40px;
   font-size: var(--fs-16);
   font-weight: var(--fw-600);
@@ -103,7 +103,7 @@
   border-radius: 10px;
 }
 .auth-main .auth-form .btn-login-fb {
-  @apply w-full flex items-center justify-center mt-5 outline-0 shadow-none;
+  @apply mt-5 flex w-full items-center justify-center shadow-none outline-0;
   min-height: 40px;
   font-size: var(--fs-16);
   font-weight: var(--fw-600);
@@ -208,7 +208,7 @@
     padding: 30px 0;
   }
   .auth-main .fixed-at-top-left {
-    @apply justify-between grow-0;
+    @apply grow-0 justify-between;
     position: initial;
   }
   .auth-main .auth-form {

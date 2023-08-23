@@ -21,7 +21,6 @@ const initialState: DeviceState = {
   Address: '',
   AddressList: [],
 }
-
 export const deviceStateSlice = createSlice({
   name: 'device',
   initialState,
@@ -34,6 +33,7 @@ export const deviceStateSlice = createSlice({
       state.Address = action.payload
     },
     setUserAddressList: (state, action: PayloadAction<[]>) => {
+      setItem('Address', action.payload)
       state.AddressList = action.payload
     },
   },

@@ -1,93 +1,97 @@
 /*********************General Page CSS***************** 
 Faqs Page, Terms & Conditions Page, Privacy Policy Page
 ******************************************************/
-.general-page .page-heading{
-    @apply mb-0;
-    font-size: var(--fs-24);
-    font-weight: var(--fw-600);
-    color: var(--dark-100);
-    line-height: 1.1;
+.general-page .page-heading {
+  @apply mb-0;
+  font-size: var(--fs-24);
+  font-weight: var(--fw-600);
+  color: var(--dark-100);
+  line-height: 1.1;
 }
-.general-page .general-card{
-    @apply p-6;
-    background: var(--white);
-    box-shadow: 2px 4px 6px 0px rgba(0, 0, 0, 0.06);
-    border-radius: 10px;
+.general-page .general-card {
+  @apply p-6;
+  background: var(--white);
+  box-shadow: 2px 4px 6px 0px rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
 }
-.general-page .general-card .heading-sm{
-    @apply mb-4;
-    font-size: var(--fs-16);
-    font-weight: var(--fw-600);
-    color: var(--dark);
-    line-height: 1.1;
+.general-page .general-card .heading-sm {
+  @apply mb-4;
+  font-size: var(--fs-16);
+  font-weight: var(--fw-600);
+  color: var(--dark);
+  line-height: 1.1;
 }
-.general-page .general-card .text{
-    @apply mb-5;
-    font-size: var(--fs-14);
-    font-weight: var(--fw-400);
-    color: var(--dark-300);
-    line-height: 1.5;
+.general-page .general-card .text {
+  @apply mb-5;
+  font-size: var(--fs-14);
+  font-weight: var(--fw-400);
+  color: var(--dark-300);
+  line-height: 1.5;
 }
 
-.faqs-accordion .accordion-item{
-    @apply shadow-none;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    margin: 0 !important;
-    border-top: 0.5px solid var(--light-400);
-}
-.faqs-accordion .accordion-item:last-of-type{
-    border-bottom: 0.5px solid var(--light-400);
-}
-.faqs-accordion .accordion-item:first-of-type {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-}
-.faqs-accordion .accordion-item:before {
-    display: none;
+.faqs-accordion .accordion-item {
+  @apply shadow-none;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  margin: 0 !important;
+  border-top: 0.5px solid var(--light-400);
 }
 .faqs-accordion .accordion-item:last-of-type {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+  border-bottom: 0.5px solid var(--light-400);
 }
-.faqs-accordion .accordion-item .accordion-header{
-    @apply px-0;
+.faqs-accordion .accordion-item:first-of-type {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.faqs-accordion .accordion-item:before {
+  display: none;
+}
+.faqs-accordion .accordion-item:last-of-type {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.faqs-accordion .accordion-item .accordion-header {
+  @apply px-0;
 }
 .faqs-accordion .accordion-item .accordion-header.Mui-expanded {
-    min-height: auto;
+  min-height: auto;
 }
-.faqs-accordion .accordion-item .accordion-header .css-o4b71y-MuiAccordionSummary-content{
-    @apply my-4;
+.faqs-accordion
+  .accordion-item
+  .accordion-header
+  .css-o4b71y-MuiAccordionSummary-content {
+  @apply my-4;
 }
-.faqs-accordion .accordion-item .accordion-header .css-o4b71y-MuiAccordionSummary-content.Mui-expanded{
-    @apply my-4;
-    min-height: auto !important;
+.faqs-accordion
+  .accordion-item
+  .accordion-header
+  .css-o4b71y-MuiAccordionSummary-content.Mui-expanded {
+  @apply my-4;
+  min-height: auto !important;
 }
-.faqs-accordion .accordion-item .accordion-header .heading{
-    @apply mb-0 leading-none;
-    font-size: var(--fs-14);
-    font-weight: var(--fw-400);
-    color: var(--dark-300);
+.faqs-accordion .accordion-item .accordion-header .heading {
+  @apply mb-0 leading-none;
+  font-size: var(--fs-14);
+  font-weight: var(--fw-400);
+  color: var(--dark-300);
 }
-.faqs-accordion .accordion-item .accordion-body{
-    @apply pt-0 px-0 pb-4;
+.faqs-accordion .accordion-item .accordion-body {
+  @apply px-0 pt-0 pb-4;
 }
-.faqs-accordion .accordion-item .accordion-body .desc{
-    @apply mb-0;
-    font-size: var(--fs-14);
-    font-weight: var(--fw-400);
-    color: var(--dark-300);
-    line-height: 1.5;
+.faqs-accordion .accordion-item .accordion-body .desc {
+  @apply mb-0;
+  font-size: var(--fs-14);
+  font-weight: var(--fw-400);
+  color: var(--dark-300);
+  line-height: 1.5;
 }
 
 /*********************General Page CSS***************** 
 Faqs Page, Terms & Conditions Page, Privacy Policy Page
 ******************************************************/
 
-@media only screen and (max-width: 1535.98px) and (min-width: 1280px)  {
-    
+@media only screen and (max-width: 1535.98px) and (min-width: 1280px) {
 }
 
 @media only screen and (max-width: 639.98px) {
-   
 }
