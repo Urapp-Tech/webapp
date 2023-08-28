@@ -1,99 +1,99 @@
-import { useEffect, useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import dayjs from 'dayjs';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import CircularProgress from '@mui/material/CircularProgress';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
-import DateRangeIcon from '@mui/icons-material/DateRange';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
-import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
-import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
-import FilterNoneOutlinedIcon from '@mui/icons-material/FilterNoneOutlined';
-import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
-import DomainVerificationOutlinedIcon from '@mui/icons-material/DomainVerificationOutlined';
-import classNames from 'classnames';
-import DatePickerButton from '../my-basket/DatePickerButton';
-import OrderDetailsPagePopup from './OrderDetailsPagePopup';
-import assets from '../../assets';
-import { getItem } from '../../utilities/local-storage';
-import { useAppSelector } from '../../redux/redux-hooks';
-import AlertBox from '../../components/common/SnackBar';
+import { useEffect, useState, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
+import dayjs from 'dayjs'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import CircularProgress from '@mui/material/CircularProgress'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
+import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined'
+import DateRangeIcon from '@mui/icons-material/DateRange'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined'
+import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined'
+import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined'
+import FilterNoneOutlinedIcon from '@mui/icons-material/FilterNoneOutlined'
+import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined'
+import DomainVerificationOutlinedIcon from '@mui/icons-material/DomainVerificationOutlined'
+import classNames from 'classnames'
+import DatePickerButton from '../my-basket/DatePickerButton'
+import OrderDetailsPagePopup from './OrderDetailsPagePopup'
+import assets from '../../assets'
+import { getItem } from '../../utilities/local-storage'
+import { useAppSelector } from '../../redux/redux-hooks'
+import AlertBox from '../../components/common/SnackBar'
 import {
   ORDER_STATUSES,
   ORDER_STATUS_IN_DELIVERY,
-} from '../../utilities/constant';
+} from '../../utilities/constant'
 
 function OrderDetailsPage() {
-  const { cartItems }: any = useAppSelector((state) => state.cartState);
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const navigate = useNavigate();
-  const [orderItemDetail, setOrderItemDetail] = useState<any>();
-  const [pickUpTime, setPickUpTime] = useState<dayjs.Dayjs | null>(null);
-  const [dropOffTime, setDropOffTime] = useState<dayjs.Dayjs | null>(null);
+  const { cartItems }: any = useAppSelector((state) => state.cartState)
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false)
+  const navigate = useNavigate()
+  const [orderItemDetail, setOrderItemDetail] = useState<any>()
+  const [pickUpTime, setPickUpTime] = useState<dayjs.Dayjs | null>(null)
+  const [dropOffTime, setDropOffTime] = useState<dayjs.Dayjs | null>(null)
   const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
-    setPickUpTime(value);
-  };
-  const items = getItem('OrderItem');
-  const address = getItem('Address');
-  const AddressList = address.map((el: any) => el);
+    setPickUpTime(value)
+  }
+  const items = getItem('OrderItem')
+  const address = getItem('Address')
+  const AddressList = address.map((el: any) => el)
   const userAddress = AddressList.find(
-    (el: any) => el.id === orderItemDetail?.appUserAddress
-  );
-  const [alertMsg, setAlertMsg] = useState<any>('');
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertSeverity, setAlertSeverity] = useState('');
-  const [orderCanceled, setOrderCanceled] = useState(false);
+    (el: any) => el.id === orderItemDetail?.appUserAddress,
+  )
+  const [alertMsg, setAlertMsg] = useState<any>('')
+  const [showAlert, setShowAlert] = useState(false)
+  const [alertSeverity, setAlertSeverity] = useState('')
+  const [orderCanceled, setOrderCanceled] = useState(false)
   const total = cartItems.reduce(
     (previousValue: any, currentValue: any) =>
       previousValue + currentValue.price * currentValue.quantity,
-    0
-  );
+    0,
+  )
   useEffect(() => {
     const orderDetail = async () => {
       try {
         const id = await window.location.pathname.slice(
-          window.location.pathname.lastIndexOf('/') + 1
-        );
-        const Details = items?.orders.find((el: any) => el.id === id);
-        setOrderItemDetail(Details);
+          window.location.pathname.lastIndexOf('/') + 1,
+        )
+        const Details = items?.orders.find((el: any) => el.id === id)
+        setOrderItemDetail(Details)
       } catch (error) {
-        setAlertMsg(error);
-        setShowAlert(true);
-        setAlertSeverity('error');
+        setAlertMsg(error)
+        setShowAlert(true)
+        setAlertSeverity('error')
       }
-    };
-    orderDetail();
+    }
+    orderDetail()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   const HandleCancelOrder = () => {
-    setDialogOpen(true);
-    setOrderCanceled(true);
-  };
+    setDialogOpen(true)
+    setOrderCanceled(true)
+  }
 
   const handleDropOffTimeChange = (value: dayjs.Dayjs | null) => {
-    setDropOffTime(value);
-  };
+    setDropOffTime(value)
+  }
   const getIcon = ORDER_STATUSES.map((status: any, index) => {
-    let icon;
+    let icon
     if (status.iconText === 'AssignmentTurnedInOutlinedIcon') {
       icon = (
         <AssignmentTurnedInOutlinedIcon className={`text-xl ${status.color}`} />
-      );
+      )
     } else if (status.iconText === 'FilterNoneOutlinedIcon') {
-      icon = <FilterNoneOutlinedIcon className={`text-xl ${status.color}`} />;
+      icon = <FilterNoneOutlinedIcon className={`text-xl ${status.color}`} />
     } else if (status.iconText === 'LocationOnOutlinedIcon') {
-      icon = <LocationOnOutlinedIcon className={`text-xl ${status.color}`} />;
+      icon = <LocationOnOutlinedIcon className={`text-xl ${status.color}`} />
     } else if (status.iconText === 'DomainVerificationOutlinedIcon') {
       icon = (
         <DomainVerificationOutlinedIcon className={`text-xl ${status.color}`} />
-      );
+      )
     } else if (status.iconText === 'AccessTimeIcon') {
-      icon = <AccessTimeIcon className={`text-xl ${status.color}`} />;
+      icon = <AccessTimeIcon className={`text-xl ${status.color}`} />
     }
 
     return (
@@ -103,31 +103,31 @@ function OrderDetailsPage() {
       >
         {icon}
       </div>
-    );
-  });
+    )
+  })
 
   const getColorFromCode = (colorCode: any) => {
     if (colorCode.includes('blue')) {
-      return 'primary';
+      return 'primary'
     }
     if (colorCode.includes('purple')) {
-      return 'secondary';
+      return 'secondary'
     }
     if (colorCode.includes('green')) {
-      return 'success';
+      return 'success'
     }
     if (colorCode.includes('orange')) {
-      return 'warning';
+      return 'warning'
     }
     if (colorCode.includes('yellow')) {
-      return 'inherit';
+      return 'inherit'
     }
     if (colorCode.includes('red')) {
-      return 'error';
+      return 'error'
     }
-    return 'primary'; // Default to 'primary' if not recognized
-  };
-
+    return 'primary' // Default to 'primary' if not recognized
+  }
+  console.log(orderItemDetail)
   return (
     <>
       {showAlert && (
@@ -182,7 +182,7 @@ function OrderDetailsPage() {
                               {getIcon[index]}
                             </div>
                           </>
-                        )
+                        ),
                     )}
                   </div>
                   <div className="basic-details">
@@ -329,13 +329,13 @@ function OrderDetailsPage() {
                     disabled:
                       index >
                         ORDER_STATUSES.findIndex(
-                          (status) => status.status === orderItemDetail?.status
+                          (status) => status.status === orderItemDetail?.status,
                         ) ||
                       (orderCanceled &&
                         index >
                           ORDER_STATUSES.findIndex(
                             (status) =>
-                              status.status === orderItemDetail?.status
+                              status.status === orderItemDetail?.status,
                           )),
                   })}
                   key={index}
@@ -348,8 +348,8 @@ function OrderDetailsPage() {
                         index >
                           ORDER_STATUSES.findIndex(
                             (SecondStatus) =>
-                              SecondStatus.status === orderItemDetail?.status
-                          )
+                              SecondStatus.status === orderItemDetail?.status,
+                          ),
                     ) ? (
                       <CheckCircleOutlineOutlinedIcon />
                     ) : (
@@ -378,7 +378,7 @@ function OrderDetailsPage() {
         </div>
       </div>
     </>
-  );
+  )
 }
 
-export default OrderDetailsPage;
+export default OrderDetailsPage
