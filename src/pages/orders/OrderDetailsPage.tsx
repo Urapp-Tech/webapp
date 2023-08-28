@@ -1,73 +1,133 @@
-import { useEffect, useState, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
-import dayjs from 'dayjs'
-import Button from '@mui/material/Button'
-import IconButton from '@mui/material/IconButton'
-import CircularProgress from '@mui/material/CircularProgress'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
-import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined'
-import DateRangeIcon from '@mui/icons-material/DateRange'
-import AccessTimeIcon from '@mui/icons-material/AccessTime'
-import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined'
-import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined'
-import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined'
-import FilterNoneOutlinedIcon from '@mui/icons-material/FilterNoneOutlined'
-import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined'
-import DomainVerificationOutlinedIcon from '@mui/icons-material/DomainVerificationOutlined'
-import DatePickerButton from '../my-basket/DatePickerButton'
-import OrderDetailsPagePopup from './OrderDetailsPagePopup'
-import assets from '../../assets'
-import { getItem } from '../../utilities/local-storage'
-import { useAppSelector } from '../../redux/redux-hooks'
-import AlertBox from '../../components/common/SnackBar'
+import { useEffect, useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import CircularProgress from '@mui/material/CircularProgress';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
+import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
+import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
+import FilterNoneOutlinedIcon from '@mui/icons-material/FilterNoneOutlined';
+import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
+import DomainVerificationOutlinedIcon from '@mui/icons-material/DomainVerificationOutlined';
+import classNames from 'classnames';
+import DatePickerButton from '../my-basket/DatePickerButton';
+import OrderDetailsPagePopup from './OrderDetailsPagePopup';
+import assets from '../../assets';
+import { getItem } from '../../utilities/local-storage';
+import { useAppSelector } from '../../redux/redux-hooks';
+import AlertBox from '../../components/common/SnackBar';
+import {
+  ORDER_STATUSES,
+  ORDER_STATUS_IN_DELIVERY,
+} from '../../utilities/constant';
 
 function OrderDetailsPage() {
-  const { cartItems }: any = useAppSelector((state) => state.cartState)
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false)
-  const navigate = useNavigate()
-  const [orderItemDetail, setOrderItemDetail] = useState<any>()
-  const [pickUpTime, setPickUpTime] = useState<dayjs.Dayjs | null>(null)
-  const [dropOffTime, setDropOffTime] = useState<dayjs.Dayjs | null>(null)
+  const { cartItems }: any = useAppSelector((state) => state.cartState);
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const [orderItemDetail, setOrderItemDetail] = useState<any>();
+  const [pickUpTime, setPickUpTime] = useState<dayjs.Dayjs | null>(null);
+  const [dropOffTime, setDropOffTime] = useState<dayjs.Dayjs | null>(null);
   const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
-    setPickUpTime(value)
-  }
-  const items = getItem('OrderItem')
-  const address = getItem('Address')
-  const AddressList = address.map((el: any) => el)
+    setPickUpTime(value);
+  };
+  const items = getItem('OrderItem');
+  const address = getItem('Address');
+  const AddressList = address.map((el: any) => el);
   const userAddress = AddressList.find(
-    (el: any) => el.id === orderItemDetail?.appUserAddress,
-  )
-  const [alertMsg, setAlertMsg] = useState<any>('')
-  const [showAlert, setShowAlert] = useState(false)
-  const [alertSeverity, setAlertSeverity] = useState('')
+    (el: any) => el.id === orderItemDetail?.appUserAddress
+  );
+  const [alertMsg, setAlertMsg] = useState<any>('');
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState('');
+  const [orderCanceled, setOrderCanceled] = useState(false);
   const total = cartItems.reduce(
     (previousValue: any, currentValue: any) =>
       previousValue + currentValue.price * currentValue.quantity,
-    0,
-  )
-
-  const orderDetail = async () => {
-    try {
-      const id = await window.location.pathname.slice(
-        window.location.pathname.lastIndexOf('/') + 1,
-      )
-      const Details = items?.orders.find((el: any) => el.id === id)
-      setOrderItemDetail(Details)
-    } catch (error) {
-      setAlertMsg(error)
-          setShowAlert(true)
-      setAlertSeverity('error')
-    }
-  }
-
+    0
+  );
   useEffect(() => {
-    orderDetail()
-  }, [])
+    const orderDetail = async () => {
+      try {
+        const id = await window.location.pathname.slice(
+          window.location.pathname.lastIndexOf('/') + 1
+        );
+        const Details = items?.orders.find((el: any) => el.id === id);
+        setOrderItemDetail(Details);
+      } catch (error) {
+        setAlertMsg(error);
+        setShowAlert(true);
+        setAlertSeverity('error');
+      }
+    };
+    orderDetail();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const HandleCancelOrder = () => {
+    setDialogOpen(true);
+    setOrderCanceled(true);
+  };
 
   const handleDropOffTimeChange = (value: dayjs.Dayjs | null) => {
-    setDropOffTime(value)
-  }
+    setDropOffTime(value);
+  };
+  const getIcon = ORDER_STATUSES.map((status: any, index) => {
+    let icon;
+    if (status.iconText === 'AssignmentTurnedInOutlinedIcon') {
+      icon = (
+        <AssignmentTurnedInOutlinedIcon className={`text-xl ${status.color}`} />
+      );
+    } else if (status.iconText === 'FilterNoneOutlinedIcon') {
+      icon = <FilterNoneOutlinedIcon className={`text-xl ${status.color}`} />;
+    } else if (status.iconText === 'LocationOnOutlinedIcon') {
+      icon = <LocationOnOutlinedIcon className={`text-xl ${status.color}`} />;
+    } else if (status.iconText === 'DomainVerificationOutlinedIcon') {
+      icon = (
+        <DomainVerificationOutlinedIcon className={`text-xl ${status.color}`} />
+      );
+    } else if (status.iconText === 'AccessTimeIcon') {
+      icon = <AccessTimeIcon className={`text-xl ${status.color}`} />;
+    }
+
+    return (
+      <div
+        className="absolute inset-0 flex items-center justify-center"
+        key={index}
+      >
+        {icon}
+      </div>
+    );
+  });
+
+  const getColorFromCode = (colorCode: any) => {
+    if (colorCode.includes('blue')) {
+      return 'primary';
+    }
+    if (colorCode.includes('purple')) {
+      return 'secondary';
+    }
+    if (colorCode.includes('green')) {
+      return 'success';
+    }
+    if (colorCode.includes('orange')) {
+      return 'warning';
+    }
+    if (colorCode.includes('yellow')) {
+      return 'inherit';
+    }
+    if (colorCode.includes('red')) {
+      return 'error';
+    }
+    return 'primary'; // Default to 'primary' if not recognized
+  };
+
   return (
     <>
       {showAlert && (
@@ -98,25 +158,32 @@ function OrderDetailsPage() {
               <div className="items-center justify-between gap-x-5 sm:flex">
                 <div className="mb-5 flex items-center gap-x-3 sm:mb-0">
                   <div className="icon-order-out-for-delivery relative inline-flex">
-                    <CircularProgress
-                      thickness={1.5}
-                      className="z-10"
-                      size="4rem"
-                      variant="determinate"
-                      value={80}
-                      color="inherit"
-                    />
-                    <CircularProgress
-                      thickness={1.5}
-                      className="absolute z-0 text-neutral-200"
-                      size="4rem"
-                      variant="determinate"
-                      value={100}
-                      color="inherit"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <LocationOnOutlinedIcon className="text-3xl" />
-                    </div>
+                    {ORDER_STATUSES.map(
+                      (status, index) =>
+                        orderItemDetail?.status === status.status && (
+                          <>
+                            <CircularProgress
+                              thickness={1.5}
+                              className="z-10"
+                              size="4rem"
+                              variant="determinate"
+                              value={(index + 1) * (100 / 6)}
+                              color={getColorFromCode(status.color)}
+                            />
+                            <CircularProgress
+                              thickness={1.5}
+                              className="absolute z-0 text-neutral-200"
+                              size="4rem"
+                              variant="determinate"
+                              value={100}
+                              color="inherit"
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              {getIcon[index]}
+                            </div>
+                          </>
+                        )
+                    )}
                   </div>
                   <div className="basic-details">
                     <p className="order-id">
@@ -131,9 +198,12 @@ function OrderDetailsPage() {
 
                 <Button
                   type="button"
-                  onClick={() => setDialogOpen(true)}
+                  onClick={HandleCancelOrder}
                   className="btn-cancel-order"
                   color="inherit"
+                  disabled={
+                    orderItemDetail?.status === ORDER_STATUS_IN_DELIVERY
+                  }
                 >
                   Cancel Order
                 </Button>
@@ -222,7 +292,6 @@ function OrderDetailsPage() {
               </div>
 
               <div className="total-amount">
-                <h5 className="heading">Total Amount</h5>
                 <div className="mb-4 flex items-center justify-between">
                   <p className="key">Total Amount</p>
                   <p className="value">${total.toFixed(2)}</p>
@@ -254,159 +323,62 @@ function OrderDetailsPage() {
               <h6 className="heading">Your order is in progress...</h6>
             </div>
             <div className="body">
-              <div className="timeline-item">
-                <div className="dot">
-                  <CheckCircleOutlineOutlinedIcon />
-                </div>
-                <div className="order-placed relative inline-flex">
-                  <CircularProgress
-                    thickness={1.5}
-                    className="circular-icon"
-                    variant="determinate"
-                    value={100}
-                    color="inherit"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <AssignmentTurnedInOutlinedIcon className="text-base md:text-xl" />
+              {ORDER_STATUSES.map((el, index) => (
+                <div
+                  className={classNames('timeline-item', {
+                    disabled:
+                      index >
+                        ORDER_STATUSES.findIndex(
+                          (status) => status.status === orderItemDetail?.status
+                        ) ||
+                      (orderCanceled &&
+                        index >
+                          ORDER_STATUSES.findIndex(
+                            (status) =>
+                              status.status === orderItemDetail?.status
+                          )),
+                  })}
+                  key={index}
+                >
+                  <div className="dot">
+                    {index !==
+                    ORDER_STATUSES.findIndex(
+                      (status) =>
+                        status.status === orderItemDetail?.status &&
+                        index >
+                          ORDER_STATUSES.findIndex(
+                            (SecondStatus) =>
+                              SecondStatus.status === orderItemDetail?.status
+                          )
+                    ) ? (
+                      <CheckCircleOutlineOutlinedIcon />
+                    ) : (
+                      <CircleOutlinedIcon />
+                    )}
                   </div>
-                </div>
-                <div className="flex-grow">
-                  <h6 className="status-title order-placed">Placed Order</h6>
-                  <p className="status-desc">We have received your order</p>
-                </div>
-                <p className="date">{dayjs().format('HH:mm, MMM DD, YY')}</p>
-              </div>
-
-              <div className="timeline-item">
-                <div className="dot">
-                  <CheckCircleOutlineOutlinedIcon />
-                </div>
-                <div className="order-picked-up relative inline-flex">
-                  <CircularProgress
-                    thickness={1.5}
-                    className="circular-icon"
-                    variant="determinate"
-                    value={100}
-                    color="inherit"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <FilterNoneOutlinedIcon className="text-base md:text-xl" />
+                  <div className="order-placed relative inline-flex">
+                    <CircularProgress
+                      thickness={1.5}
+                      className="circular-icon"
+                      variant="determinate"
+                      value={100}
+                      color={getColorFromCode(el.color)}
+                    />
+                    <div>{getIcon[index]}</div>
                   </div>
-                </div>
-                <div className="flex-grow">
-                  <h6 className="status-title order-picked-up">
-                    Order Picked Up
-                  </h6>
-                  <p className="status-desc">Your order has been collected</p>
-                </div>
-                <p className="date">{dayjs().format('HH:mm, MMM DD, YY')}</p>
-              </div>
-
-              <div className="timeline-item">
-                <div className="dot">
-                  <CheckCircleOutlineOutlinedIcon />
-                </div>
-                <div className="order-out-for-delivery relative inline-flex">
-                  <CircularProgress
-                    thickness={1.5}
-                    className="circular-icon"
-                    variant="determinate"
-                    value={100}
-                    color="inherit"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <LocationOnOutlinedIcon className="text-base md:text-xl" />
+                  <div className="flex-grow">
+                    <h6 className={`status-title ${el.color}`}>{el.title}</h6>
+                    <p className="status-desc">{el.text}</p>
                   </div>
+                  <p className="date">{dayjs().format('HH:mm, MMM DD, YY')}</p>
                 </div>
-                <div className="flex-grow">
-                  <h6 className="status-title order-out-for-delivery">
-                    Order Out For Delivery
-                  </h6>
-                  <p className="status-desc">Your order is out for delivery</p>
-                </div>
-                <p className="date">{dayjs().format('HH:mm, MMM DD, YY')}</p>
-              </div>
-
-              <div className="timeline-item disabled">
-                <div className="dot">
-                  <CircleOutlinedIcon />
-                </div>
-                <div className="order-drop-off relative inline-flex">
-                  <CircularProgress
-                    thickness={1.5}
-                    className="circular-icon"
-                    variant="determinate"
-                    value={100}
-                    color="inherit"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <DomainVerificationOutlinedIcon className="text-base md:text-xl" />
-                  </div>
-                </div>
-                <div className="flex-grow">
-                  <h6 className="status-title order-drop-off">
-                    Order Drop Off
-                  </h6>
-                  <p className="status-desc">Your order has been dropped</p>
-                </div>
-                <p className="date">{dayjs().format('HH:mm, MMM DD, YY')}</p>
-              </div>
-
-              <div className="timeline-item disabled">
-                <div className="dot">
-                  <CircleOutlinedIcon />
-                </div>
-                <div className="order-delivered relative inline-flex">
-                  <CircularProgress
-                    thickness={1.5}
-                    className="circular-icon"
-                    variant="determinate"
-                    value={100}
-                    color="inherit"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <AccessTimeIcon className="text-base md:text-xl" />
-                  </div>
-                </div>
-                <div className="flex-grow">
-                  <h6 className="status-title order-delivered">
-                    Order Delivered
-                  </h6>
-                  <p className="status-desc">Your order has been delivered</p>
-                </div>
-                <p className="date">{dayjs().format('HH:mm, MMM DD, YY')}</p>
-              </div>
-
-              <div className="timeline-item disabled">
-                <div className="dot">
-                  <CircleOutlinedIcon />
-                </div>
-                <div className="order-cancelled relative inline-flex">
-                  <CircularProgress
-                    thickness={1.5}
-                    className="circular-icon"
-                    variant="determinate"
-                    value={100}
-                    color="inherit"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <DomainVerificationOutlinedIcon className="text-base md:text-xl" />
-                  </div>
-                </div>
-                <div className="flex-grow">
-                  <h6 className="status-title order-cancelled">
-                    Order Cancelled
-                  </h6>
-                  <p className="status-desc">Your order has been cancelled</p>
-                </div>
-                <p className="date">{dayjs().format('HH:mm, MMM DD, YY')}</p>
-              </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default OrderDetailsPage
+export default OrderDetailsPage;

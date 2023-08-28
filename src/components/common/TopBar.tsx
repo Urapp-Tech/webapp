@@ -1,26 +1,24 @@
-import { useRef, useState } from 'react'
-import { NavLink } from 'react-router-dom'
-import AppBar from '@mui/material/AppBar'
-import Toolbar from '@mui/material/Toolbar'
-import Badge from '@mui/material/Badge'
-import IconButton from '@mui/material/IconButton'
-import MenuIcon from '@mui/icons-material/Menu'
-import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
-import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined'
-import NotificationPopover from './NotificationPopover'
-import { useAppSelector } from '../../redux/redux-hooks'
-import assets from '../../assets'
+import { useRef, useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Badge from '@mui/material/Badge';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
+import NotificationPopover from './NotificationPopover';
+import { useAppSelector } from '../../redux/redux-hooks';
+import assets from '../../assets';
 
 function TopBar() {
-  const [
-    notificationElement,
-    setNotificationElement,
-  ] = useState<HTMLButtonElement | null>(null)
-  const notificationIconButtonElement = useRef(null)
+  const [notificationElement, setNotificationElement] =
+    useState<HTMLButtonElement | null>(null);
+  const notificationIconButtonElement = useRef(null);
   const handleClick = () => {
-    setNotificationElement(notificationIconButtonElement.current)
-  }
-  const { cartItems }: any = useAppSelector((state) => state.cartState)
+    setNotificationElement(notificationIconButtonElement.current);
+  };
+  const { cartItems }: any = useAppSelector((state) => state.cartState);
   return (
     <AppBar position="fixed" className="topbar">
       <Toolbar>
@@ -82,7 +80,7 @@ function TopBar() {
         </div>
       </Toolbar>
     </AppBar>
-  )
+  );
 }
 
-export default TopBar
+export default TopBar;
