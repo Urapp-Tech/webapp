@@ -1,81 +1,81 @@
-import { useEffect, useState } from 'react';
-import dayjs from 'dayjs';
-import IconButton from '@mui/material/IconButton';
-import FormControl from '@mui/material/FormControl';
-import InputAdornment from '@mui/material/InputAdornment';
-import Input from '@mui/material/Input';
-import { Link, useNavigate } from 'react-router-dom';
-import Button from '@mui/material/Button';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import DiscountIcon from '@mui/icons-material/Discount';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
-import DateRangeIcon from '@mui/icons-material/DateRange';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import CreditCardOutlinedIcon from '@mui/icons-material/CreditCardOutlined';
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import DatePickerButton from './DatePickerButton';
+import { useEffect, useState } from 'react'
+import dayjs from 'dayjs'
+import IconButton from '@mui/material/IconButton'
+import FormControl from '@mui/material/FormControl'
+import InputAdornment from '@mui/material/InputAdornment'
+import Input from '@mui/material/Input'
+import { Link, useNavigate } from 'react-router-dom'
+import Button from '@mui/material/Button'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import DiscountIcon from '@mui/icons-material/Discount'
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
+import DateRangeIcon from '@mui/icons-material/DateRange'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
+import CreditCardOutlinedIcon from '@mui/icons-material/CreditCardOutlined'
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks'
+import DatePickerButton from './DatePickerButton'
 import {
   newOrder,
   removeFromCart,
   Cart,
-} from '../../redux/features/cartStateSlice';
-import { getItem } from '../../utilities/local-storage';
-import cartService from '../../services/cart';
-import AlertBox from '../../components/common/SnackBar';
-import OrderService from '../../services/Order';
-import { setUserAddressList } from '../../redux/features/deviceState';
-import AddressService from '../../services/Address';
-import { setToken } from '../../utilities/constant';
+} from '../../redux/features/cartStateSlice'
+import { getItem } from '../../utilities/local-storage'
+import cartService from '../../services/cart'
+import AlertBox from '../../components/common/SnackBar'
+import OrderService from '../../services/Order'
+import { setUserAddressList } from '../../redux/features/deviceState'
+import AddressService from '../../services/Address'
+import { setToken } from '../../utilities/constant'
 
 function MyBasketPage() {
-  const { cartItems }: any = useAppSelector((state) => state.cartState);
-  const dispatch = useAppDispatch();
-  const [pickUpTime, setPickUpTime] = useState<dayjs.Dayjs | null>();
-  const [dropOffTime, setDropOffTime] = useState<dayjs.Dayjs | null>();
-  const Cartdata = getItem('RegisteredCart');
-  const [promocode, setPromocode] = useState('');
-  const navigate = useNavigate();
-  const [alertMsg, setAlertMsg] = useState('');
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertSeverity, setAlertSeverity] = useState('');
-  const user = JSON.parse(localStorage.getItem('user')!);
-  const userAddress: any = useAppSelector(
-    (state) => state.deviceStates.AddressList
-  );
+  const { cartItems }: any = useAppSelector((state) => state.cartState)
+  const dispatch = useAppDispatch()
+  const [pickUpTime, setPickUpTime] = useState<dayjs.Dayjs | null>()
+  const [dropOffTime, setDropOffTime] = useState<dayjs.Dayjs | null>()
+  const Cartdata = getItem('RegisteredCart')
+  const [promocode, setPromocode] = useState('')
+  const navigate = useNavigate()
+  const [alertMsg, setAlertMsg] = useState('')
+  const [showAlert, setShowAlert] = useState(false)
+  const [alertSeverity, setAlertSeverity] = useState('')
+  const user = JSON.parse(localStorage.getItem('user')!)
+  const userAddress = useAppSelector(
+    (state: any) => state.deviceStates.AddressList,
+  )
 
   const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
-    setPickUpTime(value);
-  };
+    setPickUpTime(value)
+  }
   const handleDropOffTimeChange = (value: dayjs.Dayjs | null) => {
-    setDropOffTime(value);
-  };
+    setDropOffTime(value)
+  }
   const total = cartItems.reduce(
     (previousValue: any, currentValue: any) =>
       previousValue + currentValue.price * currentValue.quantity,
-    0
-  );
+    0,
+  )
   useEffect(() => {
     if (user) {
       AddressService.getUserAddress().then((response) => {
-        dispatch(setUserAddressList(response.data.data));
-      });
+        dispatch(setUserAddressList(response.data.data))
+      })
     }
-  }, [user, dispatch]);
+  }, [user, dispatch])
 
-  const arr: any = [];
+  const arr: any = []
   cartItems.forEach((el: any) => {
     const abc = {
       id: el.id,
       quantity: el.quantity,
-    };
-    arr.push(abc);
-  });
+    }
+    arr.push(abc)
+  })
 
   const onCheckout = () => {
-    setToken(user?.token);
+    setToken(user?.token)
     const reqBody: any = {
       appUser: user?.id,
       appUserAddress: userAddress[0]?.id,
@@ -86,33 +86,33 @@ function MyBasketPage() {
       promoCode: promocode,
       tenant: Cartdata?.tenant,
       products: arr,
-    };
+    }
     if (!user) {
-      navigate('/auth/login');
-      return;
+      navigate('/auth/login')
+      return
     }
     if (pickUpTime && dropOffTime) {
       cartService
         .updateCart(reqBody)
         .then((response) => {
-          dispatch(Cart(response.data.data.cart));
+          dispatch(Cart(response.data.data.cart))
           OrderService.addOrder({ cartId: response.data.data.cart.id }).then(
             (OrderResponse) => {
-              dispatch(newOrder(OrderResponse.data));
-              window.location.replace(OrderResponse.data.data.paymentUrl);
-            }
-          );
+              dispatch(newOrder(OrderResponse.data))
+              window.location.replace(OrderResponse.data.data.paymentUrl)
+            },
+          )
         })
         .catch((error) => {
-          setAlertMsg(error.message);
-          setShowAlert(true);
-          setAlertSeverity('error');
-        });
+          setAlertMsg(error.message)
+          setShowAlert(true)
+          setAlertSeverity('error')
+        })
     }
-    setAlertMsg('Pickup Date & Drop off time is Required');
-    setShowAlert(true);
-    setAlertSeverity('error');
-  };
+    setAlertMsg('Pickup Date & Drop off time is Required')
+    setShowAlert(true)
+    setAlertSeverity('error')
+  }
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -295,7 +295,7 @@ function MyBasketPage() {
         </div>
       </div>
     </LocalizationProvider>
-  );
+  )
 }
 
-export default MyBasketPage;
+export default MyBasketPage

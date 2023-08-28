@@ -2,7 +2,9 @@ import { NavLink } from 'react-router-dom';
 import dayjs from 'dayjs';
 import CircularProgress from '@mui/material/CircularProgress';
 import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import FilterNoneOutlinedIcon from '@mui/icons-material/FilterNoneOutlined';
+import DomainVerificationOutlinedIcon from '@mui/icons-material/DomainVerificationOutlined';
 
 type Status = 'New' | 'Processing';
 
