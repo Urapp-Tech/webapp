@@ -1,19 +1,21 @@
-import { NavLink } from 'react-router-dom';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
-import CreditCardRoundedIcon from '@mui/icons-material/CreditCardRounded';
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import MailIcon from '@mui/icons-material/Mail';
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import { useAppDispatch } from '../../redux/redux-hooks';
-import { logout } from '../../redux/features/authStateSlice';
+import React, { useEffect, useState } from 'react'
+import { NavLink } from 'react-router-dom'
+import Drawer from '@mui/material/Drawer'
+import IconButton from '@mui/material/IconButton'
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined'
+import CreditCardRoundedIcon from '@mui/icons-material/CreditCardRounded'
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
+import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined'
+import FacebookIcon from '@mui/icons-material/Facebook'
+import TwitterIcon from '@mui/icons-material/Twitter'
+import InstagramIcon from '@mui/icons-material/Instagram'
+import MailIcon from '@mui/icons-material/Mail'
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
+import LoginIcon from '@mui/icons-material/Login'
+import { useAppDispatch } from '../../redux/redux-hooks'
+import { logout } from '../../redux/features/authStateSlice'
 
 const links = [
   {
@@ -59,15 +61,17 @@ const links = [
       <HelpOutlineOutlinedIcon className="aside-list-icon" fontSize="inherit" />
     ),
   },
-];
+]
 
 function Sidebar() {
-  const dispatch = useAppDispatch();
-  const user = JSON.parse(localStorage.getItem('user')!);
+  const dispatch = useAppDispatch()
+  const user = JSON.parse(localStorage.getItem('user')!)
+  const [LoginUser, setLoginUser] = useState(null)
 
-  const logOut = () => {
-    dispatch(logout());
-  };
+  useEffect(() => {
+    setLoginUser(user)
+  }, [LoginUser])
+
   return (
     <Drawer
       variant="permanent"
@@ -77,16 +81,22 @@ function Sidebar() {
     >
       <div className="sidebar-links">
         {links.map((link) => {
-          return (
-            <NavLink
-              key={link.path}
-              className={({ isActive }) => (isActive ? 'item active' : 'item')}
-              to={link.path}
-            >
-              {link.icon}
-              <span>{link.name}</span>
-            </NavLink>
-          );
+          // If user exists, show all links, else show only Home link FAQs Link
+          if (LoginUser || link.name === 'Home') {
+            return (
+              <NavLink
+                key={link.path}
+                className={({ isActive }) =>
+                  isActive ? 'item active' : 'item'
+                }
+                to={link.path}
+              >
+                {link.icon}
+                <span>{link.name}</span>
+              </NavLink>
+            )
+          }
+          return null // Skip rendering links other than Home & FAQs if user is not logged in
         })}
       </div>
       <div className="sidebar-footer-content">
@@ -115,21 +125,24 @@ function Sidebar() {
           </NavLink>
           <hr className="mt-4" />
         </div>
-        {user ? (
+        {LoginUser ? (
           <NavLink
             className="logout-link"
             to="/dashboard"
-            onClick={() => logOut()}
+            onClick={() => dispatch(logout())}
           >
             <LogoutOutlinedIcon className="icon" />
             Logout
           </NavLink>
         ) : (
-          ''
+          <NavLink className="logout-link" to="/auth/login">
+            <LogoutOutlinedIcon />
+            Login
+          </NavLink>
         )}
       </div>
     </Drawer>
-  );
+  )
 }
 
-export default Sidebar;
+export default Sidebar
