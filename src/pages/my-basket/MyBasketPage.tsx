@@ -195,6 +195,7 @@ function MyBasketPage() {
                   variant="outlined"
                   color="inherit"
                   startIcon={<ShoppingBagOutlinedIcon />}
+                  onClick={() => navigate('/dashboard/home')}
                 >
                   Add More to Basket
                 </Button>
