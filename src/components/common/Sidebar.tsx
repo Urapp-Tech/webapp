@@ -16,6 +16,7 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
 import LoginIcon from '@mui/icons-material/Login'
 import { useAppDispatch } from '../../redux/redux-hooks'
 import { logout } from '../../redux/features/authStateSlice'
+import { getItem } from '../../utilities/local-storage'
 
 const links = [
   {
@@ -65,12 +66,17 @@ const links = [
 
 function Sidebar() {
   const dispatch = useAppDispatch()
-  const user = JSON.parse(localStorage.getItem('user')!)
   const [LoginUser, setLoginUser] = useState(null)
-
-  useEffect(() => {
+  const user = JSON.parse(localStorage.getItem('user')!)
+  console.log(LoginUser)
+  useEffect(() => {  
     setLoginUser(user)
-  }, [LoginUser])
+  }, [])
+
+  const handleLogout = () => {
+    setLoginUser(null)
+    dispatch(logout())
+  }
 
   return (
     <Drawer
@@ -129,7 +135,7 @@ function Sidebar() {
           <NavLink
             className="logout-link"
             to="/dashboard"
-            onClick={() => dispatch(logout())}
+            onClick={() => handleLogout()}
           >
             <LogoutOutlinedIcon className="icon" />
             Logout
