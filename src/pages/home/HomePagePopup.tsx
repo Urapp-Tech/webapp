@@ -1,28 +1,28 @@
-import { useCallback, useEffect, useState } from 'react';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ClearIcon from '@mui/icons-material/Clear';
-import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
-import HomePagePopupClasses from './HomePagePopup.module.css';
-import assets from '../../assets';
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import { addToCart, Cart } from '../../redux/features/cartStateSlice';
-import cartService from '../../services/cart';
-import { getItem } from '../../utilities/local-storage';
+import { useCallback, useEffect, useState } from 'react'
+import Dialog from '@mui/material/Dialog'
+import DialogContent from '@mui/material/DialogContent'
+import DialogActions from '@mui/material/DialogActions'
+import Accordion from '@mui/material/Accordion'
+import AccordionSummary from '@mui/material/AccordionSummary'
+import AccordionDetails from '@mui/material/AccordionDetails'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import ClearIcon from '@mui/icons-material/Clear'
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined'
+import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined'
+import HomePagePopupClasses from './HomePagePopup.module.css'
+import assets from '../../assets'
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks'
+import { addToCart, Cart } from '../../redux/features/cartStateSlice'
+import cartService from '../../services/cart'
+import { getItem } from '../../utilities/local-storage'
 
 type Props = {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  data: any;
-};
+  open: boolean
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  data: any
+}
 
 const itemFAQs = [
   {
@@ -63,34 +63,36 @@ const itemFAQs = [
               temporibus ex porro sint ut at dolorum quo aut odit officia? Sunt
               necessitatibus asperiores harum nesciunt.`,
   },
-];
+]
 
 function HomePagePopup({ open, setOpen, data }: Props) {
-  const [expanded, setExpanded] = useState<string | false>(false);
-  const dispatch = useAppDispatch();
-  const [count, setCount] = useState(1);
-  const Cartdata = getItem('RegisteredCart');
-  const arr: any = [];
+  const [expanded, setExpanded] = useState<string | false>(false)
+  const dispatch = useAppDispatch()
+  const [count, setCount] = useState(1)
+  const Cartdata = getItem('RegisteredCart')
+  const arr: any = []
 
-  const handleChange =
-    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-      setExpanded(isExpanded ? panel : false);
-    };
+  const handleChange = (panel: string) => (
+    event: React.SyntheticEvent,
+    isExpanded: boolean,
+  ) => {
+    setExpanded(isExpanded ? panel : false)
+  }
   const incrementCount = () => {
-    setCount((previousCount) => previousCount + 1);
-  };
+    setCount((previousCount) => previousCount + 1)
+  }
   const decrementCount = () => {
     setCount((previousCount) => {
       if (previousCount <= 1) {
-        return 1;
+        return 1
       }
-      return previousCount - 1;
-    });
-  };
+      return previousCount - 1
+    })
+  }
 
   const addToBasketHandler = (CartData: any) => {
-    dispatch(addToCart(CartData));
-    arr.push(...arr, { id: CartData.id, quantity: CartData.quantity });
+    dispatch(addToCart(CartData))
+    arr.push(...arr, { id: CartData.id, quantity: CartData.quantity })
     const reqBody = {
       appUser: Cartdata?.appUser,
       appUserAddress: Cartdata?.appUserAddres,
@@ -101,18 +103,19 @@ function HomePagePopup({ open, setOpen, data }: Props) {
       promoCode: Cartdata?.promoCode,
       tenant: Cartdata?.tenant,
       products: arr,
-    };
+    }
     cartService
       .updateCart(reqBody)
-      .then((response) => dispatch(Cart(response.data.data.cart)));
-    setOpen(false);
-    setCount(0);
-  };
+      .then((response) => dispatch(Cart(response.data.data.cart)))
+    setOpen(false)
+    setCount(0)
+  }
   const onCloseHandler = (event: object, reason: string) => {
     if (reason === 'backdropClick') {
-      setOpen(false);
+      setOpen(false)
     }
-  };
+  }
+
   return (
     <Dialog open={open} onClose={onCloseHandler} className="modal-add-to-cart">
       <IconButton onClick={() => setOpen(false)} className="btn-close">
@@ -126,12 +129,7 @@ function HomePagePopup({ open, setOpen, data }: Props) {
             </div>
             <div className="p-4">
               <h4 className="product-name">{data?.name}</h4>
-              <p className="product-desc">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industrys standard dummy text
-                ever since the 1500s, when an unknown printer took a galley of
-                type and scrambled it to make a type specimen book.
-              </p>
+              <p className="product-desc">{data?.desc}</p>
               <div className="flex-container flex items-center justify-between">
                 <div className="price">
                   <h3 className="number">
@@ -179,7 +177,7 @@ function HomePagePopup({ open, setOpen, data }: Props) {
                     <p className="desc">{faq.answer}</p>
                   </AccordionDetails>
                 </Accordion>
-              );
+              )
             })}
           </div>
         </div>
@@ -194,15 +192,15 @@ function HomePagePopup({ open, setOpen, data }: Props) {
               name: data?.name,
               price: data?.price,
               quantity: count,
-            };
-            addToBasketHandler(cartItem);
+            }
+            addToBasketHandler(cartItem)
           }}
         >
           Add to Basket
         </Button>
       </DialogActions>
     </Dialog>
-  );
+  )
 }
 
-export default HomePagePopup;
+export default HomePagePopup
