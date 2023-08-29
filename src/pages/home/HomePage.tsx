@@ -37,6 +37,7 @@ function HomePage() {
   const [alertMsg, setAlertMsg] = useState('')
   const [showAlert, setShowAlert] = useState(false)
   const [alertSeverity, setAlertSeverity] = useState('')
+  const [FAQs, setFAQs] = useState(null)
   const fingerprint = client.getFingerprint()
   const agent = client.getUserAgent()
   const fetchIp = async () => {
@@ -57,7 +58,12 @@ function HomePage() {
     setDialogOpen(true)
     categoryService
       .FaqService(subCategory?.tenant, subCategory?.id, item.id)
-      .then((response) => console.log(response))
+      .then((response) => {
+        if (response.data.success) {
+          console.log(response)
+          setFAQs(response.data.data.homeCatItemFaq)
+        }
+      })
   }
   const onClickButton = (item: any) => {
     categoryService
@@ -143,6 +149,7 @@ function HomePage() {
         open={dialogOpen}
         setOpen={setDialogOpen}
         data={selectedItem}
+        FAQs={FAQs}
       />
       <div className="px-4 pt-6 sm:px-5 sm:pt-4 xl:px-7">
         <div className="all-categories">

@@ -22,50 +22,10 @@ type Props = {
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   data: any
+  FAQs: any
 }
 
-const itemFAQs = [
-  {
-    question: `What if theres no care label on an item ?`,
-    answer: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-
-    It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
-    
-    It was popularized in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
-  },
-  {
-    question: `Will my items be hung or folded too ?`,
-    answer: `Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officia
-              culpa est cumque aut unde, soluta aperiam illum. Alias saepe fuga
-              corporis nisi vitae asperiores magni, fugit, perferendis inventore
-              aspernatur quisquam veritatis voluptates sed amet atque ullam,
-              nobis quas minima error beatae reprehenderit animi minus cum
-              officia! Magnam officia libero quidem sint rerum labore ab
-              exercitationem corporis totam fugiat, corrupti quas asperiores
-              blanditiis, nobis dolor officiis pariatur, nam maxime. Facere
-              perferendis adipisci iure velit id nesciunt, quaerat nam
-              perspiciatis atque ratione culpa tenetur voluptatum necessitatibus
-              temporibus ex porro sint ut at dolorum quo aut odit officia? Sunt
-              necessitatibus asperiores harum nesciunt.`,
-  },
-  {
-    question: `What if there’s no care label on an item ?`,
-    answer: `Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officia
-              culpa est cumque aut unde, soluta aperiam illum. Alias saepe fuga
-              corporis nisi vitae asperiores magni, fugit, perferendis inventore
-              aspernatur quisquam veritatis voluptates sed amet atque ullam,
-              nobis quas minima error beatae reprehenderit animi minus cum
-              officia! Magnam officia libero quidem sint rerum labore ab
-              exercitationem corporis totam fugiat, corrupti quas asperiores
-              blanditiis, nobis dolor officiis pariatur, nam maxime. Facere
-              perferendis adipisci iure velit id nesciunt, quaerat nam
-              perspiciatis atque ratione culpa tenetur voluptatum necessitatibus
-              temporibus ex porro sint ut at dolorum quo aut odit officia? Sunt
-              necessitatibus asperiores harum nesciunt.`,
-  },
-]
-
-function HomePagePopup({ open, setOpen, data }: Props) {
+function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
   const [expanded, setExpanded] = useState<string | false>(false)
   const dispatch = useAppDispatch()
   const [count, setCount] = useState(1)
@@ -156,30 +116,30 @@ function HomePagePopup({ open, setOpen, data }: Props) {
               </div>
             </div>
           </div>
-          <div className="product-accordion">
-            {itemFAQs.map((faq, index) => {
+          {FAQs?.map((faq: any, index: any) => (
+            <div className="product-accordion">
               return (
-                <Accordion
-                  key={index}
-                  className="accordion-item"
-                  expanded={expanded === `panel-${index}`}
-                  onChange={handleChange(`panel-${index}`)}
+              <Accordion
+                key={index}
+                className="accordion-item"
+                expanded={expanded === `panel-${index}`}
+                onChange={handleChange(`panel-${index}`)}
+              >
+                <AccordionSummary
+                  className="accordion-header"
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls={`panel-${index}-content`}
+                  id={`panel-${index}-header`}
                 >
-                  <AccordionSummary
-                    className="accordion-header"
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls={`panel-${index}-content`}
-                    id={`panel-${index}-header`}
-                  >
-                    <h6 className="heading">{faq.question}</h6>
-                  </AccordionSummary>
-                  <AccordionDetails className="accordion-body">
-                    <p className="desc">{faq.answer}</p>
-                  </AccordionDetails>
-                </Accordion>
+                  <h6 className="heading">{faq.question}</h6>
+                </AccordionSummary>
+                <AccordionDetails className="accordion-body">
+                  <p className="desc">{faq.answer}</p>
+                </AccordionDetails>
+              </Accordion>
               )
-            })}
-          </div>
+            </div>
+          ))}
         </div>
       </DialogContent>
       <DialogActions className="modal-footer">
