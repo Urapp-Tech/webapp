@@ -112,7 +112,7 @@ function DeliveryAddressPage() {
       .finally(() => {
         setIsLoading(false) // Set loading to false when the API call completes (success or error)
       })
-  }, [draggedAddress, dispatch, user?.token])
+  }, [draggedAddress])
 
   const handleAddressClick = (index: number) => {
     setActiveAddress(index) // Set the active address index
@@ -217,7 +217,7 @@ function DeliveryAddressPage() {
       </div>
     )
   }
-
+  console.log(addressList)
   return (
     <>
       {showAlert && (
