@@ -1,32 +1,32 @@
-import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import { useEffect, useState } from 'react';
-import TableRow from './TableRow';
-import { setToken } from '../../utilities/constant';
-import OrderService from '../../services/Order';
-import { getItem, setItem } from '../../utilities/local-storage';
-import AlertBox from '../../components/common/SnackBar';
+import FormControl from '@mui/material/FormControl'
+import Input from '@mui/material/Input'
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
+import { useEffect, useState } from 'react'
+import TableRow from './TableRow'
+import { setToken } from '../../utilities/constant'
+import OrderService from '../../services/Order'
+import { getItem, setItem } from '../../utilities/local-storage'
+import AlertBox from '../../components/common/SnackBar'
 
 function OrdersPage() {
-  const user = getItem('user');
-  const [orders, setOrders] = useState<any>([]);
-  const [alertMsg, setAlertMsg] = useState<any>('');
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertSeverity, setAlertSeverity] = useState('');
-  setToken(user?.token);
+  const user = getItem('user')
+  const [orders, setOrders] = useState<any>([])
+  const [alertMsg, setAlertMsg] = useState<any>('')
+  const [showAlert, setShowAlert] = useState(false)
+  const [alertSeverity, setAlertSeverity] = useState('')
+  setToken(user?.token)
   useEffect(() => {
     OrderService.orderList()
       .then((response) => {
-        setOrders(response.data.data);
-        setItem('OrderItem', response.data.data);
+        setOrders(response.data.data)
+        setItem('OrderItem', response.data.data)
       })
       .catch((error) => {
-        setAlertMsg(error.message);
-        setShowAlert(true);
-        setAlertSeverity('error');
-      });
-  }, []);
+        setAlertMsg(error.message)
+        setShowAlert(true)
+        setAlertSeverity('error')
+      })
+  }, [])
 
   return (
     <>
@@ -67,7 +67,7 @@ function OrdersPage() {
               {orders?.orders?.map((row: any) => (
                 <TableRow
                   key={row.id}
-                  id={row.id}
+                  id={row.orderNumber}
                   type={row.status}
                   date={row.createdDate}
                   progress={row.progress}
@@ -79,7 +79,7 @@ function OrdersPage() {
         </div>
       </div>
     </>
-  );
+  )
 }
 
-export default OrdersPage;
+export default OrdersPage
