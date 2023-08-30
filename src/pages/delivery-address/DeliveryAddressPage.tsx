@@ -1,25 +1,25 @@
-import { useEffect, useState } from 'react';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
-import InputLabel from '@mui/material/InputLabel';
-import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
-import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
-import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import MyLocationIcon from '@mui/icons-material/MyLocation';
-import DeleteAddressPopup from './DeleteAddressPopup';
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import { setUserAddressList } from '../../redux/features/deviceState';
-import Map from '../../components/common/Map';
-import { getItem } from '../../utilities/local-storage';
-import AddressService from '../../services/Address';
-import { setToken } from '../../utilities/constant';
-import noLocation from '../../assets/images/icon-noMapLocation.svg';
-import AlertBox from '../../components/common/SnackBar';
+import { useEffect, useState } from 'react'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import FormControl from '@mui/material/FormControl'
+import Input from '@mui/material/Input'
+import InputLabel from '@mui/material/InputLabel'
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined'
+import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined'
+import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined'
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
+import MyLocationIcon from '@mui/icons-material/MyLocation'
+import DeleteAddressPopup from './DeleteAddressPopup'
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks'
+import { setUserAddressList } from '../../redux/features/deviceState'
+import Map from '../../components/common/Map'
+import { getItem } from '../../utilities/local-storage'
+import AddressService from '../../services/Address'
+import { setToken } from '../../utilities/constant'
+import noLocation from '../../assets/images/icon-noMapLocation.svg'
+import AlertBox from '../../components/common/SnackBar'
 
 const typeData = [
   {
@@ -37,7 +37,7 @@ const typeData = [
     img: <LocationOnOutlinedIcon />,
     type: 'Others',
   },
-];
+]
 function NoLocationAvailable() {
   return (
     <div className="no-map-location">
@@ -48,7 +48,7 @@ function NoLocationAvailable() {
         <h4 className="text">Location not available</h4>
       </div>
     </div>
-  );
+  )
 }
 function NoLocationFound() {
   return (
@@ -65,119 +65,123 @@ function NoLocationFound() {
     >
       <span className="title">No Location Found </span>
     </div>
-  );
+  )
 }
 
 function DeliveryAddressPage() {
   const addressList = useAppSelector(
-    (state: any) => state.deviceStates.AddressList
-  );
-  const user = getItem('user');
-  const [delAddress, setDelAddress] = useState<boolean>(false);
-  const [location, setLocation] = useState<any>();
-  const [activeAddress, setActiveAddress] = useState<any>(null);
-  const [newAddress, setNewAddress] = useState('');
-  const [type, setType] = useState('');
-  const [name, setName] = useState('');
-  const [addressObj, setAddressObj] = useState<any>('');
-  const geoCoder = new google.maps.Geocoder();
-  const [alertMsg, setAlertMsg] = useState<any>('');
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertSeverity, setAlertSeverity] = useState('');
+    (state: any) => state.deviceStates.AddressList,
+  )
+  const user = getItem('user')
+  const [delAddress, setDelAddress] = useState<boolean>(false)
+  const [location, setLocation] = useState<any>({
+    lat: addressList.length > 0 ? addressList[0].latitude : 0,
+    lng: addressList.length > 0 ? addressList[0].longitude : 0,
+  })
+  const [activeAddress, setActiveAddress] = useState<any>(0)
+  const [newAddress, setNewAddress] = useState('')
+  const [type, setType] = useState('')
+  const [name, setName] = useState('')
+  const [addressObj, setAddressObj] = useState<any>('')
+  const geoCoder = new google.maps.Geocoder()
+  const [alertMsg, setAlertMsg] = useState<any>('')
+  const [showAlert, setShowAlert] = useState(false)
+  const [alertSeverity, setAlertSeverity] = useState('')
   const draggedAddress = useAppSelector(
-    (state: any) => state.deviceStates.Address
-  );
-  const dispatch = useAppDispatch();
+    (state: any) => state.deviceStates.Address,
+  )
+  const dispatch = useAppDispatch()
   useEffect(() => {
-    setToken(user?.token);
+    setToken(user?.token)
     if (draggedAddress && draggedAddress.latitude && draggedAddress.longitude) {
       setLocation({
         lat: draggedAddress.latitude,
         lng: draggedAddress.longitude,
-      });
+      })
     }
     AddressService.getUserAddress()
       .then((response) => dispatch(setUserAddressList(response.data.data)))
       .catch((error) => {
-        setAlertMsg(error.message);
-        setShowAlert(true);
-        setAlertSeverity('error');
-      });
-  }, [draggedAddress, dispatch, user?.token]);
+        setAlertMsg(error.message)
+        setShowAlert(true)
+        setAlertSeverity('error')
+      })
+  }, [draggedAddress, dispatch, user?.token])
 
   const handleAddressClick = (index: number) => {
-    setActiveAddress(index); // Set the active address index
-    const selectedAddress = addressList[index];
-    setAddressObj(selectedAddress);
-    setNewAddress(selectedAddress.address); // Update the input field with the clicked address
-    setType(selectedAddress.type); // Update the selected type
+    setActiveAddress(index) // Set the active address index
+    const selectedAddress = addressList[index]
+    setAddressObj(selectedAddress)
+    setNewAddress(selectedAddress.address) // Update the input field with the clicked address
+    setType(selectedAddress.type) // Update the selected type
     setLocation({
       lat: selectedAddress.latitude,
       lng: selectedAddress.longitude,
-    });
-  };
+    })
+  }
 
   const handleMarkerDragEnd = (newPosition: google.maps.LatLngLiteral) => {
-    setLocation(newPosition);
+    setLocation(newPosition)
     geoCoder.geocode(
       { location: newPosition },
       (
         result: google.maps.GeocoderResult[] | null,
-        status: google.maps.GeocoderStatus
+        status: google.maps.GeocoderStatus,
       ) => {
         if (status === google.maps.GeocoderStatus.OK) {
           if (result && result[0]) {
-            setNewAddress(result[0].formatted_address);
-            setType('');
+            setNewAddress(result[0].formatted_address)
+            setType('')
+            setActiveAddress(null)
           }
         }
-      }
-    );
-  };
+      },
+    )
+  }
   const handleCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          const { latitude, longitude } = position.coords;
+          const { latitude, longitude } = position.coords
 
-          const latLng = new google.maps.LatLng(latitude, longitude);
+          const latLng = new google.maps.LatLng(latitude, longitude)
           geoCoder.geocode(
             { location: latLng },
             (
               results: google.maps.GeocoderResult[] | null,
-              status: google.maps.GeocoderStatus
+              status: google.maps.GeocoderStatus,
             ) => {
               if (
                 status === google.maps.GeocoderStatus.OK &&
                 results &&
                 results[0]
               ) {
-                const formattedAddress = results[0].formatted_address;
+                const formattedAddress = results[0].formatted_address
                 setLocation({
                   lat: latitude,
                   lng: longitude,
-                });
-                setNewAddress(formattedAddress); // Update the input field with the current location's address
+                })
+                setNewAddress(formattedAddress) // Update the input field with the current location's address
               } else {
-                setAlertMsg(status);
-                setShowAlert(true);
-                setAlertSeverity('error');
+                setAlertMsg(status)
+                setShowAlert(true)
+                setAlertSeverity('error')
               }
-            }
-          );
+            },
+          )
         },
         (error) => {
-          setAlertMsg(error);
-          setShowAlert(true);
-          setAlertSeverity('error');
-        }
-      );
+          setAlertMsg(error)
+          setShowAlert(true)
+          setAlertSeverity('error')
+        },
+      )
     } else {
-      setAlertMsg('Geolocation is not supported by this browser.');
-      setShowAlert(true);
-      setAlertSeverity('error');
+      setAlertMsg('Geolocation is not supported by this browser.')
+      setShowAlert(true)
+      setAlertSeverity('error')
     }
-  };
+  }
   const addNewAddress = () => {
     AddressService.userAddress({
       address: newAddress,
@@ -191,11 +195,11 @@ function DeliveryAddressPage() {
         // dispatch()
       })
       .catch((error) => {
-        setAlertMsg(error.message);
-        setShowAlert(true);
-        setAlertSeverity('error');
-      });
-  };
+        setAlertMsg(error.message)
+        setShowAlert(true)
+        setAlertSeverity('error')
+      })
+  }
   function MapHeader() {
     return (
       <div className="header" style={{ height: '600px' }}>
@@ -205,7 +209,7 @@ function DeliveryAddressPage() {
           handleDragged={handleMarkerDragEnd}
         />
       </div>
-    );
+    )
   }
 
   return (
@@ -238,7 +242,7 @@ function DeliveryAddressPage() {
                     onClick={() => handleAddressClick(index)}
                     onKeyDown={(event) => {
                       if (event.key === 'Enter') {
-                        handleAddressClick(index);
+                        handleAddressClick(index)
                       }
                     }}
                     role="button" // Add a role attribute
@@ -299,8 +303,8 @@ function DeliveryAddressPage() {
                   type="location"
                   value={newAddress}
                   onChange={(e) => {
-                    setNewAddress(e.target.value);
-                    setType(''); // Clear the selected type when user manually enters address
+                    setNewAddress(e.target.value)
+                    setType('') // Clear the selected type when user manually enters address
                     // Call geocoder to update the marker position
                     if (geoCoder && e.target.value) {
                       geoCoder.geocode(
@@ -308,14 +312,13 @@ function DeliveryAddressPage() {
                         (results: any, status: any) => {
                           if (status === google.maps.GeocoderStatus.OK) {
                             if (results && results[0]) {
-                              const newPosition =
-                                results[0].geometry.location.toJSON();
-                              handleMarkerDragEnd(newPosition);
-                              setActiveAddress(null); // Clear active address when user enters new location
+                              const newPosition = results[0].geometry.location.toJSON()
+                              handleMarkerDragEnd(newPosition)
+                              setActiveAddress(null) // Clear active address when user enters new location
                             }
                           }
-                        }
-                      );
+                        },
+                      )
                     }
                   }}
                 />
@@ -336,7 +339,7 @@ function DeliveryAddressPage() {
                     onClick={() => setType(el.type)}
                     onKeyDown={(event) => {
                       if (event.key === 'Enter') {
-                        handleAddressClick(index);
+                        handleAddressClick(index)
                       }
                     }}
                     role="button" // Add a role attribute
@@ -362,7 +365,7 @@ function DeliveryAddressPage() {
         </div>
       </div>
     </>
-  );
+  )
 }
 
-export default DeliveryAddressPage;
+export default DeliveryAddressPage
