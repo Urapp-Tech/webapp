@@ -32,8 +32,8 @@ function Map({
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    loader.load().then(() => {
-      const options: google.maps.MapOptions = {
+    loader.load().then(async () => {
+      const options: google.maps.MapOptions = await {
         center,
         zoom,
         mapTypeId: 'roadmap',

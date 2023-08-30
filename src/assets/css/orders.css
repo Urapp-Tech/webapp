@@ -61,14 +61,14 @@
 .icon-order-out-for-delivery {
   color: #2cd285;
 }
-.icon-order-cancelled {
+.icon-order-delivered {
   color: #fd2f2f;
 }
 .icon-order-drop-off {
   color: #ff8c39;
 }
-.icon-order-delivered {
-  color: #949eae;
+.icon-order-cancelled {
+  color: #ee0404;
 }
 
 .orders-table tr td .order-status {
@@ -90,14 +90,14 @@
 .bg-order-out-for-delivery {
   background-color: #2cd285;
 }
-.bg-order-cancelled {
+.bg-order-delivered {
   background-color: #fd2f2f;
 }
 .bg-order-drop-off {
   background-color: #ff8c39;
 }
-.bg-order-delivered {
-  background-color: #949eae;
+.bg-order-cancelled {
+  color: #ee0404;
 }
 
 .orders-table tr td .link {

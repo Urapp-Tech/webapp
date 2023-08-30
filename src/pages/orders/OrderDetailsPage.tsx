@@ -294,7 +294,7 @@ function OrderDetailsPage() {
               <div className="total-amount">
                 <div className="mb-4 flex items-center justify-between">
                   <p className="key">Total Amount</p>
-                  <p className="value">${total.toFixed(2)}</p>
+                  <p className="value">${orderItemDetail?.totalAmount}</p>
                 </div>
                 <div className="mb-4 flex items-center justify-between">
                   <p className="key">Discount</p>
@@ -302,16 +302,14 @@ function OrderDetailsPage() {
                 </div>
                 <div className="mb-4 flex items-center justify-between">
                   <p className="key">HST 13%</p>
-                  <p className="value">${((total / 100) * 13).toFixed(2)}</p>
+                  <p className="value">${orderItemDetail?.gstAmount}</p>
                 </div>
               </div>
             </div>
 
             <div className="grand-total">
               <p className="key">Grand Total</p>
-              <p className="value">
-                ${(total + (total / 100) * 13).toFixed(2)}
-              </p>
+              <p className="value">${orderItemDetail?.grandTotal}</p>
             </div>
           </div>
 
