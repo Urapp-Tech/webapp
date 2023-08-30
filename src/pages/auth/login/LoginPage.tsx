@@ -12,13 +12,14 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import { useForm } from 'react-hook-form'
 import assets from '../../../assets'
 import { LoginPayload } from '../../../interfaces/auth.interface'
-import { useAppDispatch } from '../../../redux/redux-hooks'
+import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks'
 import authService from '../../../services/Auth'
 import { login } from '../../../redux/features/authStateSlice'
 import AlertBox from '../../../components/common/SnackBar'
 import { setToken } from '../../../utilities/constant'
 
 function LoginPage() {
+  const cartItem = useAppSelector((state: any) => state.cartState.cartItems)
   const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
   const [showAlert, setShowAlert] = useState<boolean>(false)
@@ -26,7 +27,6 @@ function LoginPage() {
   const [alertSeverity, setAlertSeverity] = useState('')
   const dispatch = useAppDispatch()
   const handleClickShowPassword = () => setShowPassword((show) => !show)
-
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
@@ -51,7 +51,11 @@ function LoginPage() {
           setAlertSeverity('success')
           dispatch(login(response.data.data))
           setToken(response.data.data.token)
-          navigate('/dashboard/my-basket')
+          if (cartItem > 0) {
+            navigate('/dashboard/my-basket')
+          } else {
+            navigate('/dashboard/home')
+          }
         } else {
           setShowAlert(true)
           setAlertMessage(response.data.message)

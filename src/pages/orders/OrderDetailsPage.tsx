@@ -47,18 +47,14 @@ function OrderDetailsPage() {
   const [showAlert, setShowAlert] = useState(false)
   const [alertSeverity, setAlertSeverity] = useState('')
   const [orderCanceled, setOrderCanceled] = useState(false)
-  const total = cartItems.reduce(
-    (previousValue: any, currentValue: any) =>
-      previousValue + currentValue.price * currentValue.quantity,
-    0,
-  )
+
   useEffect(() => {
     const orderDetail = async () => {
       try {
         const id = await window.location.pathname.slice(
           window.location.pathname.lastIndexOf('/') + 1,
         )
-        const Details = items?.orders.find((el: any) => el.id === id)
+        const Details = items?.orders.find((el: any) => el.orderNumber === id)
         setOrderItemDetail(Details)
       } catch (error) {
         setAlertMsg(error)

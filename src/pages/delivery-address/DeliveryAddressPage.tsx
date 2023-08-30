@@ -20,6 +20,7 @@ import AddressService from '../../services/Address'
 import { setToken } from '../../utilities/constant'
 import noLocation from '../../assets/images/icon-noMapLocation.svg'
 import AlertBox from '../../components/common/SnackBar'
+import Loader from '../../components/common/Loader'
 
 const typeData = [
   {
@@ -87,11 +88,13 @@ function DeliveryAddressPage() {
   const [alertMsg, setAlertMsg] = useState<any>('')
   const [showAlert, setShowAlert] = useState(false)
   const [alertSeverity, setAlertSeverity] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const draggedAddress = useAppSelector(
     (state: any) => state.deviceStates.Address,
   )
   const dispatch = useAppDispatch()
   useEffect(() => {
+    setIsLoading(true)
     setToken(user?.token)
     if (draggedAddress && draggedAddress.latitude && draggedAddress.longitude) {
       setLocation({
@@ -105,6 +108,9 @@ function DeliveryAddressPage() {
         setAlertMsg(error.message)
         setShowAlert(true)
         setAlertSeverity('error')
+      })
+      .finally(() => {
+        setIsLoading(false) // Set loading to false when the API call completes (success or error)
       })
   }, [draggedAddress, dispatch, user?.token])
 
@@ -223,147 +229,153 @@ function DeliveryAddressPage() {
         />
       )}
       <DeleteAddressPopup open={delAddress} setOpen={setDelAddress} />
-      <div className="delivery-address-page p-4 sm:p-5 xl:p-7">
-        <h4 className="main-heading">Delivery Address</h4>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <div className="saved-addresses">
-              <h5 className="heading">Saved Addresses</h5>
-              <div
-                className="addresses-list"
-                style={{ maxHeight: '850px', overflow: 'auto' }}
-              >
-                {addressList.map((item: any, index: any) => (
-                  <div
-                    className={`item ${
-                      index === activeAddress ? 'active' : ''
-                    }`}
-                    key={index}
-                    onClick={() => handleAddressClick(index)}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter') {
-                        handleAddressClick(index)
-                      }
-                    }}
-                    role="button" // Add a role attribute
-                    tabIndex={0}
-                  >
-                    {index === activeAddress ? (
-                      <CheckCircleOutlinedIcon className="icon checked" />
-                    ) : (
-                      <CircleOutlinedIcon className="icon unchecked" />
-                    )}
-
-                    <div className="address">
-                      <p className="location">{item.type}</p>
-                      <h6 className="detailed">{item.address}</h6>
-                    </div>
-                    <IconButton
-                      className="btn-del"
-                      onClick={() => setDelAddress(true)}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div className="delivery-address-page p-4 sm:p-5 xl:p-7">
+          <h4 className="main-heading">Delivery Address</h4>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <div className="saved-addresses">
+                <h5 className="heading">Saved Addresses</h5>
+                <div
+                  className="addresses-list"
+                  style={{ maxHeight: '850px', overflow: 'auto' }}
+                >
+                  {addressList.map((item: any, index: any) => (
+                    <div
+                      className={`item ${
+                        index === activeAddress ? 'active' : ''
+                      }`}
+                      key={index}
+                      onClick={() => handleAddressClick(index)}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter') {
+                          handleAddressClick(index)
+                        }
+                      }}
+                      role="button" // Add a role attribute
+                      tabIndex={0}
                     >
-                      <DeleteOutlineOutlinedIcon />
-                    </IconButton>
-                  </div>
-                ))}
+                      {index === activeAddress ? (
+                        <CheckCircleOutlinedIcon className="icon checked" />
+                      ) : (
+                        <CircleOutlinedIcon className="icon unchecked" />
+                      )}
+
+                      <div className="address">
+                        <p className="location">{item.type}</p>
+                        <h6 className="detailed">{item.address}</h6>
+                      </div>
+                      <IconButton
+                        className="btn-del"
+                        onClick={() => setDelAddress(true)}
+                      >
+                        <DeleteOutlineOutlinedIcon />
+                      </IconButton>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-          <div className="select-location">
-            {user === null && <NoLocationAvailable />}
-            {user !== null && addressObj?.latitude === 0 && <NoLocationFound />}
-            {user !== null && addressObj?.latitude !== 0 && <MapHeader />}
-            <div className="body h-100">
-              <h5 className="title">Select Location</h5>
-              <FormControl className="location-address" variant="standard">
-                <InputLabel
-                  className="font-open-sans text-sm font-normal text-neutral-500"
-                  htmlFor="location"
-                >
-                  Your Name
-                </InputLabel>
-                <Input
-                  className="font-open-sans text-base font-semibold text-neutral-900 after:border-b-neutral-900"
-                  id="location"
-                  type="location"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </FormControl>
-              <FormControl className="location-address" variant="standard">
-                <InputLabel
-                  className="font-open-sans text-sm font-normal text-neutral-500"
-                  htmlFor="location"
-                >
-                  Your Location
-                </InputLabel>
-                <Input
-                  className="font-open-sans text-base font-semibold text-neutral-900 after:border-b-neutral-900"
-                  id="location"
-                  type="location"
-                  value={newAddress}
-                  onChange={(e) => {
-                    setNewAddress(e.target.value)
-                    setType('') // Clear the selected type when user manually enters address
-                    // Call geocoder to update the marker position
-                    if (geoCoder && e.target.value) {
-                      geoCoder.geocode(
-                        { address: e.target.value },
-                        (results: any, status: any) => {
-                          if (status === google.maps.GeocoderStatus.OK) {
-                            if (results && results[0]) {
-                              const newPosition = results[0].geometry.location.toJSON()
-                              handleMarkerDragEnd(newPosition)
-                              setActiveAddress(null) // Clear active address when user enters new location
+            <div className="select-location">
+              {user === null && <NoLocationAvailable />}
+              {user !== null && addressObj?.latitude === 0 && (
+                <NoLocationFound />
+              )}
+              {user !== null && addressObj?.latitude !== 0 && <MapHeader />}
+              <div className="body h-100">
+                <h5 className="title">Select Location</h5>
+                <FormControl className="location-address" variant="standard">
+                  <InputLabel
+                    className="font-open-sans text-sm font-normal text-neutral-500"
+                    htmlFor="location"
+                  >
+                    Your Name
+                  </InputLabel>
+                  <Input
+                    className="font-open-sans text-base font-semibold text-neutral-900 after:border-b-neutral-900"
+                    id="location"
+                    type="location"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </FormControl>
+                <FormControl className="location-address" variant="standard">
+                  <InputLabel
+                    className="font-open-sans text-sm font-normal text-neutral-500"
+                    htmlFor="location"
+                  >
+                    Your Location
+                  </InputLabel>
+                  <Input
+                    className="font-open-sans text-base font-semibold text-neutral-900 after:border-b-neutral-900"
+                    id="location"
+                    type="location"
+                    value={newAddress}
+                    onChange={(e) => {
+                      setNewAddress(e.target.value)
+                      setType('') // Clear the selected type when user manually enters address
+                      // Call geocoder to update the marker position
+                      if (geoCoder && e.target.value) {
+                        geoCoder.geocode(
+                          { address: e.target.value },
+                          (results: any, status: any) => {
+                            if (status === google.maps.GeocoderStatus.OK) {
+                              if (results && results[0]) {
+                                const newPosition = results[0].geometry.location.toJSON()
+                                handleMarkerDragEnd(newPosition)
+                                setActiveAddress(null) // Clear active address when user enters new location
+                              }
                             }
-                          }
-                        },
-                      )
-                    }
-                  }}
-                />
-                <IconButton
-                  className="btn-current-location"
-                  onClick={handleCurrentLocation}
-                >
-                  <MyLocationIcon />
-                </IconButton>
-              </FormControl>
-
-              <p className="location-label">Save As</p>
-              <div className="all-locations grid grid-cols-3 gap-3">
-                {typeData.map((el: any, index) => (
-                  <div
-                    className="item"
-                    key={index}
-                    onClick={() => setType(el.type)}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter') {
-                        handleAddressClick(index)
+                          },
+                        )
                       }
                     }}
-                    role="button" // Add a role attribute
-                    tabIndex={0}
+                  />
+                  <IconButton
+                    className="btn-current-location"
+                    onClick={handleCurrentLocation}
                   >
-                    <input type="radio" name={el.name} />
-                    <div className="content">
-                      <div className="icon">{el.img}</div>
-                      <p className="text">{el.type}</p>
+                    <MyLocationIcon />
+                  </IconButton>
+                </FormControl>
+
+                <p className="location-label">Save As</p>
+                <div className="all-locations grid grid-cols-3 gap-3">
+                  {typeData.map((el: any, index) => (
+                    <div
+                      className="item"
+                      key={index}
+                      onClick={() => setType(el.type)}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter') {
+                          handleAddressClick(index)
+                        }
+                      }}
+                      role="button" // Add a role attribute
+                      tabIndex={0}
+                    >
+                      <input type="radio" name={el.name} />
+                      <div className="content">
+                        <div className="icon">{el.img}</div>
+                        <p className="text">{el.type}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+                <Button
+                  color="inherit"
+                  className="btn-add-address"
+                  onClick={addNewAddress}
+                >
+                  Add Address
+                </Button>
               </div>
-              <Button
-                color="inherit"
-                className="btn-add-address"
-                onClick={addNewAddress}
-              >
-                Add Address
-              </Button>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   )
 }
