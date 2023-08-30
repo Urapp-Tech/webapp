@@ -15,6 +15,7 @@ function OrdersPage() {
   const [alertMsg, setAlertMsg] = useState<any>('')
   const [showAlert, setShowAlert] = useState(false)
   const [alertSeverity, setAlertSeverity] = useState('')
+  const [search, setSearch] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   setToken(user?.token)
   useEffect(() => {
@@ -33,7 +34,11 @@ function OrdersPage() {
         setIsLoading(false) // Set loading to false when the API call completes (success or error)
       })
   }, [])
-
+  const searchOrder = orders?.orders?.filter(
+    (el: any) =>
+      el.orderNumber.toLowerCase().includes(search.toLowerCase()) ||
+      el.status.toLowerCase().includes(search.toLowerCase()),
+  )
   return (
     <>
       {showAlert && (
@@ -53,6 +58,8 @@ function OrdersPage() {
               id="search"
               type="text"
               disableUnderline
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               inputProps={{ placeholder: 'Search' }}
               endAdornment={<SearchOutlinedIcon />}
             />
@@ -73,7 +80,7 @@ function OrdersPage() {
                 </tr>
               </thead>
               <tbody>
-                {orders?.orders?.map((row: any) => (
+                {searchOrder.map((row: any) => (
                   <TableRow
                     key={row.id}
                     id={row.orderNumber}
