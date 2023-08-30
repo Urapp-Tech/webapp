@@ -1,49 +1,68 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
-import IconButton from '@mui/material/IconButton';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { useForm } from 'react-hook-form';
-import assets from '../../../assets';
-import { OTPPayload, SignupPayload } from '../../../interfaces/auth.interface';
-import authService from '../../../services/Auth';
-import { setSignUpData } from '../../../utilities/constant';
+import { useState } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded'
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
+import Input from '@mui/material/Input'
+import InputAdornment from '@mui/material/InputAdornment'
+import IconButton from '@mui/material/IconButton'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
+import { useForm } from 'react-hook-form'
+import assets from '../../../assets'
+import { OTPPayload, SignupPayload } from '../../../interfaces/auth.interface'
+import authService from '../../../services/Auth'
+import { setSignUpData } from '../../../utilities/constant'
+import AlertBox from '../../../components/common/SnackBar'
 
 function SignUpPage() {
-  const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false)
+  const [showAlert, setShowAlert] = useState<boolean>(false)
+  const [alertMessage, setAlertMessage] = useState('')
+  const [alertSeverity, setAlertSeverity] = useState('')
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignupPayload>();
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  } = useForm<SignupPayload>()
+  const handleClickShowPassword = () => setShowPassword((show) => !show)
   const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ) => {
-    event.preventDefault();
-  };
+    event.preventDefault()
+  }
 
   const OtpVerification = (data: OTPPayload) => {
-    authService.otpService(data).then((response) => {
-      if (response.data.success) {
-        navigate('../otp-verification');
-      }
-    });
-  };
+    authService
+      .otpService(data)
+      .then((response) => {
+        if (response.data.success) {
+          navigate('../otp-verification')
+        }
+      })
+      .catch((error) => {
+        setShowAlert(true)
+        setAlertMessage(error.message)
+        setAlertSeverity('error')
+      })
+  }
   const onsubmit = (data: SignupPayload) => {
-    setSignUpData(data);
-    const dataOtp = { email: data.email };
-    OtpVerification(dataOtp);
-  };
+    setSignUpData(data)
+    const dataOtp = { email: data.email }
+    OtpVerification(dataOtp)
+  }
   return (
     <>
+      {showAlert && (
+        <AlertBox
+          msg={alertMessage}
+          setSeverty={alertSeverity}
+          alertOpen={showAlert}
+          setAlertOpen={setShowAlert}
+        />
+      )}
       <div className="fixed-at-top-left">
         <NavLink to="../login" className="go-back">
           <ArrowBackRoundedIcon className="icon-arrow" />
@@ -180,7 +199,7 @@ function SignUpPage() {
         </div>
       </div>
     </>
-  );
+  )
 }
 
-export default SignUpPage;
+export default SignUpPage

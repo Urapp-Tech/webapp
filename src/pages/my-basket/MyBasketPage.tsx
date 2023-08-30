@@ -29,6 +29,7 @@ import OrderService from '../../services/Order'
 import { setUserAddressList } from '../../redux/features/deviceState'
 import AddressService from '../../services/Address'
 import { setToken } from '../../utilities/constant'
+import Loader from '../../components/common/Loader'
 
 function MyBasketPage() {
   const { cartItems }: any = useAppSelector((state) => state.cartState)
@@ -41,6 +42,7 @@ function MyBasketPage() {
   const [alertMsg, setAlertMsg] = useState('')
   const [showAlert, setShowAlert] = useState(false)
   const [alertSeverity, setAlertSeverity] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
   const user = JSON.parse(localStorage.getItem('user')!)
   const userAddress = useAppSelector(
     (state: any) => state.deviceStates.AddressList,
@@ -89,7 +91,6 @@ function MyBasketPage() {
     }
     if (!user) {
       navigate('/auth/login')
-      return
     }
     if (pickUpTime && dropOffTime) {
       cartService

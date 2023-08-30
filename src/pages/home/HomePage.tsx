@@ -14,6 +14,7 @@ import cartService from '../../services/cart'
 import { getCart } from '../../redux/features/cartStateSlice'
 import { getItem } from '../../utilities/local-storage'
 import AlertBox from '../../components/common/SnackBar'
+import Loader from '../../components/common/Loader'
 
 function getCategoryClasses(isActive: boolean) {
   const classes = 'item'
@@ -32,7 +33,6 @@ function HomePage() {
   const [searchName, setSearchName] = useState('')
   const [filteredSubCategory, setFilteredSubCategory] = useState<any[]>([])
   const dispatch = useAppDispatch()
-  const [location, setLocation] = useState<any>()
   const client = new ClientJS()
   const [alertMsg, setAlertMsg] = useState('')
   const [showAlert, setShowAlert] = useState(false)
@@ -40,6 +40,8 @@ function HomePage() {
   const [FAQs, setFAQs] = useState(null)
   const fingerprint = client.getFingerprint()
   const agent = client.getUserAgent()
+  const [isLoading, setIsLoading] = useState(false)
+
   const fetchIp = async () => {
     const url = 'https://api.ipify.org/?format=json'
     try {
@@ -71,48 +73,70 @@ function HomePage() {
       .then((response) => setSubCategory(response.data.data))
   }
   useEffect(() => {
+    setIsLoading(true)
     const persistedDeviceData: any = getItem('deviceData')
     if (persistedDeviceData) {
       dispatch(setDeviceData(JSON.parse(persistedDeviceData)))
     }
-    navigator.geolocation.getCurrentPosition((position) => {
-      return setLocation({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      })
-    })
 
     fetchIp().then((ip) => {
       const nameValue = `${agent.slice(0, 11)}-${ip}-${fingerprint}`
       if (persistedDeviceData === null) {
-        tenantService.getTenantConfig().then((response) => {
-          tenantService
-            .deviceRegisteration({
-              deviceId: fingerprint.toString(),
-              deviceType: 'Android',
-              isNotificationAllowed: true,
-              name: nameValue,
-              tenant: response.data.data.id,
-              token: 'undefined',
-            })
-            .then((newResponse) => {
-              dispatch(setDeviceData(newResponse.data.data))
-              cartService
-                .AnonyomousCart({
-                  tenant: newResponse.data.data?.tenant,
-                  appUserDevice: newResponse.data.data?.id,
-                })
-                .then((cartResponse) => {
-                  dispatch(getCart(cartResponse.data.data.cart))
-                })
-            })
-        })
+        tenantService
+          .getTenantConfig()
+          .then((response) => {
+            tenantService
+              .deviceRegisteration({
+                deviceId: fingerprint.toString(),
+                deviceType: 'Android',
+                isNotificationAllowed: true,
+                name: nameValue,
+                tenant: response.data.data.id,
+                token: 'undefined',
+              })
+              .then((newResponse) => {
+                dispatch(setDeviceData(newResponse.data.data))
+                cartService
+                  .AnonyomousCart({
+                    tenant: newResponse.data.data?.tenant,
+                    appUserDevice: newResponse.data.data?.id,
+                  })
+                  .then((cartResponse) => {
+                    dispatch(getCart(cartResponse.data.data.cart))
+                  })
+                  .catch((error) => {
+                    setAlertMsg(error.message)
+                    setShowAlert(true)
+                    setAlertSeverity('error')
+                  })
+              })
+              .catch((error) => {
+                setAlertMsg(error.message)
+                setShowAlert(true)
+                setAlertSeverity('error')
+              })
+          })
+          .catch((error) => {
+            setAlertMsg(error.message)
+            setShowAlert(true)
+            setAlertSeverity('error')
+          })
       }
     })
-    categoryService.CategoryList().then((response) => {
-      onClickButton(response.data.data[0])
-      setSelectedCategory(response.data.data)
-    })
+    categoryService
+      .CategoryList()
+      .then((response) => {
+        onClickButton(response.data.data[0])
+        setSelectedCategory(response.data.data)
+      })
+      .catch((error) => {
+        setAlertMsg(error.message)
+        setShowAlert(true)
+        setAlertSeverity('error')
+      })
+      .finally(() => {
+        setIsLoading(false) // Set loading to false when the API call completes (success or error)
+      })
   }, [agent, dispatch, fingerprint])
   const searchSubCategory = useCallback(() => {
     if (!searchName) {
@@ -151,73 +175,77 @@ function HomePage() {
         data={selectedItem}
         FAQs={FAQs}
       />
-      <div className="px-4 pt-6 sm:px-5 sm:pt-4 xl:px-7">
-        <div className="all-categories">
-          <h4 className="heading">Categories</h4>
-          <div className="categories-list">
-            {selectedCategory &&
-              selectedCategory.map((category: any) => (
-                <button
-                  type="button"
-                  onClick={() => {
-                    onClickButton(category)
-                  }}
-                  key={category.id}
-                  className={getCategoryClasses(
-                    category.id === selectedCategory?.id,
-                  )}
-                >
-                  <h3 className="cat-name">{category.name}</h3>
-                  <div className="cat-img">
-                    <img src={category.icon} alt="" />
-                  </div>
-                </button>
-              ))}
-          </div>
-        </div>
-        <div className="selected-categories">
-          <div className="mb-4 items-center justify-between sm:flex">
-            <h4 className="heading">{subCategory?.name}</h4>
-            <FormControl className="search-sub-cats">
-              <Input
-                className="field"
-                id="search"
-                type="text"
-                inputProps={{
-                  placeholder: 'Search',
-                }}
-                disableUnderline
-                endAdornment={<SearchOutlinedIcon />}
-                value={searchName}
-                onChange={(e) => setSearchName(e.target.value)}
-              />
-            </FormControl>
-          </div>
-          <div className="categories-list">
-            {filteredSubCategory.map((item: any) => (
-              <div key={item.id} className="item">
-                <img
-                  className="mb-4 aspect-[4/3] w-full object-contain md:mb-6"
-                  src={item.icon}
-                  alt=""
-                />
-                <div className="flex flex-wrap items-center justify-between">
-                  <h5 className="name">{item.name}</h5>
-                  <h6 className="price">$ {item.price.toFixed(2)}</h6>
-                  <Button
-                    className="btn-add"
-                    variant="contained"
-                    endIcon={<ShoppingBagOutlinedIcon />}
-                    onClick={() => addItemHandler(item)}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div className="px-4 pt-6 sm:px-5 sm:pt-4 xl:px-7">
+          <div className="all-categories">
+            <h4 className="heading">Categories</h4>
+            <div className="categories-list">
+              {selectedCategory &&
+                selectedCategory.map((category: any) => (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClickButton(category)
+                    }}
+                    key={category.id}
+                    className={getCategoryClasses(
+                      category.id === selectedCategory?.id,
+                    )}
                   >
-                    Add
-                  </Button>
+                    <h3 className="cat-name">{category.name}</h3>
+                    <div className="cat-img">
+                      <img src={category.icon} alt="" />
+                    </div>
+                  </button>
+                ))}
+            </div>
+          </div>
+          <div className="selected-categories">
+            <div className="mb-4 items-center justify-between sm:flex">
+              <h4 className="heading">{subCategory?.name}</h4>
+              <FormControl className="search-sub-cats">
+                <Input
+                  className="field"
+                  id="search"
+                  type="text"
+                  inputProps={{
+                    placeholder: 'Search',
+                  }}
+                  disableUnderline
+                  endAdornment={<SearchOutlinedIcon />}
+                  value={searchName}
+                  onChange={(e) => setSearchName(e.target.value)}
+                />
+              </FormControl>
+            </div>
+            <div className="categories-list">
+              {filteredSubCategory.map((item: any) => (
+                <div key={item.id} className="item">
+                  <img
+                    className="mb-4 aspect-[4/3] w-full object-contain md:mb-6"
+                    src={item.icon}
+                    alt=""
+                  />
+                  <div className="flex flex-wrap items-center justify-between">
+                    <h5 className="name">{item.name}</h5>
+                    <h6 className="price">$ {item.price.toFixed(2)}</h6>
+                    <Button
+                      className="btn-add"
+                      variant="contained"
+                      endIcon={<ShoppingBagOutlinedIcon />}
+                      onClick={() => addItemHandler(item)}
+                    >
+                      Add
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   )
 }

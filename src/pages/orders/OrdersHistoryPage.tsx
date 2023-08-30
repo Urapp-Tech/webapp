@@ -7,6 +7,7 @@ import { setToken } from '../../utilities/constant'
 import OrderService from '../../services/Order'
 import { getItem, setItem } from '../../utilities/local-storage'
 import AlertBox from '../../components/common/SnackBar'
+import Loader from '../../components/common/Loader'
 
 function OrdersPage() {
   const user = getItem('user')
@@ -14,8 +15,10 @@ function OrdersPage() {
   const [alertMsg, setAlertMsg] = useState<any>('')
   const [showAlert, setShowAlert] = useState(false)
   const [alertSeverity, setAlertSeverity] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   setToken(user?.token)
   useEffect(() => {
+    setIsLoading(true)
     OrderService.orderList()
       .then((response) => {
         setOrders(response.data.data)
@@ -25,6 +28,9 @@ function OrdersPage() {
         setAlertMsg(error.message)
         setShowAlert(true)
         setAlertSeverity('error')
+      })
+      .finally(() => {
+        setIsLoading(false) // Set loading to false when the API call completes (success or error)
       })
   }, [])
 
@@ -53,29 +59,33 @@ function OrdersPage() {
           </FormControl>
         </div>
         <div className="orders-card">
-          <table className="orders-table">
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>Date & Time</th>
-                <th>Status</th>
-                <th>Items</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders?.orders?.map((row: any) => (
-                <TableRow
-                  key={row.id}
-                  id={row.orderNumber}
-                  type={row.status}
-                  date={row.createdDate}
-                  progress={row.progress}
-                  item={row.items}
-                />
-              ))}
-            </tbody>
-          </table>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <table className="orders-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Date & Time</th>
+                  <th>Status</th>
+                  <th>Items</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders?.orders?.map((row: any) => (
+                  <TableRow
+                    key={row.id}
+                    id={row.orderNumber}
+                    type={row.status}
+                    date={row.createdDate}
+                    progress={row.progress}
+                    item={row.items}
+                  />
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </>
