@@ -16,12 +16,12 @@ function OrdersPage() {
   const [showAlert, setShowAlert] = useState(false)
   const [alertSeverity, setAlertSeverity] = useState('')
   const [search, setSearch] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   setToken(user?.token)
   useEffect(() => {
-    setIsLoading(true)
     OrderService.orderList()
       .then((response) => {
+        setIsLoading(false)
         setOrders(response.data.data)
         setItem('OrderItem', response.data.data)
       })
@@ -30,16 +30,15 @@ function OrdersPage() {
         setShowAlert(true)
         setAlertSeverity('error')
       })
-      .finally(() => {
-        setIsLoading(false) // Set loading to false when the API call completes (success or error)
-      })
   }, [])
   const searchOrder = orders?.orders?.filter(
     (el: any) =>
       el.orderNumber.toLowerCase().includes(search.toLowerCase()) ||
       el.status.toLowerCase().includes(search.toLowerCase()),
   )
-  return (
+  return isLoading ? (
+    <Loader />
+  ) : (
     <>
       {showAlert && (
         <AlertBox
@@ -66,33 +65,29 @@ function OrdersPage() {
           </FormControl>
         </div>
         <div className="orders-card">
-          {isLoading ? (
-            <Loader />
-          ) : (
-            <table className="orders-table">
-              <thead>
-                <tr>
-                  <th>Order ID</th>
-                  <th>Date & Time</th>
-                  <th>Status</th>
-                  <th>Items</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {searchOrder.map((row: any) => (
-                  <TableRow
-                    key={row.id}
-                    id={row.orderNumber}
-                    type={row.status}
-                    date={row.createdDate}
-                    progress={row.progress}
-                    item={row.items}
-                  />
-                ))}
-              </tbody>
-            </table>
-          )}
+          <table className="orders-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Date & Time</th>
+                <th>Status</th>
+                <th>Items</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {searchOrder?.map((row: any) => (
+                <TableRow
+                  key={row.id}
+                  id={row.orderNumber}
+                  type={row.status}
+                  date={row.createdDate}
+                  progress={row.progress}
+                  item={row.items}
+                />
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </>
