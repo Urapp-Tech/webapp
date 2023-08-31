@@ -68,8 +68,7 @@ function Sidebar() {
   const dispatch = useAppDispatch()
   const [LoginUser, setLoginUser] = useState(null)
   const user = JSON.parse(localStorage.getItem('user')!)
-  console.log(LoginUser)
-  useEffect(() => {  
+  useEffect(() => {
     setLoginUser(user)
   }, [])
 
