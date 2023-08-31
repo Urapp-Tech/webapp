@@ -217,7 +217,6 @@ function DeliveryAddressPage() {
       </div>
     )
   }
-  console.log(addressList)
   return (
     <>
       {showAlert && (
