@@ -20,24 +20,7 @@
 .all-categories .categories-list .item.active {
   transform: translateY(-5px);
 }
-.all-categories .categories-list .item:nth-child(1) {
-  background-color: #e1ccec;
-}
-.all-categories .categories-list .item:nth-child(2) {
-  background-color: #dfd3c3;
-}
-.all-categories .categories-list .item:nth-child(3) {
-  background-color: #c8d9eb;
-}
-.all-categories .categories-list .item:nth-child(4) {
-  background-color: rgba(200, 217, 223, 0.956863);
-}
-.all-categories .categories-list .item:nth-child(5) {
-  background-color: rgba(217, 217, 217, 0.956863);
-}
-.all-categories .categories-list .item:nth-child(6) {
-  background-color: #ffe2e2;
-}
+
 .all-categories .categories-list .item .cat-name {
   @apply mb-0 grow-0 text-left capitalize;
   font-size: var(--fs-24);
