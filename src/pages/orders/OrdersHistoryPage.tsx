@@ -39,7 +39,9 @@ function OrdersPage() {
       el.orderNumber.toLowerCase().includes(search.toLowerCase()) ||
       el.status.toLowerCase().includes(search.toLowerCase()),
   )
-  return (
+  return isLoading ? (
+    <Loader />
+  ) : (
     <>
       {showAlert && (
         <AlertBox
@@ -66,33 +68,29 @@ function OrdersPage() {
           </FormControl>
         </div>
         <div className="orders-card">
-          {isLoading ? (
-            <Loader />
-          ) : (
-            <table className="orders-table">
-              <thead>
-                <tr>
-                  <th>Order ID</th>
-                  <th>Date & Time</th>
-                  <th>Status</th>
-                  <th>Items</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {searchOrder.map((row: any) => (
-                  <TableRow
-                    key={row.id}
-                    id={row.orderNumber}
-                    type={row.status}
-                    date={row.createdDate}
-                    progress={row.progress}
-                    item={row.items}
-                  />
-                ))}
-              </tbody>
-            </table>
-          )}
+          <table className="orders-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Date & Time</th>
+                <th>Status</th>
+                <th>Items</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {searchOrder?.map((row: any) => (
+                <TableRow
+                  key={row.id}
+                  id={row.orderNumber}
+                  type={row.status}
+                  date={row.createdDate}
+                  progress={row.progress}
+                  item={row.items}
+                />
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </>

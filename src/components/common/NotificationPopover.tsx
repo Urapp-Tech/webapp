@@ -1,25 +1,35 @@
-import dayjs from 'dayjs';
-import Popover from '@mui/material/Popover';
-import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
-// import NotificationPopoverClasses from './NotificationPopover.module.css';
+import dayjs from 'dayjs'
+import Popover from '@mui/material/Popover'
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined'
+import { useEffect } from 'react'
+import { setToken } from '../../utilities/constant'
+import { getItem } from '../../utilities/local-storage'
+import Notification from '../../services/Notification'
 
 type Props = {
-  notification: HTMLButtonElement | null;
+  notification: HTMLButtonElement | null
   setNotification: React.Dispatch<
     React.SetStateAction<HTMLButtonElement | null>
-  >;
-  anchorElement: Element | ((element: Element) => Element) | null | undefined;
-};
+  >
+  anchorElement: Element | ((element: Element) => Element) | null | undefined
+}
 function NotificationPopover({
   notification,
   setNotification,
   anchorElement,
 }: Props) {
   const handleClose = () => {
-    setNotification(null);
-  };
-  const open = Boolean(notification);
-  const idProp = open ? 'notification-popover' : undefined;
+    setNotification(null)
+  }
+  const open = Boolean(notification)
+  const idProp = open ? 'notification-popover' : undefined
+  const user = getItem('user')
+  useEffect(() => {
+    setToken(user?.token)
+    Notification.NetworkService()
+      .then((response) => console.log(response))
+      .catch((error) => console.log(error))
+  })
   return (
     <Popover
       id={idProp}
@@ -101,7 +111,7 @@ function NotificationPopover({
         </div>
       </div>
     </Popover>
-  );
+  )
 }
 
-export default NotificationPopover;
+export default NotificationPopover

@@ -143,7 +143,7 @@ function TableRow({ id, type, date, progress, item }: Props) {
           {ORDER_STATUSES.map(
             (status, index) =>
               type === status.status && (
-                <div className={getProgressClasses(type)}>
+                <div className={getProgressClasses(type)} key={index}>
                   <CircularProgress
                     thickness={1.5}
                     className="z-10"
