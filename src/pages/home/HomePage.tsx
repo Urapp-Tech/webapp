@@ -24,6 +24,14 @@ function getCategoryClasses(isActive: boolean) {
   }
   return classes
 }
+const colorArray = [
+  '#e1ccec',
+  '#dfd3c3',
+  '#c8d9eb',
+  'rgba(200, 217, 223, 0.956863)',
+  'rgba(217, 217, 217, 0.956863)',
+  '#ffe2e2',
+]
 
 function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<any>(null)
@@ -181,9 +189,9 @@ function HomePage() {
         <div className="px-4 pt-6 sm:px-5 sm:pt-4 xl:px-7">
           <div className="all-categories">
             <h4 className="heading">Categories</h4>
-            <div className="categories-list">
+            <div className={`categories-list`}>
               {selectedCategory &&
-                selectedCategory.map((category: any) => (
+                selectedCategory.map((category: any, index: number) => (
                   <button
                     type="button"
                     onClick={() => {
@@ -193,6 +201,9 @@ function HomePage() {
                     className={getCategoryClasses(
                       category.id === selectedCategory?.id,
                     )}
+                    style={{
+                      background: colorArray[index % colorArray.length],
+                    }}
                   >
                     <h3 className="cat-name">{category.name}</h3>
                     <div className="cat-img">
