@@ -70,7 +70,6 @@ function HomePage() {
       .FaqService(subCategory?.tenant, subCategory?.id, item.id)
       .then((response) => {
         if (response.data.success) {
-          console.log(response)
           setFAQs(response.data.data.homeCatItemFaq)
         }
       })
@@ -134,6 +133,7 @@ function HomePage() {
     categoryService
       .CategoryList()
       .then((response) => {
+        setIsLoading(false)
         onClickButton(response.data.data[0])
         setSelectedCategory(response.data.data)
       })
@@ -176,87 +176,86 @@ function HomePage() {
           setAlertOpen={setShowAlert}
         />
       )}
-
       <HomePagePopup
         open={dialogOpen}
         setOpen={setDialogOpen}
         data={selectedItem}
         FAQs={FAQs}
       />
-      {isLoading ? (
+      {/* {isLoading ? (
         <Loader />
-      ) : (
-        <div className="px-4 pt-6 sm:px-5 sm:pt-4 xl:px-7">
-          <div className="all-categories">
-            <h4 className="heading">Categories</h4>
-            <div className={`categories-list`}>
-              {selectedCategory &&
-                selectedCategory.map((category: any, index: number) => (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onClickButton(category)
-                    }}
-                    key={category.id}
-                    className={getCategoryClasses(
-                      category.id === selectedCategory?.id,
-                    )}
-                    style={{
-                      background: colorArray[index % colorArray.length],
-                    }}
-                  >
-                    <h3 className="cat-name">{category.name}</h3>
-                    <div className="cat-img">
-                      <img src={category.icon} alt="" />
-                    </div>
-                  </button>
-                ))}
-            </div>
-          </div>
-          <div className="selected-categories">
-            <div className="mb-4 items-center justify-between sm:flex">
-              <h4 className="heading">{subCategory?.name}</h4>
-              <FormControl className="search-sub-cats">
-                <Input
-                  className="field"
-                  id="search"
-                  type="text"
-                  inputProps={{
-                    placeholder: 'Search',
+      ) : ( */}
+      <div className="px-4 pt-6 sm:px-5 sm:pt-4 xl:px-7">
+        <div className="all-categories">
+          <h4 className="heading">Categories</h4>
+          <div className={`categories-list`}>
+            {selectedCategory &&
+              selectedCategory.map((category: any, index: number) => (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClickButton(category)
                   }}
-                  disableUnderline
-                  endAdornment={<SearchOutlinedIcon />}
-                  value={searchName}
-                  onChange={(e) => setSearchName(e.target.value)}
-                />
-              </FormControl>
-            </div>
-            <div className="categories-list">
-              {filteredSubCategory.map((item: any) => (
-                <div key={item.id} className="item">
-                  <img
-                    className="mb-4 aspect-[4/3] w-full object-contain md:mb-6"
-                    src={item.icon}
-                    alt=""
-                  />
-                  <div className="flex flex-wrap items-center justify-between">
-                    <h5 className="name">{item.name}</h5>
-                    <h6 className="price">$ {item.price.toFixed(2)}</h6>
-                    <Button
-                      className="btn-add"
-                      variant="contained"
-                      endIcon={<ShoppingBagOutlinedIcon />}
-                      onClick={() => addItemHandler(item)}
-                    >
-                      Add
-                    </Button>
+                  key={category.id}
+                  className={getCategoryClasses(
+                    category.id === selectedCategory?.id,
+                  )}
+                  style={{
+                    background: colorArray[index % colorArray.length],
+                  }}
+                >
+                  <h3 className="cat-name">{category.name}</h3>
+                  <div className="cat-img">
+                    <img src={category.icon} alt="" />
                   </div>
-                </div>
+                </button>
               ))}
-            </div>
           </div>
         </div>
-      )}
+        <div className="selected-categories">
+          <div className="mb-4 items-center justify-between sm:flex">
+            <h4 className="heading">{subCategory?.name}</h4>
+            <FormControl className="search-sub-cats">
+              <Input
+                className="field"
+                id="search"
+                type="text"
+                inputProps={{
+                  placeholder: 'Search',
+                }}
+                disableUnderline
+                endAdornment={<SearchOutlinedIcon />}
+                value={searchName}
+                onChange={(e) => setSearchName(e.target.value)}
+              />
+            </FormControl>
+          </div>
+          <div className="categories-list">
+            {filteredSubCategory.map((item: any) => (
+              <div key={item.id} className="item">
+                <img
+                  className="mb-4 aspect-[4/3] w-full object-contain md:mb-6"
+                  src={item.icon}
+                  alt=""
+                />
+                <div className="flex flex-wrap items-center justify-between">
+                  <h5 className="name">{item.name}</h5>
+                  <h6 className="price">$ {item.price.toFixed(2)}</h6>
+                  <Button
+                    className="btn-add"
+                    variant="contained"
+                    endIcon={<ShoppingBagOutlinedIcon />}
+                    onClick={() => addItemHandler(item)}
+                  >
+                    Add
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      {/* )} */}
     </>
   )
 }

@@ -118,7 +118,6 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
           </div>
           {FAQs?.map((faq: any, index: any) => (
             <div className="product-accordion">
-              return (
               <Accordion
                 key={index}
                 className="accordion-item"
@@ -137,7 +136,6 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
                   <p className="desc">{faq.answer}</p>
                 </AccordionDetails>
               </Accordion>
-              )
             </div>
           ))}
         </div>
