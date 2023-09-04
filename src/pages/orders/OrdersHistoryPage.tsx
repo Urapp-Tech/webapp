@@ -16,20 +16,23 @@ function OrdersPage() {
   const [showAlert, setShowAlert] = useState(false)
   const [alertSeverity, setAlertSeverity] = useState('')
   const [search, setSearch] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   setToken(user?.token)
   useEffect(() => {
-    OrderService.orderList()
-      .then((response) => {
-        setIsLoading(false)
-        setOrders(response.data.data)
-        setItem('OrderItem', response.data.data)
-      })
-      .catch((error) => {
-        setAlertMsg(error.message)
-        setShowAlert(true)
-        setAlertSeverity('error')
-      })
+    if (user) {
+      setIsLoading(true)
+      OrderService.orderList()
+        .then((response) => {
+          setIsLoading(false)
+          setOrders(response.data.data)
+          setItem('OrderItem', response.data.data)
+        })
+        .catch((error) => {
+          setAlertMsg(error.message)
+          setShowAlert(true)
+          setAlertSeverity('error')
+        })
+    }
   }, [])
   const searchOrder = orders?.orders?.filter(
     (el: any) =>

@@ -123,7 +123,6 @@ function OrderDetailsPage() {
     }
     return 'primary' // Default to 'primary' if not recognized
   }
-  console.log(orderItemDetail)
   return (
     <>
       {showAlert && (

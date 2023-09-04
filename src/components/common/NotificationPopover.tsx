@@ -30,23 +30,21 @@ function NotificationPopover({
   const [alertMsg, setAlertMsg] = useState<any>('')
   const [showAlert, setShowAlert] = useState(false)
   const [alertSeverity, setAlertSeverity] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
   useEffect(() => {
-    setToken(user?.token)
-    Notification.NetworkService()
-      .then((response) => {
-        setIsLoading(false)
-        setNotificationList(response.data.data.notifications)
-      })
-      .catch((error) => {
-        setAlertMsg(error.message)
-        setShowAlert(true)
-        setAlertSeverity('error')
-      })
+    if (user) {
+      setToken(user?.token)
+      Notification.NetworkService()
+        .then((response) => {
+          setNotificationList(response.data.data.notifications)
+        })
+        .catch((error) => {
+          setAlertMsg(error.message)
+          setShowAlert(true)
+          setAlertSeverity('error')
+        })
+    }
   }, [])
-  return isLoading ? (
-    <Loader />
-  ) : (
+  return (
     <>
       {showAlert && (
         <AlertBox

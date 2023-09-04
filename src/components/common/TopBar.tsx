@@ -27,10 +27,14 @@ function TopBar() {
   const user = getItem('user')
   const [notificationList, setNotificationList] = useState([])
   useEffect(() => {
-    setToken(user?.token)
-    Notification.NetworkService()
-      .then((response) => setNotificationList(response.data.data.notifications))
-      .catch((error) => console.log(error))
+    if (user) {
+      setToken(user?.token)
+      Notification.NetworkService()
+        .then((response) =>
+          setNotificationList(response.data.data.notifications),
+        )
+        .catch((error) => console.log(error))
+    }
   }, [])
   return (
     <AppBar position="fixed" className="topbar">
@@ -49,7 +53,7 @@ function TopBar() {
             <MenuIcon />
           </IconButton>
           <Badge
-            badgeContent={notificationList.length}
+            badgeContent={notificationList?.length}
             max={99}
             classes={{
               badge: 'custom-badge',

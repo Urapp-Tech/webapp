@@ -17,6 +17,7 @@ import LoginIcon from '@mui/icons-material/Login'
 import { useAppDispatch } from '../../redux/redux-hooks'
 import { logout } from '../../redux/features/authStateSlice'
 import { getItem } from '../../utilities/local-storage'
+import { setDropOff, setPickup } from '../../redux/features/DateAndTime'
 
 const links = [
   {
@@ -73,6 +74,8 @@ function Sidebar() {
   }, [])
 
   const handleLogout = () => {
+    dispatch(setPickup(null))
+    dispatch(setDropOff(null))
     setLoginUser(null)
     dispatch(logout())
   }

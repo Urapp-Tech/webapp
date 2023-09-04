@@ -12,7 +12,7 @@ function AccountProfilePage() {
   const [alertMsg, setAlertMsg] = useState<any>('')
   const [showAlert, setShowAlert] = useState(false)
   const [alertSeverity, setAlertSeverity] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const {
     handleSubmit,
     control,
@@ -21,6 +21,7 @@ function AccountProfilePage() {
   } = useForm()
 
   useEffect(() => {
+    setIsLoading(true)
     setToken(user?.token)
     ProfileApi.ProfileService()
       .then((response) => {

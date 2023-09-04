@@ -29,30 +29,37 @@ import OrderService from '../../services/Order'
 import { setUserAddressList } from '../../redux/features/deviceState'
 import AddressService from '../../services/Address'
 import { setToken } from '../../utilities/constant'
-import Loader from '../../components/common/Loader'
+import { setDropOff, setPickup } from '../../redux/features/DateAndTime'
 
 function MyBasketPage() {
   const { cartItems }: any = useAppSelector((state) => state.cartState)
+  const { DropOff, PickUp } = useAppSelector((state) => state.dateState)
   const dispatch = useAppDispatch()
-  const [pickUpTime, setPickUpTime] = useState<dayjs.Dayjs | null>()
-  const [dropOffTime, setDropOffTime] = useState<dayjs.Dayjs | null>()
   const Cartdata = getItem('RegisteredCart')
   const [promocode, setPromocode] = useState('')
   const navigate = useNavigate()
   const [alertMsg, setAlertMsg] = useState('')
   const [showAlert, setShowAlert] = useState(false)
   const [alertSeverity, setAlertSeverity] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const user = JSON.parse(localStorage.getItem('user')!)
   const userAddress = useAppSelector(
     (state: any) => state.deviceStates.AddressList,
   )
 
   const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
-    setPickUpTime(value)
+    if (value) {
+      dispatch(setPickup(value))
+    } else {
+      dispatch(setPickup(null)) // Dispatch null if needed
+    }
   }
   const handleDropOffTimeChange = (value: dayjs.Dayjs | null) => {
-    setDropOffTime(value)
+    if (value) {
+      dispatch(setDropOff(value))
+    } else {
+      dispatch(setDropOff(null)) // Dispatch null if needed
+    }
   }
   const total = cartItems.reduce(
     (previousValue: any, currentValue: any) =>
@@ -61,11 +68,13 @@ function MyBasketPage() {
   )
   useEffect(() => {
     if (user) {
+      setIsLoading(true)
       AddressService.getUserAddress().then((response) => {
+        setIsLoading(false)
         dispatch(setUserAddressList(response.data.data))
       })
     }
-  }, [user, dispatch])
+  }, [])
 
   const arr: any = []
   cartItems.forEach((el: any) => {
@@ -83,8 +92,8 @@ function MyBasketPage() {
       appUserAddress: userAddress[0]?.id,
       appUserDevice: Cartdata?.appUserDevice,
       cartId: Cartdata?.id,
-      dropDateTime: dropOffTime,
-      pickupDateTime: pickUpTime,
+      dropDateTime: DropOff,
+      pickupDateTime: PickUp,
       promoCode: promocode,
       tenant: Cartdata?.tenant,
       products: arr,
@@ -92,7 +101,7 @@ function MyBasketPage() {
     if (!user) {
       navigate('/auth/login')
     }
-    if (pickUpTime && dropOffTime) {
+    if (PickUp && DropOff) {
       cartService
         .updateCart(reqBody)
         .then((response) => {
@@ -100,6 +109,8 @@ function MyBasketPage() {
           OrderService.addOrder({ cartId: response.data.data.cart.id }).then(
             (OrderResponse) => {
               dispatch(newOrder(OrderResponse.data))
+              dispatch(setPickup(null))
+              dispatch(setDropOff(null))
               window.location.replace(OrderResponse.data.data.paymentUrl)
             },
           )
@@ -109,12 +120,12 @@ function MyBasketPage() {
           setShowAlert(true)
           setAlertSeverity('error')
         })
+    } else {
+      setAlertMsg('Pickup Date & Drop off time is Required')
+      setShowAlert(true)
+      setAlertSeverity('error')
     }
-    setAlertMsg('Pickup Date & Drop off time is Required')
-    setShowAlert(true)
-    setAlertSeverity('error')
   }
-
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       {showAlert && (
@@ -217,14 +228,14 @@ function MyBasketPage() {
                   <div className="mb-2 flex items-center">
                     <DateRangeIcon className="mr-2 text-xl" />
                     <p className="selected-value">
-                      {pickUpTime?.format('ddd, MMM MM, YYYY')}
+                      {PickUp?.format('ddd, MMM MM, YYYY')}
                     </p>
                   </div>
                   <div className="flex items-center">
                     <AccessTimeIcon className="mr-2 text-xl" />
                     <p className="selected-value">
-                      {pickUpTime?.format('HH:mm')} -
-                      {pickUpTime?.add(1, 'hours').format('HH:mm')}
+                      {PickUp?.format('HH:mm')} -
+                      {PickUp?.add(1, 'hours').format('HH:mm')}
                     </p>
                   </div>
                 </div>
@@ -238,14 +249,14 @@ function MyBasketPage() {
                   <div className="mb-2 flex items-center">
                     <DateRangeIcon className="mr-2 text-xl" />
                     <p className="selected-value">
-                      {dropOffTime?.format('ddd, MMM MM, YYYY')}
+                      {DropOff?.format('ddd, MMM MM, YYYY')}
                     </p>
                   </div>
                   <div className="flex items-center">
                     <AccessTimeIcon className="mr-2 text-xl" />
                     <p className="selected-value">
-                      {dropOffTime?.format('HH:mm')} -
-                      {dropOffTime?.add(1, 'hours').format('HH:mm')}
+                      {DropOff?.format('HH:mm')} -
+                      {DropOff?.add(1, 'hours').format('HH:mm')}
                     </p>
                   </div>
                 </div>
