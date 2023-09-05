@@ -17,6 +17,8 @@ import authService from '../../../services/Auth'
 import { login } from '../../../redux/features/authStateSlice'
 import AlertBox from '../../../components/common/SnackBar'
 import { setToken } from '../../../utilities/constant'
+import AddressService from '../../../services/Address'
+import { setUserAddressList } from '../../../redux/features/deviceState'
 
 function LoginPage() {
   const cartItem = useAppSelector((state: any) => state.cartState.cartItems)
@@ -44,13 +46,13 @@ function LoginPage() {
   const submitHandler = (data: LoginPayload) => {
     authService
       .LoginService(data)
-      .then((response) => {
+      .then((response: any) => {
         if (response.data.success) {
-          setShowAlert(true)
-          setAlertMessage(response.data.data.message)
-          setAlertSeverity('success')
           dispatch(login(response.data.data))
           setToken(response.data.data.token)
+          AddressService.getUserAddress().then((response) => {
+            dispatch(setUserAddressList(response.data.data))
+          })
           if (cartItem > 0) {
             navigate('/dashboard/my-basket')
           } else {
