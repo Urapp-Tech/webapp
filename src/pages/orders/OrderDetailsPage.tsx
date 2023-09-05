@@ -25,44 +25,53 @@ import AlertBox from '../../components/common/SnackBar'
 import {
   ORDER_STATUSES,
   ORDER_STATUS_IN_DELIVERY,
+  setToken,
 } from '../../utilities/constant'
+import OrderServices from '../../services/Order'
 
 function OrderDetailsPage() {
-  const { cartItems }: any = useAppSelector((state) => state.cartState)
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
   const navigate = useNavigate()
   const [orderItemDetail, setOrderItemDetail] = useState<any>()
   const [pickUpTime, setPickUpTime] = useState<dayjs.Dayjs | null>(null)
   const [dropOffTime, setDropOffTime] = useState<dayjs.Dayjs | null>(null)
-  const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
-    setPickUpTime(value)
-  }
+  const [alertMsg, setAlertMsg] = useState<any>('')
+  const [showAlert, setShowAlert] = useState(false)
+  const [alertSeverity, setAlertSeverity] = useState('')
+  const [orderCanceled, setOrderCanceled] = useState(false)
+  const user = getItem('user')
   const items = getItem('OrderItem')
   const address = getItem('Address')
   const AddressList = address.map((el: any) => el)
   const userAddress = AddressList?.find(
     (el: any) => el.id === orderItemDetail?.appUserAddress,
   )
-  const [alertMsg, setAlertMsg] = useState<any>('')
-  const [showAlert, setShowAlert] = useState(false)
-  const [alertSeverity, setAlertSeverity] = useState('')
-  const [orderCanceled, setOrderCanceled] = useState(false)
 
+  console.log(userAddress)
+  console.log(orderItemDetail)
   useEffect(() => {
-    const orderDetail = async () => {
-      try {
-        const id = await window.location.pathname.slice(
-          window.location.pathname.lastIndexOf('/') + 1,
-        )
-        const Details = items?.orders.find((el: any) => el.orderNumber === id)
-        setOrderItemDetail(Details)
-      } catch (error) {
-        setAlertMsg(error)
-        setShowAlert(true)
-        setAlertSeverity('error')
+    if (user) {
+      setToken(user?.token)
+      const orderDetail = async () => {
+        try {
+          const id = await window.location.pathname.slice(
+            window.location.pathname.lastIndexOf('/') + 1,
+          )
+
+          const Details = items?.orders.find(
+            (el: any) => el.appOrderNumber === id,
+          )
+          OrderServices.orderDetail(Details.id).then((response) =>
+            setOrderItemDetail(response.data.data),
+          )
+        } catch (error) {
+          setAlertMsg(error)
+          setShowAlert(true)
+          setAlertSeverity('error')
+        }
       }
+      orderDetail()
     }
-    orderDetail()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -73,6 +82,9 @@ function OrderDetailsPage() {
 
   const handleDropOffTimeChange = (value: dayjs.Dayjs | null) => {
     setDropOffTime(value)
+  }
+  const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
+    setPickUpTime(value)
   }
   const getIcon = ORDER_STATUSES.map((status: any, index) => {
     let icon
@@ -152,10 +164,13 @@ function OrderDetailsPage() {
             <div className="px-5 pt-6 pb-1">
               <div className="items-center justify-between gap-x-5 sm:flex">
                 <div className="mb-5 flex items-center gap-x-3 sm:mb-0">
-                  <div className="icon-order-out-for-delivery relative inline-flex">
-                    {ORDER_STATUSES.map(
-                      (status, index) =>
-                        orderItemDetail?.status === status.status && (
+                  {ORDER_STATUSES.map(
+                    (status, index) =>
+                      orderItemDetail?.status === status.status && (
+                        <div
+                          className="icon-order-out-for-delivery relative inline-flex"
+                          key={index}
+                        >
                           <>
                             <CircularProgress
                               thickness={1.5}
@@ -177,12 +192,13 @@ function OrderDetailsPage() {
                               {getIcon[index]}
                             </div>
                           </>
-                        ),
-                    )}
-                  </div>
+                        </div>
+                      ),
+                  )}
                   <div className="basic-details">
                     <p className="order-id">
-                      Order Id:&nbsp;<span>{orderItemDetail?.id}</span>
+                      Order Id:&nbsp;
+                      <span>{orderItemDetail?.appOrderNumber}</span>
                     </p>
                     <p className="order-date-time">08:35 , 05-01-2020</p>
                     <h6 className="order-status order-out-for-delivery">
@@ -261,28 +277,30 @@ function OrderDetailsPage() {
                     <td colSpan={3}>
                       <div className="flex items-center gap-x-2">
                         <LocationOnOutlinedIcon className="text-xl" />
-                        <p className="adress">{userAddress?.address}</p>
+                        <p className="adress">
+                          {!userAddress
+                            ? 'No Address Active'
+                            : userAddress?.address}
+                        </p>
                       </div>
                     </td>
                   </tr>
-                  {orderItemDetail?.items.map((el: any, index: number) => (
-                    <tr key={index}>
-                      <td>
-                        <div className="flex items-center gap-x-2 sm:gap-x-4">
-                          <img
-                            className="order-pic"
-                            src={assets.tempImages.wash}
-                            alt=""
-                          />
-                          <p className="name">Wash & Fold 15 Lbs</p>
-                        </div>
-                      </td>
-                      <td>{el.quantity} Items</td>
-                      <td>
-                        <p className="price">{el.unitPrice}</p>
-                      </td>
-                    </tr>
-                  ))}
+                  {orderItemDetail?.appOrderItem.map(
+                    (el: any, index: number) => (
+                      <tr key={index}>
+                        <td>
+                          <div className="flex items-center gap-x-2 sm:gap-x-4">
+                            <img className="order-pic" src={el.icon} alt="" />
+                            <p className="name">{el.name}</p>
+                          </div>
+                        </td>
+                        <td>{el.quantity} Items</td>
+                        <td>
+                          <p className="price">{el.unitPrice}</p>
+                        </td>
+                      </tr>
+                    ),
+                  )}
                 </table>
               </div>
 
@@ -296,7 +314,7 @@ function OrderDetailsPage() {
                   <p className="value">$0.00</p>
                 </div>
                 <div className="mb-4 flex items-center justify-between">
-                  <p className="key">HST 13%</p>
+                  <p className="key">HST {orderItemDetail?.gstPercentage}%</p>
                   <p className="value">${orderItemDetail?.gstAmount}</p>
                 </div>
               </div>

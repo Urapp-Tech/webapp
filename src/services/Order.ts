@@ -10,7 +10,11 @@ const orderList = () => {
   return devNetwork.get(`appOrder/webapp/list`)
 }
 
+const orderDetail = (id: string) => {
+  return devNetwork.get(`appOrder/webapp/detail/${id}`)
+}
 export default {
   addOrder,
   orderList,
+  orderDetail,
 }
