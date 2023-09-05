@@ -82,7 +82,7 @@ function OrdersPage() {
               {searchOrder?.map((row: any) => (
                 <TableRow
                   key={row.id}
-                  id={row.orderNumber}
+                  id={row.appOrderNumber}
                   type={row.status}
                   date={row.createdDate}
                   progress={row.progress}

@@ -173,7 +173,7 @@ function TableRow({ id, type, date, progress, item }: Props) {
       <td>
         <div className={getStatusClasses(type)}>{getStatusText(type)}</div>
       </td>
-      <td>{item.length} Items</td>
+      <td>{item} Items</td>
       <td>
         <NavLink to={id} className="link">
           Track Order

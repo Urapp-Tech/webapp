@@ -40,7 +40,7 @@ function OrderDetailsPage() {
   const items = getItem('OrderItem')
   const address = getItem('Address')
   const AddressList = address.map((el: any) => el)
-  const userAddress = AddressList.find(
+  const userAddress = AddressList?.find(
     (el: any) => el.id === orderItemDetail?.appUserAddress,
   )
   const [alertMsg, setAlertMsg] = useState<any>('')
