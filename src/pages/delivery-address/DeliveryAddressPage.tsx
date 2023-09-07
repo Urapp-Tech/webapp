@@ -13,7 +13,12 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
 import MyLocationIcon from '@mui/icons-material/MyLocation'
 import DeleteAddressPopup from './DeleteAddressPopup'
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks'
-import { setUserAddressList } from '../../redux/features/deviceState'
+import {
+  deleteUserAddress,
+  setAddressStatus,
+  setUserAddressList,
+  setUserNewAddress,
+} from '../../redux/features/deviceState'
 import Map from '../../components/common/Map'
 import { getItem } from '../../utilities/local-storage'
 import AddressService from '../../services/Address'
@@ -76,10 +81,10 @@ function DeliveryAddressPage() {
   const user = getItem('user')
   const [delAddress, setDelAddress] = useState<boolean>(false)
   const [location, setLocation] = useState<any>({
-    lat: addressList.length > 0 ? addressList[0].latitude : 0,
-    lng: addressList.length > 0 ? addressList[0].longitude : 0,
+    lat: addressList?.length > 0 ? addressList[0]?.latitude : 0,
+    lng: addressList?.length > 0 ? addressList[0]?.longitude : 0,
   })
-  const [activeAddress, setActiveAddress] = useState<any>(0)
+  const [activeAddress, setActiveAddress] = useState<any>()
   const [newAddress, setNewAddress] = useState('')
   const [type, setType] = useState('')
   const [name, setName] = useState('')
@@ -89,6 +94,7 @@ function DeliveryAddressPage() {
   const [showAlert, setShowAlert] = useState(false)
   const [alertSeverity, setAlertSeverity] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [deleteItem, setDeleteItem] = useState<any>(null)
   const draggedAddress = useAppSelector(
     (state: any) => state.deviceStates.Address,
   )
@@ -103,27 +109,47 @@ function DeliveryAddressPage() {
     }
     setIsLoading(true)
     AddressService.getUserAddress()
-      .then((response) => dispatch(setUserAddressList(response.data.data)))
+      .then((response) => {
+        const responseActiveAddress = response.data.data.find(
+          (item: any) => item.isActive,
+        )
+        if (responseActiveAddress) {
+          setActiveAddress(responseActiveAddress)
+        }
+        dispatch(setUserAddressList(response.data.data))
+      })
       .catch((error) => {
         setAlertMsg(error.message)
         setShowAlert(true)
         setAlertSeverity('error')
       })
       .finally(() => {
-        setIsLoading(false) // Set loading to false when the API call completes (success or error)
+        setIsLoading(false)
       })
-  }, [draggedAddress])
+  }, [])
 
   const handleAddressClick = (index: number) => {
-    setActiveAddress(index) // Set the active address index
     const selectedAddress = addressList[index]
     setAddressObj(selectedAddress)
-    setNewAddress(selectedAddress.address) // Update the input field with the clicked address
-    setType(selectedAddress.type) // Update the selected type
+    setNewAddress(selectedAddress.address)
+    setType(selectedAddress.type)
     setLocation({
       lat: selectedAddress.latitude,
       lng: selectedAddress.longitude,
     })
+    AddressService.UpdateAddressStatus(
+      selectedAddress.tenant,
+      selectedAddress.id,
+    )
+      .then((response) => {
+        setActiveAddress(response.data.data)
+        dispatch(setAddressStatus(response.data.data))
+      })
+      .catch((error) => {
+        setAlertMsg(error.message)
+        setShowAlert(true)
+        setAlertSeverity('error')
+      })
   }
 
   const handleMarkerDragEnd = (newPosition: google.maps.LatLngLiteral) => {
@@ -138,7 +164,7 @@ function DeliveryAddressPage() {
           if (result && result[0]) {
             setNewAddress(result[0].formatted_address)
             setType('')
-            setActiveAddress(null)
+            setActiveAddress(false)
           }
         }
       },
@@ -197,11 +223,15 @@ function DeliveryAddressPage() {
       type,
     })
       .then((response) => {
-        // console.log(response)
-        // dispatch()
+        console.log(response)
+        dispatch(setUserNewAddress(response.data.data))
+        setAlertMsg(response.data.message)
+        setShowAlert(true)
+        setAlertSeverity('success')
       })
       .catch((error) => {
-        setAlertMsg(error.message)
+        console.log(error)
+        setAlertMsg(error.response.data.message)
         setShowAlert(true)
         setAlertSeverity('error')
       })
@@ -217,6 +247,33 @@ function DeliveryAddressPage() {
       </div>
     )
   }
+  console.log(deleteItem)
+  const handleDelete = () => {
+    setToken(user?.token)
+    AddressService.deleteUserAddress(deleteItem?.tenant, deleteItem?.id)
+      .then((response) => {
+        dispatch(deleteUserAddress(response.data.data))
+        setAlertMsg(response.data.message)
+        setShowAlert(true)
+        setAlertSeverity('success')
+      })
+      .catch((error) => {
+        console.log(error)
+        setAlertMsg(error.message)
+        setShowAlert(true)
+        setAlertSeverity('error')
+      })
+  }
+
+  const sortedAddressList = addressList.slice()
+  const activeIndex = sortedAddressList.findIndex(
+    (item: any) => item.id === activeAddress?.id,
+  )
+
+  if (activeIndex !== -1) {
+    const activeAddressItem = sortedAddressList.splice(activeIndex, 1)[0]
+    sortedAddressList.unshift(activeAddressItem)
+  }
   return (
     <>
       {showAlert && (
@@ -227,7 +284,11 @@ function DeliveryAddressPage() {
           setAlertOpen={setShowAlert}
         />
       )}
-      <DeleteAddressPopup open={delAddress} setOpen={setDelAddress} />
+      <DeleteAddressPopup
+        open={delAddress}
+        setOpen={setDelAddress}
+        onDelete={handleDelete}
+      />
       <div className="delivery-address-page p-4 sm:p-5 xl:p-7">
         <h4 className="main-heading">Delivery Address</h4>
         <div className="grid grid-cols-2 gap-4">
@@ -241,11 +302,9 @@ function DeliveryAddressPage() {
                   className="addresses-list"
                   style={{ maxHeight: '850px', overflow: 'auto' }}
                 >
-                  {addressList.map((item: any, index: any) => (
+                  {sortedAddressList?.map((item: any, index: any) => (
                     <div
-                      className={`item ${
-                        index === activeAddress ? 'active' : ''
-                      }`}
+                      className={`item ${item.isActive ? 'active' : ''}`}
                       key={index}
                       onClick={() => handleAddressClick(index)}
                       onKeyDown={(event) => {
@@ -256,7 +315,7 @@ function DeliveryAddressPage() {
                       role="button" // Add a role attribute
                       tabIndex={0}
                     >
-                      {index === activeAddress ? (
+                      {item.isActive ? (
                         <CheckCircleOutlinedIcon className="icon checked" />
                       ) : (
                         <CircleOutlinedIcon className="icon unchecked" />
@@ -268,7 +327,10 @@ function DeliveryAddressPage() {
                       </div>
                       <IconButton
                         className="btn-del"
-                        onClick={() => setDelAddress(true)}
+                        onClick={() => {
+                          setDeleteItem(item)
+                          setDelAddress(true)
+                        }}
                       >
                         <DeleteOutlineOutlinedIcon />
                       </IconButton>
