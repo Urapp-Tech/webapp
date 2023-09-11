@@ -32,13 +32,13 @@ const links = [
       <AssignmentOutlinedIcon className="aside-list-icon" fontSize="inherit" />
     ),
   },
-  {
-    name: 'Payment Setting',
-    path: 'payment-setting',
-    icon: (
-      <CreditCardRoundedIcon className="aside-list-icon" fontSize="inherit" />
-    ),
-  },
+  // {
+  //   name: 'Payment Setting',
+  //   path: 'payment-setting',
+  //   icon: (
+  //     <CreditCardRoundedIcon className="aside-list-icon" fontSize="inherit" />
+  //   ),
+  // },
   {
     name: 'Delivery Address',
     path: 'delivery-address',

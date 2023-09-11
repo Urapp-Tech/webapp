@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks'
 import { addToCart, Cart } from '../../redux/features/cartStateSlice'
 import cartService from '../../services/cart'
 import { getItem } from '../../utilities/local-storage'
+import AlertBox from '../../components/common/SnackBar'
 
 type Props = {
   open: boolean
@@ -29,6 +30,9 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
   const [expanded, setExpanded] = useState<string | false>(false)
   const dispatch = useAppDispatch()
   const [count, setCount] = useState(1)
+  const [alertMsg, setAlertMsg] = useState<any>('')
+  const [showAlert, setShowAlert] = useState(false)
+  const [alertSeverity, setAlertSeverity] = useState('')
   const Cartdata = getItem('RegisteredCart')
   const arr: any = []
 
@@ -66,9 +70,19 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
     }
     cartService
       .updateCart(reqBody)
-      .then((response) => dispatch(Cart(response.data.data.cart)))
+      .then((response) => {
+        return dispatch(Cart(response.data.data.cart))
+      })
+      .catch((error) => {
+        setAlertMsg(error.message)
+        setShowAlert(true)
+        setAlertSeverity('error')
+      })
+    setAlertMsg('Item Successfully Added')
+    setShowAlert(true)
+    setAlertSeverity('success')
     setOpen(false)
-    setCount(0)
+    setCount(1)
   }
   const onCloseHandler = (event: object, reason: string) => {
     if (reason === 'backdropClick') {
@@ -77,87 +91,101 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
   }
 
   return (
-    <Dialog open={open} onClose={onCloseHandler} className="modal-add-to-cart">
-      <IconButton onClick={() => setOpen(false)} className="btn-close">
-        <ClearIcon />
-      </IconButton>
-      <DialogContent className="modal-content">
-        <div className="main-grid">
-          <div>
-            <div className="product-img">
-              <img src={data?.icon} alt="" />
-            </div>
-            <div className="p-4">
-              <h4 className="product-name">{data?.name}</h4>
-              <p className="product-desc">{data?.desc}</p>
-              <div className="flex-container flex items-center justify-between">
-                <div className="price">
-                  <h3 className="number">
-                    $ <span>{data?.price.toFixed(2)}</span>
-                  </h3>
-                  <p className="text">&nbsp;/ item</p>
-                </div>
-                <div className="count">
-                  <IconButton
-                    onClick={decrementCount}
-                    className="btn-decrement"
-                  >
-                    <RemoveCircleOutlineOutlinedIcon className="icon" />
-                  </IconButton>
+    <>
+      {showAlert && (
+        <AlertBox
+          msg={alertMsg}
+          setSeverty={alertSeverity}
+          alertOpen={showAlert}
+          setAlertOpen={setShowAlert}
+        />
+      )}
+      <Dialog
+        open={open}
+        onClose={onCloseHandler}
+        className="modal-add-to-cart"
+      >
+        <IconButton onClick={() => setOpen(false)} className="btn-close">
+          <ClearIcon />
+        </IconButton>
+        <DialogContent className="modal-content">
+          <div className="main-grid">
+            <div>
+              <div className="product-img">
+                <img src={data?.icon} alt="" />
+              </div>
+              <div className="p-4">
+                <h4 className="product-name">{data?.name}</h4>
+                <p className="product-desc">{data?.desc}</p>
+                <div className="flex-container flex items-center justify-between">
+                  <div className="price">
+                    <h3 className="number">
+                      $ <span>{data?.price.toFixed(2)}</span>
+                    </h3>
+                    <p className="text">&nbsp;/ item</p>
+                  </div>
+                  <div className="count">
+                    <IconButton
+                      onClick={decrementCount}
+                      className="btn-decrement"
+                    >
+                      <RemoveCircleOutlineOutlinedIcon className="icon" />
+                    </IconButton>
 
-                  <div className="number">{count}</div>
-                  <IconButton
-                    onClick={incrementCount}
-                    className="btn-increment"
-                  >
-                    <AddCircleOutlineOutlinedIcon className="icon" />
-                  </IconButton>
+                    <div className="number">{count}</div>
+                    <IconButton
+                      onClick={incrementCount}
+                      className="btn-increment"
+                    >
+                      <AddCircleOutlineOutlinedIcon className="icon" />
+                    </IconButton>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          {FAQs?.map((faq: any, index: any) => (
-            <div className="product-accordion">
-              <Accordion
-                key={index}
-                className="accordion-item"
-                expanded={expanded === `panel-${index}`}
-                onChange={handleChange(`panel-${index}`)}
-              >
-                <AccordionSummary
-                  className="accordion-header"
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls={`panel-${index}-content`}
-                  id={`panel-${index}-header`}
+            {FAQs?.map((faq: any, index: any) => (
+              <div className="product-accordion">
+                <Accordion
+                  key={index}
+                  className="accordion-item"
+                  expanded={expanded === `panel-${index}`}
+                  onChange={handleChange(`panel-${index}`)}
                 >
-                  <h6 className="heading">{faq.question}</h6>
-                </AccordionSummary>
-                <AccordionDetails className="accordion-body">
-                  <p className="desc">{faq.answer}</p>
-                </AccordionDetails>
-              </Accordion>
-            </div>
-          ))}
-        </div>
-      </DialogContent>
-      <DialogActions className="modal-footer">
-        <Button
-          className="btn-add"
-          onClick={() => {
-            const cartItem = {
-              id: data?.id,
-              image: data?.icon,
-              name: data?.name,
-              price: data?.price,
-              quantity: count,
-            }
-            addToBasketHandler(cartItem)
-          }}
-        >
-          Add to Basket
-        </Button>
-      </DialogActions>
-    </Dialog>
+                  <AccordionSummary
+                    className="accordion-header"
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls={`panel-${index}-content`}
+                    id={`panel-${index}-header`}
+                  >
+                    <h6 className="heading">{faq.question}</h6>
+                  </AccordionSummary>
+                  <AccordionDetails className="accordion-body">
+                    <p className="desc">{faq.answer}</p>
+                  </AccordionDetails>
+                </Accordion>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+        <DialogActions className="modal-footer">
+          <Button
+            className="btn-add"
+            onClick={() => {
+              const cartItem = {
+                id: data?.id,
+                image: data?.icon,
+                name: data?.name,
+                price: data?.price,
+                quantity: count,
+              }
+              addToBasketHandler(cartItem)
+            }}
+          >
+            Add to Basket
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   )
 }
 
