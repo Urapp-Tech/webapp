@@ -263,13 +263,10 @@ function MyBasketPage() {
               </div>
               {user ? (
                 <div className="address-card">
-                  <div className="key">
+                  <div className="key" style={{ width: '500px' }}>
                     <LocationOnOutlinedIcon className="mr-2 text-xl" />
                     <p className="text">{userAddress[0]?.address}</p>
                   </div>
-                  <Link className="value" to="/dashboard/delivery-address">
-                    Change
-                  </Link>
                 </div>
               ) : (
                 ''
