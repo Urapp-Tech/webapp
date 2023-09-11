@@ -19,10 +19,13 @@ type Props = {
   id: string
   text: string
   onChange: (value: dayjs.Dayjs | null) => void
+  initialValue: dayjs.Dayjs | null
 }
-function DatePickerButton({ onChange, text, id, icon }: Props) {
+function DatePickerButton({ onChange, text, id, icon, initialValue }: Props) {
   const [datePicker, setDatePicker] = useState<HTMLButtonElement | null>(null)
-  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(dayjs())
+  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(
+    initialValue,
+  )
   const buttonElement = useRef(null)
   const handleClick = () => {
     setDatePicker(buttonElement.current)
@@ -35,6 +38,7 @@ function DatePickerButton({ onChange, text, id, icon }: Props) {
   const idProp = open ? id : undefined
 
   const handleChange = (value: dayjs.Dayjs | null) => {
+    console.log(value)
     setSelectedDate(value)
     onChange(value)
     handleClose()

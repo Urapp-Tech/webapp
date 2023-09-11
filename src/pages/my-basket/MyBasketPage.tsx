@@ -47,18 +47,16 @@ function MyBasketPage() {
     (state: any) => state.deviceStates.AddressList,
   )
 
+  console.log(PickUp)
+
   const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
     if (value) {
       dispatch(setPickup(value))
-    } else {
-      dispatch(setPickup(null)) // Dispatch null if needed
     }
   }
   const handleDropOffTimeChange = (value: dayjs.Dayjs | null) => {
     if (value) {
       dispatch(setDropOff(value))
-    } else {
-      dispatch(setDropOff(null)) // Dispatch null if needed
     }
   }
   const total = cartItems.reduce(
@@ -224,11 +222,14 @@ function MyBasketPage() {
                     id="pick-up-date-time-picker"
                     icon={<DateRangeIcon />}
                     text="Pick up time"
+                    initialValue={PickUp}
                   />
                   <div className="mb-2 flex items-center">
                     <DateRangeIcon className="mr-2 text-xl" />
                     <p className="selected-value">
-                      {PickUp?.format('ddd, MMM MM, YYYY')}
+                      {PickUp
+                        ? PickUp.format('ddd, MMM D, YYYY')
+                        : 'Select a date'}
                     </p>
                   </div>
                   <div className="flex items-center">
@@ -245,11 +246,14 @@ function MyBasketPage() {
                     id="drop-off-date-time-picker"
                     icon={<DateRangeIcon />}
                     text="Drop off time"
+                    initialValue={DropOff}
                   />
                   <div className="mb-2 flex items-center">
                     <DateRangeIcon className="mr-2 text-xl" />
                     <p className="selected-value">
-                      {DropOff?.format('ddd, MMM MM, YYYY')}
+                      {DropOff
+                        ? DropOff.format('ddd, MMM D, YYYY')
+                        : 'Select a date'}
                     </p>
                   </div>
                   <div className="flex items-center">
