@@ -37,7 +37,7 @@ function LoginPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors  },
   } = useForm<LoginPayload>()
 
   const Email = register('email')
