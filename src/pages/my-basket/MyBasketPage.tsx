@@ -21,6 +21,7 @@ import {
   newOrder,
   removeFromCart,
   Cart,
+  setInitialCart,
 } from '../../redux/features/cartStateSlice'
 import { getItem } from '../../utilities/local-storage'
 import cartService from '../../services/cart'
@@ -109,6 +110,8 @@ function MyBasketPage() {
               dispatch(newOrder(OrderResponse.data))
               dispatch(setPickup(null))
               dispatch(setDropOff(null))
+              localStorage.removeItem('CART_ITEMS')
+              dispatch(setInitialCart(null))
               window.location.replace(OrderResponse.data.data.paymentUrl)
             },
           )
