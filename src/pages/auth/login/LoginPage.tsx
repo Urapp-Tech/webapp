@@ -37,7 +37,7 @@ function LoginPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors  },
+    formState: { errors },
   } = useForm<LoginPayload>()
 
   const Email = register('email')
@@ -48,6 +48,7 @@ function LoginPage() {
       .LoginService(data)
       .then((response: any) => {
         if (response.data.success) {
+          console.log(response.data)
           dispatch(login(response.data.data))
           setToken(response.data.data.token)
           AddressService.getUserAddress().then((response) => {
@@ -66,7 +67,7 @@ function LoginPage() {
       })
       .catch((error) => {
         setShowAlert(true)
-        setAlertMessage(error.message)
+        setAlertMessage(error.response.data.message)
         setAlertSeverity('error')
       })
   }
