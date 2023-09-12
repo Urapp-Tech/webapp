@@ -15,6 +15,7 @@ import { getCart } from '../../redux/features/cartStateSlice'
 import { getItem } from '../../utilities/local-storage'
 import AlertBox from '../../components/common/SnackBar'
 import Loader from '../../components/common/Loader'
+import CategoriesCard from '../../components/common/CategoriesCard'
 
 function getCategoryClasses(isActive: boolean) {
   const classes = 'item'
@@ -188,29 +189,10 @@ function HomePage() {
       <div className="px-4 pt-6 sm:px-5 sm:pt-4 xl:px-7">
         <div className="all-categories">
           <h4 className="heading">Categories</h4>
-          <div className={`categories-list`}>
-            {selectedCategory &&
-              selectedCategory.map((category: any, index: number) => (
-                <button
-                  type="button"
-                  onClick={() => {
-                    onClickButton(category)
-                  }}
-                  key={category.id}
-                  className={getCategoryClasses(
-                    category.id === selectedCategory?.id,
-                  )}
-                  style={{
-                    background: colorArray[index % colorArray.length],
-                  }}
-                >
-                  <h3 className="cat-name">{category.name}</h3>
-                  <div className="cat-img">
-                    <img src={category.icon} alt="" />
-                  </div>
-                </button>
-              ))}
-          </div>
+          <CategoriesCard
+            categories={selectedCategory}
+            onClick={onClickButton}
+          />
         </div>
         <div className="selected-categories">
           <div className="mb-4 items-center justify-between sm:flex">
