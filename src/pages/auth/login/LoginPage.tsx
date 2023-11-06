@@ -1,76 +1,76 @@
-import { useEffect, useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
-import IconButton from '@mui/material/IconButton'
-import InputAdornment from '@mui/material/InputAdornment'
-import Checkbox from '@mui/material/Checkbox'
-import FormControl from '@mui/material/FormControl'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Input from '@mui/material/Input'
-import InputLabel from '@mui/material/InputLabel'
-import Visibility from '@mui/icons-material/Visibility'
-import VisibilityOff from '@mui/icons-material/VisibilityOff'
-import { useForm } from 'react-hook-form'
-import assets from '../../../assets'
-import { LoginPayload } from '../../../interfaces/auth.interface'
-import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks'
-import authService from '../../../services/Auth'
-import { login } from '../../../redux/features/authStateSlice'
-import AlertBox from '../../../components/common/SnackBar'
-import { setToken } from '../../../utilities/constant'
-import AddressService from '../../../services/Address'
-import { setUserAddressList } from '../../../redux/features/deviceState'
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Checkbox from '@mui/material/Checkbox';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import IconButton from '@mui/material/IconButton';
+import Input from '@mui/material/Input';
+import InputAdornment from '@mui/material/InputAdornment';
+import InputLabel from '@mui/material/InputLabel';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { NavLink, useNavigate } from 'react-router-dom';
+import assets from '../../../assets';
+import AlertBox from '../../../components/common/SnackBar';
+import { LoginPayload } from '../../../interfaces/auth.interface';
+import { login } from '../../../redux/features/authStateSlice';
+import { setUserAddressList } from '../../../redux/features/deviceState';
+import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
+import AddressService from '../../../services/Address';
+import authService from '../../../services/Auth';
+import { setToken } from '../../../utilities/constant';
+import promiseHandler from '../../../utilities/promise-handler';
 
 function LoginPage() {
-  const cartItem = useAppSelector((state: any) => state.cartState.cartItems)
-  const navigate = useNavigate()
-  const [showPassword, setShowPassword] = useState(false)
-  const [showAlert, setShowAlert] = useState<boolean>(false)
-  const [alertMessage, setAlertMessage] = useState('')
-  const [alertSeverity, setAlertSeverity] = useState('')
-  const dispatch = useAppDispatch()
-  const handleClickShowPassword = () => setShowPassword((show) => !show)
+  const cartItem = useAppSelector((state: any) => state.cartState.cartItems);
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertSeverity, setAlertSeverity] = useState('');
+  const dispatch = useAppDispatch();
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>,
+    event: React.MouseEvent<HTMLButtonElement>
   ) => {
-    event.preventDefault()
-  }
+    event.preventDefault();
+  };
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginPayload>()
+  } = useForm<LoginPayload>();
 
-  const Email = register('email')
-  const Password = register('password')
+  const Email = register('email');
+  const Password = register('password');
 
-  const submitHandler = (data: LoginPayload) => {
-    authService
-      .LoginService(data)
-      .then((response: any) => {
-        if (response.data.success) {
-          console.log(response.data)
-          dispatch(login(response.data.data))
-          setToken(response.data.data.token)
-          AddressService.getUserAddress().then((response) => {
-            dispatch(setUserAddressList(response.data.data))
-          })
-          if (cartItem > 0) {
-            navigate('/dashboard/my-basket')
-          } else {
-            navigate('/dashboard/home')
-          }
-        } else {
-          setShowAlert(true)
-          setAlertMessage(response.data.message)
-          setAlertSeverity('error')
-        }
-      })
-      .catch((error) => {
-        setShowAlert(true)
-        setAlertMessage(error.response.data.message)
-        setAlertSeverity('error')
-      })
-  }
+  const submitHandler = async (data: LoginPayload) => {
+    const loginPromise = authService.loginService(data);
+    const [loginResponse, loginError] = await promiseHandler(loginPromise);
+    if (!loginResponse) {
+      return;
+    }
+    if (loginResponse.data.success) {
+      dispatch(login(loginResponse.data.data));
+      setToken(loginResponse.data.data.token);
+      const addressPromise = AddressService.getUserAddress();
+      const [addressResponse, addressError] = await promiseHandler(
+        addressPromise
+      );
+      if (addressResponse) {
+        dispatch(setUserAddressList(addressResponse.data.data));
+      }
+      if (cartItem > 0) {
+        navigate('/dashboard/my-basket');
+      } else {
+        navigate('/dashboard/home');
+      }
+    } else {
+      setShowAlert(true);
+      setAlertMessage(loginResponse.data.message);
+      setAlertSeverity('error');
+    }
+  };
 
   return (
     <>
@@ -183,12 +183,12 @@ function LoginPage() {
         <AlertBox
           alertOpen={showAlert}
           msg={alertMessage}
-          setSeverty={alertSeverity}
+          setSeverity={alertSeverity}
           setAlertOpen={setShowAlert}
         />
       )}
     </>
-  )
+  );
 }
 
-export default LoginPage
+export default LoginPage;

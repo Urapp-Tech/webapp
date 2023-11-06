@@ -1,138 +1,135 @@
-import { useEffect, useState } from 'react'
-import dayjs from 'dayjs'
-import IconButton from '@mui/material/IconButton'
-import FormControl from '@mui/material/FormControl'
-import InputAdornment from '@mui/material/InputAdornment'
-import Input from '@mui/material/Input'
-import { Link, useNavigate } from 'react-router-dom'
-import Button from '@mui/material/Button'
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import DiscountIcon from '@mui/icons-material/Discount'
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'
-import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
-import DateRangeIcon from '@mui/icons-material/DateRange'
-import AccessTimeIcon from '@mui/icons-material/AccessTime'
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
-import CreditCardOutlinedIcon from '@mui/icons-material/CreditCardOutlined'
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks'
-import DatePickerButton from './DatePickerButton'
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import DiscountIcon from '@mui/icons-material/Discount';
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
+import Input from '@mui/material/Input';
+import InputAdornment from '@mui/material/InputAdornment';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import AlertBox from '../../components/common/SnackBar';
+import { setDropOff, setPickup } from '../../redux/features/DateAndTime';
 import {
+  Cart,
   newOrder,
   removeFromCart,
-  Cart,
   setInitialCart,
-} from '../../redux/features/cartStateSlice'
-import { getItem } from '../../utilities/local-storage'
-import cartService from '../../services/cart'
-import AlertBox from '../../components/common/SnackBar'
-import OrderService from '../../services/Order'
-import { setUserAddressList } from '../../redux/features/deviceState'
-import AddressService from '../../services/Address'
-import { setToken } from '../../utilities/constant'
-import { setDropOff, setPickup } from '../../redux/features/DateAndTime'
+} from '../../redux/features/cartStateSlice';
+import { setUserAddressList } from '../../redux/features/deviceState';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import AddressService from '../../services/Address';
+import OrderService from '../../services/Order';
+import cartService from '../../services/cart';
+import { setToken } from '../../utilities/constant';
+import { getItem, removeItem } from '../../utilities/local-storage';
+import DatePickerButton from './DatePickerButton';
 
 function MyBasketPage() {
-  const { cartItems }: any = useAppSelector((state) => state.cartState)
-  const { DropOff, PickUp } = useAppSelector((state) => state.dateState)
-  const dispatch = useAppDispatch()
-  const Cartdata = getItem('RegisteredCart')
-  const [promocode, setPromocode] = useState('')
-  const navigate = useNavigate()
-  const [alertMsg, setAlertMsg] = useState('')
-  const [showAlert, setShowAlert] = useState(false)
-  const [alertSeverity, setAlertSeverity] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const user = JSON.parse(localStorage.getItem('user')!)
+  const { cartItems }: any = useAppSelector((state) => state.cartState);
+  const { DropOff, PickUp } = useAppSelector((state) => state.dateState);
+  const dispatch = useAppDispatch();
+  const cartData = getItem('REGISTERED_CART');
+  const [promoCode, setPromoCode] = useState('');
+  const navigate = useNavigate();
+  const [alertMsg, setAlertMsg] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const user = getItem('USER');
   const userAddress = useAppSelector(
-    (state: any) => state.deviceStates.AddressList,
-  )
-
-  console.log(PickUp)
+    (state: any) => state.deviceStates.AddressList
+  );
 
   const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
     if (value) {
-      dispatch(setPickup(value))
+      dispatch(setPickup(value));
     }
-  }
+  };
   const handleDropOffTimeChange = (value: dayjs.Dayjs | null) => {
     if (value) {
-      dispatch(setDropOff(value))
+      dispatch(setDropOff(value));
     }
-  }
+  };
   const total = cartItems.reduce(
     (previousValue: any, currentValue: any) =>
       previousValue + currentValue.price * currentValue.quantity,
-    0,
-  )
+    0
+  );
   useEffect(() => {
     if (user) {
-      setIsLoading(true)
+      setIsLoading(true);
       AddressService.getUserAddress().then((response) => {
-        setIsLoading(false)
-        dispatch(setUserAddressList(response.data.data))
-      })
+        setIsLoading(false);
+        dispatch(setUserAddressList(response.data.data));
+      });
     }
-  }, [])
+  }, [dispatch, user]);
 
-  const arr: any = []
+  const arr: any = [];
   cartItems.forEach((el: any) => {
     const abc = {
       id: el.id,
       quantity: el.quantity,
-    }
-    arr.push(abc)
-  })
+    };
+    arr.push(abc);
+  });
 
   const onCheckout = () => {
-    setToken(user?.token)
+    setToken(user?.token);
     const reqBody: any = {
       appUser: user?.id,
       appUserAddress: userAddress[0]?.id,
-      appUserDevice: Cartdata?.appUserDevice,
-      cartId: Cartdata?.id,
+      appUserDevice: cartData?.appUserDevice,
+      cartId: cartData?.id,
       dropDateTime: DropOff,
       pickupDateTime: PickUp,
-      promoCode: promocode,
-      tenant: Cartdata?.tenant,
+      promoCode,
+      tenant: cartData?.tenant,
       products: arr,
-    }
+    };
     if (!user) {
-      navigate('/auth/login')
+      navigate('/auth/login');
     }
     if (PickUp && DropOff) {
       cartService
         .updateCart(reqBody)
         .then((response) => {
-          dispatch(Cart(response.data.data.cart))
+          dispatch(Cart(response.data.data.cart));
           OrderService.addOrder({ cartId: response.data.data.cart.id }).then(
             (OrderResponse) => {
-              dispatch(newOrder(OrderResponse.data))
-              dispatch(setPickup(null))
-              dispatch(setDropOff(null))
-              localStorage.removeItem('CART_ITEMS')
-              dispatch(setInitialCart(null))
-              window.location.replace(OrderResponse.data.data.paymentUrl)
-            },
-          )
+              dispatch(newOrder(OrderResponse.data));
+              dispatch(setPickup(null));
+              dispatch(setDropOff(null));
+              removeItem('CART_ITEMS');
+              dispatch(setInitialCart(null));
+              window.location.replace(OrderResponse.data.data.paymentUrl);
+            }
+          );
         })
         .catch((error) => {
-          setAlertMsg(error.message)
-          setShowAlert(true)
-          setAlertSeverity('error')
-        })
+          setAlertMsg(error.message);
+          setShowAlert(true);
+          setAlertSeverity('error');
+        });
     } else {
-      setAlertMsg('Pickup Date & Drop off time is Required')
-      setShowAlert(true)
-      setAlertSeverity('error')
+      setAlertMsg('Pickup Date & Drop off time is Required');
+      setShowAlert(true);
+      setAlertSeverity('error');
     }
-  }
+  };
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       {showAlert && (
         <AlertBox
           msg={alertMsg}
-          setSeverty={alertSeverity}
+          setSeverity={alertSeverity}
           alertOpen={showAlert}
           setAlertOpen={setShowAlert}
         />
@@ -190,8 +187,8 @@ function MyBasketPage() {
                       inputProps={{
                         placeholder: 'Enter Promo Code',
                       }}
-                      value={promocode}
-                      onChange={(e) => setPromocode(e.target.value)}
+                      value={promoCode}
+                      onChange={(e) => setPromoCode(e.target.value)}
                       startAdornment={
                         <InputAdornment
                           className="text-orange-100"
@@ -312,7 +309,7 @@ function MyBasketPage() {
         </div>
       </div>
     </LocalizationProvider>
-  )
+  );
 }
 
-export default MyBasketPage
+export default MyBasketPage;

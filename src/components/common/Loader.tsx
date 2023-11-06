@@ -1,5 +1,5 @@
-import Backdrop from '@mui/material/Backdrop'
-import CircularProgress from '@mui/material/CircularProgress'
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function Loader() {
   return (
@@ -9,7 +9,7 @@ function Loader() {
         <CircularProgress color="inherit" />
       </Backdrop>
     </>
-  )
+  );
 }
 
-export default Loader
+export default Loader;

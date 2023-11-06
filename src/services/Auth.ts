@@ -1,24 +1,25 @@
-import network from '../utilities/network';
+import axios from 'axios';
 import {
   LoginPayload,
   OTPPayload,
   SignupPayload,
 } from '../interfaces/auth.interface';
-import { APP_USER_PREFIXES } from '../utilities/constant';
+import API_PATHS from '../utilities/API-PATHS';
+import { getHeaders } from '../utilities/constant';
 
 const signupService = (signupData: SignupPayload) => {
-  return network.post(`${APP_USER_PREFIXES}/sign-up/app`, signupData);
+  return axios.post(API_PATHS.signupService, signupData, getHeaders());
 };
 
 const otpService = (data: OTPPayload) => {
-  return network.post(`${APP_USER_PREFIXES}/get-otp`, data);
+  return axios.post(API_PATHS.otpService, data, getHeaders());
 };
 
-const LoginService = (data: LoginPayload) => {
-  return network.post(`${APP_USER_PREFIXES}/sign-in/app`, data);
+const loginService = (data: LoginPayload) => {
+  return axios.post(API_PATHS.loginService, data, getHeaders());
 };
 export default {
   signupService,
   otpService,
-  LoginService,
+  loginService,
 };

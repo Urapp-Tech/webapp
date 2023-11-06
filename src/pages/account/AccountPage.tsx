@@ -1,8 +1,8 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
+import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined';
-import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
+import { NavLink, Outlet } from 'react-router-dom';
 
 function AccountPage() {
   return (

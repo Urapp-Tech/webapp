@@ -1,22 +1,22 @@
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
+import dayjs from 'dayjs';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import OTPInput from 'react18-otp-input';
-import dayjs from 'dayjs';
 import assets from '../../../assets';
-import { getItem } from '../../../utilities/local-storage';
-import { useAppDispatch } from '../../../redux/redux-hooks';
-import { tenantId } from '../../../utilities/constant';
-import authService from '../../../services/Auth';
 import { login } from '../../../redux/features/authStateSlice';
+import { useAppDispatch } from '../../../redux/redux-hooks';
+import authService from '../../../services/Auth';
+import { tenantId } from '../../../utilities/constant';
+import { getItem } from '../../../utilities/local-storage';
 
 function OTPVerificationPage() {
   const [OTP, setOTP] = useState('');
-  const signupData = getItem('SignupData');
+  const signUpData = getItem('SIGN_UP_DATA');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const onsubmit = () => {
-    const code = Object.assign(signupData, {
+    const code = Object.assign(signUpData, {
       otp: OTP,
       tenant: tenantId,
       createdDate: dayjs().format(),

@@ -1,16 +1,16 @@
-import React from 'react'
+import React from 'react';
 
 function getCategoryClasses(isActive: boolean) {
-  const classes = 'item'
+  const classes = 'item';
 
   if (isActive) {
-    return `${classes} active shadow-lg`
+    return `${classes} active shadow-lg`;
   }
-  return classes
+  return classes;
 }
 interface ICategoryProps {
-  categories: any
-  onClick: (item: any) => void
+  categories: any;
+  onClick: (item: any) => void;
 }
 
 const colorArray = [
@@ -20,7 +20,7 @@ const colorArray = [
   'rgba(200, 217, 223, 0.956863)',
   'rgba(217, 217, 217, 0.956863)',
   '#ffe2e2',
-]
+];
 
 const CategoriesCard: React.FC<ICategoryProps> = ({
   categories,
@@ -47,7 +47,7 @@ const CategoriesCard: React.FC<ICategoryProps> = ({
           </button>
         ))}
     </div>
-  )
-}
+  );
+};
 
-export default CategoriesCard
+export default CategoriesCard;

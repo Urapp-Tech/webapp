@@ -1,101 +1,95 @@
-import { useCallback, useEffect, useState } from 'react'
-import Dialog from '@mui/material/Dialog'
-import DialogContent from '@mui/material/DialogContent'
-import DialogActions from '@mui/material/DialogActions'
-import Accordion from '@mui/material/Accordion'
-import AccordionSummary from '@mui/material/AccordionSummary'
-import AccordionDetails from '@mui/material/AccordionDetails'
-import Button from '@mui/material/Button'
-import IconButton from '@mui/material/IconButton'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import ClearIcon from '@mui/icons-material/Clear'
-import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined'
-import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined'
-import HomePagePopupClasses from './HomePagePopup.module.css'
-import assets from '../../assets'
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks'
-import { addToCart, Cart } from '../../redux/features/cartStateSlice'
-import cartService from '../../services/cart'
-import { getItem } from '../../utilities/local-storage'
-import AlertBox from '../../components/common/SnackBar'
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
+import ClearIcon from '@mui/icons-material/Clear';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import IconButton from '@mui/material/IconButton';
+import { useState } from 'react';
+import AlertBox from '../../components/common/SnackBar';
+import { Cart, addToCart } from '../../redux/features/cartStateSlice';
+import { useAppDispatch } from '../../redux/redux-hooks';
+import cartService from '../../services/cart';
 
 type Props = {
-  open: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  data: any
-  FAQs: any
-}
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  data: any;
+  FAQs: any;
+};
 
 function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
-  const [expanded, setExpanded] = useState<string | false>(false)
-  const dispatch = useAppDispatch()
-  const [count, setCount] = useState(1)
-  const [alertMsg, setAlertMsg] = useState<any>('')
-  const [showAlert, setShowAlert] = useState(false)
-  const [alertSeverity, setAlertSeverity] = useState('')
-  const Cartdata = getItem('RegisteredCart')
-  const arr: any = []
+  const [expanded, setExpanded] = useState<string | false>(false);
+  const dispatch = useAppDispatch();
+  const [count, setCount] = useState(1);
+  const [alertMsg, setAlertMsg] = useState<any>('');
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState('');
+  const arr: any = [];
 
-  const handleChange = (panel: string) => (
-    event: React.SyntheticEvent,
-    isExpanded: boolean,
-  ) => {
-    setExpanded(isExpanded ? panel : false)
-  }
+  const handleChange =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpanded(isExpanded ? panel : false);
+    };
   const incrementCount = () => {
-    setCount((previousCount) => previousCount + 1)
-  }
+    setCount((previousCount) => previousCount + 1);
+  };
   const decrementCount = () => {
     setCount((previousCount) => {
       if (previousCount <= 1) {
-        return 1
+        return 1;
       }
-      return previousCount - 1
-    })
-  }
+      return previousCount - 1;
+    });
+  };
 
-  const addToBasketHandler = (CartData: any) => {
-    dispatch(addToCart(CartData))
-    arr.push(...arr, { id: CartData.id, quantity: CartData.quantity })
+  const addToBasketHandler = (cartData: any) => {
+    dispatch(addToCart(cartData));
+    arr.push(...arr, { id: cartData.id, quantity: cartData.quantity });
     const reqBody = {
-      appUser: Cartdata?.appUser,
-      appUserAddress: Cartdata?.appUserAddres,
-      appUserDevice: Cartdata?.appUserDevice,
-      cartId: Cartdata?.id,
-      dropDateTime: Cartdata?.dropDateTime,
-      pickupDateTime: Cartdata?.pickupDateTime,
-      promoCode: Cartdata?.promoCode,
-      tenant: Cartdata?.tenant,
+      appUser: cartData?.appUser,
+      appUserAddress: cartData?.appUserAddress,
+      appUserDevice: cartData?.appUserDevice,
+      cartId: cartData?.id,
+      dropDateTime: cartData?.dropDateTime,
+      pickupDateTime: cartData?.pickupDateTime,
+      promoCode: cartData?.promoCode,
+      tenant: cartData?.tenant,
       products: arr,
-    }
+    };
     cartService
       .updateCart(reqBody)
       .then((response) => {
-        return dispatch(Cart(response.data.data.cart))
+        return dispatch(Cart(response.data.data.cart));
       })
       .catch((error) => {
-        setAlertMsg(error.message)
-        setShowAlert(true)
-        setAlertSeverity('error')
-      })
-    setAlertMsg('Item Successfully Added')
-    setShowAlert(true)
-    setAlertSeverity('success')
-    setOpen(false)
-    setCount(1)
-  }
+        setAlertMsg(error.message);
+        setShowAlert(true);
+        setAlertSeverity('error');
+      });
+    setAlertMsg('Item Successfully Added');
+    setShowAlert(true);
+    setAlertSeverity('success');
+    setOpen(false);
+    setCount(1);
+  };
   const onCloseHandler = (event: object, reason: string) => {
     if (reason === 'backdropClick') {
-      setOpen(false)
+      setOpen(false);
     }
-  }
+  };
 
   return (
     <>
       {showAlert && (
         <AlertBox
           msg={alertMsg}
-          setSeverty={alertSeverity}
+          setSeverity={alertSeverity}
           alertOpen={showAlert}
           setAlertOpen={setShowAlert}
         />
@@ -144,7 +138,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
               </div>
             </div>
             {FAQs?.map((faq: any, index: any) => (
-              <div className="product-accordion">
+              <div className="product-accordion" key={index}>
                 <Accordion
                   key={index}
                   className="accordion-item"
@@ -177,8 +171,8 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
                 name: data?.name,
                 price: data?.price,
                 quantity: count,
-              }
-              addToBasketHandler(cartItem)
+              };
+              addToBasketHandler(cartItem);
             }}
           >
             Add to Basket
@@ -186,7 +180,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
         </DialogActions>
       </Dialog>
     </>
-  )
+  );
 }
 
-export default HomePagePopup
+export default HomePagePopup;

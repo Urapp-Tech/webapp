@@ -1,8 +1,8 @@
-import { NavLink } from 'react-router-dom';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Input from '@mui/material/Input';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
+import FormControl from '@mui/material/FormControl';
+import Input from '@mui/material/Input';
+import InputLabel from '@mui/material/InputLabel';
+import { NavLink } from 'react-router-dom';
 import assets from '../../../assets';
 
 function ForgotPasswordPage() {

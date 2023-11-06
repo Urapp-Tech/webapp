@@ -1,41 +1,39 @@
-import { useEffect, useRef, useState } from 'react'
-import { NavLink } from 'react-router-dom'
-import AppBar from '@mui/material/AppBar'
-import Toolbar from '@mui/material/Toolbar'
-import Badge from '@mui/material/Badge'
-import IconButton from '@mui/material/IconButton'
-import MenuIcon from '@mui/icons-material/Menu'
-import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
-import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined'
-import NotificationPopover from './NotificationPopover'
-import { useAppSelector } from '../../redux/redux-hooks'
-import assets from '../../assets'
-import { setToken } from '../../utilities/constant'
-import Notification from '../../services/Notification'
-import { getItem } from '../../utilities/local-storage'
+import MenuIcon from '@mui/icons-material/Menu';
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
+import AppBar from '@mui/material/AppBar';
+import Badge from '@mui/material/Badge';
+import IconButton from '@mui/material/IconButton';
+import Toolbar from '@mui/material/Toolbar';
+import { useEffect, useRef, useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import assets from '../../assets';
+import { useAppSelector } from '../../redux/redux-hooks';
+import Notification from '../../services/Notification';
+import { setToken } from '../../utilities/constant';
+import { getItem } from '../../utilities/local-storage';
+import NotificationPopover from './NotificationPopover';
 
 function TopBar() {
-  const [
-    notificationElement,
-    setNotificationElement,
-  ] = useState<HTMLButtonElement | null>(null)
-  const notificationIconButtonElement = useRef(null)
+  const [notificationElement, setNotificationElement] =
+    useState<HTMLButtonElement | null>(null);
+  const notificationIconButtonElement = useRef(null);
   const handleClick = () => {
-    setNotificationElement(notificationIconButtonElement.current)
-  }
-  const { cartItems }: any = useAppSelector((state) => state.cartState)
-  const user = getItem('user')
-  const [notificationList, setNotificationList] = useState([])
+    setNotificationElement(notificationIconButtonElement.current);
+  };
+  const { cartItems }: any = useAppSelector((state) => state.cartState);
+  const user = getItem('USER');
+  const [notificationList, setNotificationList] = useState([]);
   useEffect(() => {
     if (user) {
-      setToken(user?.token)
-      Notification.NetworkService()
+      setToken(user?.token);
+      Notification.notificationListService()
         .then((response) =>
-          setNotificationList(response.data.data.notifications),
+          setNotificationList(response.data.data.notifications)
         )
-        .catch((error) => console.log(error))
+        .catch((error) => console.log(error));
     }
-  }, [])
+  }, [user]);
   return (
     <AppBar position="fixed" className="topbar">
       <Toolbar>
@@ -97,7 +95,7 @@ function TopBar() {
         </div>
       </Toolbar>
     </AppBar>
-  )
+  );
 }
 
-export default TopBar
+export default TopBar;

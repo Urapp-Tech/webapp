@@ -1,21 +1,21 @@
-import Dialog from '@mui/material/Dialog'
-import DialogContent from '@mui/material/DialogContent'
-import DialogActions from '@mui/material/DialogActions'
-import Button from '@mui/material/Button'
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
 
 type Props = {
-  open: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  onDelete: () => void
-}
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onDelete: () => void;
+};
 
 function DeleteAddressPopup({ open, setOpen, onDelete }: Props) {
   const onCloseHandler = (event: object, reason: string) => {
     if (reason === 'backdropClick') {
-      setOpen(false)
+      setOpen(false);
     }
-  }
+  };
   return (
     <Dialog
       onClose={onCloseHandler}
@@ -30,8 +30,8 @@ function DeleteAddressPopup({ open, setOpen, onDelete }: Props) {
       <DialogActions className="modal-footer">
         <Button
           onClick={() => {
-            onDelete()
-            setOpen(false)
+            onDelete();
+            setOpen(false);
           }}
           className="btn-yes"
           type="button"
@@ -49,7 +49,7 @@ function DeleteAddressPopup({ open, setOpen, onDelete }: Props) {
         </Button>
       </DialogActions>
     </Dialog>
-  )
+  );
 }
 
-export default DeleteAddressPopup
+export default DeleteAddressPopup;

@@ -1,44 +1,45 @@
-import FormControl from '@mui/material/FormControl'
-import Input from '@mui/material/Input'
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
-import { useEffect, useState } from 'react'
-import TableRow from './TableRow'
-import { setToken } from '../../utilities/constant'
-import OrderService from '../../services/Order'
-import { getItem, setItem } from '../../utilities/local-storage'
-import AlertBox from '../../components/common/SnackBar'
-import Loader from '../../components/common/Loader'
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import FormControl from '@mui/material/FormControl';
+import Input from '@mui/material/Input';
+import { useEffect, useState } from 'react';
+import Loader from '../../components/common/Loader';
+import AlertBox from '../../components/common/SnackBar';
+import OrderService from '../../services/Order';
+import { setToken } from '../../utilities/constant';
+import { getItem, setItem } from '../../utilities/local-storage';
+import TableRow from './TableRow';
 
 function OrdersPage() {
-  const user = getItem('user')
-  const [orders, setOrders] = useState<any>([])
-  const [alertMsg, setAlertMsg] = useState<any>('')
-  const [showAlert, setShowAlert] = useState(false)
-  const [alertSeverity, setAlertSeverity] = useState('')
-  const [search, setSearch] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  setToken(user?.token)
+  const [orders, setOrders] = useState<any>([]);
+  const [alertMsg, setAlertMsg] = useState<any>('');
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState('');
+  const [search, setSearch] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
+    const user = getItem('USER');
+    setToken(user?.token);
+
     if (user) {
-      setIsLoading(true)
+      setIsLoading(true);
       OrderService.orderList()
         .then((response) => {
-          setIsLoading(false)
-          setOrders(response.data.data)
-          setItem('OrderItem', response.data.data)
+          setIsLoading(false);
+          setOrders(response.data.data);
+          setItem('ORDER_ITEM', response.data.data);
         })
         .catch((error) => {
-          setAlertMsg(error.message)
-          setShowAlert(true)
-          setAlertSeverity('error')
-        })
+          setAlertMsg(error.message);
+          setShowAlert(true);
+          setAlertSeverity('error');
+        });
     }
-  }, [])
+  }, []);
   const searchOrder = orders?.orders?.filter(
     (el: any) =>
       el.orderNumber.toLowerCase().includes(search.toLowerCase()) ||
-      el.status.toLowerCase().includes(search.toLowerCase()),
-  )
+      el.status.toLowerCase().includes(search.toLowerCase())
+  );
   return isLoading ? (
     <Loader />
   ) : (
@@ -46,7 +47,7 @@ function OrdersPage() {
       {showAlert && (
         <AlertBox
           msg={alertMsg}
-          setSeverty={alertSeverity}
+          setSeverity={alertSeverity}
           alertOpen={showAlert}
           setAlertOpen={setShowAlert}
         />
@@ -94,7 +95,7 @@ function OrdersPage() {
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default OrdersPage
+export default OrdersPage;

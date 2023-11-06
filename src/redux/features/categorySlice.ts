@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CategoryPayload } from '../../interfaces/Category';
+import { CategoryPayload } from '../../interfaces/category.interface';
 
 type CategoryState = {
-  CategoryList: CategoryPayload[];
+  categoryList: CategoryPayload[];
   subCategory: [];
 };
 
 const initialState: CategoryState = {
-  CategoryList: [],
+  categoryList: [],
   subCategory: [],
 };
 
@@ -16,7 +16,7 @@ export const CategorySliceReducer = createSlice({
   initialState,
   reducers: {
     category: (state, action: PayloadAction<CategoryPayload[]>) => {
-      state.CategoryList = action.payload;
+      state.categoryList = action.payload;
     },
   },
 });

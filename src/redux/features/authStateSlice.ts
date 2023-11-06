@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { removeItem, setItem } from '../../utilities/local-storage';
 
 type RegisteredUser = {
   email: string;
@@ -29,11 +30,11 @@ export const authStateSlice = createSlice({
   reducers: {
     login: (state, action: PayloadAction<RegisteredUser>) => {
       state.user = action.payload;
-      localStorage.setItem('user', JSON.stringify(action.payload));
+      setItem('USER', action.payload);
     },
     logout: (state) => {
       state.user = null;
-      localStorage.clear();
+      removeItem('USER');
     },
   },
 });

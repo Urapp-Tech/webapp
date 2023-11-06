@@ -1,30 +1,33 @@
-import devNetwork from '../utilities/devNetwork'
+import axios from 'axios';
+import API_PATHS from '../utilities/API-PATHS';
+import { getHeaders } from '../utilities/constant';
 
 export interface AddressPayload {
-  name: string
-  address: string
-  type: string
-  latitude: number
-  longitude: number
+  name: string;
+  address: string;
+  type: string;
+  latitude: number;
+  longitude: number;
 }
 
 const getUserAddress = () => {
-  return devNetwork.get('appUserAddress/list')
-}
-const userAddress = (data: AddressPayload) => {
-  return devNetwork.post(`appUserAddress/add`, data)
-}
+  return axios.get(API_PATHS.getUserAddress, getHeaders());
+};
 
-const UpdateAddressStatus = (tenantId: string, id: string) => {
-  return devNetwork.put(`appUserAddress/update/status/${tenantId}/${id}`, {})
-}
-const deleteUserAddress = (tenantId: string, id: string) => {
-  return devNetwork.delete(`appUserAddress/delete/${tenantId}/${id}`)
-}
+const userAddress = (data: AddressPayload) => {
+  return axios.post(API_PATHS.userAddress, data, getHeaders());
+};
+
+const updateAddressStatus = (id: string) => {
+  return axios.put(API_PATHS.UpdateAddressStatus(id), {}, getHeaders());
+};
+const deleteUserAddress = (id: string) => {
+  return axios.delete(API_PATHS.deleteUserAddress(id), getHeaders());
+};
 
 export default {
   userAddress,
   getUserAddress,
-  UpdateAddressStatus,
+  updateAddressStatus,
   deleteUserAddress,
-}
+};

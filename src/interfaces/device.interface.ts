@@ -1,4 +1,4 @@
-export interface DeviceRegisteration {
+export interface DeviceRegistration {
   token: string;
   deviceType: string;
   appUser?: string | null;

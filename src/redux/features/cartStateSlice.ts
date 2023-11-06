@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { getItem, setItem } from '../../utilities/local-storage';
 
 export type CartItem = {
@@ -46,7 +46,7 @@ export const cartSlice: any = createSlice({
   initialState,
   reducers: {
     getCart: (state, action: PayloadAction<GetCart>) => {
-      setItem('RegisteredCart', action.payload);
+      setItem('REGISTERED_CART', action.payload);
       state.getCart = action.payload;
     },
     Cart: (state, action: PayloadAction<null>) => {
@@ -64,24 +64,24 @@ export const cartSlice: any = createSlice({
       );
       if (cartItemIndex === -1) {
         state.cartItems.push(action.payload);
-        localStorage.setItem('CART_ITEMS', JSON.stringify(state.cartItems));
+        setItem('CART_ITEMS', state.cartItems);
         return;
       }
       state.cartItems[cartItemIndex].quantity += action.payload.quantity;
-      localStorage.setItem('CART_ITEMS', JSON.stringify(state.cartItems));
+      setItem('CART_ITEMS', state.cartItems);
     },
     removeFromCart: (state, action: PayloadAction<number>) => {
       state.cartItems = state.cartItems.filter(
         (item) => item.id !== action.payload
       );
-      localStorage.setItem('CART_ITEMS', JSON.stringify(state.cartItems));
+      setItem('CART_ITEMS', state.cartItems);
     },
     incrementItemQuantity: (state, action: PayloadAction<number>) => {
       const cartItemIndex = state.cartItems.findIndex(
         (item) => item.id === action.payload
       );
       state.cartItems[cartItemIndex].quantity += 1;
-      localStorage.setItem('CART_ITEMS', JSON.stringify(state.cartItems));
+      setItem('CART_ITEMS', state.cartItems);
     },
     decrementQuantity: (state, action: PayloadAction<number>) => {
       const cartItemIndex = state.cartItems.findIndex(
@@ -89,10 +89,10 @@ export const cartSlice: any = createSlice({
       );
       if (state.cartItems[cartItemIndex].quantity <= 0) {
         state.cartItems[cartItemIndex].quantity = 0;
-        localStorage.setItem('CART_ITEMS', JSON.stringify(state.cartItems));
+        setItem('CART_ITEMS', state.cartItems);
       }
       state.cartItems[cartItemIndex].quantity -= 1;
-      localStorage.setItem('CART_ITEMS', JSON.stringify(state.cartItems));
+      setItem('CART_ITEMS', state.cartItems);
     },
     newOrder: (state, action: PayloadAction<[]>) => {
       state.newOrder = action.payload;
