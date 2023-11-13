@@ -5,6 +5,8 @@ import authStateReducer from './features/authStateSlice';
 import cartStateReducer from './features/cartStateSlice';
 import CategoryStateReducer from './features/categorySlice';
 import deviceStateReducer from './features/deviceState';
+import { categoryAPI } from './features/categorySliceAPI';
+import { orderAPI } from './features/orderStateSliceAPI';
 
 export const store = configureStore({
   reducer: {
@@ -14,7 +16,11 @@ export const store = configureStore({
     deviceStates: deviceStateReducer,
     categoryState: CategoryStateReducer,
     dateState: dateStateReducer,
+    [categoryAPI.reducerPath]: categoryAPI.reducer,
+    [orderAPI.reducerPath]: orderAPI.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(categoryAPI.middleware, orderAPI.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

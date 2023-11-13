@@ -38,7 +38,6 @@ function getProgressClasses(type: Status) {
   if (type === 'PickedUp') {
     return `${temp} icon-order-picked-up`;
   }
-
   return `${temp} icon-order-delivered`;
 }
 function getStatusText(type: Status) {
@@ -46,13 +45,13 @@ function getStatusText(type: Status) {
     return 'New';
   }
   if (type === 'Processing') {
-    return 'Order In Progess';
+    return 'Order In Progress';
   }
   if (type === 'In-Delivery') {
     return 'Order Is In Delivery';
   }
   if (type === 'Delivered') {
-    return 'Order In Progess';
+    return 'Order In Progress';
   }
   if (type === 'Cancelled') {
     return 'Order Is Cancelled';
@@ -62,6 +61,7 @@ function getStatusText(type: Status) {
   }
   return 'New';
 }
+
 function getStatusClasses(type: Status) {
   const statusClass = 'order-status';
   if (type === 'New') {

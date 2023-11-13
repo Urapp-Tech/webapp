@@ -10,11 +10,12 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AlertBox from '../../components/common/SnackBar';
-import { Cart, addToCart } from '../../redux/features/cartStateSlice';
-import { useAppDispatch } from '../../redux/redux-hooks';
-import cartService from '../../services/cart';
+import { addToCart, setCartData } from '../../redux/features/cartStateSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import cartService, { UpdateCartPayload } from '../../services/cart';
+import { tenantId } from '../../utilities/constant';
 
 type Props = {
   open: boolean;
@@ -24,13 +25,17 @@ type Props = {
 };
 
 function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
-  const [expanded, setExpanded] = useState<string | false>(false);
+  const user = useAppSelector((state) => state.authState.user);
+  const cartItems = useAppSelector((state) => state.cartState.cartItems);
+  const cartData = useAppSelector((state) => state.cartState.cartData);
+  const deviceData = useAppSelector((state) => state.deviceStates.deviceData);
   const dispatch = useAppDispatch();
+
+  const [expanded, setExpanded] = useState<string | false>(false);
   const [count, setCount] = useState(1);
   const [alertMsg, setAlertMsg] = useState<any>('');
   const [showAlert, setShowAlert] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState('');
-  const arr: any = [];
 
   const handleChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -48,24 +53,38 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
     });
   };
 
-  const addToBasketHandler = (cartData: any) => {
-    dispatch(addToCart(cartData));
-    arr.push(...arr, { id: cartData.id, quantity: cartData.quantity });
-    const reqBody = {
-      appUser: cartData?.appUser,
-      appUserAddress: cartData?.appUserAddress,
-      appUserDevice: cartData?.appUserDevice,
-      cartId: cartData?.id,
-      dropDateTime: cartData?.dropDateTime,
-      pickupDateTime: cartData?.pickupDateTime,
-      promoCode: cartData?.promoCode,
-      tenant: cartData?.tenant,
-      products: arr,
+  const addToBasketHandler = (tempCartData: any) => {
+    dispatch(addToCart(tempCartData));
+    setOpen(false);
+    setCount(1);
+  };
+
+  useEffect(() => {
+    if (!cartData) {
+      return;
+    }
+    if (!cartItems.length) {
+      return;
+    }
+    const tempCartItems = cartItems.map((item) => ({
+      id: item.id,
+      quantity: item.buyCount,
+    }));
+    const reqBody: UpdateCartPayload = {
+      appUser: user?.id ?? null,
+      appUserDevice: deviceData?.id ?? null,
+      cartId: cartData.id,
+      tenant: tenantId,
+      products: tempCartItems,
+      appUserAddress: undefined,
+      pickupDateTime: undefined,
+      dropDateTime: undefined,
+      promoCode: undefined,
     };
     cartService
       .updateCart(reqBody)
       .then((response) => {
-        return dispatch(Cart(response.data.data.cart));
+        return dispatch(setCartData(response.data.data.cart));
       })
       .catch((error) => {
         setAlertMsg(error.message);
@@ -75,9 +94,9 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
     setAlertMsg('Item Successfully Added');
     setShowAlert(true);
     setAlertSeverity('success');
-    setOpen(false);
-    setCount(1);
-  };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cartItems]);
   const onCloseHandler = (event: object, reason: string) => {
     if (reason === 'backdropClick') {
       setOpen(false);
@@ -166,11 +185,8 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
             className="btn-add"
             onClick={() => {
               const cartItem = {
-                id: data?.id,
-                image: data?.icon,
-                name: data?.name,
-                price: data?.price,
-                quantity: count,
+                ...data,
+                buyCount: count,
               };
               addToBasketHandler(cartItem);
             }}

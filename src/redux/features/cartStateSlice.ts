@@ -3,22 +3,23 @@ import { createSlice } from '@reduxjs/toolkit';
 import { getItem, setItem } from '../../utilities/local-storage';
 
 export type CartItem = {
-  id: number;
+  id: string;
   price: number;
   name: string;
   image: string;
   quantity: number;
+  buyCount: number;
 };
 
-export type GetCart = {
+export type CartData = {
   appUser: string | null;
-  appUserAddres: string | null;
+  appUserAddress: string | null;
   appUserDevice: string;
   createdDate: string;
   dropDateTime: string | null;
   grandTotal: string;
   gstAmount: string;
-  gstPercentage: 10;
+  gstPercentage: number;
   id: string;
   pickupDateTime: string | null;
   promoCode: string | null;
@@ -29,69 +30,74 @@ export type GetCart = {
 };
 export interface CartState {
   cartItems: CartItem[];
-  getCart: GetCart | null;
-  cartData: null;
+  cartData: CartData | null;
   newOrder: [] | null;
 }
 
+const initialCartItems = getItem<CartItem[]>('CART_ITEMS') ?? [];
+
+const initialCartData = getItem<CartData>('REGISTERED_CART') ?? null;
+
 const initialState: CartState = {
-  cartItems: [],
-  getCart: null,
-  cartData: null,
+  cartItems: initialCartItems,
+  cartData: initialCartData,
   newOrder: null,
 };
 
-export const cartSlice: any = createSlice({
+export const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    getCart: (state, action: PayloadAction<GetCart>) => {
+    setCartData: (state, action: PayloadAction<null>) => {
       setItem('REGISTERED_CART', action.payload);
-      state.getCart = action.payload;
-    },
-    Cart: (state, action: PayloadAction<null>) => {
       state.cartData = action.payload;
     },
-    setInitialCart: (state) => {
-      const cartItems = getItem<CartItem[]>('CART_ITEMS');
-      if (cartItems) {
-        state.cartItems = cartItems;
-      }
-    },
-    addToCart: (state, action: PayloadAction<CartItem>) => {
+    addToCart: (state, action: PayloadAction<any>) => {
       const cartItemIndex = state.cartItems.findIndex(
         (item) => item.id === action.payload.id
       );
       if (cartItemIndex === -1) {
-        state.cartItems.push(action.payload);
+        state.cartItems.push({
+          id: action.payload.id,
+          price: action.payload.price,
+          name: action.payload.name,
+          image: action.payload.banner,
+          quantity: action.payload.quantity,
+          buyCount: action.payload.buyCount,
+        });
         setItem('CART_ITEMS', state.cartItems);
         return;
       }
-      state.cartItems[cartItemIndex].quantity += action.payload.quantity;
+      state.cartItems[cartItemIndex].buyCount += action.payload.buyCount;
       setItem('CART_ITEMS', state.cartItems);
     },
-    removeFromCart: (state, action: PayloadAction<number>) => {
+    removeFromCart: (state, action: PayloadAction<string>) => {
       state.cartItems = state.cartItems.filter(
         (item) => item.id !== action.payload
       );
       setItem('CART_ITEMS', state.cartItems);
     },
-    incrementItemQuantity: (state, action: PayloadAction<number>) => {
+    incrementItemQuantity: (state, action: PayloadAction<string>) => {
       const cartItemIndex = state.cartItems.findIndex(
         (item) => item.id === action.payload
       );
-      state.cartItems[cartItemIndex].quantity += 1;
+      if (
+        state.cartItems[cartItemIndex].buyCount <
+        state.cartItems[cartItemIndex].quantity
+      ) {
+        state.cartItems[cartItemIndex].buyCount += 1;
+      }
       setItem('CART_ITEMS', state.cartItems);
     },
-    decrementQuantity: (state, action: PayloadAction<number>) => {
+    decrementQuantity: (state, action: PayloadAction<string>) => {
       const cartItemIndex = state.cartItems.findIndex(
         (item) => item.id === action.payload
       );
-      if (state.cartItems[cartItemIndex].quantity <= 0) {
-        state.cartItems[cartItemIndex].quantity = 0;
+      if (state.cartItems[cartItemIndex].buyCount <= 0) {
+        state.cartItems[cartItemIndex].buyCount = 0;
         setItem('CART_ITEMS', state.cartItems);
       }
-      state.cartItems[cartItemIndex].quantity -= 1;
+      state.cartItems[cartItemIndex].buyCount -= 1;
       setItem('CART_ITEMS', state.cartItems);
     },
     newOrder: (state, action: PayloadAction<[]>) => {
@@ -106,9 +112,7 @@ export const {
   removeFromCart,
   incrementItemQuantity,
   decrementQuantity,
-  setInitialCart,
-  getCart,
-  Cart,
+  setCartData,
   newOrder,
 } = cartSlice.actions;
 

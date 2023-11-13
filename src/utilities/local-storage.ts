@@ -15,11 +15,19 @@ export function setItem<T = any>(key: Key, value: T) {
 export function getItem<T = any>(key: Key) {
   const stringifiedValue = localStorage.getItem(key);
   if (stringifiedValue) {
-    return JSON.parse(stringifiedValue) as T;
+    try {
+      return JSON.parse(stringifiedValue) as T;
+    } catch (error) {
+      return null;
+    }
   }
   return null;
 }
 
 export function removeItem(key: Key) {
   localStorage.removeItem(key);
+}
+
+export function clear() {
+  localStorage.clear();
 }

@@ -14,7 +14,7 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { setDropOff, setPickup } from '../../redux/features/DateAndTime';
 import { logout } from '../../redux/features/authStateSlice';
-import { useAppDispatch } from '../../redux/redux-hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { getItem } from '../../utilities/local-storage';
 
 const links = [
@@ -64,8 +64,8 @@ const links = [
 ];
 
 function Sidebar() {
+  const user = useAppSelector((state) => state.authState.user);
   const dispatch = useAppDispatch();
-  const user = getItem('USER');
   const [LoginUser, setLoginUser] = useState(user);
 
   const handleLogout = () => {

@@ -10,23 +10,20 @@ import { NavLink } from 'react-router-dom';
 import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
 import Notification from '../../services/Notification';
-import { setToken } from '../../utilities/constant';
-import { getItem } from '../../utilities/local-storage';
 import NotificationPopover from './NotificationPopover';
 
 function TopBar() {
+  const user = useAppSelector((state) => state.authState.user);
+  const { cartItems }: any = useAppSelector((state) => state.cartState);
   const [notificationElement, setNotificationElement] =
     useState<HTMLButtonElement | null>(null);
   const notificationIconButtonElement = useRef(null);
   const handleClick = () => {
     setNotificationElement(notificationIconButtonElement.current);
   };
-  const { cartItems }: any = useAppSelector((state) => state.cartState);
-  const user = getItem('USER');
   const [notificationList, setNotificationList] = useState([]);
   useEffect(() => {
     if (user) {
-      setToken(user?.token);
       Notification.notificationListService()
         .then((response) =>
           setNotificationList(response.data.data.notifications)

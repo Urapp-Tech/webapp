@@ -15,21 +15,22 @@ import IconButton from '@mui/material/IconButton';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import AlertBox from '../../components/common/SnackBar';
+import { useAppSelector } from '../../redux/redux-hooks';
 import OrderServices from '../../services/Order';
 import {
   ORDER_STATUSES,
   ORDER_STATUS_IN_DELIVERY,
-  setToken,
 } from '../../utilities/constant';
 import { getItem } from '../../utilities/local-storage';
 import DatePickerButton from '../my-basket/DatePickerButton';
 import OrderDetailsPagePopup from './OrderDetailsPagePopup';
 
 function OrderDetailsPage() {
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const user = useAppSelector((state) => state.authState.user);
   const navigate = useNavigate();
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [orderItemDetail, setOrderItemDetail] = useState<any>();
   const [pickUpTime, setPickUpTime] = useState<dayjs.Dayjs | null>(null);
   const [dropOffTime, setDropOffTime] = useState<dayjs.Dayjs | null>(null);
@@ -37,10 +38,10 @@ function OrderDetailsPage() {
   const [showAlert, setShowAlert] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState('');
   const [orderCanceled, setOrderCanceled] = useState(false);
-  const user = getItem('USER');
   const items = getItem('ORDER_ITEM');
   const address = getItem('ADDRESS');
   const AddressList = address.map((el: any) => el);
+  const { id } = useParams();
   const userAddress = AddressList?.find(
     (el: any) => el.id === orderItemDetail?.appUserAddress
   );
@@ -49,17 +50,12 @@ function OrderDetailsPage() {
   console.log(orderItemDetail);
   useEffect(() => {
     if (user) {
-      setToken(user?.token);
       const orderDetail = async () => {
         try {
-          const id = await window.location.pathname.slice(
-            window.location.pathname.lastIndexOf('/') + 1
-          );
-
-          const Details = items?.orders.find(
+          const details = items?.orders.find(
             (el: any) => el.appOrderNumber === id
           );
-          OrderServices.orderDetail(Details.id).then((response) =>
+          OrderServices.orderDetail(details.id).then((response) =>
             setOrderItemDetail(response.data.data)
           );
         } catch (error) {

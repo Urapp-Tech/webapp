@@ -18,7 +18,6 @@ import { setUserAddressList } from '../../../redux/features/deviceState';
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
 import AddressService from '../../../services/Address';
 import authService from '../../../services/Auth';
-import { setToken } from '../../../utilities/constant';
 import promiseHandler from '../../../utilities/promise-handler';
 
 function LoginPage() {
@@ -52,7 +51,6 @@ function LoginPage() {
     }
     if (loginResponse.data.success) {
       dispatch(login(loginResponse.data.data));
-      setToken(loginResponse.data.data.token);
       const addressPromise = AddressService.getUserAddress();
       const [addressResponse, addressError] = await promiseHandler(
         addressPromise

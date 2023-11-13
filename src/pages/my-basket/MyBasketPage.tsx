@@ -17,17 +17,15 @@ import { useNavigate } from 'react-router-dom';
 import AlertBox from '../../components/common/SnackBar';
 import { setDropOff, setPickup } from '../../redux/features/DateAndTime';
 import {
-  Cart,
   newOrder,
   removeFromCart,
-  setInitialCart,
+  setCartData,
 } from '../../redux/features/cartStateSlice';
 import { setUserAddressList } from '../../redux/features/deviceState';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import AddressService from '../../services/Address';
 import OrderService from '../../services/Order';
 import cartService from '../../services/cart';
-import { setToken } from '../../utilities/constant';
 import { getItem, removeItem } from '../../utilities/local-storage';
 import DatePickerButton from './DatePickerButton';
 
@@ -42,7 +40,7 @@ function MyBasketPage() {
   const [showAlert, setShowAlert] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const user = getItem('USER');
+  const user = useAppSelector((state) => state.authState.user);
   const userAddress = useAppSelector(
     (state: any) => state.deviceStates.AddressList
   );
@@ -82,7 +80,6 @@ function MyBasketPage() {
   });
 
   const onCheckout = () => {
-    setToken(user?.token);
     const reqBody: any = {
       appUser: user?.id,
       appUserAddress: userAddress[0]?.id,
@@ -101,14 +98,13 @@ function MyBasketPage() {
       cartService
         .updateCart(reqBody)
         .then((response) => {
-          dispatch(Cart(response.data.data.cart));
+          dispatch(setCartData(response.data.data.cart));
           OrderService.addOrder({ cartId: response.data.data.cart.id }).then(
             (OrderResponse) => {
               dispatch(newOrder(OrderResponse.data));
               dispatch(setPickup(null));
               dispatch(setDropOff(null));
               removeItem('CART_ITEMS');
-              dispatch(setInitialCart(null));
               window.location.replace(OrderResponse.data.data.paymentUrl);
             }
           );

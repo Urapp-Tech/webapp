@@ -3,12 +3,11 @@ import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import Loader from '../../components/common/Loader';
 import AlertBox from '../../components/common/SnackBar';
+import { useAppSelector } from '../../redux/redux-hooks';
 import ProfileApi from '../../services/Profile';
-import { setToken } from '../../utilities/constant';
-import { getItem } from '../../utilities/local-storage';
 
 function AccountProfilePage() {
-  const user = getItem('USER');
+  const user = useAppSelector((state) => state.authState.user);
   const [alertMsg, setAlertMsg] = useState<any>('');
   const [showAlert, setShowAlert] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState('');
@@ -22,7 +21,6 @@ function AccountProfilePage() {
 
   useEffect(() => {
     setIsLoading(true);
-    setToken(user?.token);
     ProfileApi.profileService()
       .then((response) => {
         setIsLoading(false);

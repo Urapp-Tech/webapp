@@ -4,43 +4,38 @@ import Input from '@mui/material/Input';
 import { useEffect, useState } from 'react';
 import Loader from '../../components/common/Loader';
 import AlertBox from '../../components/common/SnackBar';
-import OrderService from '../../services/Order';
-import { setToken } from '../../utilities/constant';
-import { getItem, setItem } from '../../utilities/local-storage';
+import { useOrderListQuery } from '../../redux/features/orderStateSliceAPI';
+import { setItem } from '../../utilities/local-storage';
 import TableRow from './TableRow';
 
 function OrdersPage() {
-  const [orders, setOrders] = useState<any>([]);
   const [alertMsg, setAlertMsg] = useState<any>('');
   const [showAlert, setShowAlert] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState('');
   const [search, setSearch] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  useEffect(() => {
-    const user = getItem('USER');
-    setToken(user?.token);
 
-    if (user) {
-      setIsLoading(true);
-      OrderService.orderList()
-        .then((response) => {
-          setIsLoading(false);
-          setOrders(response.data.data);
-          setItem('ORDER_ITEM', response.data.data);
-        })
-        .catch((error) => {
-          setAlertMsg(error.message);
-          setShowAlert(true);
-          setAlertSeverity('error');
-        });
+  const { isLoading: isOrderListLoading, data: orderListData } =
+    useOrderListQuery('');
+
+  useEffect(() => {
+    if (isOrderListLoading) {
+      return;
     }
-  }, []);
-  const searchOrder = orders?.orders?.filter(
+    if (orderListData.success) {
+      setItem('ORDER_ITEM', orderListData.data);
+      return;
+    }
+    setAlertMsg(orderListData.message);
+    setShowAlert(true);
+    setAlertSeverity('error');
+  }, [isOrderListLoading, orderListData]);
+
+  const searchOrder = orderListData?.orders?.filter(
     (el: any) =>
       el.orderNumber.toLowerCase().includes(search.toLowerCase()) ||
       el.status.toLowerCase().includes(search.toLowerCase())
   );
-  return isLoading ? (
+  return isOrderListLoading ? (
     <Loader />
   ) : (
     <>

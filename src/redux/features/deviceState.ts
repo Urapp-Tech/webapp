@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { setItem } from '../../utilities/local-storage';
+import { getItem, setItem } from '../../utilities/local-storage';
 
 type DevicePayload = {
   deviceId: string;
@@ -12,21 +12,23 @@ type DevicePayload = {
 };
 
 type DeviceState = {
-  DeviceData: DevicePayload | null;
+  deviceData: DevicePayload | null;
   Address: string;
   AddressList: [];
 };
+
+const initialDeviceData = getItem<DevicePayload>('DEVICE_DATA');
 const initialState: DeviceState = {
-  DeviceData: null,
+  deviceData: initialDeviceData,
   Address: '',
   AddressList: [],
 };
-export const deviceStateSlice: any = createSlice({
+export const deviceStateSlice = createSlice({
   name: 'device',
   initialState,
   reducers: {
     setDeviceData: (state, action: PayloadAction<DevicePayload>) => {
-      state.DeviceData = action.payload;
+      state.deviceData = action.payload;
       setItem('DEVICE_DATA', action.payload);
     },
     setUserAddress: (state, action: PayloadAction<string>) => {

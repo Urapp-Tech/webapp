@@ -1,5 +1,3 @@
-import React from 'react';
-
 function getCategoryClasses(isActive: boolean) {
   const classes = 'item';
 
@@ -22,18 +20,14 @@ const colorArray = [
   '#ffe2e2',
 ];
 
-const CategoriesCard: React.FC<ICategoryProps> = ({
-  categories,
-  onClick,
-  ...props
-}) => {
+function CategoriesCard({ categories, onClick }: ICategoryProps) {
   return (
-    <div className={`categories-list`} {...props}>
-      {categories &&
+    <div className="categories-list">
+      {categories.length &&
         categories.map((category: any, index: number) => (
           <button
             type="button"
-            onClick={() => onClick(category)}
+            onClick={() => onClick(category.id)}
             key={category.id}
             className={getCategoryClasses(category.id === categories?.id)}
             style={{
@@ -48,6 +42,6 @@ const CategoriesCard: React.FC<ICategoryProps> = ({
         ))}
     </div>
   );
-};
+}
 
 export default CategoriesCard;

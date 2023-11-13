@@ -2,9 +2,10 @@ import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNone
 import Popover from '@mui/material/Popover';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { logout } from '../../redux/features/authStateSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import Notification from '../../services/Notification';
-import { setToken } from '../../utilities/constant';
-import { getItem } from '../../utilities/local-storage';
 import AlertBox from './SnackBar';
 
 type Props = {
@@ -22,18 +23,25 @@ function NotificationPopover({
   const handleClose = () => {
     setNotification(null);
   };
+  const user = useAppSelector((state) => state.authState.user);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const open = Boolean(notification);
   const idProp = open ? 'notification-popover' : undefined;
-  const user = getItem('USER');
   const [notificationList, setNotificationList] = useState([]);
   const [alertMsg, setAlertMsg] = useState<any>('');
   const [showAlert, setShowAlert] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState('');
+
   useEffect(() => {
     if (user) {
-      setToken(user?.token);
       Notification.notificationListService()
         .then((response) => {
+          if (response.data.data.code === 401) {
+            dispatch(logout());
+            navigate('/auth/login');
+            return;
+          }
           setNotificationList(response.data.data.notifications);
         })
         .catch((error) => {
@@ -42,7 +50,7 @@ function NotificationPopover({
           setAlertSeverity('error');
         });
     }
-  }, [user]);
+  }, [dispatch, navigate, user]);
   return (
     <>
       {showAlert && (

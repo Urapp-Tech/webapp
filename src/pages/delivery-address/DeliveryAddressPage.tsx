@@ -23,9 +23,7 @@ import {
 } from '../../redux/features/deviceState';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import AddressService from '../../services/Address';
-import { setToken } from '../../utilities/constant';
 import loadGoogleMaps from '../../utilities/load-google-maps';
-import { getItem } from '../../utilities/local-storage';
 import DeleteAddressPopup from './DeleteAddressPopup';
 
 const typeData = [
@@ -95,7 +93,7 @@ function DeliveryAddressPage() {
   const addressList = useAppSelector(
     (state: any) => state.deviceStates.AddressList
   );
-  const user = getItem('USER');
+  const user = useAppSelector((state) => state.authState.user);
   const [delAddress, setDelAddress] = useState<boolean>(false);
   const [location, setLocation] = useState<any>({
     lat: addressList?.length > 0 ? addressList[0]?.latitude : 0,
@@ -116,7 +114,6 @@ function DeliveryAddressPage() {
   );
   const dispatch = useAppDispatch();
   useEffect(() => {
-    setToken(user?.token);
     if (draggedAddress && draggedAddress.latitude && draggedAddress.longitude) {
       setLocation({
         lat: draggedAddress.latitude,
@@ -256,7 +253,6 @@ function DeliveryAddressPage() {
   };
 
   const handleDelete = () => {
-    setToken(user?.token);
     AddressService.deleteUserAddress(deleteItem?.id)
       .then((response) => {
         dispatch(deleteUserAddress(response.data.data));
