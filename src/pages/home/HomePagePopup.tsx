@@ -1,101 +1,114 @@
-import { useCallback, useEffect, useState } from 'react'
-import Dialog from '@mui/material/Dialog'
-import DialogContent from '@mui/material/DialogContent'
-import DialogActions from '@mui/material/DialogActions'
-import Accordion from '@mui/material/Accordion'
-import AccordionSummary from '@mui/material/AccordionSummary'
-import AccordionDetails from '@mui/material/AccordionDetails'
-import Button from '@mui/material/Button'
-import IconButton from '@mui/material/IconButton'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import ClearIcon from '@mui/icons-material/Clear'
-import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined'
-import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined'
-import HomePagePopupClasses from './HomePagePopup.module.css'
-import assets from '../../assets'
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks'
-import { addToCart, Cart } from '../../redux/features/cartStateSlice'
-import cartService from '../../services/cart'
-import { getItem } from '../../utilities/local-storage'
-import AlertBox from '../../components/common/SnackBar'
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
+import ClearIcon from '@mui/icons-material/Clear';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import IconButton from '@mui/material/IconButton';
+import { useEffect, useState } from 'react';
+import AlertBox from '../../components/common/SnackBar';
+import { addToCart, setCartData } from '../../redux/features/cartStateSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import cartService, { UpdateCartPayload } from '../../services/cart';
+import { tenantId } from '../../utilities/constant';
 
 type Props = {
-  open: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  data: any
-  FAQs: any
-}
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  data: any;
+  FAQs: any;
+};
 
 function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
-  const [expanded, setExpanded] = useState<string | false>(false)
-  const dispatch = useAppDispatch()
-  const [count, setCount] = useState(1)
-  const [alertMsg, setAlertMsg] = useState<any>('')
-  const [showAlert, setShowAlert] = useState(false)
-  const [alertSeverity, setAlertSeverity] = useState('')
-  const Cartdata = getItem('RegisteredCart')
-  const arr: any = []
+  const user = useAppSelector((state) => state.authState.user);
+  const cartItems = useAppSelector((state) => state.cartState.cartItems);
+  const cartData = useAppSelector((state) => state.cartState.cartData);
+  const deviceData = useAppSelector((state) => state.deviceStates.deviceData);
+  const dispatch = useAppDispatch();
 
-  const handleChange = (panel: string) => (
-    event: React.SyntheticEvent,
-    isExpanded: boolean,
-  ) => {
-    setExpanded(isExpanded ? panel : false)
-  }
+  const [expanded, setExpanded] = useState<string | false>(false);
+  const [count, setCount] = useState(1);
+  const [alertMsg, setAlertMsg] = useState<any>('');
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState('');
+
+  const handleChange =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpanded(isExpanded ? panel : false);
+    };
   const incrementCount = () => {
-    setCount((previousCount) => previousCount + 1)
-  }
+    setCount((previousCount) => previousCount + 1);
+  };
   const decrementCount = () => {
     setCount((previousCount) => {
       if (previousCount <= 1) {
-        return 1
+        return 1;
       }
-      return previousCount - 1
-    })
-  }
+      return previousCount - 1;
+    });
+  };
 
-  const addToBasketHandler = (CartData: any) => {
-    dispatch(addToCart(CartData))
-    arr.push(...arr, { id: CartData.id, quantity: CartData.quantity })
-    const reqBody = {
-      appUser: Cartdata?.appUser,
-      appUserAddress: Cartdata?.appUserAddres,
-      appUserDevice: Cartdata?.appUserDevice,
-      cartId: Cartdata?.id,
-      dropDateTime: Cartdata?.dropDateTime,
-      pickupDateTime: Cartdata?.pickupDateTime,
-      promoCode: Cartdata?.promoCode,
-      tenant: Cartdata?.tenant,
-      products: arr,
+  const addToBasketHandler = (tempCartData: any) => {
+    dispatch(addToCart(tempCartData));
+    setOpen(false);
+    setCount(1);
+  };
+
+  useEffect(() => {
+    if (!cartData) {
+      return;
     }
+    if (!cartItems.length) {
+      return;
+    }
+    const tempCartItems = cartItems.map((item) => ({
+      id: item.id,
+      quantity: item.buyCount,
+    }));
+    const reqBody: UpdateCartPayload = {
+      appUser: user?.id ?? null,
+      appUserDevice: deviceData?.id ?? null,
+      cartId: cartData.id,
+      tenant: tenantId,
+      products: tempCartItems,
+      appUserAddress: undefined,
+      pickupDateTime: undefined,
+      dropDateTime: undefined,
+      promoCode: undefined,
+    };
     cartService
       .updateCart(reqBody)
       .then((response) => {
-        return dispatch(Cart(response.data.data.cart))
+        return dispatch(setCartData(response.data.data.cart));
       })
       .catch((error) => {
-        setAlertMsg(error.message)
-        setShowAlert(true)
-        setAlertSeverity('error')
-      })
-    setAlertMsg('Item Successfully Added')
-    setShowAlert(true)
-    setAlertSeverity('success')
-    setOpen(false)
-    setCount(1)
-  }
+        setAlertMsg(error.message);
+        setShowAlert(true);
+        setAlertSeverity('error');
+      });
+    setAlertMsg('Item Successfully Added');
+    setShowAlert(true);
+    setAlertSeverity('success');
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cartItems]);
   const onCloseHandler = (event: object, reason: string) => {
     if (reason === 'backdropClick') {
-      setOpen(false)
+      setOpen(false);
     }
-  }
+  };
 
   return (
     <>
       {showAlert && (
         <AlertBox
           msg={alertMsg}
-          setSeverty={alertSeverity}
+          setSeverity={alertSeverity}
           alertOpen={showAlert}
           setAlertOpen={setShowAlert}
         />
@@ -144,7 +157,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
               </div>
             </div>
             {FAQs?.map((faq: any, index: any) => (
-              <div className="product-accordion">
+              <div className="product-accordion" key={index}>
                 <Accordion
                   key={index}
                   className="accordion-item"
@@ -172,13 +185,10 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
             className="btn-add"
             onClick={() => {
               const cartItem = {
-                id: data?.id,
-                image: data?.icon,
-                name: data?.name,
-                price: data?.price,
-                quantity: count,
-              }
-              addToBasketHandler(cartItem)
+                ...data,
+                buyCount: count,
+              };
+              addToBasketHandler(cartItem);
             }}
           >
             Add to Basket
@@ -186,7 +196,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
         </DialogActions>
       </Dialog>
     </>
-  )
+  );
 }
 
-export default HomePagePopup
+export default HomePagePopup;

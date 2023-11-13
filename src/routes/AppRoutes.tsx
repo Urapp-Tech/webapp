@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import { lazy, Suspense } from 'react';
-import { RouteObject, Navigate } from 'react-router-dom';
+import { Navigate, RouteObject } from 'react-router-dom';
 import AuthLayout from '../components/layout/AuthLayout';
 // import LoginPage from '../pages/auth/login/LoginPage';
 // import SignUpPage from '../pages/auth/sign-up/SignUpPage';

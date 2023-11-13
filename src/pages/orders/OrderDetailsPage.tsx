@@ -1,107 +1,101 @@
-import { useEffect, useState, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
-import dayjs from 'dayjs'
-import Button from '@mui/material/Button'
-import IconButton from '@mui/material/IconButton'
-import CircularProgress from '@mui/material/CircularProgress'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
-import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined'
-import DateRangeIcon from '@mui/icons-material/DateRange'
-import AccessTimeIcon from '@mui/icons-material/AccessTime'
-import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined'
-import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined'
-import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined'
-import FilterNoneOutlinedIcon from '@mui/icons-material/FilterNoneOutlined'
-import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined'
-import DomainVerificationOutlinedIcon from '@mui/icons-material/DomainVerificationOutlined'
-import classNames from 'classnames'
-import DatePickerButton from '../my-basket/DatePickerButton'
-import OrderDetailsPagePopup from './OrderDetailsPagePopup'
-import assets from '../../assets'
-import { getItem } from '../../utilities/local-storage'
-import { useAppSelector } from '../../redux/redux-hooks'
-import AlertBox from '../../components/common/SnackBar'
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
+import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
+import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import DomainVerificationOutlinedIcon from '@mui/icons-material/DomainVerificationOutlined';
+import FilterNoneOutlinedIcon from '@mui/icons-material/FilterNoneOutlined';
+import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import IconButton from '@mui/material/IconButton';
+import classNames from 'classnames';
+import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import AlertBox from '../../components/common/SnackBar';
+import { useAppSelector } from '../../redux/redux-hooks';
+import OrderServices from '../../services/Order';
 import {
   ORDER_STATUSES,
   ORDER_STATUS_IN_DELIVERY,
-  setToken,
-} from '../../utilities/constant'
-import OrderServices from '../../services/Order'
+} from '../../utilities/constant';
+import { getItem } from '../../utilities/local-storage';
+import DatePickerButton from '../my-basket/DatePickerButton';
+import OrderDetailsPagePopup from './OrderDetailsPagePopup';
 
 function OrderDetailsPage() {
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false)
-  const navigate = useNavigate()
-  const [orderItemDetail, setOrderItemDetail] = useState<any>()
-  const [pickUpTime, setPickUpTime] = useState<dayjs.Dayjs | null>(null)
-  const [dropOffTime, setDropOffTime] = useState<dayjs.Dayjs | null>(null)
-  const [alertMsg, setAlertMsg] = useState<any>('')
-  const [showAlert, setShowAlert] = useState(false)
-  const [alertSeverity, setAlertSeverity] = useState('')
-  const [orderCanceled, setOrderCanceled] = useState(false)
-  const user = getItem('user')
-  const items = getItem('OrderItem')
-  const address = getItem('Address')
-  const AddressList = address.map((el: any) => el)
+  const user = useAppSelector((state) => state.authState.user);
+  const navigate = useNavigate();
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [orderItemDetail, setOrderItemDetail] = useState<any>();
+  const [pickUpTime, setPickUpTime] = useState<dayjs.Dayjs | null>(null);
+  const [dropOffTime, setDropOffTime] = useState<dayjs.Dayjs | null>(null);
+  const [alertMsg, setAlertMsg] = useState<any>('');
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState('');
+  const [orderCanceled, setOrderCanceled] = useState(false);
+  const items = getItem('ORDER_ITEM');
+  const address = getItem('ADDRESS');
+  const AddressList = address.map((el: any) => el);
+  const { id } = useParams();
   const userAddress = AddressList?.find(
-    (el: any) => el.id === orderItemDetail?.appUserAddress,
-  )
+    (el: any) => el.id === orderItemDetail?.appUserAddress
+  );
 
-  console.log(userAddress)
-  console.log(orderItemDetail)
+  console.log(userAddress);
+  console.log(orderItemDetail);
   useEffect(() => {
     if (user) {
-      setToken(user?.token)
       const orderDetail = async () => {
         try {
-          const id = await window.location.pathname.slice(
-            window.location.pathname.lastIndexOf('/') + 1,
-          )
-
-          const Details = items?.orders.find(
-            (el: any) => el.appOrderNumber === id,
-          )
-          OrderServices.orderDetail(Details.id).then((response) =>
-            setOrderItemDetail(response.data.data),
-          )
+          const details = items?.orders.find(
+            (el: any) => el.appOrderNumber === id
+          );
+          OrderServices.orderDetail(details.id).then((response) =>
+            setOrderItemDetail(response.data.data)
+          );
         } catch (error) {
-          setAlertMsg(error)
-          setShowAlert(true)
-          setAlertSeverity('error')
+          setAlertMsg(error);
+          setShowAlert(true);
+          setAlertSeverity('error');
         }
-      }
-      orderDetail()
+      };
+      orderDetail();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   const HandleCancelOrder = () => {
-    setDialogOpen(true)
-    setOrderCanceled(true)
-  }
+    setDialogOpen(true);
+    setOrderCanceled(true);
+  };
 
   const handleDropOffTimeChange = (value: dayjs.Dayjs | null) => {
-    setDropOffTime(value)
-  }
+    setDropOffTime(value);
+  };
   const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
-    setPickUpTime(value)
-  }
+    setPickUpTime(value);
+  };
   const getIcon = ORDER_STATUSES.map((status: any, index) => {
-    let icon
+    let icon;
     if (status.iconText === 'AssignmentTurnedInOutlinedIcon') {
       icon = (
         <AssignmentTurnedInOutlinedIcon className={`text-xl ${status.color}`} />
-      )
+      );
     } else if (status.iconText === 'FilterNoneOutlinedIcon') {
-      icon = <FilterNoneOutlinedIcon className={`text-xl ${status.color}`} />
+      icon = <FilterNoneOutlinedIcon className={`text-xl ${status.color}`} />;
     } else if (status.iconText === 'LocationOnOutlinedIcon') {
-      icon = <LocationOnOutlinedIcon className={`text-xl ${status.color}`} />
+      icon = <LocationOnOutlinedIcon className={`text-xl ${status.color}`} />;
     } else if (status.iconText === 'DomainVerificationOutlinedIcon') {
       icon = (
         <DomainVerificationOutlinedIcon className={`text-xl ${status.color}`} />
-      )
+      );
     } else if (status.iconText === 'AccessTimeIcon') {
-      icon = <AccessTimeIcon className={`text-xl ${status.color}`} />
+      icon = <AccessTimeIcon className={`text-xl ${status.color}`} />;
     }
 
     return (
@@ -111,36 +105,36 @@ function OrderDetailsPage() {
       >
         {icon}
       </div>
-    )
-  })
+    );
+  });
 
   const getColorFromCode = (colorCode: any) => {
     if (colorCode.includes('blue')) {
-      return 'primary'
+      return 'primary';
     }
     if (colorCode.includes('purple')) {
-      return 'secondary'
+      return 'secondary';
     }
     if (colorCode.includes('green')) {
-      return 'success'
+      return 'success';
     }
     if (colorCode.includes('orange')) {
-      return 'warning'
+      return 'warning';
     }
     if (colorCode.includes('yellow')) {
-      return 'inherit'
+      return 'inherit';
     }
     if (colorCode.includes('red')) {
-      return 'error'
+      return 'error';
     }
-    return 'primary' // Default to 'primary' if not recognized
-  }
+    return 'primary'; // Default to 'primary' if not recognized
+  };
   return (
     <>
       {showAlert && (
         <AlertBox
           msg={alertMsg}
-          setSeverty={alertSeverity}
+          setSeverity={alertSeverity}
           alertOpen={showAlert}
           setAlertOpen={setShowAlert}
         />
@@ -171,29 +165,27 @@ function OrderDetailsPage() {
                           className="icon-order-out-for-delivery relative inline-flex"
                           key={index}
                         >
-                          <>
-                            <CircularProgress
-                              thickness={1.5}
-                              className="z-10"
-                              size="4rem"
-                              variant="determinate"
-                              value={(index + 1) * (100 / 6)}
-                              color={getColorFromCode(status.color)}
-                            />
-                            <CircularProgress
-                              thickness={1.5}
-                              className="absolute z-0 text-neutral-200"
-                              size="4rem"
-                              variant="determinate"
-                              value={100}
-                              color="inherit"
-                            />
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              {getIcon[index]}
-                            </div>
-                          </>
+                          <CircularProgress
+                            thickness={1.5}
+                            className="z-10"
+                            size="4rem"
+                            variant="determinate"
+                            value={(index + 1) * (100 / 6)}
+                            color={getColorFromCode(status.color)}
+                          />
+                          <CircularProgress
+                            thickness={1.5}
+                            className="absolute z-0 text-neutral-200"
+                            size="4rem"
+                            variant="determinate"
+                            value={100}
+                            color="inherit"
+                          />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            {getIcon[index]}
+                          </div>
                         </div>
-                      ),
+                      )
                   )}
                   <div className="basic-details">
                     <p className="order-id">
@@ -229,6 +221,7 @@ function OrderDetailsPage() {
                       icon={<ModeEditOutlineOutlinedIcon />}
                       id=""
                       text=""
+                      initialValue={null}
                     />
                   </div>
                   <div className="mb-3 flex items-center gap-3">
@@ -253,6 +246,7 @@ function OrderDetailsPage() {
                       id=""
                       icon={<ModeEditOutlineOutlinedIcon />}
                       text=""
+                      initialValue={null}
                     />
                   </div>
                   <div className="mb-3 flex items-center gap-3">
@@ -299,7 +293,7 @@ function OrderDetailsPage() {
                           <p className="price">{el.unitPrice}</p>
                         </td>
                       </tr>
-                    ),
+                    )
                   )}
                 </table>
               </div>
@@ -340,13 +334,13 @@ function OrderDetailsPage() {
                     disabled:
                       index >
                         ORDER_STATUSES.findIndex(
-                          (status) => status.status === orderItemDetail?.status,
+                          (status) => status.status === orderItemDetail?.status
                         ) ||
                       (orderCanceled &&
                         index >
                           ORDER_STATUSES.findIndex(
                             (status) =>
-                              status.status === orderItemDetail?.status,
+                              status.status === orderItemDetail?.status
                           )),
                   })}
                   key={index}
@@ -359,8 +353,8 @@ function OrderDetailsPage() {
                         index >
                           ORDER_STATUSES.findIndex(
                             (SecondStatus) =>
-                              SecondStatus.status === orderItemDetail?.status,
-                          ),
+                              SecondStatus.status === orderItemDetail?.status
+                          )
                     ) ? (
                       <CheckCircleOutlineOutlinedIcon />
                     ) : (
@@ -389,7 +383,7 @@ function OrderDetailsPage() {
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default OrderDetailsPage
+export default OrderDetailsPage;

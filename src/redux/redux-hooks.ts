@@ -7,7 +7,7 @@
 
 // Create custom hooks for accessing Redux state and dispatch
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, AppDispatch } from './store'; // Update the path to your Redux store configuration file
+import { AppDispatch, RootState } from './store'; // Update the path to your Redux store configuration file
 
 // Custom hooks for Redux state and dispatch
 export function useAppSelector<T>(selector: (state: RootState) => T): T {

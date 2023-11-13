@@ -1,9 +1,11 @@
-import devNetwork from '../utilities/devNetwork'
+import axios from 'axios';
+import API_PATHS from '../utilities/API-PATHS';
+import { getHeaders } from '../utilities/constant';
 
-const ProfileService = () => {
-  return devNetwork.get(`app-user/profile`)
-}
+const profileService = () => {
+  return axios.get(API_PATHS.profileService, getHeaders());
+};
 
 export default {
-  ProfileService,
-}
+  profileService,
+};

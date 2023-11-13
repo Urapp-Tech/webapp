@@ -1,33 +1,33 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react'
-import Stack from '@mui/material/Stack'
-import Snackbar from '@mui/material/Snackbar'
-import MuiAlert, { AlertProps } from '@mui/material/Alert'
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import Stack from '@mui/material/Stack';
+import React from 'react';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
-  ref,
+  ref
 ) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
-})
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 type Props = {
-  msg: string
-  setSeverty: any
-  alertOpen: boolean
-  setAlertOpen: React.Dispatch<React.SetStateAction<boolean>>
-}
+  msg: string;
+  setSeverity: any;
+  alertOpen: boolean;
+  setAlertOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-function AlertBox({ msg, setSeverty, alertOpen, setAlertOpen }: Props) {
+function AlertBox({ msg, setSeverity, alertOpen, setAlertOpen }: Props) {
   const handleClose = (
     event?: React.SyntheticEvent | Event,
-    reason?: string,
+    reason?: string
   ) => {
     if (reason === 'clickaway') {
-      return
+      return;
     }
-    setAlertOpen(false)
-  }
+    setAlertOpen(false);
+  };
   return (
     <Stack spacing={2} sx={{ width: '100%' }}>
       <Snackbar
@@ -38,14 +38,14 @@ function AlertBox({ msg, setSeverty, alertOpen, setAlertOpen }: Props) {
       >
         <Alert
           onClose={handleClose}
-          severity={setSeverty}
+          severity={setSeverity}
           sx={{ width: '100%' }}
         >
           {msg}
         </Alert>
       </Snackbar>
     </Stack>
-  )
+  );
 }
 
-export default AlertBox
+export default AlertBox;

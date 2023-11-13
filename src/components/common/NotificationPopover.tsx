@@ -1,55 +1,62 @@
-import dayjs from 'dayjs'
-import Popover from '@mui/material/Popover'
-import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined'
-import { useEffect, useState } from 'react'
-import { setToken } from '../../utilities/constant'
-import { getItem } from '../../utilities/local-storage'
-import Notification from '../../services/Notification'
-import AlertBox from './SnackBar'
-import Loader from './Loader'
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
+import Popover from '@mui/material/Popover';
+import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { logout } from '../../redux/features/authStateSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import Notification from '../../services/Notification';
+import AlertBox from './SnackBar';
 
 type Props = {
-  notification: HTMLButtonElement | null
+  notification: HTMLButtonElement | null;
   setNotification: React.Dispatch<
     React.SetStateAction<HTMLButtonElement | null>
-  >
-  anchorElement: Element | ((element: Element) => Element) | null | undefined
-}
+  >;
+  anchorElement: Element | ((element: Element) => Element) | null | undefined;
+};
 function NotificationPopover({
   notification,
   setNotification,
   anchorElement,
 }: Props) {
   const handleClose = () => {
-    setNotification(null)
-  }
-  const open = Boolean(notification)
-  const idProp = open ? 'notification-popover' : undefined
-  const user = getItem('user')
-  const [notificationList, setNotificationList] = useState([])
-  const [alertMsg, setAlertMsg] = useState<any>('')
-  const [showAlert, setShowAlert] = useState(false)
-  const [alertSeverity, setAlertSeverity] = useState('')
+    setNotification(null);
+  };
+  const user = useAppSelector((state) => state.authState.user);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const open = Boolean(notification);
+  const idProp = open ? 'notification-popover' : undefined;
+  const [notificationList, setNotificationList] = useState([]);
+  const [alertMsg, setAlertMsg] = useState<any>('');
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState('');
+
   useEffect(() => {
     if (user) {
-      setToken(user?.token)
-      Notification.NetworkService()
+      Notification.notificationListService()
         .then((response) => {
-          setNotificationList(response.data.data.notifications)
+          if (response.data.data.code === 401) {
+            dispatch(logout());
+            navigate('/auth/login');
+            return;
+          }
+          setNotificationList(response.data.data.notifications);
         })
         .catch((error) => {
-          setAlertMsg(error.message)
-          setShowAlert(true)
-          setAlertSeverity('error')
-        })
+          setAlertMsg(error.message);
+          setShowAlert(true);
+          setAlertSeverity('error');
+        });
     }
-  }, [])
+  }, [dispatch, navigate, user]);
   return (
     <>
       {showAlert && (
         <AlertBox
           msg={alertMsg}
-          setSeverty={alertSeverity}
+          setSeverity={alertSeverity}
           alertOpen={showAlert}
           setAlertOpen={setShowAlert}
         />
@@ -73,7 +80,7 @@ function NotificationPopover({
           <h3 className="day">Today</h3>
           {notificationList &&
             notificationList?.map((item: any) => (
-              <div className="item">
+              <div className="item" key={item.id}>
                 <NotificationsNoneOutlinedIcon className="icon" />
                 <div className="content">
                   <div className="text">
@@ -89,7 +96,7 @@ function NotificationPopover({
         </div>
       </Popover>
     </>
-  )
+  );
 }
 
-export default NotificationPopover
+export default NotificationPopover;

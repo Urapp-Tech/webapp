@@ -1,20 +1,25 @@
-import devNetwork from '../utilities/devNetwork'
+import axios from 'axios';
+import API_PATHS from '../utilities/API-PATHS';
+import { getHeaders } from '../utilities/constant';
 
 export interface NewOrder {
-  cartId: string
-}
-const addOrder = (data: NewOrder) => {
-  return devNetwork.post(`appOrder/newOrder`, data)
-}
-const orderList = () => {
-  return devNetwork.get(`appOrder/webapp/list`)
+  cartId: string;
 }
 
+const addOrder = (data: NewOrder) => {
+  return axios.post(API_PATHS.addOrder, data, getHeaders());
+};
+
+const orderList = () => {
+  return axios.get(API_PATHS.orderList, getHeaders());
+};
+
 const orderDetail = (id: string) => {
-  return devNetwork.get(`appOrder/webapp/detail/${id}`)
-}
+  return axios.get(API_PATHS.orderDetail(id), getHeaders());
+};
+
 export default {
   addOrder,
   orderList,
   orderDetail,
-}
+};

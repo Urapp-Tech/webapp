@@ -1,26 +1,31 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { setToken } from '../../utilities/constant';
+import { clear, getItem, setItem } from '../../utilities/local-storage';
 
 type RegisteredUser = {
-  email: string;
-  firstName: string;
   id: string;
+  email: string;
   isActive: boolean;
-  lastName: string;
-  phone: string;
-  postalCode: string;
-  tenant: string;
-  token: string;
-  userType: string;
   createdDate: string;
   updatedDate: string;
+  tenant: string;
+  phone: string;
+  firstName: string;
+  lastName: string;
+  postalCode: string;
+  userType: string;
+  token: string;
 };
 
 type AuthState = {
   user: RegisteredUser | null;
 };
 
+const storedUser = getItem('USER');
+setToken(storedUser?.token || null);
+
 const initialState: AuthState = {
-  user: null,
+  user: storedUser,
 };
 
 export const authStateSlice = createSlice({
@@ -29,11 +34,13 @@ export const authStateSlice = createSlice({
   reducers: {
     login: (state, action: PayloadAction<RegisteredUser>) => {
       state.user = action.payload;
-      localStorage.setItem('user', JSON.stringify(action.payload));
+      setItem('USER', action.payload);
+      setToken(action.payload.token);
     },
     logout: (state) => {
       state.user = null;
-      localStorage.clear();
+      setToken('');
+      clear();
     },
   },
 });

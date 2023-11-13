@@ -1,29 +1,36 @@
-import { useCallback, useEffect, useState } from 'react'
-import Input from '@mui/material/Input'
-import Button from '@mui/material/Button'
-import FormControl from '@mui/material/FormControl'
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
-import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
-import { ClientJS } from 'clientjs'
-import HomePagePopup from './HomePagePopup'
-import tenantService from '../../services/tenant'
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks'
-import categoryService from '../../services/Category'
-import { setDeviceData } from '../../redux/features/deviceState'
-import cartService from '../../services/cart'
-import { getCart } from '../../redux/features/cartStateSlice'
-import { getItem } from '../../utilities/local-storage'
-import AlertBox from '../../components/common/SnackBar'
-import Loader from '../../components/common/Loader'
-import CategoriesCard from '../../components/common/CategoriesCard'
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import Input from '@mui/material/Input';
+import axios from 'axios';
+import { ClientJS } from 'clientjs';
+import { useCallback, useEffect, useState } from 'react';
+import CategoriesCard from '../../components/common/CategoriesCard';
+import AlertBox from '../../components/common/SnackBar';
+import { setCartData } from '../../redux/features/cartStateSlice';
+import { setDeviceData } from '../../redux/features/deviceState';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+
+import Loader from '../../components/common/Loader';
+import {
+  useGetAllCategoryQuery,
+  useLazyGetSubCategoryQuery,
+} from '../../redux/features/categorySliceAPI';
+import categoryService from '../../services/Category';
+import cartService from '../../services/cart';
+import tenantService from '../../services/tenant';
+import { getItem } from '../../utilities/local-storage';
+import promiseHandler from '../../utilities/promise-handler';
+import HomePagePopup from './HomePagePopup';
 
 function getCategoryClasses(isActive: boolean) {
-  const classes = 'item'
+  const classes = 'item';
 
   if (isActive) {
-    return `${classes} active shadow-lg`
+    return `${classes} active shadow-lg`;
   }
-  return classes
+  return classes;
 }
 const colorArray = [
   '#e1ccec',
@@ -32,147 +39,164 @@ const colorArray = [
   'rgba(200, 217, 223, 0.956863)',
   'rgba(217, 217, 217, 0.956863)',
   '#ffe2e2',
-]
+];
 
 function HomePage() {
-  const [selectedCategory, setSelectedCategory] = useState<any>(null)
-  const [subCategory, setSubCategory] = useState<any>([])
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false)
-  const [selectedItem, setSelectedItem] = useState(null)
-  const [searchName, setSearchName] = useState('')
-  const [filteredSubCategory, setFilteredSubCategory] = useState<any[]>([])
-  const dispatch = useAppDispatch()
-  const client = new ClientJS()
-  const [alertMsg, setAlertMsg] = useState('')
-  const [showAlert, setShowAlert] = useState(false)
-  const [alertSeverity, setAlertSeverity] = useState('')
-  const [FAQs, setFAQs] = useState(null)
-  const fingerprint = client.getFingerprint()
-  const agent = client.getUserAgent()
-  const [isLoading, setIsLoading] = useState(false)
+  const persistedDeviceData = useAppSelector(
+    (state) => state.deviceStates.deviceData
+  );
+  const dispatch = useAppDispatch();
+  const client = new ClientJS();
+  const fingerprint = client.getFingerprint();
+  const agent = client.getUserAgent();
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [searchName, setSearchName] = useState('');
+  const [filteredSubCategory, setFilteredSubCategory] = useState<any[]>([]);
+  const [alertMsg, setAlertMsg] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState('');
+  const [FAQs, setFAQs] = useState(null);
 
-  const fetchIp = async () => {
-    const url = 'https://api.ipify.org/?format=json'
-    try {
-      const response = await fetch(url)
-      const address = await response.json()
-      return address.ip
-    } catch (error) {
-      setAlertMsg('Error Occurred')
-      setShowAlert(true)
-      setAlertSeverity('error')
-      return null // Return a value even in case of an error
-    }
-  }
-  const addItemHandler = (item: any) => {
-    setSelectedItem(item)
-    setDialogOpen(true)
-    categoryService
-      .FaqService(subCategory?.tenant, subCategory?.id, item.id)
-      .then((response) => {
-        if (response.data.success) {
-          setFAQs(response.data.data.homeCatItemFaq)
-        }
-      })
-  }
-  const onClickButton = (item: any) => {
-    categoryService
-      .SubCategory(item.id)
-      .then((response) => setSubCategory(response.data.data))
-  }
+  const { isLoading: isCategoryLoading, data: categoryData } =
+    useGetAllCategoryQuery('');
+
+  const [subCategoryTrigger, subCategoryResult] = useLazyGetSubCategoryQuery();
+
+  const { isLoading: isSubCategoryLoading, data: subCategoryData } =
+    subCategoryResult;
+
   useEffect(() => {
-    setIsLoading(true)
-    const persistedDeviceData: any = getItem('deviceData')
+    if (!isCategoryLoading && categoryData && categoryData.success) {
+      subCategoryTrigger(categoryData.data[0].id);
+      return;
+    }
+    setShowAlert(true);
+    setAlertSeverity('error');
+  }, [isCategoryLoading, categoryData, subCategoryTrigger]);
+
+  async function fetchIp() {
+    const url = new URL('https://api.ipify.org');
+    url.searchParams.append('format', 'json');
+    const ipPromise = axios.get(url.toString());
+    const [result, error] = await promiseHandler(ipPromise);
+    if (!result) {
+      setAlertMsg('Error Occurred');
+      setShowAlert(true);
+      setAlertSeverity('error');
+      return null;
+    }
+    return result.data.ip;
+  }
+
+  const addItemHandler = async (item: any) => {
+    setSelectedItem(item);
+    setDialogOpen(true);
+    const faqPromise = categoryService.faqService(subCategoryData?.id, item.id);
+    const [result, error] = await promiseHandler(faqPromise);
+    if (!result) {
+      console.error('error :>> ', error);
+      return;
+    }
+    if (result.data.success) {
+      setFAQs(result.data.data.homeCatItemFaq);
+    }
+  };
+
+  useEffect(() => {
     if (persistedDeviceData) {
-      dispatch(setDeviceData(JSON.parse(persistedDeviceData)))
+      dispatch(setDeviceData(persistedDeviceData));
     }
 
     fetchIp().then((ip) => {
-      const nameValue = `${agent.slice(0, 11)}-${ip}-${fingerprint}`
+      const nameValue = `${agent.slice(0, 11)}-${ip}-${fingerprint}`;
       if (persistedDeviceData === null) {
         tenantService
           .getTenantConfig()
-          .then((response) => {
-            tenantService
-              .deviceRegisteration({
-                deviceId: fingerprint.toString(),
-                deviceType: 'Android',
-                isNotificationAllowed: true,
-                name: nameValue,
-                tenant: response.data.data.id,
-                token: 'undefined',
-              })
-              .then((newResponse) => {
-                dispatch(setDeviceData(newResponse.data.data))
-                cartService
-                  .AnonyomousCart({
-                    tenant: newResponse.data.data?.tenant,
-                    appUserDevice: newResponse.data.data?.id,
-                  })
-                  .then((cartResponse) => {
-                    dispatch(getCart(cartResponse.data.data.cart))
-                  })
-                  .catch((error) => {
-                    setAlertMsg(error.message)
-                    setShowAlert(true)
-                    setAlertSeverity('error')
-                  })
-              })
-              .catch((error) => {
-                setAlertMsg(error.message)
-                setShowAlert(true)
-                setAlertSeverity('error')
-              })
+          .then((tenantConfigResponse) =>
+            tenantService.deviceRegistration({
+              deviceId: fingerprint.toString(),
+              deviceType: 'Web',
+              isNotificationAllowed: true,
+              name: nameValue,
+              tenant: tenantConfigResponse.data.data.id,
+              token:
+                'Push notifications are not available on the web platform.',
+            })
+          )
+          .then((deviceRegistrationResponse) => {
+            dispatch(setDeviceData(deviceRegistrationResponse.data.data));
           })
           .catch((error) => {
-            setAlertMsg(error.message)
-            setShowAlert(true)
-            setAlertSeverity('error')
-          })
+            setAlertMsg(error.message);
+            setShowAlert(true);
+            setAlertSeverity('error');
+          });
       }
-    })
-    categoryService
-      .CategoryList()
-      .then((response) => {
-        setIsLoading(false)
-        onClickButton(response.data.data[0])
-        setSelectedCategory(response.data.data)
-      })
-      .catch((error) => {
-        setAlertMsg(error.message)
-        setShowAlert(true)
-        setAlertSeverity('error')
-      })
-      .finally(() => {
-        setIsLoading(false) // Set loading to false when the API call completes (success or error)
-      })
-  }, [agent, dispatch, fingerprint])
-  const searchSubCategory = useCallback(() => {
-    if (!searchName) {
-      setFilteredSubCategory(subCategory.homeCatItems)
-    } else {
-      const filteredItems = subCategory.homeCatItems.filter((item: any) => {
-        const priceString = item?.price?.toString() || ''
-        return (
-          item.name.toLowerCase().includes(searchName.toLowerCase()) ||
-          priceString.includes(searchName)
-        )
-      })
-      setFilteredSubCategory(filteredItems)
-    }
-  }, [searchName, subCategory])
+    });
+  }, [agent, dispatch, fingerprint, persistedDeviceData]);
 
   useEffect(() => {
-    if (subCategory?.homeCatItems?.length > 0) {
-      searchSubCategory()
+    if (!persistedDeviceData) {
+      return;
     }
-  }, [searchSubCategory, subCategory])
+    cartService
+      .anonymousCart({
+        tenant: persistedDeviceData?.tenant,
+        appUserDevice: persistedDeviceData?.id,
+      })
+      .then((cartResponse) => {
+        if (cartResponse.data.success) {
+          dispatch(setCartData(cartResponse.data.data.cart));
+        }
+      })
+      .catch((error) => {
+        setAlertMsg(error.message);
+        setShowAlert(true);
+        setAlertSeverity('error');
+      });
+  }, [dispatch, persistedDeviceData]);
+
+  useEffect(() => {
+    if (subCategoryData?.data?.homeCatItems?.length > 0) {
+      if (!searchName) {
+        setFilteredSubCategory(subCategoryData?.data?.homeCatItems);
+        return;
+      }
+      const filteredItems = subCategoryData?.data?.homeCatItems.filter(
+        (item: any) => {
+          const priceString = item?.price?.toString() || '';
+          return (
+            item.name.toLowerCase().includes(searchName.toLowerCase()) ||
+            priceString.includes(searchName)
+          );
+        }
+      );
+      setFilteredSubCategory(filteredItems);
+    }
+  }, [searchName, subCategoryData]);
+
+  const categoryList = useCallback(() => {
+    if (isCategoryLoading) {
+      return <Loader />;
+    }
+    if (categoryData && categoryData.success) {
+      return (
+        <CategoriesCard
+          categories={categoryData.data}
+          onClick={(id: string) => subCategoryTrigger(id)}
+        />
+      );
+    }
+    return <div>Error Occurred</div>;
+  }, [categoryData, isCategoryLoading, subCategoryTrigger]);
+
   return (
     <>
       {showAlert && (
         <AlertBox
           msg={alertMsg}
-          setSeverty={alertSeverity}
+          setSeverity={alertSeverity}
           alertOpen={showAlert}
           setAlertOpen={setShowAlert}
         />
@@ -183,20 +207,15 @@ function HomePage() {
         data={selectedItem}
         FAQs={FAQs}
       />
-      {/* {isLoading ? (
-        <Loader />
-      ) : ( */}
+
       <div className="px-4 pt-6 sm:px-5 sm:pt-4 xl:px-7">
         <div className="all-categories">
           <h4 className="heading">Categories</h4>
-          <CategoriesCard
-            categories={selectedCategory}
-            onClick={onClickButton}
-          />
+          {categoryList()}
         </div>
         <div className="selected-categories">
           <div className="mb-4 items-center justify-between sm:flex">
-            <h4 className="heading">{subCategory?.name}</h4>
+            <h4 className="heading">{subCategoryData?.data?.name}</h4>
             <FormControl className="search-sub-cats">
               <Input
                 className="field"
@@ -213,33 +232,36 @@ function HomePage() {
             </FormControl>
           </div>
           <div className="categories-list">
-            {filteredSubCategory.map((item: any) => (
-              <div key={item.id} className="item">
-                <img
-                  className="mb-4 aspect-[4/3] w-full object-contain md:mb-6"
-                  src={item.icon}
-                  alt=""
-                />
-                <div className="flex flex-wrap items-center justify-between">
-                  <h5 className="name">{item.name}</h5>
-                  <h6 className="price">$ {item.price.toFixed(2)}</h6>
-                  <Button
-                    className="btn-add"
-                    variant="contained"
-                    endIcon={<ShoppingBagOutlinedIcon />}
-                    onClick={() => addItemHandler(item)}
-                  >
-                    Add
-                  </Button>
+            {isSubCategoryLoading ? (
+              <Loader />
+            ) : (
+              filteredSubCategory.map((item: any) => (
+                <div key={item.id} className="item">
+                  <img
+                    className="mb-4 aspect-[4/3] w-full object-contain md:mb-6"
+                    src={item.icon}
+                    alt=""
+                  />
+                  <div className="flex flex-wrap items-center justify-between">
+                    <h5 className="name">{item.name}</h5>
+                    <h6 className="price">$ {item.price.toFixed(2)}</h6>
+                    <Button
+                      className="btn-add"
+                      variant="contained"
+                      endIcon={<ShoppingBagOutlinedIcon />}
+                      onClick={() => addItemHandler(item)}
+                    >
+                      Add
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </div>
-      {/* )} */}
     </>
-  )
+  );
 }
 
-export default HomePage
+export default HomePage;

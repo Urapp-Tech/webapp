@@ -1,11 +1,11 @@
-import { useState, useCallback, useEffect } from 'react';
-import { useJsApiLoader } from '@react-google-maps/api';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import IconButton from '@mui/material/IconButton';
-import Dialog from '@mui/material/Dialog';
 import ClearIcon from '@mui/icons-material/Clear';
-import LocationPopupClasses from './LocationPopup.module.css';
+import Dialog from '@mui/material/Dialog';
+import IconButton from '@mui/material/IconButton';
+import { useJsApiLoader } from '@react-google-maps/api';
+import { useCallback, useEffect, useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import Map from '../../components/common/Map';
+import LocationPopupClasses from './LocationPopup.module.css';
 
 type Props = {
   open: boolean;

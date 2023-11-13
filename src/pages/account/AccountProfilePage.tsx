@@ -1,46 +1,44 @@
-import React, { useEffect, useState } from 'react'
-import Button from '@mui/material/Button'
-import ProfileApi from '../../services/Profile'
-import { setToken } from '../../utilities/constant'
-import { getItem } from '../../utilities/local-storage'
-import { useForm, Controller } from 'react-hook-form'
-import AlertBox from '../../components/common/SnackBar'
-import Loader from '../../components/common/Loader'
+import Button from '@mui/material/Button';
+import { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import Loader from '../../components/common/Loader';
+import AlertBox from '../../components/common/SnackBar';
+import { useAppSelector } from '../../redux/redux-hooks';
+import ProfileApi from '../../services/Profile';
 
 function AccountProfilePage() {
-  const user = getItem('user')
-  const [alertMsg, setAlertMsg] = useState<any>('')
-  const [showAlert, setShowAlert] = useState(false)
-  const [alertSeverity, setAlertSeverity] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const user = useAppSelector((state) => state.authState.user);
+  const [alertMsg, setAlertMsg] = useState<any>('');
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const {
     handleSubmit,
     control,
     setValue,
     formState: { errors },
-  } = useForm()
+  } = useForm();
 
   useEffect(() => {
-    setIsLoading(true)
-    setToken(user?.token)
-    ProfileApi.ProfileService()
+    setIsLoading(true);
+    ProfileApi.profileService()
       .then((response) => {
-        setIsLoading(false)
-        setValue('firstName', response.data.data.firstName)
-        setValue('lastName', response.data.data.lastName)
-        setValue('email', response.data.data.email)
-        setValue('postalCode', response.data.data.postalCode)
-        setValue('phoneNumber', response.data.data.phone)
+        setIsLoading(false);
+        setValue('firstName', response.data.data.firstName);
+        setValue('lastName', response.data.data.lastName);
+        setValue('email', response.data.data.email);
+        setValue('postalCode', response.data.data.postalCode);
+        setValue('phoneNumber', response.data.data.phone);
       })
       .catch((error) => {
-        setAlertMsg(error.message)
-        setShowAlert(true)
-        setAlertSeverity('error')
-      })
-  }, [setValue])
+        setAlertMsg(error.message);
+        setShowAlert(true);
+        setAlertSeverity('error');
+      });
+  }, [setValue, user?.token]);
   const onSubmit = (data: any) => {
-    console.log(data)
-  }
+    console.log(data);
+  };
   return isLoading ? (
     <Loader />
   ) : (
@@ -48,7 +46,7 @@ function AccountProfilePage() {
       {showAlert && (
         <AlertBox
           msg={alertMsg}
-          setSeverty={alertSeverity}
+          setSeverity={alertSeverity}
           alertOpen={showAlert}
           setAlertOpen={setShowAlert}
         />
@@ -65,16 +63,20 @@ function AccountProfilePage() {
                 defaultValue=""
                 rules={{ required: 'First Name is required' }}
                 render={({ field }) => (
-                  <label htmlFor="firstName" className="mb-4 block">
+                  <label htmlFor={field.name} className="mb-4 block">
                     <p className="label">First Name</p>
                     <input
                       type="text"
-                      id="firstName"
                       className="field"
-                      {...field}
+                      id={field.name}
+                      name={field.name}
+                      onBlur={field.onBlur}
+                      onChange={field.onChange}
+                      ref={field.ref}
+                      value={field.value}
                     />
                     {errors.firstName && (
-                      <p style={{ color: 'red' }}>
+                      <p className="font-open-sans text-xs text-red-500">
                         {errors.firstName.message?.toString()}
                       </p>
                     )}
@@ -87,16 +89,20 @@ function AccountProfilePage() {
                 defaultValue=""
                 rules={{ required: 'Last Name is required' }}
                 render={({ field }) => (
-                  <label htmlFor="lastName" className="mb-4 block">
+                  <label htmlFor={field.name} className="mb-4 block">
                     <p className="label">Last Name</p>
                     <input
                       type="text"
-                      id="lastName"
                       className="field"
-                      {...field}
+                      id={field.name}
+                      name={field.name}
+                      onBlur={field.onBlur}
+                      onChange={field.onChange}
+                      ref={field.ref}
+                      value={field.value}
                     />
                     {errors.lastName && (
-                      <p style={{ color: 'red' }}>
+                      <p className="font-open-sans text-xs text-red-500">
                         {errors.lastName.message?.toString()}
                       </p>
                     )}
@@ -109,16 +115,20 @@ function AccountProfilePage() {
                 defaultValue=""
                 rules={{ required: 'Email is required' }}
                 render={({ field }) => (
-                  <label htmlFor="email" className="mb-4 block">
+                  <label htmlFor={field.name} className="mb-4 block">
                     <p className="label">Email Address</p>
                     <input
                       type="text"
-                      id="email"
                       className="field"
-                      {...field}
+                      id={field.name}
+                      name={field.name}
+                      onBlur={field.onBlur}
+                      onChange={field.onChange}
+                      ref={field.ref}
+                      value={field.value}
                     />
                     {errors.email && (
-                      <p style={{ color: 'red' }}>
+                      <p className="font-open-sans text-xs text-red-500">
                         {errors.email.message?.toString()}
                       </p>
                     )}
@@ -131,16 +141,20 @@ function AccountProfilePage() {
                 defaultValue=""
                 rules={{ required: 'Phone Number is required' }}
                 render={({ field }) => (
-                  <label htmlFor="phoneNumber" className="mb-4 block">
+                  <label htmlFor={field.name} className="mb-4 block">
                     <p className="label">Phone Number</p>
                     <input
                       type="number"
-                      id="phoneNumber"
                       className="field"
-                      {...field}
+                      id={field.name}
+                      name={field.name}
+                      onBlur={field.onBlur}
+                      onChange={field.onChange}
+                      ref={field.ref}
+                      value={field.value}
                     />
                     {errors.phoneNumber && (
-                      <p style={{ color: 'red' }}>
+                      <p className="font-open-sans text-xs text-red-500">
                         {errors.phoneNumber.message?.toString()}
                       </p>
                     )}
@@ -153,16 +167,20 @@ function AccountProfilePage() {
                 defaultValue=""
                 rules={{ required: 'Postal Code is required' }}
                 render={({ field }) => (
-                  <label htmlFor="postalCode" className="mb-4 block">
+                  <label htmlFor={field.name} className="mb-4 block">
                     <p className="label">Postal Code</p>
                     <input
                       type="number"
-                      id="postalCode"
                       className="field"
-                      {...field}
+                      id={field.name}
+                      name={field.name}
+                      onBlur={field.onBlur}
+                      onChange={field.onChange}
+                      ref={field.ref}
+                      value={field.value}
                     />
                     {errors.postalCode && (
-                      <p style={{ color: 'red' }}>
+                      <p className="font-open-sans text-xs text-red-500">
                         {errors.postalCode.message?.toString()}
                       </p>
                     )}
@@ -178,16 +196,20 @@ function AccountProfilePage() {
                 defaultValue=""
                 rules={{ required: 'Current Password is required' }}
                 render={({ field }) => (
-                  <label htmlFor="currentPassword" className="mb-4 block">
+                  <label htmlFor={field.name} className="mb-4 block">
                     <p className="label">Current Password</p>
                     <input
                       type="password"
-                      id="currentPassword"
                       className="field"
-                      {...field}
+                      id={field.name}
+                      name={field.name}
+                      onBlur={field.onBlur}
+                      onChange={field.onChange}
+                      ref={field.ref}
+                      value={field.value}
                     />
                     {errors.currentPassword && (
-                      <p style={{ color: 'red' }}>
+                      <p className="font-open-sans text-xs text-red-500">
                         {errors.currentPassword.message?.toString()}
                       </p>
                     )}
@@ -200,16 +222,20 @@ function AccountProfilePage() {
                 defaultValue=""
                 rules={{ required: 'New Password is required' }}
                 render={({ field }) => (
-                  <label htmlFor="newPassword" className="mb-4 block">
+                  <label htmlFor={field.name} className="mb-4 block">
                     <p className="label">New Password</p>
                     <input
                       type="password"
-                      id="newPassword"
                       className="field"
-                      {...field}
+                      id={field.name}
+                      name={field.name}
+                      onBlur={field.onBlur}
+                      onChange={field.onChange}
+                      ref={field.ref}
+                      value={field.value}
                     />
                     {errors.newPassword && (
-                      <p style={{ color: 'red' }}>
+                      <p className="font-open-sans text-xs text-red-500">
                         {errors.newPassword.message?.toString()}
                       </p>
                     )}
@@ -222,16 +248,20 @@ function AccountProfilePage() {
                 defaultValue=""
                 rules={{ required: 'Verify Password is required' }}
                 render={({ field }) => (
-                  <label htmlFor="verifyPassword" className="mb-4 block">
+                  <label htmlFor={field.name} className="mb-4 block">
                     <p className="label">Verify Password</p>
                     <input
                       type="password"
-                      id="verifyPassword"
                       className="field"
-                      {...field}
+                      id={field.name}
+                      name={field.name}
+                      onBlur={field.onBlur}
+                      onChange={field.onChange}
+                      ref={field.ref}
+                      value={field.value}
                     />
                     {errors.verifyPassword && (
-                      <p style={{ color: 'red' }}>
+                      <p className="font-open-sans text-xs text-red-500">
                         {errors.verifyPassword.message?.toString()}
                       </p>
                     )}
@@ -251,7 +281,7 @@ function AccountProfilePage() {
         </form>
       </div>
     </>
-  )
+  );
 }
 
-export default AccountProfilePage
+export default AccountProfilePage;

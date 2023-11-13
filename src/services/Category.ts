@@ -1,18 +1,21 @@
-import { tenantId } from '../utilities/constant'
-import devNetwork from '../utilities/devNetwork'
-import network from '../utilities/network'
+import axios from 'axios';
+import API_PATHS from '../utilities/API-PATHS';
+import { getHeaders } from '../utilities/constant';
 
-const CategoryList = () => {
-  return network.get(`homemenu/list/${tenantId}`)
-}
-const SubCategory = (menuId: string | null) => {
-  return network.get(`homemenu/view/${tenantId}/${menuId}`)
-}
-const FaqService = (tenantId: string, menuId: string, submenuId: string) => {
-  return network.get(`homemenu/view/submenu/${tenantId}/${menuId}/${submenuId}`)
-}
+const categoryList = () => {
+  return axios.get(API_PATHS.categoryList, getHeaders());
+};
+
+const subCategory = (menuId: string) => {
+  return axios.get(API_PATHS.subCategory(menuId), getHeaders());
+};
+
+const faqService = (menuId: string, submenuId: string) => {
+  return axios.get(API_PATHS.faqService(menuId, submenuId), getHeaders());
+};
+
 export default {
-  CategoryList,
-  SubCategory,
-  FaqService,
-}
+  categoryList,
+  subCategory,
+  faqService,
+};

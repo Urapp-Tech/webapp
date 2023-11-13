@@ -1,6 +1,8 @@
-import devNetwork from '../utilities/devNetwork';
+import axios from 'axios';
+import API_PATHS from '../utilities/API-PATHS';
+import { getHeaders } from '../utilities/constant';
 
-export interface AnonyomousCartPayload {
+export interface AnonymousCartPayload {
   tenant: string | undefined;
   appUserDevice: string | undefined;
 }
@@ -19,13 +21,16 @@ export interface UpdateCartPayload {
   promoCode: string | null | undefined;
   products: ProductPayload[];
 }
-const AnonyomousCart = (data: AnonyomousCartPayload) => {
-  return devNetwork.post(`appUserCart/getCart/device`, data);
+
+const anonymousCart = (data: AnonymousCartPayload) => {
+  return axios.post(API_PATHS.anonymousCart, data, getHeaders());
 };
+
 const updateCart = (data: UpdateCartPayload) => {
-  return devNetwork.post(`appUserCart/updateCart`, data);
+  return axios.post(API_PATHS.updateCart, data, getHeaders());
 };
+
 export default {
-  AnonyomousCart,
+  anonymousCart,
   updateCart,
 };

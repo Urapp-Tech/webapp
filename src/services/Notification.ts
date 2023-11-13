@@ -1,9 +1,11 @@
-import devNetwork from '../utilities/devNetwork'
+import axios from 'axios';
+import API_PATHS from '../utilities/API-PATHS';
+import { getHeaders } from '../utilities/constant';
 
-const NetworkService = () => {
-  return devNetwork.get(`appNotification/list`)
-}
+const notificationListService = () => {
+  return axios.get(API_PATHS.notificationListService, getHeaders());
+};
 
 export default {
-  NetworkService,
-}
+  notificationListService,
+};

@@ -1,10 +1,10 @@
-import { useRef, useState } from 'react'
-import ThemeProvider from '@mui/material/styles/ThemeProvider'
-import createTheme from '@mui/material/styles/createTheme'
-import Button from '@mui/material/Button'
-import Popover from '@mui/material/Popover'
-import { StaticDateTimePicker } from '@mui/x-date-pickers'
-import dayjs from 'dayjs'
+import Button from '@mui/material/Button';
+import Popover from '@mui/material/Popover';
+import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import createTheme from '@mui/material/styles/createTheme';
+import { StaticDateTimePicker } from '@mui/x-date-pickers';
+import dayjs from 'dayjs';
+import { useRef, useState } from 'react';
 
 const darkTheme = createTheme({
   palette: {
@@ -12,37 +12,37 @@ const darkTheme = createTheme({
       main: '#171717',
     },
   },
-})
+});
 
 type Props = {
-  icon: JSX.Element
-  id: string
-  text: string
-  onChange: (value: dayjs.Dayjs | null) => void
-  initialValue: dayjs.Dayjs | null
-}
+  icon: JSX.Element;
+  id: string;
+  text: string;
+  onChange: (value: dayjs.Dayjs | null) => void;
+  initialValue: dayjs.Dayjs | null;
+};
 function DatePickerButton({ onChange, text, id, icon, initialValue }: Props) {
-  const [datePicker, setDatePicker] = useState<HTMLButtonElement | null>(null)
+  const [datePicker, setDatePicker] = useState<HTMLButtonElement | null>(null);
   const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(
-    initialValue,
-  )
-  const buttonElement = useRef(null)
+    initialValue
+  );
+  const buttonElement = useRef(null);
   const handleClick = () => {
-    setDatePicker(buttonElement.current)
-  }
+    setDatePicker(buttonElement.current);
+  };
   const handleClose = () => {
-    setDatePicker(null)
-  }
+    setDatePicker(null);
+  };
 
-  const open = Boolean(datePicker)
-  const idProp = open ? id : undefined
+  const open = Boolean(datePicker);
+  const idProp = open ? id : undefined;
 
   const handleChange = (value: dayjs.Dayjs | null) => {
-    console.log(value)
-    setSelectedDate(value)
-    onChange(value)
-    handleClose()
-  }
+    console.log(value);
+    setSelectedDate(value);
+    onChange(value);
+    handleClose();
+  };
 
   return (
     <>
@@ -75,7 +75,7 @@ function DatePickerButton({ onChange, text, id, icon, initialValue }: Props) {
         </ThemeProvider>
       </Popover>
     </>
-  )
+  );
 }
 
-export default DatePickerButton
+export default DatePickerButton;
