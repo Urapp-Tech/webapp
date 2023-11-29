@@ -12,13 +12,13 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AlertBox from '../../components/common/SnackBar';
 import { setDropOff, setPickup } from '../../redux/features/DateAndTime';
 import {
-  newOrder,
   removeFromCart,
+  resetCart,
   setCartData,
 } from '../../redux/features/cartStateSlice';
 import { setUserAddressList } from '../../redux/features/deviceState';
@@ -26,40 +26,39 @@ import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import AddressService from '../../services/Address';
 import OrderService from '../../services/Order';
 import cartService from '../../services/cart';
-import { getItem, removeItem } from '../../utilities/local-storage';
 import DatePickerButton from './DatePickerButton';
+import PayFastForm from './PayFastForm';
 
 function MyBasketPage() {
-  const { cartItems }: any = useAppSelector((state) => state.cartState);
+  const { cartItems, cartData }: any = useAppSelector(
+    (state) => state.cartState
+  );
   const { DropOff, PickUp } = useAppSelector((state) => state.dateState);
+  const user = useAppSelector((state) => state.authState.user);
+  const userAddress = useAppSelector((state) => state.deviceStates.AddressList);
   const dispatch = useAppDispatch();
-  const cartData = getItem('REGISTERED_CART');
+
   const [promoCode, setPromoCode] = useState('');
   const navigate = useNavigate();
   const [alertMsg, setAlertMsg] = useState('');
   const [showAlert, setShowAlert] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const user = useAppSelector((state) => state.authState.user);
-  const userAddress = useAppSelector(
-    (state: any) => state.deviceStates.AddressList
-  );
+  const [payFastFormData, setPayFastFormData] = useState<any>(null);
+
+  const formSubmitButtonRef = useRef<HTMLButtonElement>(null);
 
   const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
     if (value) {
-      dispatch(setPickup(value));
+      dispatch(setPickup(value.toISOString()));
     }
   };
   const handleDropOffTimeChange = (value: dayjs.Dayjs | null) => {
     if (value) {
-      dispatch(setDropOff(value));
+      dispatch(setDropOff(value.toISOString()));
     }
   };
-  const total = cartItems.reduce(
-    (previousValue: any, currentValue: any) =>
-      previousValue + currentValue.price * currentValue.quantity,
-    0
-  );
+
   useEffect(() => {
     if (user) {
       setIsLoading(true);
@@ -70,14 +69,7 @@ function MyBasketPage() {
     }
   }, [dispatch, user]);
 
-  const arr: any = [];
-  cartItems.forEach((el: any) => {
-    const abc = {
-      id: el.id,
-      quantity: el.quantity,
-    };
-    arr.push(abc);
-  });
+  useEffect(() => {}, [cartData]);
 
   const onCheckout = () => {
     const reqBody: any = {
@@ -89,7 +81,9 @@ function MyBasketPage() {
       pickupDateTime: PickUp,
       promoCode,
       tenant: cartData?.tenant,
-      products: arr,
+      products: cartItems.map((item) => {
+        return { id: item.id, quantity: item.buyCount };
+      }),
     };
     if (!user) {
       navigate('/auth/login');
@@ -98,16 +92,49 @@ function MyBasketPage() {
       cartService
         .updateCart(reqBody)
         .then((response) => {
-          dispatch(setCartData(response.data.data.cart));
-          OrderService.addOrder({ cartId: response.data.data.cart.id }).then(
-            (OrderResponse) => {
-              dispatch(newOrder(OrderResponse.data));
-              dispatch(setPickup(null));
-              dispatch(setDropOff(null));
-              removeItem('CART_ITEMS');
-              window.location.replace(OrderResponse.data.data.paymentUrl);
+          if (response.data.success) {
+            dispatch(setCartData(response.data.data.cart));
+            return OrderService.addPayFastOrder({
+              cartId: response.data.data.cart.id,
+            });
+          }
+          return { data: { success: false } };
+        })
+        .then(async (orderResponse) => {
+          if (orderResponse.data.success) {
+            dispatch(setPickup(null));
+            dispatch(setDropOff(null));
+            dispatch(resetCart());
+            // window.location.replace(orderResponse.data.data.paymentUrl);
+            const payFastTokenData = await OrderService.getPayFastToken();
+            if (payFastTokenData.data.success) {
+              setPayFastFormData({
+                merchantId: payFastTokenData.data.data.merchantId,
+                token: payFastTokenData.data.data.accessToken,
+                merchantName: payFastTokenData.data.data.name,
+                generatedDateTime: payFastTokenData.data.data.generatedDateTime,
+                successURL: payFastTokenData.data.data.successUrl,
+                failureURL: payFastTokenData.data.data.cancelUrl,
+                // webHookURL: payFastTokenData.data.data.payFastHookUrl,
+                webHookURL:
+                  'https://c8a4-2400-adc1-47f-8600-ad55-77e7-42ea-b489.ngrok-free.app/api/v1/app/appOrder/pay-fast/webhook',
+                userName: user?.firstName,
+                totalPrice: orderResponse.data.data.order.grandTotal,
+                phoneNumber: user?.phone,
+                emailAddress: user?.email,
+                items: orderResponse.data.data.orderItems.map((item: any) => ({
+                  id: item.itemId,
+                  quantity: item.quantity,
+                  price: item.unitPrice.replace('$', ''),
+                })),
+                orderId: orderResponse.data.data.order.id,
+                currencyType: 'USD',
+              });
+              setTimeout(() => {
+                formSubmitButtonRef?.current?.click();
+              }, 250);
             }
-          );
+          }
         })
         .catch((error) => {
           setAlertMsg(error.message);
@@ -165,9 +192,15 @@ function MyBasketPage() {
                             </div>
                           </div>
                         </td>
-                        <td>${item?.price?.toFixed(2)}</td>
-                        <td>{item.quantity}</td>
-                        <td>${(item.price * item.quantity).toFixed(2)}</td>
+                        <td>${Number(item?.price ?? 0).toFixed(2)}</td>
+                        <td>{Number(item?.buyCount ?? 0).toFixed(2)}</td>
+                        <td>
+                          $
+                          {(
+                            Number(item?.price ?? 0) *
+                            Number(item?.buyCount ?? 0)
+                          ).toFixed(2)}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -218,21 +251,24 @@ function MyBasketPage() {
                     id="pick-up-date-time-picker"
                     icon={<DateRangeIcon />}
                     text="Pick up time"
-                    initialValue={PickUp}
+                    initialValue={dayjs(PickUp ?? new Date())}
                   />
                   <div className="mb-2 flex items-center">
                     <DateRangeIcon className="mr-2 text-xl" />
                     <p className="selected-value">
                       {PickUp
-                        ? PickUp.format('ddd, MMM D, YYYY')
+                        ? dayjs(PickUp ?? new Date()).format('ddd, MMM D, YYYY')
                         : 'Select a date'}
                     </p>
                   </div>
                   <div className="flex items-center">
                     <AccessTimeIcon className="mr-2 text-xl" />
                     <p className="selected-value">
-                      {PickUp?.format('HH:mm')} -
-                      {PickUp?.add(1, 'hours').format('HH:mm')}
+                      {PickUp
+                        ? `${dayjs(PickUp)?.format('HH:mm')}-${dayjs(PickUp)
+                            ?.add(1, 'hours')
+                            .format('HH:mm')}`
+                        : 'Select time'}
                     </p>
                   </div>
                 </div>
@@ -242,21 +278,24 @@ function MyBasketPage() {
                     id="drop-off-date-time-picker"
                     icon={<DateRangeIcon />}
                     text="Drop off time"
-                    initialValue={DropOff}
+                    initialValue={dayjs(DropOff)}
                   />
                   <div className="mb-2 flex items-center">
                     <DateRangeIcon className="mr-2 text-xl" />
                     <p className="selected-value">
                       {DropOff
-                        ? DropOff.format('ddd, MMM D, YYYY')
+                        ? dayjs(DropOff).format('ddd, MMM D, YYYY')
                         : 'Select a date'}
                     </p>
                   </div>
                   <div className="flex items-center">
                     <AccessTimeIcon className="mr-2 text-xl" />
                     <p className="selected-value">
-                      {DropOff?.format('HH:mm')} -
-                      {DropOff?.add(1, 'hours').format('HH:mm')}
+                      {DropOff
+                        ? `${dayjs(DropOff)?.format('HH:mm')}-${dayjs(DropOff)
+                            ?.add(1, 'hours')
+                            .format('HH:mm')}`
+                        : 'Select time'}
                     </p>
                   </div>
                 </div>
@@ -275,21 +314,27 @@ function MyBasketPage() {
                 <h5 className="heading">Total Amount</h5>
                 <div className="mb-4 flex items-center justify-between">
                   <p className="key">Total Amount</p>
-                  <p className="value">${total.toFixed(2)}</p>
+                  <p className="value">
+                    ${Number(cartData?.totalAmount ?? 0).toFixed(2)}
+                  </p>
                 </div>
                 <div className="mb-4 flex items-center justify-between">
                   <p className="key">Discount</p>
                   <p className="value">$0.00</p>
                 </div>
                 <div className="mb-4 flex items-center justify-between">
-                  <p className="key">HST 13%</p>
-                  <p className="value">${((total / 100) * 13).toFixed(2)}</p>
+                  <p className="key">
+                    HST {Number(cartData?.gstPercentage ?? 0).toFixed(0)}%
+                  </p>
+                  <p className="value">
+                    {Number(cartData?.gstAmount ?? 0).toFixed(2)}
+                  </p>
                 </div>
               </div>
               <div className="grand-total">
                 <p className="key">Grand Total</p>
                 <p className="value">
-                  ${(total + (total / 100) * 13).toFixed(2)}
+                  ${Number(cartData?.grandTotal ?? 0).toFixed(2)}
                 </p>
               </div>
               <Button
@@ -304,6 +349,25 @@ function MyBasketPage() {
           </div>
         </div>
       </div>
+      {payFastFormData ? (
+        <PayFastForm
+          token={payFastFormData.token}
+          totalPrice={payFastFormData.totalPrice}
+          phoneNumber={payFastFormData.phoneNumber}
+          emailAddress={payFastFormData.emailAddress}
+          items={payFastFormData.items}
+          successURL={payFastFormData.successURL}
+          failureURL={payFastFormData.failureURL}
+          webHookURL={payFastFormData.webHookURL}
+          orderId={payFastFormData.orderId}
+          currencyType={payFastFormData.currencyType}
+          userName={payFastFormData.userName}
+          merchantId={payFastFormData.merchantId}
+          merchantName={payFastFormData.merchantName}
+          generatedDateTime={payFastFormData.generatedDateTime}
+          formSubmitButtonRef={formSubmitButtonRef}
+        />
+      ) : null}
     </LocalizationProvider>
   );
 }

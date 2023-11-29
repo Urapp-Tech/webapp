@@ -25,6 +25,8 @@ const API_PATHS = {
   // Cart
   anonymousCart: new URL(`appUserCart/getCart/device`, BASE_URL).toString(),
 
+  userCart: new URL(`appUserCart/getCart/user`, BASE_URL).toString(),
+
   updateCart: new URL(`appUserCart/updateCart`, BASE_URL).toString(),
 
   // Category
@@ -44,6 +46,13 @@ const API_PATHS = {
 
   // Order
   addOrder: new URL(`appOrder/newOrder`, BASE_URL).toString(),
+
+  addPayFastOrder: new URL(`appOrder/newPayFastOrder`, BASE_URL).toString(),
+
+  getPayFastToken: new URL(
+    `appOrder/pay-fast/access-token`,
+    BASE_URL
+  ).toString(),
 
   orderList: new URL(`appOrder/webapp/list`, BASE_URL).toString(),
 

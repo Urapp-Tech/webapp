@@ -8,7 +8,7 @@ import { ClientJS } from 'clientjs';
 import { useCallback, useEffect, useState } from 'react';
 import CategoriesCard from '../../components/common/CategoriesCard';
 import AlertBox from '../../components/common/SnackBar';
-import { setCartData } from '../../redux/features/cartStateSlice';
+import { setCartData, setCartItems } from '../../redux/features/cartStateSlice';
 import { setDeviceData } from '../../redux/features/deviceState';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 
@@ -45,6 +45,11 @@ function HomePage() {
   const persistedDeviceData = useAppSelector(
     (state) => state.deviceStates.deviceData
   );
+  const user = useAppSelector((state) => state.authState.user);
+
+  const cartItems = useAppSelector((state) => state.cartState.cartItems);
+  const cartData = useAppSelector((state) => state.cartState.cartData);
+
   const dispatch = useAppDispatch();
   const client = new ClientJS();
   const fingerprint = client.getFingerprint();
@@ -137,25 +142,69 @@ function HomePage() {
   }, [agent, dispatch, fingerprint, persistedDeviceData]);
 
   useEffect(() => {
-    if (!persistedDeviceData) {
-      return;
+    if (persistedDeviceData) {
+      cartService
+        .anonymousCart({
+          tenant: persistedDeviceData?.tenant,
+          appUserDevice: persistedDeviceData?.id,
+        })
+        .then((cartResponse) => {
+          console.log('cartResponse :>> ', cartResponse);
+          if (cartResponse.data.success) {
+            dispatch(setCartData(cartResponse.data.data.cart));
+            dispatch(setCartItems(cartResponse.data.data.cartItems));
+          }
+        })
+        .catch((error) => {
+          setAlertMsg(error.message);
+          setShowAlert(true);
+          setAlertSeverity('error');
+        });
     }
-    cartService
-      .anonymousCart({
-        tenant: persistedDeviceData?.tenant,
-        appUserDevice: persistedDeviceData?.id,
-      })
-      .then((cartResponse) => {
-        if (cartResponse.data.success) {
-          dispatch(setCartData(cartResponse.data.data.cart));
-        }
-      })
-      .catch((error) => {
-        setAlertMsg(error.message);
-        setShowAlert(true);
-        setAlertSeverity('error');
-      });
   }, [dispatch, persistedDeviceData]);
+
+  useEffect(() => {
+    if (user && !persistedDeviceData && !cartData) {
+      cartService
+        .userCart()
+        .then((cartResponse) => {
+          if (cartResponse.data.success) {
+            dispatch(setCartData(cartResponse.data.data.cart));
+            dispatch(setCartItems(cartResponse.data.data.cartItems));
+          }
+        })
+        .catch((error) => {
+          setAlertMsg(error.message);
+          setShowAlert(true);
+          setAlertSeverity('error');
+        });
+    }
+  }, [cartData, dispatch, persistedDeviceData, user]);
+
+  /*  useEffect(() => {
+    if (user && cartData) {
+      const updateCartPayload: any = {
+        appUser: user?.id,
+        cartId: cartData?.id,
+        tenant: cartData?.tenant,
+        products: cartItems.map((item) => {
+          return { id: item.id, quantity: item.buyCount };
+        }),
+      };
+      cartService
+        .updateCart(updateCartPayload)
+        .then((cartResponse) => {
+          if (cartResponse.data.success) {
+            dispatch(setCartData(cartResponse.data.data.cart));
+          }
+        })
+        .catch((error) => {
+          setAlertMsg(error.message);
+          setShowAlert(true);
+          setAlertSeverity('error');
+        });
+    }
+  }, [cartItems, dispatch, user]); */
 
   useEffect(() => {
     if (subCategoryData?.data?.homeCatItems?.length > 0) {

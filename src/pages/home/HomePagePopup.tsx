@@ -84,7 +84,12 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
     cartService
       .updateCart(reqBody)
       .then((response) => {
-        return dispatch(setCartData(response.data.data.cart));
+        if (response.data.success) {
+          dispatch(setCartData(response.data.data.cart));
+        }
+        setAlertMsg(response.data.message);
+        setShowAlert(true);
+        setAlertSeverity('error');
       })
       .catch((error) => {
         setAlertMsg(error.message);
@@ -97,6 +102,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cartItems]);
+
   const onCloseHandler = (event: object, reason: string) => {
     if (reason === 'backdropClick') {
       setOpen(false);

@@ -26,11 +26,16 @@ const anonymousCart = (data: AnonymousCartPayload) => {
   return axios.post(API_PATHS.anonymousCart, data, getHeaders());
 };
 
+const userCart = () => {
+  return axios.post(API_PATHS.userCart, {}, getHeaders());
+};
+
 const updateCart = (data: UpdateCartPayload) => {
   return axios.post(API_PATHS.updateCart, data, getHeaders());
 };
 
 export default {
   anonymousCart,
+  userCart,
   updateCart,
 };

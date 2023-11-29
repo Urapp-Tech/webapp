@@ -10,6 +10,14 @@ const addOrder = (data: NewOrder) => {
   return axios.post(API_PATHS.addOrder, data, getHeaders());
 };
 
+const addPayFastOrder = (data: NewOrder) => {
+  return axios.post(API_PATHS.addPayFastOrder, data, getHeaders());
+};
+
+const getPayFastToken = () => {
+  return axios.post(API_PATHS.getPayFastToken, {}, getHeaders());
+};
+
 const orderList = () => {
   return axios.get(API_PATHS.orderList, getHeaders());
 };
@@ -22,4 +30,6 @@ export default {
   addOrder,
   orderList,
   orderDetail,
+  getPayFastToken,
+  addPayFastOrder,
 };

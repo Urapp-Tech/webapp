@@ -1,6 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import { getItem, setItem } from '../../utilities/local-storage';
+import { getItem, removeItem, setItem } from '../../utilities/local-storage';
 
 export type CartItem = {
   id: string;
@@ -52,6 +52,23 @@ export const cartSlice = createSlice({
       setItem('REGISTERED_CART', action.payload);
       state.cartData = action.payload;
     },
+    setCartItems: (state, action: PayloadAction<Array<any>>) => {
+      state.cartItems = action.payload.map((item) => ({
+        ...item,
+        buyCount: item.quantity,
+      }));
+      setItem(
+        'CART_ITEMS',
+        state.cartItems.map((item) => ({ ...item, buyCount: item.quantity }))
+      );
+    },
+
+    resetCart: (state) => {
+      state.cartItems = [];
+      state.cartData = null;
+      removeItem('REGISTERED_CART');
+      removeItem('CART_ITEMS');
+    },
     addToCart: (state, action: PayloadAction<any>) => {
       const cartItemIndex = state.cartItems.findIndex(
         (item) => item.id === action.payload.id
@@ -100,20 +117,18 @@ export const cartSlice = createSlice({
       state.cartItems[cartItemIndex].buyCount -= 1;
       setItem('CART_ITEMS', state.cartItems);
     },
-    newOrder: (state, action: PayloadAction<[]>) => {
-      state.newOrder = action.payload;
-    },
   },
 });
 
 // Action creators are generated for each case reducer function
 export const {
   addToCart,
-  removeFromCart,
-  incrementItemQuantity,
   decrementQuantity,
+  incrementItemQuantity,
+  removeFromCart,
+  resetCart,
   setCartData,
-  newOrder,
+  setCartItems,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
