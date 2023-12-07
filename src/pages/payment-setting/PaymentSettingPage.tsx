@@ -60,7 +60,7 @@ function PaymentSettingPage() {
             className={genButtonClasses(selectedPaymentOption === 'PAYPAL')}
           >
             {selectedPaymentOption === 'PAYPAL' ? (
-              <div className="absolute -bottom-3 left-[calc(75%_+_1rem)] z-10 aspect-square w-5 rotate-45 border-2 border-t-0 border-l-0 border-solid border-neutral-900 bg-gray-50" />
+              <div className="absolute -bottom-3 left-[calc(75%_+_1rem)] z-10 aspect-square w-5 rotate-45 border-2 border-l-0 border-t-0 border-solid border-neutral-900 bg-gray-50" />
             ) : null}
             <img
               src={assets.images.paypal}

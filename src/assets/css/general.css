@@ -76,7 +76,7 @@ Faqs Page, Terms & Conditions Page, Privacy Policy Page
   color: var(--dark-300);
 }
 .faqs-accordion .accordion-item .accordion-body {
-  @apply px-0 pt-0 pb-4;
+  @apply px-0 pb-4 pt-0;
 }
 .faqs-accordion .accordion-item .accordion-body .desc {
   @apply mb-0;

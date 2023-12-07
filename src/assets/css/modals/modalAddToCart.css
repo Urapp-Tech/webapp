@@ -34,7 +34,7 @@
   @apply w-full;
 }
 .modal-add-to-cart .p-4 {
-  @apply pl-4 pt-4 pr-4 md:pr-0;
+  @apply pl-4 pr-4 pt-4 md:pr-0;
 }
 .modal-add-to-cart .product-name {
   @apply mb-2 leading-tight;
@@ -135,7 +135,7 @@
   color: var(--dark-100);
 }
 .product-accordion .accordion-item .accordion-body {
-  @apply px-0 pt-0 pb-4 md:px-2;
+  @apply px-0 pb-4 pt-0 md:px-2;
 }
 .product-accordion .accordion-item .accordion-body .desc {
   @apply mb-0;

@@ -90,9 +90,8 @@ function MyBasketPage() {
     }
     if (PickUp && DropOff) {
       const updateCartPromise = cartService.updateCart(reqBody);
-      const [updateCartResult, updateCartError] = await promiseHandler(
-        updateCartPromise
-      );
+      const [updateCartResult, updateCartError] =
+        await promiseHandler(updateCartPromise);
       if (!updateCartResult) {
         setAlertSeverity('error');
         setAlertMsg(updateCartError.message);
@@ -109,9 +108,8 @@ function MyBasketPage() {
       const addOrderPromise = orderService.addPayFastOrder({
         cartId: updateCartResult.data.data.cart.id,
       });
-      const [addOrderResult, addOrderError] = await promiseHandler(
-        addOrderPromise
-      );
+      const [addOrderResult, addOrderError] =
+        await promiseHandler(addOrderPromise);
       if (!addOrderResult) {
         setAlertSeverity('error');
         setAlertMsg(addOrderError.message);
@@ -130,9 +128,8 @@ function MyBasketPage() {
       // window.location.replace(orderResponse.data.data.paymentUrl);
 
       const payFastTokenPromise = orderService.getPayFastToken();
-      const [payFastTokenResult, payFastTokenError] = await promiseHandler(
-        payFastTokenPromise
-      );
+      const [payFastTokenResult, payFastTokenError] =
+        await promiseHandler(payFastTokenPromise);
       if (!payFastTokenResult) {
         setAlertSeverity('error');
         setAlertMsg(payFastTokenError.message);

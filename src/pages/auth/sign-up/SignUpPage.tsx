@@ -77,7 +77,7 @@ function SignUpPage() {
       <div className="auth-form pt-12">
         <div className="custom-width">
           <h4 className="heading">Get Registered</h4>
-          <FormControl className="field mt-4 mb-3" variant="standard">
+          <FormControl className="field mb-3 mt-4" variant="standard">
             <InputLabel className="label" htmlFor="firstName">
               First Name
             </InputLabel>

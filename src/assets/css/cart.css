@@ -31,7 +31,7 @@
   font-weight: var(--fw-600);
 }
 .cart-products-table thead tr th {
-  @apply whitespace-nowrap py-5 px-5 text-left;
+  @apply whitespace-nowrap px-5 py-5 text-left;
   font-size: var(--fs-14);
   font-weight: var(--fw-600);
   color: var(--dark-100);
@@ -40,7 +40,7 @@
   border-bottom: 1px solid var(--light-400);
 }
 .cart-products-table tbody tr td {
-  @apply whitespace-nowrap py-3 px-5;
+  @apply whitespace-nowrap px-5 py-3;
   font-size: var(--fs-14);
   font-weight: var(--fw-400);
   color: var(--dark-100);
@@ -201,7 +201,7 @@
   border-radius: 10px;
 }
 .modal-order-success .modal-content {
-  @apply px-5 pt-10 pb-5 text-center;
+  @apply px-5 pb-5 pt-10 text-center;
 }
 .modal-order-success .modal-content .icon {
   @apply mb-5 h-14 w-14;

@@ -1,6 +1,6 @@
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import { AlertColor } from '@mui/material/Alert';
-import Popover from '@mui/material/Popover';
+import Popover, { PopoverVirtualElement } from '@mui/material/Popover';
 import dayjs from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +15,13 @@ type Props = {
   setNotification: React.Dispatch<
     React.SetStateAction<HTMLButtonElement | null>
   >;
-  anchorElement: Element | ((element: Element) => Element) | null | undefined;
+  anchorElement:
+    | Element
+    | (() => Element)
+    | PopoverVirtualElement
+    | (() => PopoverVirtualElement)
+    | null
+    | undefined;
 };
 function NotificationPopover({
   notification,

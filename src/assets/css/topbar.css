@@ -9,7 +9,7 @@
   width: 160px;
 }
 .custom-badge {
-  @apply pointer-events-none top-1 right-1 h-5 w-5 rounded-full !important;
+  @apply pointer-events-none right-1 top-1 h-5 w-5 rounded-full !important;
   font-family: var(--ff-open-sans) !important;
   background-color: #ff4848 !important;
   font-size: var(--fs-10) !important;
@@ -39,7 +39,7 @@
   @apply px-4 pb-5;
 }
 .notification-popover .all-notifications .day {
-  @apply mt-4 mb-3 leading-tight;
+  @apply mb-3 mt-4 leading-tight;
   font-size: var(--fs-16);
   font-weight: var(--fw-600);
   color: var(--dark-100);

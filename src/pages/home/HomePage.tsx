@@ -104,11 +104,11 @@ function HomePage() {
     );
     const [faqResult, faqError] = await promiseHandler(faqPromise);
     if (!faqResult) {
-      console.error('faqError :>> ', faqError);
+      console.error('error :>> ', faqError);
       return;
     }
     if (!faqResult.data.success) {
-      console.error('faqResult.data.message :>> ', faqResult.data.message);
+      console.error('error :>> ', faqResult.data.message);
       return;
     }
     setFAQs(faqResult.data.data.homeCatItemFaq);

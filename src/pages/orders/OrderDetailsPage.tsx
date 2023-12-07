@@ -21,10 +21,7 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import orderService from '../../services/order.service';
 import { GetOrderListData } from '../../types/order.types';
 import cn from '../../utilities/class-names';
-import {
-  ORDER_STATUSES,
-  ORDER_STATUS_IN_DELIVERY,
-} from '../../utilities/constant';
+import { ORDER_STATUS, ORDER_STATUSES } from '../../utilities/constant';
 import { getItem } from '../../utilities/local-storage';
 import promiseHandler from '../../utilities/promise-handler';
 import DatePickerButton from '../my-basket/DatePickerButton';
@@ -168,7 +165,7 @@ function OrderDetailsPage() {
 
         <div className="grid grid-cols-1 gap-x-5 xl:grid-cols-2">
           <div className="order-details-card">
-            <div className="px-5 pt-6 pb-1">
+            <div className="px-5 pb-1 pt-6">
               <div className="items-center justify-between gap-x-5 sm:flex">
                 <div className="mb-5 flex items-center gap-x-3 sm:mb-0">
                   {ORDER_STATUSES.map(
@@ -218,7 +215,7 @@ function OrderDetailsPage() {
                   className="btn-cancel-order"
                   color="inherit"
                   disabled={
-                    orderItemDetail?.status === ORDER_STATUS_IN_DELIVERY
+                    orderItemDetail?.status === ORDER_STATUS.IN_DELIVERY
                   }
                 >
                   Cancel Order

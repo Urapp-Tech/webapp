@@ -19,7 +19,7 @@
 
 /* Saved Cards */
 .payment-settings-page .saved-cards {
-  @apply h-full px-5 pt-6 pb-5;
+  @apply h-full px-5 pb-5 pt-6;
   background: var(--white);
   box-shadow: 2px 4px 6px 0px rgba(0, 0, 0, 0.06);
   border-radius: 10px;
@@ -96,7 +96,7 @@
   border-radius: 10px;
 }
 .modal-delete-card .modal-content {
-  @apply px-5 pt-11 pb-5 text-center;
+  @apply px-5 pb-5 pt-11 text-center;
 }
 .modal-delete-card .modal-content .icon {
   @apply mb-2 h-14 w-14;

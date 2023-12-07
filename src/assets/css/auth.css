@@ -37,7 +37,7 @@
   line-height: 1.2;
 }
 .auth-main .auth-form .desc {
-  @apply mx-auto mt-6 mb-0 text-center;
+  @apply mx-auto mb-0 mt-6 text-center;
   width: 75%;
   font-size: var(--fs-14);
   font-weight: var(--fw-400);
@@ -141,7 +141,7 @@
   @apply relative hidden md:block;
 }
 .auth-main .join-community .content-container {
-  @apply absolute top-0 right-16 bottom-14 left-0 flex flex-col items-center justify-end text-center;
+  @apply absolute bottom-14 left-0 right-16 top-0 flex flex-col items-center justify-end text-center;
   border-radius: 0 0 50% 50%;
 }
 .auth-main .join-community.login-community .content-container {
