@@ -64,7 +64,7 @@ function Map({
               geocoder.geocode(
                 { location: newCenter },
                 (
-                  results: google.maps.GeocoderResult[] | null,
+                  results: Array<google.maps.GeocoderResult> | null,
                   status: google.maps.GeocoderStatus
                 ) => {
                   if (status === google.GeocoderStatus.OK) {
@@ -89,7 +89,7 @@ function Map({
         geoCoder.geocode(
           { location: latLng },
           (
-            results: google.maps.GeocoderResult[] | null,
+            results: Array<google.maps.GeocoderResult> | null,
             status: google.maps.GeocoderStatus
           ) => {
             if (status === google.GeocoderStatus.OK) {
@@ -107,7 +107,7 @@ function Map({
             geoCoder.geocode(
               { location: newPosition },
               (
-                results: google.maps.GeocoderResult[] | null,
+                results: Array<google.maps.GeocoderResult> | null,
                 status: google.maps.GeocoderStatus
               ) => {
                 if (status === google.GeocoderStatus.OK) {

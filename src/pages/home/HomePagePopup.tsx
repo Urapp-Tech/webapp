@@ -5,6 +5,7 @@ import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOut
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
+import { AlertColor } from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -14,7 +15,7 @@ import { useEffect, useState } from 'react';
 import AlertBox from '../../components/common/SnackBar';
 import { addToCart, setCartData } from '../../redux/features/cartStateSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import cartService, { UpdateCartPayload } from '../../services/cart';
+import cartService, { UpdateCartPayload } from '../../services/cart.service';
 import { tenantId } from '../../utilities/constant';
 
 type Props = {
@@ -35,7 +36,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
   const [count, setCount] = useState(1);
   const [alertMsg, setAlertMsg] = useState<any>('');
   const [showAlert, setShowAlert] = useState(false);
-  const [alertSeverity, setAlertSeverity] = useState('');
+  const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success');
 
   const handleChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -87,18 +88,18 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
         if (response.data.success) {
           dispatch(setCartData(response.data.data.cart));
         }
+        setAlertSeverity('success');
         setAlertMsg(response.data.message);
         setShowAlert(true);
-        setAlertSeverity('error');
       })
       .catch((error) => {
+        setAlertSeverity('error');
         setAlertMsg(error.message);
         setShowAlert(true);
-        setAlertSeverity('error');
       });
+    setAlertSeverity('success');
     setAlertMsg('Item Successfully Added');
     setShowAlert(true);
-    setAlertSeverity('success');
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cartItems]);

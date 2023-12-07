@@ -1,26 +1,25 @@
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
+import { AlertColor } from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import axios from 'axios';
 import { ClientJS } from 'clientjs';
 import { useCallback, useEffect, useState } from 'react';
 import CategoriesCard from '../../components/common/CategoriesCard';
+import Loader from '../../components/common/Loader';
 import AlertBox from '../../components/common/SnackBar';
 import { setCartData, setCartItems } from '../../redux/features/cartStateSlice';
-import { setDeviceData } from '../../redux/features/deviceState';
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-
-import Loader from '../../components/common/Loader';
 import {
   useGetAllCategoryQuery,
   useLazyGetSubCategoryQuery,
 } from '../../redux/features/categorySliceAPI';
-import categoryService from '../../services/Category';
-import cartService from '../../services/cart';
+import { setDeviceData } from '../../redux/features/deviceState';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import cartService from '../../services/cart.service';
+import categoryService from '../../services/category.service';
+import network from '../../services/network';
 import tenantService from '../../services/tenant';
-import { getItem } from '../../utilities/local-storage';
 import promiseHandler from '../../utilities/promise-handler';
 import HomePagePopup from './HomePagePopup';
 
@@ -57,10 +56,12 @@ function HomePage() {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [searchName, setSearchName] = useState('');
-  const [filteredSubCategory, setFilteredSubCategory] = useState<any[]>([]);
+  const [filteredSubCategory, setFilteredSubCategory] = useState<Array<any>>(
+    []
+  );
   const [alertMsg, setAlertMsg] = useState('');
   const [showAlert, setShowAlert] = useState(false);
-  const [alertSeverity, setAlertSeverity] = useState('');
+  const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success');
   const [FAQs, setFAQs] = useState(null);
 
   const { isLoading: isCategoryLoading, data: categoryData } =
@@ -83,85 +84,116 @@ function HomePage() {
   async function fetchIp() {
     const url = new URL('https://api.ipify.org');
     url.searchParams.append('format', 'json');
-    const ipPromise = axios.get(url.toString());
-    const [result, error] = await promiseHandler(ipPromise);
-    if (!result) {
+    const ipPromise = network.get(url.toString());
+    const [ipResult, ipError] = await promiseHandler(ipPromise);
+    if (!ipResult) {
+      setAlertSeverity('error');
       setAlertMsg('Error Occurred');
       setShowAlert(true);
-      setAlertSeverity('error');
       return null;
     }
-    return result.data.ip;
+    return ipResult.data.ip;
   }
 
   const addItemHandler = async (item: any) => {
     setSelectedItem(item);
     setDialogOpen(true);
-    const faqPromise = categoryService.faqService(subCategoryData?.id, item.id);
-    const [result, error] = await promiseHandler(faqPromise);
-    if (!result) {
-      console.error('error :>> ', error);
+    const faqPromise = categoryService.faqService(
+      subCategoryData?.data.id,
+      item.id
+    );
+    const [faqResult, faqError] = await promiseHandler(faqPromise);
+    if (!faqResult) {
+      console.error('faqError :>> ', faqError);
       return;
     }
-    if (result.data.success) {
-      setFAQs(result.data.data.homeCatItemFaq);
+    if (!faqResult.data.success) {
+      console.error('faqResult.data.message :>> ', faqResult.data.message);
+      return;
     }
+    setFAQs(faqResult.data.data.homeCatItemFaq);
   };
 
   useEffect(() => {
-    if (persistedDeviceData) {
-      dispatch(setDeviceData(persistedDeviceData));
-    }
-
-    fetchIp().then((ip) => {
-      const nameValue = `${agent.slice(0, 11)}-${ip}-${fingerprint}`;
-      if (persistedDeviceData === null) {
-        tenantService
-          .getTenantConfig()
-          .then((tenantConfigResponse) =>
-            tenantService.deviceRegistration({
-              deviceId: fingerprint.toString(),
-              deviceType: 'Web',
-              isNotificationAllowed: true,
-              name: nameValue,
-              tenant: tenantConfigResponse.data.data.id,
-              token:
-                'Push notifications are not available on the web platform.',
-            })
-          )
-          .then((deviceRegistrationResponse) => {
-            dispatch(setDeviceData(deviceRegistrationResponse.data.data));
-          })
-          .catch((error) => {
-            setAlertMsg(error.message);
-            setShowAlert(true);
-            setAlertSeverity('error');
-          });
+    async function initializeDeviceData() {
+      if (persistedDeviceData) {
+        return;
       }
-    });
-  }, [agent, dispatch, fingerprint, persistedDeviceData]);
+      const ip = await fetchIp();
+      if (!ip) {
+        return;
+      }
+      const nameValue = `${agent.slice(0, 11)}-${ip}-${fingerprint}`;
+      const getTenantConfigPromise = tenantService.getTenantConfig();
+      const [getTenantConfigResult, getTenantConfigError] =
+        await promiseHandler(getTenantConfigPromise);
+      if (!getTenantConfigResult) {
+        setAlertSeverity('error');
+        setAlertMsg(getTenantConfigError.message);
+        setShowAlert(true);
+        return;
+      }
+      if (!getTenantConfigResult.data.success) {
+        setAlertSeverity('error');
+        setAlertMsg(getTenantConfigResult.data.message);
+        setShowAlert(true);
+        return;
+      }
+      const deviceRegistrationPromise = tenantService.deviceRegistration({
+        deviceId: fingerprint.toString(),
+        deviceType: 'Web',
+        isNotificationAllowed: true,
+        name: nameValue,
+        tenant: getTenantConfigResult.data.data.id,
+        token: 'Push notifications are not available on the web platform.',
+      });
+      const [deviceRegistrationResult, deviceRegistrationError] =
+        await promiseHandler(deviceRegistrationPromise);
+      if (!deviceRegistrationResult) {
+        setAlertSeverity('error');
+        setAlertMsg(deviceRegistrationError.message);
+        setShowAlert(true);
+        return;
+      }
+      if (!deviceRegistrationResult.data.success) {
+        setAlertSeverity('error');
+        setAlertMsg(deviceRegistrationResult.data.message);
+        setShowAlert(true);
+        return;
+      }
+      dispatch(setDeviceData(deviceRegistrationResult.data.data));
+    }
+    initializeDeviceData();
+  }, []);
 
   useEffect(() => {
-    if (persistedDeviceData) {
-      cartService
-        .anonymousCart({
-          tenant: persistedDeviceData?.tenant,
-          appUserDevice: persistedDeviceData?.id,
-        })
-        .then((cartResponse) => {
-          console.log('cartResponse :>> ', cartResponse);
-          if (cartResponse.data.success) {
-            dispatch(setCartData(cartResponse.data.data.cart));
-            dispatch(setCartItems(cartResponse.data.data.cartItems));
-          }
-        })
-        .catch((error) => {
-          setAlertMsg(error.message);
-          setShowAlert(true);
-          setAlertSeverity('error');
-        });
+    async function fetchAnonymousCart() {
+      if (!persistedDeviceData) {
+        return;
+      }
+      const getAnonymousCartPromise = cartService.anonymousCart({
+        tenant: persistedDeviceData?.tenant,
+        appUserDevice: persistedDeviceData?.id,
+      });
+      const [getAnonymousCartResult, getAnonymousCartError] =
+        await promiseHandler(getAnonymousCartPromise);
+      if (!getAnonymousCartResult) {
+        setAlertSeverity('error');
+        setAlertMsg(getAnonymousCartError.message);
+        setShowAlert(true);
+        return;
+      }
+      if (!getAnonymousCartResult.data.success) {
+        setAlertSeverity('error');
+        setAlertMsg(getAnonymousCartResult.data.message);
+        setShowAlert(true);
+        return;
+      }
+      dispatch(setCartData(getAnonymousCartResult.data.data.cart));
+      dispatch(setCartItems(getAnonymousCartResult.data.data.cartItems));
     }
-  }, [dispatch, persistedDeviceData]);
+    fetchAnonymousCart();
+  }, [persistedDeviceData]);
 
   useEffect(() => {
     if (user && !persistedDeviceData && !cartData) {
@@ -174,9 +206,9 @@ function HomePage() {
           }
         })
         .catch((error) => {
+          setAlertSeverity('error');
           setAlertMsg(error.message);
           setShowAlert(true);
-          setAlertSeverity('error');
         });
     }
   }, [cartData, dispatch, persistedDeviceData, user]);
@@ -199,9 +231,9 @@ function HomePage() {
           }
         })
         .catch((error) => {
+          setAlertSeverity('error');
           setAlertMsg(error.message);
           setShowAlert(true);
-          setAlertSeverity('error');
         });
     }
   }, [cartItems, dispatch, user]); */

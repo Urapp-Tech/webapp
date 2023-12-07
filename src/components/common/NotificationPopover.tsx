@@ -1,12 +1,14 @@
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
+import { AlertColor } from '@mui/material/Alert';
 import Popover from '@mui/material/Popover';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../redux/features/authStateSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import Notification from '../../services/Notification';
+import notificationService from '../../services/notification.service';
 import AlertBox from './SnackBar';
+import promiseHandler from '../../utilities/promise-handler';
 
 type Props = {
   notification: HTMLButtonElement | null;
@@ -31,26 +33,32 @@ function NotificationPopover({
   const [notificationList, setNotificationList] = useState([]);
   const [alertMsg, setAlertMsg] = useState<any>('');
   const [showAlert, setShowAlert] = useState(false);
-  const [alertSeverity, setAlertSeverity] = useState('');
+  const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success');
+
+  const getNotificationList = useCallback(async () => {
+    const getNotificationListPromise = notificationService.notificationList();
+    const [getNotificationListResult, getNotificationListError] =
+      await promiseHandler(getNotificationListPromise);
+    if (!getNotificationListResult) {
+      setAlertSeverity('error');
+      setAlertMsg(getNotificationListError.message);
+      setShowAlert(true);
+      return;
+    }
+    if (!getNotificationListResult.data.success) {
+      setAlertSeverity('error');
+      setAlertMsg(getNotificationListResult.data.message);
+      setShowAlert(true);
+      return;
+    }
+    setNotificationList(getNotificationListResult.data.data.notifications);
+  }, []);
 
   useEffect(() => {
     if (user) {
-      Notification.notificationListService()
-        .then((response) => {
-          if (response.data.data.code === 401) {
-            dispatch(logout());
-            navigate('/auth/login');
-            return;
-          }
-          setNotificationList(response.data.data.notifications);
-        })
-        .catch((error) => {
-          setAlertMsg(error.message);
-          setShowAlert(true);
-          setAlertSeverity('error');
-        });
+      getNotificationList();
     }
-  }, [dispatch, navigate, user]);
+  }, [user]);
   return (
     <>
       {showAlert && (

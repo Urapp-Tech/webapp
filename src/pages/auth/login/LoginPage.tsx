@@ -1,5 +1,6 @@
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { AlertColor } from '@mui/material/Alert';
 import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -12,12 +13,12 @@ import { useForm } from 'react-hook-form';
 import { NavLink, useNavigate } from 'react-router-dom';
 import assets from '../../../assets';
 import AlertBox from '../../../components/common/SnackBar';
-import { LoginPayload } from '../../../interfaces/auth.interface';
+import { LoginPayload } from '../../../types/auth.types';
 import { login } from '../../../redux/features/authStateSlice';
 import { setUserAddressList } from '../../../redux/features/deviceState';
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
-import AddressService from '../../../services/Address';
-import authService from '../../../services/Auth';
+import addressService from '../../../services/address.service';
+import authService from '../../../services/auth.service';
 import promiseHandler from '../../../utilities/promise-handler';
 
 function LoginPage() {
@@ -26,7 +27,7 @@ function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState('');
-  const [alertSeverity, setAlertSeverity] = useState('');
+  const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success');
   const dispatch = useAppDispatch();
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (
@@ -40,34 +41,45 @@ function LoginPage() {
     formState: { errors },
   } = useForm<LoginPayload>();
 
-  const Email = register('email');
-  const Password = register('password');
+  const email = register('email');
+  const password = register('password');
 
   const submitHandler = async (data: LoginPayload) => {
     const loginPromise = authService.loginService(data);
     const [loginResponse, loginError] = await promiseHandler(loginPromise);
     if (!loginResponse) {
+      setAlertSeverity('error');
+      setAlertMessage(loginError.message);
+      setShowAlert(true);
       return;
     }
-    if (loginResponse.data.success) {
-      dispatch(login(loginResponse.data.data));
-      const addressPromise = AddressService.getUserAddress();
-      const [addressResponse, addressError] = await promiseHandler(
-        addressPromise
-      );
-      if (addressResponse) {
-        dispatch(setUserAddressList(addressResponse.data.data));
-      }
-      if (cartItem > 0) {
-        navigate('/dashboard/my-basket');
-      } else {
-        navigate('/dashboard/home');
-      }
-    } else {
-      setShowAlert(true);
-      setAlertMessage(loginResponse.data.message);
+    if (!loginResponse.data.success) {
       setAlertSeverity('error');
+      setAlertMessage(loginResponse.data.message);
+      setShowAlert(true);
+      return;
     }
+    dispatch(login(loginResponse.data.data));
+    if (cartItem > 0) {
+      navigate('/dashboard/my-basket');
+    } else {
+      navigate('/dashboard/home');
+    }
+    const addressPromise = addressService.getUserAddress();
+    const [addressResult, addressError] = await promiseHandler(addressPromise);
+    if (!addressResult) {
+      setAlertSeverity('error');
+      setAlertMessage(addressError.message);
+      setShowAlert(true);
+      return;
+    }
+    if (!addressResult.data.success) {
+      setAlertSeverity('error');
+      setAlertMessage(addressResult.data.message);
+      setShowAlert(true);
+      return;
+    }
+    dispatch(setUserAddressList(addressResult.data.data));
   };
 
   return (
@@ -86,10 +98,10 @@ function LoginPage() {
               className="input-container"
               id="email"
               type="email"
-              onChange={Email.onChange}
-              onBlur={Email.onBlur}
-              name={Email.name}
-              ref={Email.ref}
+              onChange={email.onChange}
+              onBlur={email.onBlur}
+              name={email.name}
+              ref={email.ref}
             />
             {errors.email && (
               <span className="text-red-500">Email is required</span>
@@ -116,10 +128,10 @@ function LoginPage() {
                   </IconButton>
                 </InputAdornment>
               }
-              onChange={Password.onChange}
-              onBlur={Password.onBlur}
-              name={Password.name}
-              ref={Password.ref}
+              onChange={password.onChange}
+              onBlur={password.onBlur}
+              name={password.name}
+              ref={password.ref}
             />
             {errors.password && (
               <span className="text-red-500">Password is required</span>
@@ -177,14 +189,12 @@ function LoginPage() {
         </div>
       </div>
 
-      {showAlert && (
-        <AlertBox
-          alertOpen={showAlert}
-          msg={alertMessage}
-          setSeverity={alertSeverity}
-          setAlertOpen={setShowAlert}
-        />
-      )}
+      <AlertBox
+        alertOpen={showAlert}
+        msg={alertMessage}
+        setSeverity={alertSeverity}
+        setAlertOpen={setShowAlert}
+      />
     </>
   );
 }

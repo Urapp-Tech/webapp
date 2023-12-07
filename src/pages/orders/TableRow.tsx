@@ -15,7 +15,8 @@ type Props = {
   type: Status;
   date: Date;
   progress: number;
-  item: [];
+  item: Array<any>;
+  appOrderNumber: 'string';
 };
 
 function getProgressClasses(type: Status) {
@@ -135,7 +136,7 @@ const getColorFromCode = (colorCode: any) => {
   return 'primary'; // Default to 'primary' if not recognized
 };
 
-function TableRow({ id, type, date, progress, item }: Props) {
+function TableRow({ id, appOrderNumber, type, date, progress, item }: Props) {
   return (
     <tr>
       <td>
@@ -165,7 +166,7 @@ function TableRow({ id, type, date, progress, item }: Props) {
               )
           )}
           <NavLink to={id} className="order-id">
-            {id}
+            {appOrderNumber}
           </NavLink>
         </div>
       </td>

@@ -1,4 +1,4 @@
-import { SignupPayload } from '../interfaces/auth.interface';
+import { SignUpPayload } from '../types/auth.types';
 import { setItem } from './local-storage';
 
 export const BASE_URL = import.meta.env.VITE_SERVICE_BASE_URL;
@@ -33,7 +33,7 @@ export function getHeaders() {
   };
 }
 
-export const setSignUpData = (data: SignupPayload) => {
+export const setSignUpData = (data: SignUpPayload) => {
   setItem('SIGN_UP_DATA', data);
 };
 

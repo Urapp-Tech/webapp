@@ -1,5 +1,5 @@
-export interface Marker {
+export type Marker = {
   name: string;
   lat: number;
   lng: number;
-}
+};

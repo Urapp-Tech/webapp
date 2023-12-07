@@ -1,4 +1,4 @@
-export interface CategoryPayload {
+export type CategoryPayload = {
   id: string | undefined;
   name: string;
   desc: string | null;
@@ -9,4 +9,4 @@ export interface CategoryPayload {
   createdDate: string | null;
   updatedDate: string | null;
   tenant: string;
-}
+};

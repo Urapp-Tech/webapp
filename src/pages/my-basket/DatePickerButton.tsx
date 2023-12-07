@@ -38,7 +38,6 @@ function DatePickerButton({ onChange, text, id, icon, initialValue }: Props) {
   const idProp = open ? id : undefined;
 
   const handleChange = (value: dayjs.Dayjs | null) => {
-    console.log(value);
     setSelectedDate(value);
     onChange(value);
     handleClose();

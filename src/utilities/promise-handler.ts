@@ -1,9 +1,7 @@
-export default async function promiseHandler<T = any, E = any>(
+export default async function promiseHandler<T, U = Error>(
   promise: Promise<T>
 ) {
-  try {
-    return [await promise, null] as const;
-  } catch (error) {
-    return [null, error as E] as const;
-  }
+  return promise
+    .then<readonly [T, null]>((result) => [result, null] as const)
+    .catch<readonly [null, U]>((error) => [null, error] as const);
 }

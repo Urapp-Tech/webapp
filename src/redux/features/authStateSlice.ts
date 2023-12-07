@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { setToken } from '../../utilities/constant';
-import { clear, getItem, setItem } from '../../utilities/local-storage';
+import { getItem, removeItem, setItem } from '../../utilities/local-storage';
 
 type RegisteredUser = {
   id: string;
@@ -40,7 +40,7 @@ export const authStateSlice = createSlice({
     logout: (state) => {
       state.user = null;
       setToken('');
-      clear();
+      removeItem('USER');
     },
   },
 });

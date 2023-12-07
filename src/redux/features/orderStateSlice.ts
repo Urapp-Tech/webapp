@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type OrderList = {
-  list: [];
+  list: Array<any>;
 };
 
 const initialState: OrderList = {
@@ -12,7 +12,7 @@ const orderListSlice = createSlice({
   name: 'list',
   initialState,
   reducers: {
-    setOrderList: (state, action: PayloadAction<[]>) => {
+    setOrderList: (state, action: PayloadAction<Array<any>>) => {
       state.list = action.payload;
     },
   },

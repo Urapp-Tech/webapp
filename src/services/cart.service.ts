@@ -1,6 +1,6 @@
-import axios from 'axios';
 import API_PATHS from '../utilities/API-PATHS';
 import { getHeaders } from '../utilities/constant';
+import network from './network';
 
 export interface AnonymousCartPayload {
   tenant: string | undefined;
@@ -19,19 +19,19 @@ export interface UpdateCartPayload {
   pickupDateTime: string | null | undefined;
   dropDateTime: string | null | undefined;
   promoCode: string | null | undefined;
-  products: ProductPayload[];
+  products: Array<ProductPayload>;
 }
 
 const anonymousCart = (data: AnonymousCartPayload) => {
-  return axios.post(API_PATHS.anonymousCart, data, getHeaders());
+  return network.post(API_PATHS.anonymousCart, data, getHeaders());
 };
 
 const userCart = () => {
-  return axios.post(API_PATHS.userCart, {}, getHeaders());
+  return network.post(API_PATHS.userCart, {}, getHeaders());
 };
 
 const updateCart = (data: UpdateCartPayload) => {
-  return axios.post(API_PATHS.updateCart, data, getHeaders());
+  return network.post(API_PATHS.updateCart, data, getHeaders());
 };
 
 export default {

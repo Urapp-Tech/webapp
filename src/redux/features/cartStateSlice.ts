@@ -29,12 +29,12 @@ export type CartData = {
   updatedDate: string;
 };
 export interface CartState {
-  cartItems: CartItem[];
+  cartItems: Array<CartItem>;
   cartData: CartData | null;
-  newOrder: [] | null;
+  newOrder: Array<any> | null;
 }
 
-const initialCartItems = getItem<CartItem[]>('CART_ITEMS') ?? [];
+const initialCartItems = getItem<Array<CartItem>>('CART_ITEMS') ?? [];
 
 const initialCartData = getItem<CartData>('REGISTERED_CART') ?? null;
 
