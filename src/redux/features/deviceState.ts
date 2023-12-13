@@ -1,5 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getItem, setItem } from '../../utilities/local-storage';
+import {
+  AddUserAddressData,
+  DeleteUserAddressData,
+  UpdateAddressStatusData,
+  UserAddressData,
+} from '../../types/address.types';
 
 type DevicePayload = {
   deviceId: string;
@@ -13,15 +19,15 @@ type DevicePayload = {
 
 type DeviceState = {
   deviceData: DevicePayload | null;
-  Address: string;
-  AddressList: [];
+  address: string;
+  addressList: Array<UserAddressData>;
 };
 
 const initialDeviceData = getItem<DevicePayload>('DEVICE_DATA');
 const initialState: DeviceState = {
   deviceData: initialDeviceData,
-  Address: '',
-  AddressList: [],
+  address: '',
+  addressList: getItem('ADDRESS') ?? [],
 };
 export const deviceStateSlice = createSlice({
   name: 'device',
@@ -32,36 +38,60 @@ export const deviceStateSlice = createSlice({
       setItem('DEVICE_DATA', action.payload);
     },
     setUserAddress: (state, action: PayloadAction<string>) => {
-      state.Address = action.payload;
+      state.address = action.payload;
     },
-    setUserNewAddress: (state: any, action: PayloadAction<any>) => {
-      state.AddressList = [...state.AddressList, action.payload];
+    setUserNewAddress: (state, action: PayloadAction<AddUserAddressData>) => {
+      const transformedPayload: UserAddressData = {
+        ...action.payload,
+        isDeleted: false,
+      };
+      const newAddressList = state.addressList.map((address) => ({
+        ...address,
+        isActive: false,
+      }));
+      newAddressList.push(transformedPayload);
+      state.addressList = newAddressList;
     },
-    setUserAddressList: (state, action: PayloadAction<[]>) => {
-      setItem('ADDRESS', action.payload);
-      state.AddressList = action.payload;
+    setUserAddressList: (
+      state,
+      action: PayloadAction<Array<UserAddressData>>
+    ) => {
+      const tempAddressList = action.payload.sort(
+        (x: UserAddressData, y: UserAddressData) =>
+          Number(y.isActive) - Number(x.isActive)
+      );
+      state.addressList = tempAddressList;
+      setItem('ADDRESS', tempAddressList);
     },
-    setAddressStatus: (state: any, action: PayloadAction<any>) => {
-      const addressList = state.AddressList || [];
-      state.AddressList = addressList.map((el: any) => {
-        if (el.id === action.payload.id) {
+    setAddressStatus: (
+      state,
+      action: PayloadAction<UpdateAddressStatusData>
+    ) => {
+      const tempAddressList: Array<UserAddressData> = state.addressList;
+      state.addressList = tempAddressList
+        .map((address) => {
+          if (address.id === action.payload.id) {
+            return {
+              ...address,
+              isActive: true,
+            };
+          }
           return {
-            ...el,
-            isActive: true,
-          };
-        }
-        if (el.isActive) {
-          return {
-            ...el,
+            ...address,
             isActive: false,
           };
-        }
-        return el;
-      });
+        })
+        .sort(
+          (x: UserAddressData, y: UserAddressData) =>
+            Number(y.isActive) - Number(x.isActive)
+        );
     },
-    deleteUserAddress: (state: any, action: PayloadAction<any>) => {
-      state.AddressList = state.AddressList.filter(
-        (el: any) => el.id !== action.payload.id
+    deleteUserAddress: (
+      state,
+      action: PayloadAction<DeleteUserAddressData>
+    ) => {
+      state.addressList = state.addressList.filter(
+        (address) => address.id !== action.payload.id
       );
     },
   },

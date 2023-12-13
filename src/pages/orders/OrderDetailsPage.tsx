@@ -9,21 +9,21 @@ import FilterNoneOutlinedIcon from '@mui/icons-material/FilterNoneOutlined';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
+import { AlertColor } from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
-import classNames from 'classnames';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import AlertBox from '../../components/common/SnackBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import OrderServices from '../../services/Order';
-import {
-  ORDER_STATUSES,
-  ORDER_STATUS_IN_DELIVERY,
-} from '../../utilities/constant';
+import orderService from '../../services/order.service';
+import { GetOrderListData } from '../../types/order.types';
+import cn from '../../utilities/class-names';
+import { ORDER_STATUS, ORDER_STATUSES } from '../../utilities/constant';
 import { getItem } from '../../utilities/local-storage';
+import promiseHandler from '../../utilities/promise-handler';
 import DatePickerButton from '../my-basket/DatePickerButton';
 import OrderDetailsPagePopup from './OrderDetailsPagePopup';
 
@@ -36,37 +36,47 @@ function OrderDetailsPage() {
   const [dropOffTime, setDropOffTime] = useState<dayjs.Dayjs | null>(null);
   const [alertMsg, setAlertMsg] = useState<any>('');
   const [showAlert, setShowAlert] = useState(false);
-  const [alertSeverity, setAlertSeverity] = useState('');
+  const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success');
   const [orderCanceled, setOrderCanceled] = useState(false);
-  const items = getItem('ORDER_ITEM');
+  const items = getItem<GetOrderListData>('ORDER_ITEM');
   const address = getItem('ADDRESS');
-  const AddressList = address.map((el: any) => el);
+  const addressList = address.map((el: any) => el);
   const { id } = useParams();
-  const userAddress = AddressList?.find(
-    (el: any) => el.id === orderItemDetail?.appUserAddress
+  const userAddress = addressList?.find(
+    (tempAddress: any) => tempAddress.id === orderItemDetail?.appUserAddress
   );
 
-  console.log(userAddress);
-  console.log(orderItemDetail);
+  const getOrderDetails = useCallback(async function () {
+    if (!items) {
+      return;
+    }
+    const details = items.orders.find((order) => order.id === id);
+    if (!details) {
+      return;
+    }
+    const getOrderDetailsPromise = orderService.orderDetail(details.id);
+    const [getOrderDetailsResult, getOrderDetailsError] = await promiseHandler(
+      getOrderDetailsPromise
+    );
+    if (!getOrderDetailsResult) {
+      setAlertSeverity('error');
+      setAlertMsg(getOrderDetailsError.message);
+      setShowAlert(true);
+      return;
+    }
+    if (!getOrderDetailsResult.data.success) {
+      setAlertSeverity('error');
+      setAlertMsg(getOrderDetailsResult.data.message);
+      setShowAlert(true);
+      return;
+    }
+    setOrderItemDetail(getOrderDetailsResult.data.data);
+  }, []);
+
   useEffect(() => {
     if (user) {
-      const orderDetail = async () => {
-        try {
-          const details = items?.orders.find(
-            (el: any) => el.appOrderNumber === id
-          );
-          OrderServices.orderDetail(details.id).then((response) =>
-            setOrderItemDetail(response.data.data)
-          );
-        } catch (error) {
-          setAlertMsg(error);
-          setShowAlert(true);
-          setAlertSeverity('error');
-        }
-      };
-      orderDetail();
+      getOrderDetails();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const HandleCancelOrder = () => {
@@ -155,7 +165,7 @@ function OrderDetailsPage() {
 
         <div className="grid grid-cols-1 gap-x-5 xl:grid-cols-2">
           <div className="order-details-card">
-            <div className="px-5 pt-6 pb-1">
+            <div className="px-5 pb-1 pt-6">
               <div className="items-center justify-between gap-x-5 sm:flex">
                 <div className="mb-5 flex items-center gap-x-3 sm:mb-0">
                   {ORDER_STATUSES.map(
@@ -205,7 +215,7 @@ function OrderDetailsPage() {
                   className="btn-cancel-order"
                   color="inherit"
                   disabled={
-                    orderItemDetail?.status === ORDER_STATUS_IN_DELIVERY
+                    orderItemDetail?.status === ORDER_STATUS.IN_DELIVERY
                   }
                 >
                   Cancel Order
@@ -330,7 +340,7 @@ function OrderDetailsPage() {
             <div className="body">
               {ORDER_STATUSES.map((el, index) => (
                 <div
-                  className={classNames('timeline-item', {
+                  className={cn('timeline-item', {
                     disabled:
                       index >
                         ORDER_STATUSES.findIndex(

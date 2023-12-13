@@ -4,9 +4,9 @@ const API_PATHS = {
   // Address
   getUserAddress: new URL(`appUserAddress/list`, BASE_URL).toString(),
 
-  userAddress: new URL(`appUserAddress/add`, BASE_URL).toString(),
+  addUserAddress: new URL(`appUserAddress/add`, BASE_URL).toString(),
 
-  UpdateAddressStatus: (id: string) =>
+  updateAddressStatus: (id: string) =>
     new URL(
       `appUserAddress/update/status/${tenantId}/${id}`,
       BASE_URL
@@ -16,14 +16,16 @@ const API_PATHS = {
     new URL(`appUserAddress/delete/${tenantId}/${id}`, BASE_URL).toString(),
 
   // Auth
-  signupService: new URL(`app-user/sign-up/app`, BASE_URL).toString(),
+  signUp: new URL(`app-user/sign-up/app`, BASE_URL).toString(),
 
-  otpService: new URL(`app-user/get-otp`, BASE_URL).toString(),
+  getOTP: new URL(`app-user/get-otp`, BASE_URL).toString(),
 
   loginService: new URL(`app-user/sign-in/app`, BASE_URL).toString(),
 
   // Cart
   anonymousCart: new URL(`appUserCart/getCart/device`, BASE_URL).toString(),
+
+  userCart: new URL(`appUserCart/getCart/user`, BASE_URL).toString(),
 
   updateCart: new URL(`appUserCart/updateCart`, BASE_URL).toString(),
 
@@ -40,10 +42,19 @@ const API_PATHS = {
     ).toString(),
 
   // Notification
-  notificationListService: new URL(`appNotification/list`, BASE_URL).toString(),
+  notificationList: new URL(`appNotification/list`, BASE_URL).toString(),
 
   // Order
   addOrder: new URL(`appOrder/newOrder`, BASE_URL).toString(),
+
+  addPayFastOrder: new URL(`appOrder/newPayFastOrder`, BASE_URL).toString(),
+
+  addCashOrder: new URL(`appOrder/newCashOrder`, BASE_URL).toString(),
+
+  getPayFastToken: new URL(
+    `appOrder/pay-fast/access-token`,
+    BASE_URL
+  ).toString(),
 
   orderList: new URL(`appOrder/webapp/list`, BASE_URL).toString(),
 
@@ -51,7 +62,7 @@ const API_PATHS = {
     new URL(`appOrder/webapp/detail/${id}`, BASE_URL).toString(),
 
   // Profile
-  profileService: new URL(`app-user/profile`, BASE_URL).toString(),
+  getUserProfile: new URL(`app-user/profile`, BASE_URL).toString(),
 
   // Tenant
   getTenantConfig: new URL(`shop/view/${tenantId}`, BASE_URL).toString(),

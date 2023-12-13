@@ -5,12 +5,13 @@ import AppBar from '@mui/material/AppBar';
 import Badge from '@mui/material/Badge';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Notification from '../../services/Notification';
+import notificationService from '../../services/notification.service';
 import NotificationPopover from './NotificationPopover';
+import promiseHandler from '../../utilities/promise-handler';
 
 function TopBar() {
   const user = useAppSelector((state) => state.authState.user);
@@ -22,13 +23,25 @@ function TopBar() {
     setNotificationElement(notificationIconButtonElement.current);
   };
   const [notificationList, setNotificationList] = useState([]);
+
+  const getNotificationList = useCallback(async () => {
+    const getNotificationListPromise = notificationService.notificationList();
+    const [getNotificationListResult, getNotificationListError] =
+      await promiseHandler(getNotificationListPromise);
+    if (!getNotificationListResult) {
+      console.error('error', getNotificationListError.message);
+      return;
+    }
+    if (!getNotificationListResult.data.success) {
+      console.error('error', getNotificationListResult.data.message);
+      return;
+    }
+    setNotificationList(getNotificationListResult.data.data.notifications);
+  }, []);
+
   useEffect(() => {
     if (user) {
-      Notification.notificationListService()
-        .then((response) =>
-          setNotificationList(response.data.data.notifications)
-        )
-        .catch((error) => console.log(error));
+      getNotificationList();
     }
   }, [user]);
   return (

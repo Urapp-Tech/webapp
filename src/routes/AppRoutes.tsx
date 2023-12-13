@@ -62,7 +62,7 @@ const AccountSettingsPage = lazy(
   () => import('../pages/account/AccountSettingPage')
 );
 
-export const routeObjects: RouteObject[] = [
+export const routeObjects: Array<RouteObject> = [
   {
     index: true,
     element: <Navigate to="/dashboard" replace />,

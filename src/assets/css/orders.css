@@ -204,7 +204,7 @@
 }
 
 .order-details-page .order-details-card .ordered-items-table {
-  @apply mt-4 mb-3 w-full;
+  @apply mb-3 mt-4 w-full;
 }
 .ordered-items-table tr:first-child {
   border-top: 1px solid var(--light-400);
@@ -213,7 +213,7 @@
   border-bottom: 1px solid var(--light-400);
 }
 .ordered-items-table tr td {
-  @apply whitespace-nowrap py-5 px-5;
+  @apply whitespace-nowrap px-5 py-5;
   font-size: var(--fs-14);
   font-weight: var(--fw-400);
   color: var(--dark-300);
@@ -257,7 +257,7 @@
   color: var(--dark-100);
 }
 .order-details-page .order-details-card .grand-total {
-  @apply flex items-center justify-between py-3 px-5;
+  @apply flex items-center justify-between px-5 py-3;
   background-color: #1a1a1a26;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
@@ -277,7 +277,7 @@
   overflow-x: auto;
 }
 .order-progress-card .header {
-  @apply flex items-center gap-x-4 py-2 px-5;
+  @apply flex items-center gap-x-4 px-5 py-2;
   background-color: #1a1a1a26;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -294,7 +294,7 @@
   color: var(--dark-100);
 }
 .order-progress-card .body {
-  @apply py-7 px-5;
+  @apply px-5 py-7;
 }
 .order-progress-card .timeline-item {
   @apply mb-8 flex items-center gap-x-4 sm:gap-x-5;
@@ -350,7 +350,7 @@
   color: var(--dark-300);
 }
 .timeline-item .date {
-  @apply ml-auto mb-0 leading-none;
+  @apply mb-0 ml-auto leading-none;
   font-size: var(--fs-14);
   font-weight: var(--fw-400);
   color: var(--dark-300);
@@ -371,7 +371,7 @@
   border-radius: 10px;
 }
 .modal-cancel-order .modal-content {
-  @apply px-5 pt-11 pb-5 text-center;
+  @apply px-5 pb-5 pt-11 text-center;
 }
 .modal-cancel-order .modal-content .icon {
   @apply mb-2 h-14 w-14;

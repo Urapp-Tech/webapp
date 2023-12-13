@@ -6,26 +6,35 @@ import OTPInput from 'react18-otp-input';
 import assets from '../../../assets';
 import { login } from '../../../redux/features/authStateSlice';
 import { useAppDispatch } from '../../../redux/redux-hooks';
-import authService from '../../../services/Auth';
+import authService from '../../../services/auth.service';
 import { tenantId } from '../../../utilities/constant';
 import { getItem } from '../../../utilities/local-storage';
+import promiseHandler from '../../../utilities/promise-handler';
 
 function OTPVerificationPage() {
   const [OTP, setOTP] = useState('');
   const signUpData = getItem('SIGN_UP_DATA');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const onsubmit = () => {
+  const onsubmit = async () => {
     const code = Object.assign(signUpData, {
       otp: OTP,
       tenant: tenantId,
       createdDate: dayjs().format(),
       updatedDate: dayjs().format(),
     });
-    authService.signupService(code).then((response) => {
-      dispatch(login(response.data.data));
-      navigate('../../dashboard/home');
-    });
+    const signUpPromise = authService.signUp(code);
+    const [signUpResult, signUpError] = await promiseHandler(signUpPromise);
+    if (!signUpResult) {
+      console.error('error :>> ', signUpError.message);
+      return;
+    }
+    if (!signUpResult.data.success) {
+      console.error('error :>> ', signUpResult.data.message);
+      return;
+    }
+    dispatch(login(signUpResult.data.data));
+    navigate('../../dashboard/home');
   };
 
   return (

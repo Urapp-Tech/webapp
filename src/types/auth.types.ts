@@ -1,4 +1,4 @@
-export interface SignupPayload {
+export type SignUpPayload = {
   password: string;
   email: string;
   tenantId: '619943ef-8e9f-4a74-9e1e-4b299d19330d';
@@ -7,16 +7,16 @@ export interface SignupPayload {
   postalCode: string;
   otp: string;
   phone: string;
-}
+};
 
-export interface OTPPayload {
+export type OTPPayload = {
   email: string;
-}
-export interface OTPCodePayload {
+};
+export type OTPCodePayload = {
   code: string;
-}
+};
 
-export interface LoginPayload {
+export type LoginPayload = {
   email: string;
   password: string;
-}
+};

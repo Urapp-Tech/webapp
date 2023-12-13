@@ -22,7 +22,7 @@
   @apply bg-gray-50 !important;
 }
 .Details_Title {
-  @apply mt-4 mb-2 font-open-sans text-lg font-bold text-neutral-900 !important;
+  @apply mb-2 mt-4 font-open-sans text-lg font-bold text-neutral-900 !important;
 }
 .Details_FormControl {
   @apply mb-4 w-full !important;

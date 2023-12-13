@@ -2,6 +2,7 @@
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { AlertColor } from '@mui/material/Alert';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
@@ -12,21 +13,22 @@ import { useForm } from 'react-hook-form';
 import { NavLink, useNavigate } from 'react-router-dom';
 import assets from '../../../assets';
 import AlertBox from '../../../components/common/SnackBar';
-import { OTPPayload, SignupPayload } from '../../../interfaces/auth.interface';
-import authService from '../../../services/Auth';
+import { OTPPayload, SignUpPayload } from '../../../types/auth.types';
+import authService from '../../../services/auth.service';
 import { setSignUpData } from '../../../utilities/constant';
+import promiseHandler from '../../../utilities/promise-handler';
 
 function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState('');
-  const [alertSeverity, setAlertSeverity] = useState('');
+  const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success');
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignupPayload>();
+  } = useForm<SignUpPayload>();
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -34,35 +36,38 @@ function SignUpPage() {
     event.preventDefault();
   };
 
-  const OtpVerification = (data: OTPPayload) => {
-    authService
-      .otpService(data)
-      .then((response) => {
-        if (response.data.success) {
-          navigate('../otp-verification');
-        }
-      })
-      .catch((error) => {
-        setShowAlert(true);
-        setAlertMessage(error.message);
-        setAlertSeverity('error');
-      });
+  const OtpVerification = async (data: OTPPayload) => {
+    const getOPTPromise = authService.getOTP(data);
+    const [getOPTResult, getOPTError] = await promiseHandler(getOPTPromise);
+    if (!getOPTResult) {
+      setShowAlert(true);
+      setAlertMessage(getOPTError.message);
+      setAlertSeverity('error');
+      return;
+    }
+    if (!getOPTResult.data.success) {
+      setShowAlert(true);
+      setAlertMessage(getOPTResult.data.message);
+      setAlertSeverity('error');
+      return;
+    }
+    navigate('../otp-verification');
   };
-  const onsubmit = (data: SignupPayload) => {
+
+  const onsubmit = async (data: SignUpPayload) => {
     setSignUpData(data);
     const dataOtp = { email: data.email };
-    OtpVerification(dataOtp);
+    await OtpVerification(dataOtp);
   };
   return (
     <>
-      {showAlert && (
-        <AlertBox
-          msg={alertMessage}
-          setSeverity={alertSeverity}
-          alertOpen={showAlert}
-          setAlertOpen={setShowAlert}
-        />
-      )}
+      <AlertBox
+        msg={alertMessage}
+        setSeverity={alertSeverity}
+        alertOpen={showAlert}
+        setAlertOpen={setShowAlert}
+      />
+
       <div className="fixed-at-top-left">
         <NavLink to="../login" className="go-back">
           <ArrowBackRoundedIcon className="icon-arrow" />
@@ -72,7 +77,7 @@ function SignUpPage() {
       <div className="auth-form pt-12">
         <div className="custom-width">
           <h4 className="heading">Get Registered</h4>
-          <FormControl className="field mt-4 mb-3" variant="standard">
+          <FormControl className="field mb-3 mt-4" variant="standard">
             <InputLabel className="label" htmlFor="firstName">
               First Name
             </InputLabel>

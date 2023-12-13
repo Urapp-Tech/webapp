@@ -1,4 +1,4 @@
-export interface DeviceRegistration {
+export type DeviceRegistration = {
   token: string;
   deviceType: string;
   appUser?: string | null;
@@ -6,4 +6,4 @@ export interface DeviceRegistration {
   isNotificationAllowed: boolean;
   tenant: string;
   deviceId: string | null;
-}
+};

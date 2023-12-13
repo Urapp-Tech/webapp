@@ -1,16 +1,16 @@
+import { AlertColor } from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import Loader from '../../components/common/Loader';
 import AlertBox from '../../components/common/SnackBar';
-import { useAppSelector } from '../../redux/redux-hooks';
-import ProfileApi from '../../services/Profile';
+import profileService from '../../services/profile.service';
+import promiseHandler from '../../utilities/promise-handler';
 
 function AccountProfilePage() {
-  const user = useAppSelector((state) => state.authState.user);
   const [alertMsg, setAlertMsg] = useState<any>('');
   const [showAlert, setShowAlert] = useState(false);
-  const [alertSeverity, setAlertSeverity] = useState('');
+  const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success');
   const [isLoading, setIsLoading] = useState(false);
   const {
     handleSubmit,
@@ -20,24 +20,35 @@ function AccountProfilePage() {
   } = useForm();
 
   useEffect(() => {
-    setIsLoading(true);
-    ProfileApi.profileService()
-      .then((response) => {
-        setIsLoading(false);
-        setValue('firstName', response.data.data.firstName);
-        setValue('lastName', response.data.data.lastName);
-        setValue('email', response.data.data.email);
-        setValue('postalCode', response.data.data.postalCode);
-        setValue('phoneNumber', response.data.data.phone);
-      })
-      .catch((error) => {
-        setAlertMsg(error.message);
-        setShowAlert(true);
+    async function userProfile() {
+      setIsLoading(true);
+      const getUserProfilePromise = profileService.getUserProfile();
+      const [getUserProfileResult, getUserProfileError] = await promiseHandler(
+        getUserProfilePromise
+      );
+      setIsLoading(false);
+      if (!getUserProfileResult) {
         setAlertSeverity('error');
-      });
-  }, [setValue, user?.token]);
+        setAlertMsg(getUserProfileError.message);
+        setShowAlert(true);
+        return;
+      }
+      if (!getUserProfileResult.data.success) {
+        setAlertSeverity('error');
+        setAlertMsg(getUserProfileResult.data.message);
+        setShowAlert(true);
+        return;
+      }
+      setValue('firstName', getUserProfileResult.data.data.firstName);
+      setValue('lastName', getUserProfileResult.data.data.lastName);
+      setValue('email', getUserProfileResult.data.data.email);
+      setValue('postalCode', getUserProfileResult.data.data.postalCode);
+      setValue('phoneNumber', getUserProfileResult.data.data.phone);
+    }
+    userProfile();
+  }, []);
   const onSubmit = (data: any) => {
-    console.log(data);
+    // console.log(data);
   };
   return isLoading ? (
     <Loader />

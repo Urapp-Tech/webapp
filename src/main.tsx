@@ -7,7 +7,28 @@ import './index.css';
 import { store } from './redux/store';
 
 const theme = createTheme({
-  direction: 'rtl',
+  components: {
+    MuiPopover: {
+      defaultProps: {
+        container: document.getElementById('root'),
+      },
+    },
+    MuiPopper: {
+      defaultProps: {
+        container: document.getElementById('root'),
+      },
+    },
+    MuiDialog: {
+      defaultProps: {
+        container: document.getElementById('root'),
+      },
+    },
+    MuiModal: {
+      defaultProps: {
+        container: document.getElementById('root'),
+      },
+    },
+  },
 });
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

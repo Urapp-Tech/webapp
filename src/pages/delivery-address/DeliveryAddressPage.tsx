@@ -5,6 +5,7 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
+import { AlertColor } from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
@@ -22,9 +23,11 @@ import {
   setUserNewAddress,
 } from '../../redux/features/deviceState';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import AddressService from '../../services/Address';
+import addressService from '../../services/address.service';
 import loadGoogleMaps from '../../utilities/load-google-maps';
 import DeleteAddressPopup from './DeleteAddressPopup';
+import promiseHandler from '../../utilities/promise-handler';
+import { UpdateAddressStatusData } from '../../types/address.types';
 
 const typeData = [
   {
@@ -40,7 +43,7 @@ const typeData = [
   {
     name: 'location',
     img: <LocationOnOutlinedIcon />,
-    type: 'Others',
+    type: 'Other',
   },
 ];
 
@@ -90,23 +93,22 @@ function MapHeader({
 }
 
 function DeliveryAddressPage() {
-  const addressList = useAppSelector(
-    (state: any) => state.deviceStates.AddressList
-  );
+  const addressList = useAppSelector((state) => state.deviceStates.addressList);
   const user = useAppSelector((state) => state.authState.user);
   const [delAddress, setDelAddress] = useState<boolean>(false);
   const [location, setLocation] = useState<any>({
     lat: addressList?.length > 0 ? addressList[0]?.latitude : 0,
     lng: addressList?.length > 0 ? addressList[0]?.longitude : 0,
   });
-  const [activeAddress, setActiveAddress] = useState<any>();
+  const [activeAddress, setActiveAddress] =
+    useState<UpdateAddressStatusData | null>(null);
   const [newAddress, setNewAddress] = useState('');
   const [type, setType] = useState('');
   const [name, setName] = useState('');
   const [addressObj, setAddressObj] = useState<any>('');
   const [alertMsg, setAlertMsg] = useState<any>('');
   const [showAlert, setShowAlert] = useState(false);
-  const [alertSeverity, setAlertSeverity] = useState('');
+  const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success');
   const [isLoading, setIsLoading] = useState(false);
   const [deleteItem, setDeleteItem] = useState<any>(null);
   const draggedAddress = useAppSelector(
@@ -114,34 +116,48 @@ function DeliveryAddressPage() {
   );
   const dispatch = useAppDispatch();
   useEffect(() => {
-    if (draggedAddress && draggedAddress.latitude && draggedAddress.longitude) {
-      setLocation({
-        lat: draggedAddress.latitude,
-        lng: draggedAddress.longitude,
-      });
-    }
-    setIsLoading(true);
-    AddressService.getUserAddress()
-      .then((response) => {
-        const responseActiveAddress = response.data.data.find(
-          (item: any) => item.isActive
-        );
-        if (responseActiveAddress) {
-          setActiveAddress(responseActiveAddress);
-        }
-        dispatch(setUserAddressList(response.data.data));
-      })
-      .catch((error) => {
-        setAlertMsg(error.message);
-        setShowAlert(true);
+    async function getUserAddress() {
+      if (
+        draggedAddress &&
+        draggedAddress.latitude &&
+        draggedAddress.longitude
+      ) {
+        setLocation({
+          lat: draggedAddress.latitude,
+          lng: draggedAddress.longitude,
+        });
+      }
+      setIsLoading(true);
+      const getUserAddressPromise = addressService.getUserAddress();
+      const [getUserAddressResult, getUserAddressError] = await promiseHandler(
+        getUserAddressPromise
+      );
+      setIsLoading(false);
+      if (!getUserAddressResult) {
         setAlertSeverity('error');
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [dispatch, draggedAddress, user?.token]);
+        setAlertMsg(getUserAddressError.message);
+        setShowAlert(true);
+        return;
+      }
+      if (!getUserAddressResult.data.success) {
+        setAlertSeverity('error');
+        setAlertMsg(getUserAddressResult.data.message);
+        setShowAlert(true);
+        return;
+      }
 
-  const handleAddressClick = (index: number) => {
+      dispatch(setUserAddressList(getUserAddressResult.data.data));
+      const tempActiveAddress = getUserAddressResult.data.data.find(
+        (item: any) => item.isActive
+      );
+      if (tempActiveAddress) {
+        setActiveAddress(tempActiveAddress);
+      }
+    }
+    getUserAddress();
+  }, []);
+
+  const handleAddressClick = async (index: number) => {
     const selectedAddress = addressList[index];
     setAddressObj(selectedAddress);
     setNewAddress(selectedAddress.address);
@@ -150,16 +166,26 @@ function DeliveryAddressPage() {
       lat: selectedAddress.latitude,
       lng: selectedAddress.longitude,
     });
-    AddressService.updateAddressStatus(selectedAddress.id)
-      .then((response) => {
-        setActiveAddress(response.data.data);
-        dispatch(setAddressStatus(response.data.data));
-      })
-      .catch((error) => {
-        setAlertMsg(error.message);
-        setShowAlert(true);
-        setAlertSeverity('error');
-      });
+    const updateAddressStatusPromise = addressService.updateAddressStatus(
+      selectedAddress.id
+    );
+    const [updateAddressStatusResult, updateAddressStatusError] =
+      await promiseHandler(updateAddressStatusPromise);
+
+    if (!updateAddressStatusResult) {
+      setAlertSeverity('error');
+      setAlertMsg(updateAddressStatusError.message);
+      setShowAlert(true);
+      return;
+    }
+    if (!updateAddressStatusResult.data.success) {
+      setAlertSeverity('error');
+      setAlertMsg(updateAddressStatusResult.data.message);
+      setShowAlert(true);
+      return;
+    }
+    setActiveAddress(updateAddressStatusResult.data.data);
+    dispatch(setAddressStatus(updateAddressStatusResult.data.data));
   };
 
   const handleMarkerDragEnd = (newPosition: google.maps.LatLngLiteral) => {
@@ -169,20 +195,20 @@ function DeliveryAddressPage() {
       geocoder.geocode(
         { location: newPosition },
         (
-          result: google.maps.GeocoderResult[] | null,
+          result: Array<google.maps.GeocoderResult> | null,
           status: google.maps.GeocoderStatus
         ) => {
           if (status === google.GeocoderStatus.OK) {
             if (result && result[0]) {
               setNewAddress(result[0].formatted_address);
               setType('');
-              setActiveAddress(false);
             }
           }
         }
       );
     });
   };
+
   const handleCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -194,7 +220,7 @@ function DeliveryAddressPage() {
             geocoder.geocode(
               { location: latLng },
               (
-                results: google.maps.GeocoderResult[] | null,
+                results: Array<google.maps.GeocoderResult> | null,
                 status: google.maps.GeocoderStatus
               ) => {
                 if (
@@ -209,84 +235,93 @@ function DeliveryAddressPage() {
                   });
                   setNewAddress(formattedAddress); // Update the input field with the current location's address
                 } else {
+                  setAlertSeverity('error');
                   setAlertMsg(status);
                   setShowAlert(true);
-                  setAlertSeverity('error');
                 }
               }
             );
           });
         },
         (error) => {
+          setAlertSeverity('error');
           setAlertMsg(error);
           setShowAlert(true);
-          setAlertSeverity('error');
         }
       );
     } else {
+      setAlertSeverity('error');
       setAlertMsg('Geolocation is not supported by this browser.');
       setShowAlert(true);
-      setAlertSeverity('error');
     }
   };
-  const addNewAddress = () => {
-    AddressService.userAddress({
+
+  const addNewAddress = async () => {
+    const addUserAddressPromise = addressService.addUserAddress({
       address: newAddress,
       latitude: location.lat,
       longitude: location.lng,
       name,
       type,
-    })
-      .then((response) => {
-        console.log(response);
-        dispatch(setUserNewAddress(response.data.data));
-        setAlertMsg(response.data.message);
-        setShowAlert(true);
-        setAlertSeverity('success');
-      })
-      .catch((error) => {
-        console.log(error);
-        setAlertMsg(error.response.data.message);
-        setShowAlert(true);
-        setAlertSeverity('error');
-      });
+    });
+    const [addUserAddressResult, addUserAddressError] = await promiseHandler(
+      addUserAddressPromise
+    );
+    if (!addUserAddressResult) {
+      setAlertSeverity('error');
+      setAlertMsg(addUserAddressError.message);
+      setShowAlert(true);
+      return;
+    }
+    if (!addUserAddressResult.data.success) {
+      setAlertSeverity('error');
+      setAlertMsg(addUserAddressResult.data.message);
+      setShowAlert(true);
+      return;
+    }
+    dispatch(setUserNewAddress(addUserAddressResult.data.data));
   };
 
-  const handleDelete = () => {
-    AddressService.deleteUserAddress(deleteItem?.id)
-      .then((response) => {
-        dispatch(deleteUserAddress(response.data.data));
-        setAlertMsg(response.data.message);
-        setShowAlert(true);
-        setAlertSeverity('success');
-      })
-      .catch((error) => {
-        console.log(error);
-        setAlertMsg(error.message);
-        setShowAlert(true);
-        setAlertSeverity('error');
-      });
+  const handleDelete = async () => {
+    const tempDeleteItemId: string | null = deleteItem ? deleteItem.id : null;
+    if (!tempDeleteItemId) {
+      setAlertSeverity('error');
+      setAlertMsg('Delete Id Not Set');
+      setShowAlert(true);
+      return;
+    }
+    const deleteUserAddressPromise =
+      addressService.deleteUserAddress(tempDeleteItemId);
+
+    const [deleteUserAddressResult, deleteUserAddressError] =
+      await promiseHandler(deleteUserAddressPromise);
+    if (!deleteUserAddressResult) {
+      setAlertSeverity('error');
+      setAlertMsg(deleteUserAddressError.message);
+      setShowAlert(true);
+      return;
+    }
+    if (!deleteUserAddressResult.data.success) {
+      setAlertSeverity('error');
+      setAlertMsg(deleteUserAddressResult.data.message);
+      setShowAlert(true);
+      return;
+    }
+    dispatch(deleteUserAddress(deleteUserAddressResult.data.data));
+    setAlertSeverity('success');
+    setAlertMsg(deleteUserAddressResult.data.message);
+    setShowAlert(true);
   };
 
-  const sortedAddressList = addressList.slice();
-  const activeIndex = sortedAddressList.findIndex(
-    (item: any) => item.id === activeAddress?.id
-  );
-
-  if (activeIndex !== -1) {
-    const activeAddressItem = sortedAddressList.splice(activeIndex, 1)[0];
-    sortedAddressList.unshift(activeAddressItem);
-  }
   return (
     <>
-      {showAlert && (
-        <AlertBox
-          msg={alertMsg}
-          setSeverity={alertSeverity}
-          alertOpen={showAlert}
-          setAlertOpen={setShowAlert}
-        />
-      )}
+      <AlertBox
+        msg={alertMsg}
+        setSeverity={alertSeverity}
+        alertOpen={showAlert}
+        setAlertOpen={setShowAlert}
+      />
+
       <DeleteAddressPopup
         open={delAddress}
         setOpen={setDelAddress}
@@ -305,9 +340,11 @@ function DeliveryAddressPage() {
                   className="addresses-list"
                   style={{ maxHeight: '850px', overflow: 'auto' }}
                 >
-                  {sortedAddressList?.map((item: any, index: any) => (
+                  {addressList.map((item: any, index: any) => (
                     <div
-                      className={`item ${item.isActive ? 'active' : ''}`}
+                      className={`item ${
+                        item && item.isActive ? 'active' : ''
+                      }`}
                       key={index}
                       onClick={() => handleAddressClick(index)}
                       onKeyDown={(event) => {
@@ -330,7 +367,8 @@ function DeliveryAddressPage() {
                       </div>
                       <IconButton
                         className="btn-del"
-                        onClick={() => {
+                        onClick={(event) => {
+                          event.stopPropagation();
                           setDeleteItem(item);
                           setDelAddress(true);
                         }}
@@ -399,7 +437,6 @@ function DeliveryAddressPage() {
                                 const newPosition =
                                   results[0].geometry.location.toJSON();
                                 handleMarkerDragEnd(newPosition);
-                                setActiveAddress(null); // Clear active address when user enters new location
                               }
                             }
                           }

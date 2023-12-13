@@ -1,19 +1,18 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import MuiAlert, { AlertColor, AlertProps } from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import Stack from '@mui/material/Stack';
 import React from 'react';
 
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref
-) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
+  function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  }
+);
 
 type Props = {
   msg: string;
-  setSeverity: any;
+  setSeverity: AlertColor;
   alertOpen: boolean;
   setAlertOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -29,7 +28,11 @@ function AlertBox({ msg, setSeverity, alertOpen, setAlertOpen }: Props) {
     setAlertOpen(false);
   };
   return (
-    <Stack spacing={2} sx={{ width: '100%' }}>
+    <Stack
+      style={{ position: 'absolute', zIndex: 99999 }}
+      spacing={2}
+      sx={{ width: '100%' }}
+    >
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={alertOpen}
