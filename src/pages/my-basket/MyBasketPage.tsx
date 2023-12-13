@@ -13,7 +13,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AlertBox from '../../components/common/SnackBar';
 import { setDropOff, setPickup } from '../../redux/features/DateAndTime';
@@ -24,12 +24,13 @@ import {
 } from '../../redux/features/cartStateSlice';
 import { setUserAddressList } from '../../redux/features/deviceState';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import AddressService from '../../services/address.service';
-import cartService from '../../services/cart.service';
+import addressService from '../../services/address.service';
+import cartService, { UpdateCartPayload } from '../../services/cart.service';
 import orderService from '../../services/order.service';
 import promiseHandler from '../../utilities/promise-handler';
 import DatePickerButton from './DatePickerButton';
 import PayFastForm from './PayFastForm';
+import PaymentOptionPopup from './PaymentOptionPopup';
 
 function MyBasketPage() {
   const { cartItems, cartData }: any = useAppSelector(
@@ -46,6 +47,7 @@ function MyBasketPage() {
   const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success');
   const [isLoading, setIsLoading] = useState(false);
   const [payFastFormData, setPayFastFormData] = useState<any>(null);
+  const [openPaymentSelectPopup, setOpenPaymentSelectPopup] = useState(false);
 
   const formSubmitButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -59,20 +61,9 @@ function MyBasketPage() {
       dispatch(setDropOff(value.toISOString()));
     }
   };
-
-  useEffect(() => {
-    if (user) {
-      setIsLoading(true);
-      AddressService.getUserAddress().then((response) => {
-        setIsLoading(false);
-        dispatch(setUserAddressList(response.data.data));
-      });
-    }
-  }, [user]);
-
-  const onCheckout = async () => {
-    const tempAddress: any = userAddress[0] ? userAddress[0].id : null;
-    const reqBody: any = {
+  const onCheckoutPayFast = async () => {
+    const tempAddress = userAddress[0] ? userAddress[0].id : null;
+    const updateCartPayload: UpdateCartPayload = {
       appUser: user?.id,
       appUserAddress: tempAddress,
       appUserDevice: cartData?.appUserDevice,
@@ -89,7 +80,7 @@ function MyBasketPage() {
       navigate('/auth/login');
     }
     if (PickUp && DropOff) {
-      const updateCartPromise = cartService.updateCart(reqBody);
+      const updateCartPromise = cartService.updateCart(updateCartPayload);
       const [updateCartResult, updateCartError] =
         await promiseHandler(updateCartPromise);
       if (!updateCartResult) {
@@ -174,16 +165,172 @@ function MyBasketPage() {
       setShowAlert(true);
     }
   };
+
+  const onCheckoutCash = async () => {
+    const tempAddress = userAddress[0] ? userAddress[0].id : null;
+    const updateCartPayload: UpdateCartPayload = {
+      appUser: user?.id,
+      appUserAddress: tempAddress,
+      appUserDevice: cartData?.appUserDevice,
+      cartId: cartData?.id,
+      dropDateTime: DropOff,
+      pickupDateTime: PickUp,
+      promoCode,
+      tenant: cartData?.tenant,
+      products: cartItems.map((item: any) => {
+        return { id: item.id, quantity: item.buyCount };
+      }),
+    };
+    if (!user) {
+      navigate('/auth/login');
+    }
+    if (PickUp && DropOff) {
+      const updateCartPromise = cartService.updateCart(updateCartPayload);
+      const [updateCartResult, updateCartError] =
+        await promiseHandler(updateCartPromise);
+      if (!updateCartResult) {
+        setAlertSeverity('error');
+        setAlertMsg(updateCartError.message);
+        setShowAlert(true);
+        return;
+      }
+      if (!updateCartResult.data.success) {
+        setAlertSeverity('error');
+        setAlertMsg(updateCartResult.data.message);
+        setShowAlert(true);
+        return;
+      }
+      dispatch(setCartData(updateCartResult.data.data.cart));
+      const addOrderPromise = orderService.addCashOrder({
+        cartId: updateCartResult.data.data.cart.id,
+      });
+      const [addOrderResult, addOrderError] =
+        await promiseHandler(addOrderPromise);
+      if (!addOrderResult) {
+        setAlertSeverity('error');
+        setAlertMsg(addOrderError.message);
+        setShowAlert(true);
+        return;
+      }
+      if (!addOrderResult.data.success) {
+        setAlertSeverity('error');
+        setAlertMsg(addOrderResult.data.message);
+        setShowAlert(true);
+        return;
+      }
+      dispatch(setPickup(null));
+      dispatch(setDropOff(null));
+      dispatch(resetCart());
+
+      setAlertSeverity('success');
+      setAlertMsg('Order Placed');
+      setShowAlert(true);
+    } else {
+      setAlertSeverity('error');
+      setAlertMsg('Pickup Date & Drop off time is Required');
+      setShowAlert(true);
+    }
+  };
+
+  const updateCart = useCallback(async () => {
+    if (!cartData?.id) {
+      return;
+    }
+    const tempAddress = userAddress[0] ? userAddress[0].id : null;
+    const updateCartPayload: UpdateCartPayload = {
+      appUser: user?.id,
+      appUserAddress: tempAddress,
+      appUserDevice: cartData?.appUserDevice,
+      cartId: cartData?.id,
+      dropDateTime: DropOff,
+      pickupDateTime: PickUp,
+      promoCode,
+      tenant: cartData?.tenant,
+      products: cartItems.map((item: any) => {
+        return { id: item.id, quantity: item.buyCount };
+      }),
+    };
+    const updateCartPromise = cartService.updateCart(updateCartPayload);
+    const [updateCartResult, updateCartError] =
+      await promiseHandler(updateCartPromise);
+    if (!updateCartResult) {
+      setAlertSeverity('error');
+      setAlertMsg(updateCartError.message);
+      setShowAlert(true);
+      return;
+    }
+    if (!updateCartResult.data.success) {
+      setAlertSeverity('error');
+      setAlertMsg(updateCartResult.data.message);
+      setShowAlert(true);
+      return;
+    }
+    dispatch(setCartData(updateCartResult.data.data.cart));
+  }, [cartItems]);
+
+  useEffect(() => {
+    updateCart();
+  }, [cartItems]);
+
+  const handleRemoveFromCart = async (id: string) => {
+    dispatch(removeFromCart(id));
+  };
+
+  const handlePopupClose = (paymentType: 'CASH' | 'ONLINE' | null) => {
+    if (!paymentType) {
+      return;
+    }
+    if (paymentType === 'CASH') {
+      onCheckoutCash();
+      return;
+    }
+    if (paymentType === 'ONLINE') {
+      onCheckoutPayFast();
+    }
+  };
+
+  const getUserAddress = useCallback(async () => {
+    if (user) {
+      setIsLoading(true);
+      const getUserAddressPromise = addressService.getUserAddress();
+      const [getUserAddressResult, getUserAddressError] = await promiseHandler(
+        getUserAddressPromise
+      );
+      setIsLoading(false);
+      if (!getUserAddressResult) {
+        setAlertSeverity('error');
+        setAlertMsg(getUserAddressError.message);
+        setShowAlert(true);
+        return;
+      }
+      if (!getUserAddressResult.data.success) {
+        setAlertSeverity('error');
+        setAlertMsg(getUserAddressResult.data.message);
+        setShowAlert(true);
+        return;
+      }
+      dispatch(setUserAddressList(getUserAddressResult.data.data));
+    }
+  }, [user]);
+
+  useEffect(() => {
+    getUserAddress();
+  }, [user]);
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      {showAlert && (
-        <AlertBox
-          msg={alertMsg}
-          setSeverity={alertSeverity}
-          alertOpen={showAlert}
-          setAlertOpen={setShowAlert}
-        />
-      )}
+      <AlertBox
+        msg={alertMsg}
+        setSeverity={alertSeverity}
+        alertOpen={showAlert}
+        setAlertOpen={setShowAlert}
+      />
+
+      <PaymentOptionPopup
+        handlePopupClose={handlePopupClose}
+        open={openPaymentSelectPopup}
+        setOpen={setOpenPaymentSelectPopup}
+      />
 
       <div className="cart-page p-4 sm:p-5 xl:p-7">
         <div className="mb-4 flex items-center justify-start md:mb-6">
@@ -209,7 +356,7 @@ function MyBasketPage() {
                           <div className="flex items-center gap-x-5">
                             <IconButton
                               className="btn-delete"
-                              onClick={() => dispatch(removeFromCart(item?.id))}
+                              onClick={() => handleRemoveFromCart(item.id)}
                             >
                               <DeleteOutlineOutlinedIcon className="text-2xl" />
                             </IconButton>
@@ -365,7 +512,7 @@ function MyBasketPage() {
               </div>
               <Button
                 type="button"
-                onClick={() => onCheckout()}
+                onClick={() => setOpenPaymentSelectPopup(true)}
                 color="inherit"
                 className="btn-checkout"
               >

@@ -189,6 +189,7 @@ function HomePage() {
         setShowAlert(true);
         return;
       }
+
       dispatch(setCartData(getAnonymousCartResult.data.data.cart));
       dispatch(setCartItems(getAnonymousCartResult.data.data.cartItems));
     }

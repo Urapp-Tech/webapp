@@ -55,12 +55,9 @@ export const cartSlice = createSlice({
     setCartItems: (state, action: PayloadAction<Array<any>>) => {
       state.cartItems = action.payload.map((item) => ({
         ...item,
-        buyCount: item.quantity,
+        buyCount: item.buyCount,
       }));
-      setItem(
-        'CART_ITEMS',
-        state.cartItems.map((item) => ({ ...item, buyCount: item.quantity }))
-      );
+      setItem('CART_ITEMS', state.cartItems);
     },
 
     resetCart: (state) => {
@@ -92,18 +89,14 @@ export const cartSlice = createSlice({
       state.cartItems = state.cartItems.filter(
         (item) => item.id !== action.payload
       );
+      console.log('state.cartItems :>> ', state.cartItems);
       setItem('CART_ITEMS', state.cartItems);
     },
-    incrementItemQuantity: (state, action: PayloadAction<string>) => {
+    incrementQuantity: (state, action: PayloadAction<string>) => {
       const cartItemIndex = state.cartItems.findIndex(
         (item) => item.id === action.payload
       );
-      if (
-        state.cartItems[cartItemIndex].buyCount <
-        state.cartItems[cartItemIndex].quantity
-      ) {
-        state.cartItems[cartItemIndex].buyCount += 1;
-      }
+      state.cartItems[cartItemIndex].buyCount += 1;
       setItem('CART_ITEMS', state.cartItems);
     },
     decrementQuantity: (state, action: PayloadAction<string>) => {
@@ -113,6 +106,7 @@ export const cartSlice = createSlice({
       if (state.cartItems[cartItemIndex].buyCount <= 0) {
         state.cartItems[cartItemIndex].buyCount = 0;
         setItem('CART_ITEMS', state.cartItems);
+        return;
       }
       state.cartItems[cartItemIndex].buyCount -= 1;
       setItem('CART_ITEMS', state.cartItems);
@@ -124,7 +118,7 @@ export const cartSlice = createSlice({
 export const {
   addToCart,
   decrementQuantity,
-  incrementItemQuantity,
+  incrementQuantity,
   removeFromCart,
   resetCart,
   setCartData,

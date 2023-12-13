@@ -49,6 +49,8 @@ const API_PATHS = {
 
   addPayFastOrder: new URL(`appOrder/newPayFastOrder`, BASE_URL).toString(),
 
+  addCashOrder: new URL(`appOrder/newCashOrder`, BASE_URL).toString(),
+
   getPayFastToken: new URL(
     `appOrder/pay-fast/access-token`,
     BASE_URL

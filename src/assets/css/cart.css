@@ -191,14 +191,10 @@
 
 /* Order Success Modal */
 .modal-order-success .MuiModal-backdrop {
-  backdrop-filter: blur(25px) !important;
+  @apply backdrop-blur-xl;
 }
 .modal-order-success .MuiDialog-paper {
-  @apply m-4;
-  width: 100%;
-  max-width: 360px;
-  box-shadow: 2px 4px 6px 0px rgba(0, 0, 0, 0.06);
-  border-radius: 10px;
+  @apply m-4 w-full max-w-sm rounded-xl shadow-md;
 }
 .modal-order-success .modal-content {
   @apply px-5 pb-5 pt-10 text-center;

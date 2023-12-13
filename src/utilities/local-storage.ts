@@ -18,6 +18,7 @@ export function getItem<T = any>(key: Key) {
     try {
       return JSON.parse(stringifiedValue) as T;
     } catch (error) {
+      localStorage.removeItem(key);
       return null;
     }
   }

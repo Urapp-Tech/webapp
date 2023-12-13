@@ -11,12 +11,13 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import AlertBox from '../../components/common/SnackBar';
 import { addToCart, setCartData } from '../../redux/features/cartStateSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import cartService, { UpdateCartPayload } from '../../services/cart.service';
 import { tenantId } from '../../utilities/constant';
+import promiseHandler from '../../utilities/promise-handler';
 
 type Props = {
   open: boolean;
@@ -27,8 +28,7 @@ type Props = {
 
 function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
   const user = useAppSelector((state) => state.authState.user);
-  const cartItems = useAppSelector((state) => state.cartState.cartItems);
-  const cartData = useAppSelector((state) => state.cartState.cartData);
+  const { cartData, cartItems } = useAppSelector((state) => state.cartState);
   const deviceData = useAppSelector((state) => state.deviceStates.deviceData);
   const dispatch = useAppDispatch();
 
@@ -60,7 +60,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
     setCount(1);
   };
 
-  useEffect(() => {
+  const updateCart = useCallback(async () => {
     if (!cartData) {
       return;
     }
@@ -71,7 +71,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
       id: item.id,
       quantity: item.buyCount,
     }));
-    const reqBody: UpdateCartPayload = {
+    const updateCartPayload: UpdateCartPayload = {
       appUser: user?.id ?? null,
       appUserDevice: deviceData?.id ?? null,
       cartId: cartData.id,
@@ -82,33 +82,39 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
       dropDateTime: undefined,
       promoCode: undefined,
     };
-    cartService
-      .updateCart(reqBody)
-      .then((response) => {
-        if (response.data.success) {
-          dispatch(setCartData(response.data.data.cart));
-        }
-        setAlertSeverity('success');
-        setAlertMsg(response.data.message);
-        setShowAlert(true);
-      })
-      .catch((error) => {
-        setAlertSeverity('error');
-        setAlertMsg(error.message);
-        setShowAlert(true);
-      });
+    const updateCartPromise = cartService.updateCart(updateCartPayload);
+    const [updateCartResult, updateCartError] =
+      await promiseHandler(updateCartPromise);
+    if (!updateCartResult) {
+      setAlertSeverity('error');
+      setAlertMsg(updateCartError.message);
+      setShowAlert(true);
+      return;
+    }
+    if (!updateCartResult.data.success) {
+      setAlertSeverity('error');
+      setAlertMsg(updateCartResult.data.message);
+      setShowAlert(true);
+      return;
+    }
     setAlertSeverity('success');
-    setAlertMsg('Item Successfully Added');
+    setAlertMsg(updateCartResult.data.message);
     setShowAlert(true);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cartItems]);
+
+  useEffect(() => {
+    updateCart();
+  }, []);
 
   const onCloseHandler = (event: object, reason: string) => {
     if (reason === 'backdropClick') {
       setOpen(false);
     }
   };
+
+  if (!open) {
+    return null;
+  }
 
   return (
     <>

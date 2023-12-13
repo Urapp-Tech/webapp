@@ -122,7 +122,7 @@ function OrdersPage() {
               </tr>
             </thead>
             <tbody>
-              {orderListData.data &&
+              {orderListData?.data &&
                 orderListData.data.orders.map((row: any) => (
                   <TableRow
                     key={row.id}
@@ -137,7 +137,7 @@ function OrdersPage() {
             </tbody>
           </table>
           <div>
-            {orderListData.data ? (
+            {orderListData?.data ? (
               <TablePagination
                 component="div"
                 count={orderListData.data.totalResults ?? 0}

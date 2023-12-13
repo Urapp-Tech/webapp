@@ -14,6 +14,10 @@ const addPayFastOrder = (data: NewOrder) => {
   return network.post(API_PATHS.addPayFastOrder, data, getHeaders());
 };
 
+const addCashOrder = (data: NewOrder) => {
+  return network.post(API_PATHS.addCashOrder, data, getHeaders());
+};
+
 const getPayFastToken = () => {
   return network.post(API_PATHS.getPayFastToken, {}, getHeaders());
 };
@@ -32,4 +36,5 @@ export default {
   orderDetail,
   getPayFastToken,
   addPayFastOrder,
+  addCashOrder,
 };
