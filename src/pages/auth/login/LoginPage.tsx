@@ -161,10 +161,10 @@ function LoginPage() {
           >
             Login
           </button>
-          <button type="button" className="btn-login-fb">
+          {/*     <button type="button" className="btn-login-fb">
             <img className="mr-2.5 w-2.5" src={assets.images.facebook} alt="" />
             Login with Facebook
-          </button>
+          </button> */}
           <div className="login-other-options mt-8 lg:mt-10">
             <p className="text">
               Don&apos;t have an account yet ?

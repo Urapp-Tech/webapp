@@ -10,8 +10,8 @@ import { NavLink } from 'react-router-dom';
 import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
 import notificationService from '../../services/notification.service';
-import NotificationPopover from './NotificationPopover';
 import promiseHandler from '../../utilities/promise-handler';
+import NotificationPopover from './NotificationPopover';
 
 function TopBar() {
   const user = useAppSelector((state) => state.authState.user);

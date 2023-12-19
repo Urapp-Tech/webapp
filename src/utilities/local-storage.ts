@@ -7,12 +7,12 @@ type Key =
   | 'ADDRESS'
   | 'SIGN_UP_DATA';
 
-export function setItem<T = any>(key: Key, value: T) {
+export function setItem<T = any>(key: Key, value: T): void {
   const stringifiedValue = JSON.stringify(value);
   localStorage.setItem(key, stringifiedValue);
 }
 
-export function getItem<T = any>(key: Key) {
+export function getItem<T = any>(key: Key): T | null {
   const stringifiedValue = localStorage.getItem(key);
   if (stringifiedValue) {
     try {
@@ -25,10 +25,10 @@ export function getItem<T = any>(key: Key) {
   return null;
 }
 
-export function removeItem(key: Key) {
+export function removeItem(key: Key): void {
   localStorage.removeItem(key);
 }
 
-export function clear() {
+export function clear(): void {
   localStorage.clear();
 }
