@@ -22,6 +22,8 @@ const API_PATHS = {
 
   loginService: new URL(`app-user/sign-in/app`, BASE_URL).toString(),
 
+  forgotPassword: new URL(`app-user/forgotPassword/app`, BASE_URL).toString(),
+
   // Cart
   anonymousCart: new URL(`appUserCart/getCart/device`, BASE_URL).toString(),
 

@@ -3,7 +3,6 @@ import { setItem } from './local-storage';
 
 export const BASE_URL = import.meta.env.VITE_SERVICE_BASE_URL;
 // export const BASE_URL = 'https://dev.urapptech.com/api/v1/app/';
-// export const BASE_URL = 'https://dev.urapptech.com/api/v1/app/'
 export const APP_USER_PREFIXES = 'app-user';
 export const tenantId = '9e63e0ed-1b53-4509-bf9c-4768bb7ce35c';
 export const ORDER_STATUS = {

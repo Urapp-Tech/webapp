@@ -8,7 +8,7 @@ import { login } from '../../../redux/features/authStateSlice';
 import { useAppDispatch } from '../../../redux/redux-hooks';
 import authService from '../../../services/auth.service';
 import { tenantId } from '../../../utilities/constant';
-import { getItem } from '../../../utilities/local-storage';
+import { getItem, removeItem } from '../../../utilities/local-storage';
 import promiseHandler from '../../../utilities/promise-handler';
 
 function OTPVerificationPage() {
@@ -25,6 +25,7 @@ function OTPVerificationPage() {
     });
     const signUpPromise = authService.signUp(code);
     const [signUpResult, signUpError] = await promiseHandler(signUpPromise);
+    removeItem('SIGN_UP_DATA');
     if (!signUpResult) {
       console.error('error :>> ', signUpError.message);
       return;

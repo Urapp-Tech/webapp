@@ -11,7 +11,7 @@ import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import noLocation from '../../assets/images/icon-noMapLocation.svg';
 import Loader from '../../components/common/Loader';
 import Map from '../../components/common/Map';
@@ -24,10 +24,10 @@ import {
 } from '../../redux/features/deviceState';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import addressService from '../../services/address.service';
-import loadGoogleMaps from '../../utilities/load-google-maps';
-import DeleteAddressPopup from './DeleteAddressPopup';
-import promiseHandler from '../../utilities/promise-handler';
 import { UpdateAddressStatusData } from '../../types/address.types';
+import loadGoogleMaps from '../../utilities/load-google-maps';
+import promiseHandler from '../../utilities/promise-handler';
+import DeleteAddressPopup from './DeleteAddressPopup';
 
 const typeData = [
   {
@@ -188,26 +188,28 @@ function DeliveryAddressPage() {
     dispatch(setAddressStatus(updateAddressStatusResult.data.data));
   };
 
-  const handleMarkerDragEnd = (newPosition: google.maps.LatLngLiteral) => {
-    setLocation(newPosition);
-    loadGoogleMaps().then((google) => {
-      const geocoder = new google.Geocoder();
-      geocoder.geocode(
-        { location: newPosition },
-        (
-          result: Array<google.maps.GeocoderResult> | null,
-          status: google.maps.GeocoderStatus
-        ) => {
-          if (status === google.GeocoderStatus.OK) {
-            if (result && result[0]) {
-              setNewAddress(result[0].formatted_address);
-              setType('');
+  const handleMarkerDragEnd = useCallback(
+    (newPosition: google.maps.LatLngLiteral) => {
+      setLocation(newPosition);
+      loadGoogleMaps().then((google) => {
+        const geocoder = new google.Geocoder();
+        geocoder.geocode(
+          { location: newPosition },
+          (
+            result: Array<google.maps.GeocoderResult> | null,
+            status: google.maps.GeocoderStatus
+          ) => {
+            if (status === google.GeocoderStatus.OK) {
+              if (result && result[0]) {
+                setNewAddress(result[0].formatted_address);
+              }
             }
           }
-        }
-      );
-    });
-  };
+        );
+      });
+    },
+    []
+  );
 
   const handleCurrentLocation = () => {
     if (navigator.geolocation) {
@@ -256,7 +258,49 @@ function DeliveryAddressPage() {
     }
   };
 
+  const onAddressChange = (value: string) => {
+    loadGoogleMaps().then((google) => {
+      const geocoder = new google.Geocoder();
+      if (value) {
+        geocoder.geocode({ address: value }, (results: any, status: any) => {
+          if (status === google.GeocoderStatus.OK) {
+            if (results && results[0]) {
+              const newPosition = results[0].geometry.location.toJSON();
+              handleMarkerDragEnd(newPosition);
+            }
+          }
+        });
+      }
+    });
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onAddressChange(newAddress);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [newAddress]);
+
   const addNewAddress = async () => {
+    if (!name) {
+      setAlertSeverity('error');
+      setAlertMsg('Name Field Is Required');
+      setShowAlert(true);
+      return;
+    }
+    if (!newAddress) {
+      setAlertSeverity('error');
+      setAlertMsg('Address Field Is Required');
+      setShowAlert(true);
+      return;
+    }
+    if (!type) {
+      setAlertSeverity('error');
+      setAlertMsg('Type Must Be Selected');
+      setShowAlert(true);
+      return;
+    }
     const addUserAddressPromise = addressService.addUserAddress({
       address: newAddress,
       latitude: location.lat,
@@ -420,11 +464,7 @@ function DeliveryAddressPage() {
                   id="location"
                   type="location"
                   value={newAddress}
-                  onChange={(e) => {
-                    setNewAddress(e.target.value);
-                    setType(''); // Clear the selected type when user manually enters address
-                    // Call geocoder to update the marker position
-                  }}
+                  onChange={(event) => setNewAddress(event.target.value)}
                   onBlur={(event) => {
                     loadGoogleMaps().then((google) => {
                       const geocoder = new google.Geocoder();

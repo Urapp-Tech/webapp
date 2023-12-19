@@ -75,10 +75,7 @@ function HomePage() {
   useEffect(() => {
     if (!isCategoryLoading && categoryData && categoryData.success) {
       subCategoryTrigger(categoryData.data[0].id);
-      return;
     }
-    setShowAlert(true);
-    setAlertSeverity('error');
   }, [isCategoryLoading, categoryData, subCategoryTrigger]);
 
   async function fetchIp() {
@@ -189,7 +186,6 @@ function HomePage() {
         setShowAlert(true);
         return;
       }
-
       dispatch(setCartData(getAnonymousCartResult.data.data.cart));
       dispatch(setCartItems(getAnonymousCartResult.data.data.cartItems));
     }

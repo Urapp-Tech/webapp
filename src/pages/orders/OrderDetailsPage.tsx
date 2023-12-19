@@ -84,12 +84,6 @@ function OrderDetailsPage() {
     setOrderCanceled(true);
   };
 
-  const handleDropOffTimeChange = (value: dayjs.Dayjs | null) => {
-    setDropOffTime(value);
-  };
-  const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
-    setPickUpTime(value);
-  };
   const getIcon = ORDER_STATUSES.map((status: any, index) => {
     let icon;
     if (status.iconText === 'AssignmentTurnedInOutlinedIcon') {
@@ -226,13 +220,7 @@ function OrderDetailsPage() {
                 <div className="edit-date-time mb-5 sm:pr-4">
                   <div className="mb-3.5 flex items-center justify-between">
                     <p className="label">Pick Up Time</p>
-                    <DatePickerButton
-                      onChange={handlePickUpTimeChange}
-                      icon={<ModeEditOutlineOutlinedIcon />}
-                      id=""
-                      text=""
-                      initialValue={null}
-                    />
+                    {/* <ModeEditOutlineOutlinedIcon /> */}
                   </div>
                   <div className="mb-3 flex items-center gap-3">
                     <DateRangeIcon className="text-xl" />
@@ -251,13 +239,7 @@ function OrderDetailsPage() {
                 <div className="edit-date-time sm:pl-6">
                   <div className="mb-3.5 flex items-center justify-between">
                     <p className="label">Drop Off Time</p>
-                    <DatePickerButton
-                      onChange={handleDropOffTimeChange}
-                      id=""
-                      icon={<ModeEditOutlineOutlinedIcon />}
-                      text=""
-                      initialValue={null}
-                    />
+                    {/* <ModeEditOutlineOutlinedIcon /> */}
                   </div>
                   <div className="mb-3 flex items-center gap-3">
                     <DateRangeIcon className="text-xl" />

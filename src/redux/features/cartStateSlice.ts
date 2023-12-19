@@ -89,7 +89,6 @@ export const cartSlice = createSlice({
       state.cartItems = state.cartItems.filter(
         (item) => item.id !== action.payload
       );
-      console.log('state.cartItems :>> ', state.cartItems);
       setItem('CART_ITEMS', state.cartItems);
     },
     incrementQuantity: (state, action: PayloadAction<string>) => {

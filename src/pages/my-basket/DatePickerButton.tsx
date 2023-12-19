@@ -70,6 +70,7 @@ function DatePickerButton({ onChange, text, id, icon, initialValue }: Props) {
             displayStaticWrapperAs="desktop"
             onAccept={handleChange}
             value={selectedDate}
+            minDate={dayjs()}
           />
         </ThemeProvider>
       </Popover>

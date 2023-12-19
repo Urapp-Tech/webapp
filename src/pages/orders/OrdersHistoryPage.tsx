@@ -42,9 +42,6 @@ function OrdersPage() {
       return;
     }
     if (!orderListData) {
-      setAlertSeverity('error');
-      setAlertMsg(orderListError);
-      setShowAlert(true);
       return;
     }
     if (!orderListData.success) {

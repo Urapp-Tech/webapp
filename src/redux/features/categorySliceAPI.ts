@@ -5,7 +5,13 @@ export const categoryAPI = createApi({
   reducerPath: 'category-api',
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL,
-    headers: { Authorization: getToken() },
+    prepareHeaders: (headers) => {
+      const token = getToken();
+      if (token) {
+        headers.set('Authorization', token);
+      }
+      return headers;
+    },
   }),
   endpoints: (builder) => ({
     getAllCategory: builder.query({
