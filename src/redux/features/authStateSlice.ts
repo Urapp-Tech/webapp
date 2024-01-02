@@ -40,7 +40,10 @@ export const authStateSlice = createSlice({
     logout: (state) => {
       state.user = null;
       setToken('');
+      removeItem('ORDER_ITEM');
       removeItem('USER');
+      removeItem('REGISTERED_CART');
+      removeItem('CART_ITEMS');
     },
   },
 });
