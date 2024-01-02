@@ -1,4 +1,5 @@
 import {
+  FacebookLoginPayload,
   ForgotPasswordPayload,
   LoginPayload,
   OTPPayload,
@@ -24,6 +25,14 @@ const loginService = (data: LoginPayload) => {
   );
 };
 
+const loginWithFacebook = (data: FacebookLoginPayload) => {
+  return network.post(
+    API_PATHS.loginWithFacebook,
+    { ...data, tenant: tenantId },
+    getHeaders()
+  );
+};
+
 const forgotPassword = (data: ForgotPasswordPayload) => {
   return network.post(
     API_PATHS.forgotPassword,
@@ -37,4 +46,5 @@ export default {
   getOTP,
   loginService,
   forgotPassword,
+  loginWithFacebook,
 };
