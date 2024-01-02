@@ -140,10 +140,8 @@ function MyBasketPage() {
         generatedDateTime: payFastTokenResult.data.data.generatedDateTime,
         // successURL: payFastTokenResult.data.data.successUrl,
         successURL: window.location.href,
-        failureURL: payFastTokenResult.data.data.cancelUrl,
-        // webHookURL: payFastTokenResult.data.data.payFastHookUrl,
-        webHookURL:
-          'https://c8a4-2400-adc1-47f-8600-ad55-77e7-42ea-b489.ngrok-free.app/api/v1/app/appOrder/pay-fast/webhook',
+        failureURL: window.location.href,
+        webHookURL: payFastTokenResult.data.data.payFastHookUrl,
         userName: user?.firstName,
         totalPrice: addOrderResult.data.data.order.grandTotal,
         phoneNumber: user?.phone,

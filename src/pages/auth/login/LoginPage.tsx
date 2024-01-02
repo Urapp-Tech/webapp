@@ -1,3 +1,6 @@
+import FacebookLogin, {
+  SuccessResponse,
+} from '@greatsumini/react-facebook-login';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { AlertColor } from '@mui/material/Alert';
@@ -13,12 +16,12 @@ import { useForm } from 'react-hook-form';
 import { NavLink, useNavigate } from 'react-router-dom';
 import assets from '../../../assets';
 import AlertBox from '../../../components/common/SnackBar';
-import { LoginPayload } from '../../../types/auth.types';
 import { login } from '../../../redux/features/authStateSlice';
 import { setUserAddressList } from '../../../redux/features/deviceState';
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
 import addressService from '../../../services/address.service';
 import authService from '../../../services/auth.service';
+import { LoginPayload } from '../../../types/auth.types';
 import promiseHandler from '../../../utilities/promise-handler';
 
 function LoginPage() {
@@ -40,6 +43,46 @@ function LoginPage() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginPayload>();
+
+  const handleLoginWithFacebook = async (response: SuccessResponse) => {
+    const loginPromise = authService.loginWithFacebook({
+      accessToken: response.accessToken,
+    });
+    const [loginResponse, loginError] = await promiseHandler(loginPromise);
+    if (!loginResponse) {
+      setAlertSeverity('error');
+      setAlertMessage(loginError.message);
+      setShowAlert(true);
+      return;
+    }
+    if (!loginResponse.data.success) {
+      setAlertSeverity('error');
+      setAlertMessage(loginResponse.data.message);
+      setShowAlert(true);
+      return;
+    }
+    dispatch(login(loginResponse.data.data));
+    if (cartItem > 0) {
+      navigate('/dashboard/my-basket');
+    } else {
+      navigate('/dashboard/home');
+    }
+    const addressPromise = addressService.getUserAddress();
+    const [addressResult, addressError] = await promiseHandler(addressPromise);
+    if (!addressResult) {
+      setAlertSeverity('error');
+      setAlertMessage(addressError.message);
+      setShowAlert(true);
+      return;
+    }
+    if (!addressResult.data.success) {
+      setAlertSeverity('error');
+      setAlertMessage(addressResult.data.message);
+      setShowAlert(true);
+      return;
+    }
+    dispatch(setUserAddressList(addressResult.data.data));
+  };
 
   const email = register('email');
   const password = register('password');
@@ -165,6 +208,22 @@ function LoginPage() {
             <img className="mr-2.5 w-2.5" src={assets.images.facebook} alt="" />
             Login with Facebook
           </button> */}
+
+          <FacebookLogin
+            appId="246641688446576"
+            onSuccess={handleLoginWithFacebook}
+            render={({ onClick }) => (
+              <button onClick={onClick} type="button" className="btn-login-fb">
+                <img
+                  className="mr-2.5 w-2.5"
+                  src={assets.images.facebook}
+                  alt=""
+                />
+                Login with Facebook
+              </button>
+            )}
+          />
+
           <div className="login-other-options mt-8 lg:mt-10">
             <p className="text">
               Don&apos;t have an account yet ?

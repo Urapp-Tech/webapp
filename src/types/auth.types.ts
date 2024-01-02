@@ -24,3 +24,7 @@ export type LoginPayload = {
 export type ForgotPasswordPayload = {
   email: string;
 };
+
+export type FacebookLoginPayload = {
+  accessToken: string;
+};
