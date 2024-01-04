@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { getItem, setItem } from '../../utilities/local-storage';
 import {
   AddUserAddressData,
   DeleteUserAddressData,
   UpdateAddressStatusData,
   UserAddressData,
 } from '../../types/address.types';
+import { TenantConfigData } from '../../types/device.types';
+import { getItem, setItem } from '../../utilities/local-storage';
 
 type DevicePayload = {
   deviceId: string;
@@ -17,17 +18,24 @@ type DevicePayload = {
   token: string;
 };
 
+type TenantConfigPayload = TenantConfigData;
+
 type DeviceState = {
   deviceData: DevicePayload | null;
   address: string;
   addressList: Array<UserAddressData>;
+  tenantConfig: TenantConfigPayload | null;
 };
 
 const initialDeviceData = getItem<DevicePayload>('DEVICE_DATA');
+const initialAddressList = getItem('ADDRESS') ?? [];
+const initialTenantConfig = getItem<TenantConfigPayload>('TENANT_CONFIG');
+
 const initialState: DeviceState = {
   deviceData: initialDeviceData,
   address: '',
-  addressList: getItem('ADDRESS') ?? [],
+  addressList: initialAddressList,
+  tenantConfig: initialTenantConfig,
 };
 export const deviceStateSlice = createSlice({
   name: 'device',
@@ -36,6 +44,10 @@ export const deviceStateSlice = createSlice({
     setDeviceData: (state, action: PayloadAction<DevicePayload>) => {
       state.deviceData = action.payload;
       setItem('DEVICE_DATA', action.payload);
+    },
+    setTenantConfig: (state, action: PayloadAction<TenantConfigPayload>) => {
+      state.tenantConfig = action.payload;
+      setItem('TENANT_CONFIG', action.payload);
     },
     setUserAddress: (state, action: PayloadAction<string>) => {
       state.address = action.payload;
@@ -99,6 +111,7 @@ export const deviceStateSlice = createSlice({
 
 export const {
   setDeviceData,
+  setTenantConfig,
   setUserAddress,
   setUserAddressList,
   setAddressStatus,

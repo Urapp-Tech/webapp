@@ -14,7 +14,10 @@ import {
   useGetAllCategoryQuery,
   useLazyGetSubCategoryQuery,
 } from '../../redux/features/categorySliceAPI';
-import { setDeviceData } from '../../redux/features/deviceState';
+import {
+  setDeviceData,
+  setTenantConfig,
+} from '../../redux/features/deviceState';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import cartService from '../../services/cart.service';
 import categoryService from '../../services/category.service';
@@ -43,6 +46,9 @@ const colorArray = [
 function HomePage() {
   const persistedDeviceData = useAppSelector(
     (state) => state.deviceStates.deviceData
+  );
+  const tenantConfig = useAppSelector(
+    (state) => state.deviceStates.tenantConfig
   );
   const user = useAppSelector((state) => state.authState.user);
 
@@ -111,6 +117,26 @@ function HomePage() {
     setFAQs(faqResult.data.data.homeCatItemFaq);
   };
 
+  const getTenantConfig = async () => {
+    const getTenantConfigPromise = tenantService.getTenantConfig();
+    const [getTenantConfigResult, getTenantConfigError] = await promiseHandler(
+      getTenantConfigPromise
+    );
+    if (!getTenantConfigResult) {
+      setAlertSeverity('error');
+      setAlertMsg(getTenantConfigError.message);
+      setShowAlert(true);
+      return;
+    }
+    if (!getTenantConfigResult.data.success) {
+      setAlertSeverity('error');
+      setAlertMsg(getTenantConfigResult.data.message);
+      setShowAlert(true);
+      return;
+    }
+    dispatch(setTenantConfig(getTenantConfigResult.data.data));
+  };
+
   useEffect(() => {
     async function initializeDeviceData() {
       if (persistedDeviceData) {
@@ -121,18 +147,19 @@ function HomePage() {
         return;
       }
       const nameValue = `${agent.slice(0, 11)}-${ip}-${fingerprint}`;
-      const getTenantConfigPromise = tenantService.getTenantConfig();
-      const [getTenantConfigResult, getTenantConfigError] =
-        await promiseHandler(getTenantConfigPromise);
-      if (!getTenantConfigResult) {
+      const getTenantPromise = tenantService.getTenant();
+      getTenantConfig();
+      const [getTenantResult, getTenantError] =
+        await promiseHandler(getTenantPromise);
+      if (!getTenantResult) {
         setAlertSeverity('error');
-        setAlertMsg(getTenantConfigError.message);
+        setAlertMsg(getTenantError.message);
         setShowAlert(true);
         return;
       }
-      if (!getTenantConfigResult.data.success) {
+      if (!getTenantResult.data.success) {
         setAlertSeverity('error');
-        setAlertMsg(getTenantConfigResult.data.message);
+        setAlertMsg(getTenantResult.data.message);
         setShowAlert(true);
         return;
       }
@@ -141,7 +168,7 @@ function HomePage() {
         deviceType: 'Web',
         isNotificationAllowed: true,
         name: nameValue,
-        tenant: getTenantConfigResult.data.data.id,
+        tenant: getTenantResult.data.data.id,
         token: 'Push notifications are not available on the web platform.',
       });
       const [deviceRegistrationResult, deviceRegistrationError] =

@@ -27,11 +27,9 @@ export const getToken = () => {
 
 export function getHeaders() {
   return {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: getToken(),
-    },
-  };
+    'Content-Type': 'application/json',
+    Authorization: getToken(),
+  } as const;
 }
 
 export const setSignUpData = (data: SignUpPayload) => {

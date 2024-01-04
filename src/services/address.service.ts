@@ -10,31 +10,28 @@ import { getHeaders } from '../utilities/constant';
 import network from './network';
 
 const getUserAddress = () => {
-  return network.get<GetUserAddressResponse>(
-    API_PATHS.getUserAddress,
-    getHeaders()
-  );
+  return network.get<GetUserAddressResponse>(API_PATHS.getUserAddress, {
+    headers: getHeaders(),
+  });
 };
 
 const addUserAddress = (data: AddUserAddressPayload) => {
-  return network.post<AddUserAddressResponse>(
-    API_PATHS.addUserAddress,
-    data,
-    getHeaders()
-  );
+  return network.post<AddUserAddressResponse>(API_PATHS.addUserAddress, data, {
+    headers: getHeaders(),
+  });
 };
 
 const updateAddressStatus = (id: string) => {
   return network.put<UpdateAddressStatusResponse>(
     API_PATHS.updateAddressStatus(id),
     {},
-    getHeaders()
+    { headers: getHeaders() }
   );
 };
 const deleteUserAddress = (id: string) => {
   return network.delete<DeleteUserAddressResponse>(
     API_PATHS.deleteUserAddress(id),
-    getHeaders()
+    { headers: getHeaders() }
   );
 };
 

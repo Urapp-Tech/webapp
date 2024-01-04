@@ -5,7 +5,8 @@ type Key =
   | 'CART_ITEMS'
   | 'DEVICE_DATA'
   | 'ADDRESS'
-  | 'SIGN_UP_DATA';
+  | 'SIGN_UP_DATA'
+  | 'TENANT_CONFIG';
 
 export function setItem<T = any>(key: Key, value: T): void {
   const stringifiedValue = JSON.stringify(value);

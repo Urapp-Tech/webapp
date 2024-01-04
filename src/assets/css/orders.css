@@ -100,6 +100,25 @@
   color: #ee0404;
 }
 
+.text-order-placed {
+  color: #4283f4;
+}
+.text-order-picked-up {
+  color: #c367f1;
+}
+.text-order-out-for-delivery {
+  color: #2cd285;
+}
+.text-order-delivered {
+  color: #fd2f2f;
+}
+.text-order-drop-off {
+  color: #ff8c39;
+}
+.text-order-cancelled {
+  color: #ee0404;
+}
+
 .orders-table tr td .link {
   color: var(--dark-100);
 }
