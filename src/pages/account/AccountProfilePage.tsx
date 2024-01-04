@@ -1,11 +1,43 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { AlertColor } from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import * as z from 'zod';
 import Loader from '../../components/common/Loader';
 import AlertBox from '../../components/common/SnackBar';
 import profileService from '../../services/profile.service';
 import promiseHandler from '../../utilities/promise-handler';
+
+const accountProfileSchema = z
+  .object({
+    firstName: z.string().min(1, { message: 'First Name is required' }),
+    lastName: z.string().min(1, { message: 'Last Name is required' }),
+    email: z.string().min(1, { message: 'Email is required' }).email(),
+    phoneNumber: z.string().min(1, { message: 'Phone Number is required' }),
+    postalCode: z.string().min(1, { message: 'Postal Code is required' }),
+    currentPassword: z.string().optional(),
+    newPassword: z.string().optional(),
+    verifyPassword: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    console.log('data.newPassword :>> ', data.newPassword);
+    console.log('data.verifyPassword :>> ', data.verifyPassword);
+    console.log(
+      'data.newPassword !== data.verifyPassword :>> ',
+      data.newPassword !== data.verifyPassword
+    );
+    if (data.newPassword !== data.verifyPassword) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'The passwords did not match',
+        path: ['passwordConfirm'],
+      });
+    }
+    return ctx;
+  });
+
+const formOptions = { resolver: zodResolver(accountProfileSchema) };
 
 function AccountProfilePage() {
   const [alertMsg, setAlertMsg] = useState<any>('');
@@ -17,7 +49,7 @@ function AccountProfilePage() {
     control,
     setValue,
     formState: { errors },
-  } = useForm();
+  } = useForm(formOptions);
 
   useEffect(() => {
     async function userProfile() {
@@ -48,7 +80,8 @@ function AccountProfilePage() {
     userProfile();
   }, []);
   const onSubmit = (data: any) => {
-    // console.log(data);
+    console.log(data);
+    console.log('errors :>> ', errors);
   };
   return isLoading ? (
     <Loader />
@@ -72,7 +105,6 @@ function AccountProfilePage() {
                 name="firstName"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'First Name is required' }}
                 render={({ field }) => (
                   <label htmlFor={field.name} className="mb-4 block">
                     <p className="label">First Name</p>
@@ -98,7 +130,6 @@ function AccountProfilePage() {
                 name="lastName"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Last Name is required' }}
                 render={({ field }) => (
                   <label htmlFor={field.name} className="mb-4 block">
                     <p className="label">Last Name</p>
@@ -124,7 +155,6 @@ function AccountProfilePage() {
                 name="email"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Email is required' }}
                 render={({ field }) => (
                   <label htmlFor={field.name} className="mb-4 block">
                     <p className="label">Email Address</p>
@@ -150,7 +180,6 @@ function AccountProfilePage() {
                 name="phoneNumber"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Phone Number is required' }}
                 render={({ field }) => (
                   <label htmlFor={field.name} className="mb-4 block">
                     <p className="label">Phone Number</p>
@@ -176,7 +205,6 @@ function AccountProfilePage() {
                 name="postalCode"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Postal Code is required' }}
                 render={({ field }) => (
                   <label htmlFor={field.name} className="mb-4 block">
                     <p className="label">Postal Code</p>
@@ -205,7 +233,6 @@ function AccountProfilePage() {
                 name="currentPassword"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Current Password is required' }}
                 render={({ field }) => (
                   <label htmlFor={field.name} className="mb-4 block">
                     <p className="label">Current Password</p>
@@ -231,7 +258,6 @@ function AccountProfilePage() {
                 name="newPassword"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'New Password is required' }}
                 render={({ field }) => (
                   <label htmlFor={field.name} className="mb-4 block">
                     <p className="label">New Password</p>
@@ -257,7 +283,6 @@ function AccountProfilePage() {
                 name="verifyPassword"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Verify Password is required' }}
                 render={({ field }) => (
                   <label htmlFor={field.name} className="mb-4 block">
                     <p className="label">Verify Password</p>

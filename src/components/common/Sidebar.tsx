@@ -5,9 +5,11 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import MailIcon from '@mui/icons-material/Mail';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import TwitterIcon from '@mui/icons-material/Twitter';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import { useState } from 'react';
@@ -15,7 +17,6 @@ import { NavLink } from 'react-router-dom';
 import { setDropOff, setPickup } from '../../redux/features/DateAndTime';
 import { logout } from '../../redux/features/authStateSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import { getItem } from '../../utilities/local-storage';
 
 const links = [
   {
@@ -65,6 +66,25 @@ const links = [
 
 function Sidebar() {
   const user = useAppSelector((state) => state.authState.user);
+  const tenantConfig = useAppSelector(
+    (state) => state.deviceStates.tenantConfig
+  );
+
+  const hasShopLinks = () => {
+    if (!tenantConfig) {
+      return false;
+    }
+    return (
+      Boolean(tenantConfig.facebook) ||
+      Boolean(tenantConfig.instagram) ||
+      Boolean(tenantConfig.twitter) ||
+      Boolean(tenantConfig.youtube) ||
+      Boolean(tenantConfig.whatsapp) ||
+      Boolean(tenantConfig.linkedin) ||
+      false
+    );
+  };
+
   const dispatch = useAppDispatch();
   const [LoginUser, setLoginUser] = useState(user);
 
@@ -103,31 +123,103 @@ function Sidebar() {
         })}
       </div>
       <div className="sidebar-footer-content">
-        <div className="share-via">
-          <h6 className="heading">Share</h6>
-          <div className="social-icons">
-            <IconButton className="social-btn" onClick={() => null}>
-              <FacebookIcon className="text-3xl" />
-            </IconButton>
-            <IconButton className="social-btn" onClick={() => null}>
-              <TwitterIcon className="text-3xl" />
-            </IconButton>
-            <IconButton className="social-btn" onClick={() => null}>
-              <InstagramIcon className="text-3xl" />
-            </IconButton>
-            <IconButton className="social-btn" onClick={() => null}>
-              <MailIcon className="text-3xl" />
-            </IconButton>
+        {tenantConfig && hasShopLinks() ? (
+          <div className="share-via">
+            <h6 className="heading">Share</h6>
+            <div className="social-icons">
+              {tenantConfig.facebook ? (
+                <a
+                  href={tenantConfig.facebook}
+                  aria-label="shop facebook link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <IconButton className="social-btn" onClick={() => null}>
+                    <FacebookIcon className="text-3xl" />
+                  </IconButton>
+                </a>
+              ) : null}
+
+              {tenantConfig.instagram ? (
+                <a
+                  href={tenantConfig.instagram}
+                  aria-label="shop instagram link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <IconButton className="social-btn" onClick={() => null}>
+                    <InstagramIcon className="text-3xl" />
+                  </IconButton>
+                </a>
+              ) : null}
+
+              {tenantConfig.linkedin ? (
+                <a
+                  href={tenantConfig.linkedin}
+                  aria-label="shop linkedin link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  role="button"
+                >
+                  <IconButton className="social-btn" onClick={() => null}>
+                    <LinkedInIcon className="text-3xl" />
+                  </IconButton>
+                </a>
+              ) : null}
+
+              {tenantConfig.twitter ? (
+                <a
+                  href={tenantConfig.twitter}
+                  aria-label="shop twitter link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  role="button"
+                >
+                  <IconButton className="social-btn" onClick={() => null}>
+                    <TwitterIcon className="text-3xl" />
+                  </IconButton>
+                </a>
+              ) : null}
+
+              {tenantConfig.youtube ? (
+                <a
+                  href={tenantConfig.youtube}
+                  aria-label="shop youtube link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  role="button"
+                >
+                  <IconButton className="social-btn" onClick={() => null}>
+                    <YouTubeIcon className="text-3xl" />
+                  </IconButton>
+                </a>
+              ) : null}
+
+              {tenantConfig.whatsapp ? (
+                <a
+                  href={tenantConfig.whatsapp}
+                  aria-label="shop whatsapp link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  role="button"
+                >
+                  <IconButton className="social-btn" onClick={() => null}>
+                    <WhatsAppIcon className="text-3xl" />
+                  </IconButton>
+                </a>
+              ) : null}
+            </div>
+            <hr className="mb-4" />
+            <NavLink className="link mb-2" to="./terms-and-conditions">
+              Terms & Conditions
+            </NavLink>
+            <NavLink className="link" to="./privacy-policy">
+              Privacy Policy
+            </NavLink>
+            <hr className="mt-4" />
           </div>
-          <hr className="mb-4" />
-          <NavLink className="link mb-2" to="./terms-and-conditions">
-            Terms & Conditions
-          </NavLink>
-          <NavLink className="link" to="./privacy-policy">
-            Privacy Policy
-          </NavLink>
-          <hr className="mt-4" />
-        </div>
+        ) : null}
+
         {LoginUser ? (
           <NavLink
             className="logout-link"

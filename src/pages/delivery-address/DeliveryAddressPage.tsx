@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
@@ -12,6 +13,8 @@ import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
 import { useCallback, useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import * as z from 'zod';
 import noLocation from '../../assets/images/icon-noMapLocation.svg';
 import Loader from '../../components/common/Loader';
 import Map from '../../components/common/Map';
@@ -29,6 +32,19 @@ import loadGoogleMaps from '../../utilities/load-google-maps';
 import promiseHandler from '../../utilities/promise-handler';
 import DeleteAddressPopup from './DeleteAddressPopup';
 
+const addNewAddressSchema = z.object({
+  name: z
+    .string()
+    .min(1, { message: 'name is required' })
+    .regex(/^[a-zA-Z].*$/, 'name must begin with letter'),
+  location: z.string().min(1, { message: 'location is required' }),
+  type: z.enum(['Home', 'Office', 'Other']),
+});
+
+type AddNewAddressType = z.infer<typeof addNewAddressSchema>;
+
+const formOptions = { resolver: zodResolver(addNewAddressSchema) };
+
 const typeData = [
   {
     name: 'location',
@@ -45,7 +61,7 @@ const typeData = [
     img: <LocationOnOutlinedIcon />,
     type: 'Other',
   },
-];
+] as const;
 
 function NoLocationAvailable() {
   return (
@@ -93,6 +109,14 @@ function MapHeader({
 }
 
 function DeliveryAddressPage() {
+  const {
+    handleSubmit,
+    getValues,
+    setValue,
+    control,
+    formState: { errors },
+  } = useForm<AddNewAddressType>(formOptions);
+
   const addressList = useAppSelector((state) => state.deviceStates.addressList);
   const user = useAppSelector((state) => state.authState.user);
   const [delAddress, setDelAddress] = useState<boolean>(false);
@@ -102,9 +126,6 @@ function DeliveryAddressPage() {
   });
   const [activeAddress, setActiveAddress] =
     useState<UpdateAddressStatusData | null>(null);
-  const [newAddress, setNewAddress] = useState('');
-  const [type, setType] = useState('');
-  const [name, setName] = useState('');
   const [addressObj, setAddressObj] = useState<any>('');
   const [alertMsg, setAlertMsg] = useState<any>('');
   const [showAlert, setShowAlert] = useState(false);
@@ -160,8 +181,8 @@ function DeliveryAddressPage() {
   const handleAddressClick = async (index: number) => {
     const selectedAddress = addressList[index];
     setAddressObj(selectedAddress);
-    setNewAddress(selectedAddress.address);
-    setType(selectedAddress.type);
+    setValue('location', selectedAddress.address);
+    setValue('type', selectedAddress.type as 'Home' | 'Office' | 'Other');
     setLocation({
       lat: selectedAddress.latitude,
       lng: selectedAddress.longitude,
@@ -201,7 +222,7 @@ function DeliveryAddressPage() {
           ) => {
             if (status === google.GeocoderStatus.OK) {
               if (result && result[0]) {
-                setNewAddress(result[0].formatted_address);
+                setValue('location', result[0].formatted_address);
               }
             }
           }
@@ -235,7 +256,7 @@ function DeliveryAddressPage() {
                     lat: latitude,
                     lng: longitude,
                   });
-                  setNewAddress(formattedAddress); // Update the input field with the current location's address
+                  setValue('location', formattedAddress);
                 } else {
                   setAlertSeverity('error');
                   setAlertMsg(status);
@@ -276,37 +297,37 @@ function DeliveryAddressPage() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      onAddressChange(newAddress);
+      onAddressChange(getValues('location'));
     }, 1500);
 
     return () => clearTimeout(timer);
-  }, [newAddress]);
+  }, [getValues('location')]);
 
-  const addNewAddress = async () => {
-    if (!name) {
+  const addNewAddress = async (data: AddNewAddressType | any) => {
+    if (errors.name) {
       setAlertSeverity('error');
-      setAlertMsg('Name Field Is Required');
+      setAlertMsg(errors.name.message);
       setShowAlert(true);
       return;
     }
-    if (!newAddress) {
+    if (errors.location) {
       setAlertSeverity('error');
-      setAlertMsg('Address Field Is Required');
+      setAlertMsg(errors.location.message);
       setShowAlert(true);
       return;
     }
-    if (!type) {
+    if (errors.type) {
       setAlertSeverity('error');
-      setAlertMsg('Type Must Be Selected');
+      setAlertMsg('type is required');
       setShowAlert(true);
       return;
     }
     const addUserAddressPromise = addressService.addUserAddress({
-      address: newAddress,
+      address: data.location,
       latitude: location.lat,
       longitude: location.lng,
-      name,
-      type,
+      name: data.name,
+      type: data.type,
     });
     const [addUserAddressResult, addUserAddressError] = await promiseHandler(
       addUserAddressPromise
@@ -437,69 +458,87 @@ function DeliveryAddressPage() {
             )}
             <div className="body h-100">
               <h5 className="title">Select Location</h5>
-              <FormControl className="location-address" variant="standard">
-                <InputLabel
-                  className="font-open-sans text-sm font-normal text-neutral-500"
-                  htmlFor="location"
-                >
-                  Your Name
-                </InputLabel>
-                <Input
-                  className="font-open-sans text-base font-semibold text-neutral-900 after:border-b-neutral-900"
-                  id="location"
-                  type="location"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </FormControl>
-              <FormControl className="location-address" variant="standard">
-                <InputLabel
-                  className="font-open-sans text-sm font-normal text-neutral-500"
-                  htmlFor="location"
-                >
-                  Your Location
-                </InputLabel>
-                <Input
-                  className="font-open-sans text-base font-semibold text-neutral-900 after:border-b-neutral-900"
-                  id="location"
-                  type="location"
-                  value={newAddress}
-                  onChange={(event) => setNewAddress(event.target.value)}
-                  onBlur={(event) => {
-                    loadGoogleMaps().then((google) => {
-                      const geocoder = new google.Geocoder();
-                      if (event.target.value) {
-                        geocoder.geocode(
-                          { address: event.target.value },
-                          (results: any, status: any) => {
-                            if (status === google.GeocoderStatus.OK) {
-                              if (results && results[0]) {
-                                const newPosition =
-                                  results[0].geometry.location.toJSON();
-                                handleMarkerDragEnd(newPosition);
+              <Controller
+                name="name"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <FormControl className="location-address" variant="standard">
+                    <InputLabel
+                      className="font-open-sans text-sm font-normal text-neutral-500"
+                      htmlFor={field.name}
+                    >
+                      Name
+                    </InputLabel>
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      onBlur={field.onBlur}
+                      onChange={field.onChange}
+                      ref={field.ref}
+                      value={field.value}
+                      className="font-open-sans text-base font-semibold text-neutral-900 after:border-b-neutral-900"
+                      type="text"
+                    />
+                  </FormControl>
+                )}
+              />
+              <Controller
+                name="location"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <FormControl className="location-address" variant="standard">
+                    <InputLabel
+                      className="font-open-sans text-sm font-normal text-neutral-500"
+                      htmlFor={field.name}
+                    >
+                      Your Location
+                    </InputLabel>
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      ref={field.ref}
+                      value={field.value}
+                      onChange={field.onChange}
+                      className="font-open-sans text-base font-semibold text-neutral-900 after:border-b-neutral-900"
+                      type="text"
+                      onBlur={(event) => {
+                        loadGoogleMaps().then((google) => {
+                          const geocoder = new google.Geocoder();
+                          if (event.target.value) {
+                            geocoder.geocode(
+                              { address: event.target.value },
+                              (results: any, status: any) => {
+                                if (status === google.GeocoderStatus.OK) {
+                                  if (results && results[0]) {
+                                    const newPosition =
+                                      results[0].geometry.location.toJSON();
+                                    handleMarkerDragEnd(newPosition);
+                                  }
+                                }
                               }
-                            }
+                            );
                           }
-                        );
-                      }
-                    });
-                  }}
-                />
-                <IconButton
-                  className="btn-current-location"
-                  onClick={handleCurrentLocation}
-                >
-                  <MyLocationIcon />
-                </IconButton>
-              </FormControl>
-
+                        });
+                      }}
+                    />
+                    <IconButton
+                      className="btn-current-location"
+                      onClick={handleCurrentLocation}
+                    >
+                      <MyLocationIcon />
+                    </IconButton>
+                  </FormControl>
+                )}
+              />
               <p className="location-label">Save As</p>
               <div className="all-locations grid grid-cols-3 gap-3">
-                {typeData.map((el: any, index) => (
+                {typeData.map((el, index) => (
                   <div
                     className="item"
                     key={index}
-                    onClick={() => setType(el.type)}
+                    onClick={() => setValue('type', el.type)}
                     onKeyDown={(event) => {
                       if (event.key === 'Enter') {
                         handleAddressClick(index);
@@ -519,7 +558,9 @@ function DeliveryAddressPage() {
               <Button
                 color="inherit"
                 className="btn-add-address"
-                onClick={addNewAddress}
+                onClick={() =>
+                  setTimeout(handleSubmit(addNewAddress, addNewAddress), 0)
+                }
               >
                 Add Address
               </Button>

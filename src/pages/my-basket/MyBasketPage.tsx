@@ -510,7 +510,15 @@ function MyBasketPage() {
               </div>
               <Button
                 type="button"
-                onClick={() => setOpenPaymentSelectPopup(true)}
+                onClick={() => {
+                  if (!cartItems.length) {
+                    setAlertSeverity('error');
+                    setAlertMsg(`No Products In Cart`);
+                    setShowAlert(true);
+                    return;
+                  }
+                  setOpenPaymentSelectPopup(true);
+                }}
                 color="inherit"
                 className="btn-checkout"
               >

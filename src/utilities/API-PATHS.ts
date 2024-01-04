@@ -72,7 +72,8 @@ const API_PATHS = {
   getUserProfile: new URL(`app-user/profile`, BASE_URL).toString(),
 
   // Tenant
-  getTenantConfig: new URL(`shop/view/${tenantId}`, BASE_URL).toString(),
+  getTenant: new URL(`shop/view/${tenantId}`, BASE_URL).toString(),
+  getTenantConfig: new URL(`config/view/${tenantId}`, BASE_URL).toString(),
 
   deviceRegistration: new URL(
     `app-user-device/register-device`,

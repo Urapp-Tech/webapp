@@ -3,7 +3,7 @@ import { getHeaders } from '../utilities/constant';
 import network from './network';
 
 const getUserProfile = () => {
-  return network.get(API_PATHS.getUserProfile, getHeaders());
+  return network.get(API_PATHS.getUserProfile, { headers: getHeaders() });
 };
 
 export default {

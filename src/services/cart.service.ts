@@ -22,20 +22,48 @@ export interface UpdateCartPayload {
   products: Array<ProductPayload>;
 }
 
-const anonymousCart = (data: AnonymousCartPayload) => {
-  return network.post(API_PATHS.anonymousCart, data, getHeaders());
+const anonymousCartWithController = () => {
+  let anonymousCartController = new AbortController();
+  return (data: AnonymousCartPayload) => {
+    anonymousCartController.abort();
+    anonymousCartController = new AbortController();
+    return network.post(API_PATHS.anonymousCart, data, {
+      signal: anonymousCartController.signal,
+      headers: getHeaders(),
+    });
+  };
 };
 
-const userCart = () => {
-  return network.post(API_PATHS.userCart, {}, getHeaders());
+const userCartWithController = () => {
+  let userCartController = new AbortController();
+  return () => {
+    userCartController.abort();
+    userCartController = new AbortController();
+    return network.post(
+      API_PATHS.userCart,
+      {},
+      {
+        signal: userCartController.signal,
+        headers: getHeaders(),
+      }
+    );
+  };
 };
 
-const updateCart = (data: UpdateCartPayload) => {
-  return network.post(API_PATHS.updateCart, data, getHeaders());
+const updateCartWithController = () => {
+  let updateCartController = new AbortController();
+  return (data: UpdateCartPayload) => {
+    updateCartController.abort();
+    updateCartController = new AbortController();
+    return network.post(API_PATHS.updateCart, data, {
+      signal: updateCartController.signal,
+      headers: getHeaders(),
+    });
+  };
 };
 
 export default {
-  anonymousCart,
-  userCart,
-  updateCart,
+  anonymousCart: anonymousCartWithController(),
+  userCart: userCartWithController(),
+  updateCart: updateCartWithController(),
 };

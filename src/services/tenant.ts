@@ -1,16 +1,50 @@
-import { DeviceRegistration } from '../types/device.types';
+import {
+  DeviceRegistration,
+  GetTenantConfigResponse,
+  GetTenantResponse,
+} from '../types/device.types';
 import API_PATHS from '../utilities/API-PATHS';
 import { getHeaders } from '../utilities/constant';
 import network from './network';
 
-const getTenantConfig = () => {
-  return network.get(API_PATHS.getTenantConfig, getHeaders());
+const getTenantWithController = () => {
+  let getTenantController = new AbortController();
+  return () => {
+    getTenantController.abort();
+    getTenantController = new AbortController();
+    return network.get<GetTenantResponse>(API_PATHS.getTenant, {
+      signal: getTenantController.signal,
+      headers: getHeaders(),
+    });
+  };
 };
-const deviceRegistration = (deviceData: DeviceRegistration) => {
-  return network.post(API_PATHS.deviceRegistration, deviceData, getHeaders());
+
+const getTenantConfigWithController = () => {
+  let getTenantConfigController = new AbortController();
+  return () => {
+    getTenantConfigController.abort();
+    getTenantConfigController = new AbortController();
+    return network.get<GetTenantConfigResponse>(API_PATHS.getTenantConfig, {
+      signal: getTenantConfigController.signal,
+      headers: getHeaders(),
+    });
+  };
+};
+
+const deviceRegistrationWithController = () => {
+  let deviceRegistrationController = new AbortController();
+  return (deviceData: DeviceRegistration) => {
+    deviceRegistrationController.abort();
+    deviceRegistrationController = new AbortController();
+    return network.post(API_PATHS.deviceRegistration, deviceData, {
+      signal: deviceRegistrationController.signal,
+      headers: getHeaders(),
+    });
+  };
 };
 
 export default {
-  getTenantConfig,
-  deviceRegistration,
+  getTenant: getTenantWithController(),
+  deviceRegistration: deviceRegistrationWithController(),
+  getTenantConfig: getTenantConfigWithController(),
 };

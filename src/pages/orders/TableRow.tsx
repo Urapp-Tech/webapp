@@ -64,26 +64,27 @@ function getStatusText(type: Status) {
 }
 
 function getStatusClasses(type: Status) {
-  const statusClass = 'order-status';
+  const statusClass =
+    'inline-flex min-h-8 min-w-32 items-center text-xs font-semibold';
   if (type === 'New') {
-    return `${statusClass} bg-order-placed`;
+    return `${statusClass} text-[#4283f4]`;
   }
   if (type === 'Processing') {
-    return `${statusClass} bg-order-out-for-delivery`;
+    return `${statusClass} text-[#c367f1]`;
   }
   if (type === 'In-Delivery') {
-    return `${statusClass} bg-order-delivered`;
+    return `${statusClass} text-[#2cd285]`;
   }
   if (type === 'Delivered') {
-    return `${statusClass} bg-order-drop-off`;
+    return `${statusClass} text-[#ff8c39]`;
   }
   if (type === 'Cancelled') {
-    return `${statusClass} bg-order-cancelled`;
+    return `${statusClass} text-[#ee0404]`;
   }
   if (type === 'PickedUp') {
-    return `${statusClass} bg-order-picked-up`;
+    return `${statusClass} text-[#c367f1]`;
   }
-  return `${statusClass} bg-order-delivered`;
+  return `${statusClass} text-[#fd2f2f]`;
 }
 
 const getIcon = ORDER_STATUSES.map((status: any, index) => {
@@ -176,7 +177,10 @@ function TableRow({ id, appOrderNumber, type, date, progress, item }: Props) {
       </td>
       <td>{item} Items</td>
       <td>
-        <NavLink to={id} className="link">
+        <NavLink
+          to={id}
+          className="rounded-md bg-[#4283f4] px-4 py-2 text-white"
+        >
           Track Order
         </NavLink>
       </td>
