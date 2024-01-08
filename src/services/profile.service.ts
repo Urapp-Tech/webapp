@@ -2,10 +2,42 @@ import API_PATHS from '../utilities/API-PATHS';
 import { getHeaders } from '../utilities/constant';
 import network from './network';
 
-const getUserProfile = () => {
-  return network.get(API_PATHS.getUserProfile, { headers: getHeaders() });
+export type UpdateUserProfilePayload = {
+  email: string;
+  firstName: string;
+  lastName: string;
+  postalCode: string;
+  phoneNumber: string;
+  currentPassword?: string | undefined;
+  newPassword?: string | undefined;
+  verifyPassword?: string | undefined;
+};
+
+const getUserProfileWithController = () => {
+  let getUserProfileController = new AbortController();
+  return () => {
+    getUserProfileController.abort();
+    getUserProfileController = new AbortController();
+    return network.get(API_PATHS.getUserProfile, {
+      signal: getUserProfileController.signal,
+      headers: getHeaders(),
+    });
+  };
+};
+
+const updateUserProfileWithController = () => {
+  let updateUserProfileController = new AbortController();
+  return (data: UpdateUserProfilePayload) => {
+    updateUserProfileController.abort();
+    updateUserProfileController = new AbortController();
+    return network.post(API_PATHS.updateUserProfile, data, {
+      signal: updateUserProfileController.signal,
+      headers: getHeaders(),
+    });
+  };
 };
 
 export default {
-  getUserProfile,
+  getUserProfile: getUserProfileWithController(),
+  updateUserProfile: updateUserProfileWithController(),
 };

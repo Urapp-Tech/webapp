@@ -70,6 +70,7 @@ const API_PATHS = {
 
   // Profile
   getUserProfile: new URL(`app-user/profile`, BASE_URL).toString(),
+  updateUserProfile: new URL(`app-user/update`, BASE_URL).toString(),
 
   // Tenant
   getTenant: new URL(`shop/view/${tenantId}`, BASE_URL).toString(),
