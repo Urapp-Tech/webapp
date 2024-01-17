@@ -56,19 +56,7 @@ Faqs Page, Terms & Conditions Page, Privacy Policy Page
 .faqs-accordion .accordion-item .accordion-header.Mui-expanded {
   min-height: auto;
 }
-.faqs-accordion
-  .accordion-item
-  .accordion-header
-  .css-o4b71y-MuiAccordionSummary-content {
-  @apply my-4;
-}
-.faqs-accordion
-  .accordion-item
-  .accordion-header
-  .css-o4b71y-MuiAccordionSummary-content.Mui-expanded {
-  @apply my-4;
-  min-height: auto !important;
-}
+
 .faqs-accordion .accordion-item .accordion-header .heading {
   @apply mb-0 leading-none;
   font-size: var(--fs-14);

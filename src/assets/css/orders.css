@@ -203,18 +203,7 @@
   font-weight: var(--fw-600);
   color: var(--dark-100);
 }
-.order-details-card
-  .edit-date-time
-  .css-sbfmij-MuiButtonBase-root-MuiButton-root {
-  @apply px-3 !important;
-  min-width: auto;
-}
-.order-details-card
-  .edit-date-time
-  .css-sbfmij-MuiButtonBase-root-MuiButton-root
-  .css-1d6wzja-MuiButton-startIcon {
-  @apply mr-0;
-}
+
 .order-details-card .edit-date-time .selected-value {
   @apply leading-tight;
   font-size: var(--fs-14);
