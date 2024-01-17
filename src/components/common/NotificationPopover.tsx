@@ -83,6 +83,10 @@ function NotificationPopover({
         anchorEl={anchorElement}
         onClose={handleClose}
         className="notification-popover"
+        classes={{
+          paper:
+            'max-w-[calc(100%_-_2rem)] w-[25rem] shadow-md rounded-xl overflow-visible',
+        }}
         anchorOrigin={{
           vertical: 40,
           horizontal: 37,

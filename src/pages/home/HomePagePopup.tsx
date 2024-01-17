@@ -135,6 +135,10 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
         open={open}
         onClose={onCloseHandler}
         className="modal-add-to-cart"
+        classes={{
+          paper:
+            'max-w-[56rem] overflow-y-visible rounded-xl shadow-md md:m-4 md:max-h-[calc(100%_-_2rem)]',
+        }}
       >
         <IconButton
           onClick={() => {
