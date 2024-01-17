@@ -2,7 +2,6 @@
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { AlertColor } from '@mui/material/Alert';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
@@ -13,16 +12,23 @@ import { useForm } from 'react-hook-form';
 import { NavLink, useNavigate } from 'react-router-dom';
 import assets from '../../../assets';
 import AlertBox from '../../../components/common/SnackBar';
-import { OTPPayload, SignUpPayload } from '../../../types/auth.types';
+import useAlert from '../../../hooks/alert.hook';
 import authService from '../../../services/auth.service';
+import { OTPPayload, SignUpPayload } from '../../../types/auth.types';
 import { setSignUpData } from '../../../utilities/constant';
 import promiseHandler from '../../../utilities/promise-handler';
 
 function SignUpPage() {
+  const {
+    alertMessage,
+    setAlertMessage,
+    showAlert,
+    setShowAlert,
+    alertSeverity,
+    setAlertSeverity,
+  } = useAlert();
+
   const [showPassword, setShowPassword] = useState(false);
-  const [showAlert, setShowAlert] = useState<boolean>(false);
-  const [alertMessage, setAlertMessage] = useState('');
-  const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success');
   const navigate = useNavigate();
   const {
     register,
@@ -67,7 +73,6 @@ function SignUpPage() {
         alertOpen={showAlert}
         setAlertOpen={setShowAlert}
       />
-
       <div className="fixed-at-top-left">
         <NavLink to="../login" className="go-back">
           <ArrowBackRoundedIcon className="icon-arrow" />

@@ -1,28 +1,21 @@
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
-import { AlertColor } from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import { ClientJS } from 'clientjs';
 import { useCallback, useEffect, useState } from 'react';
 import CategoriesCard from '../../components/common/CategoriesCard';
 import Loader from '../../components/common/Loader';
 import AlertBox from '../../components/common/SnackBar';
+import useAlert from '../../hooks/alert.hook';
 import { setCartData, setCartItems } from '../../redux/features/cartStateSlice';
 import {
   useGetAllCategoryQuery,
   useLazyGetSubCategoryQuery,
 } from '../../redux/features/categorySliceAPI';
-import {
-  setDeviceData,
-  setTenantConfig,
-} from '../../redux/features/deviceState';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import cartService from '../../services/cart.service';
 import categoryService from '../../services/category.service';
-import network from '../../services/network';
-import tenantService from '../../services/tenant';
 import promiseHandler from '../../utilities/promise-handler';
 import HomePagePopup from './HomePagePopup';
 
@@ -44,30 +37,31 @@ const colorArray = [
 ];
 
 function HomePage() {
+  const {
+    alertMessage,
+    setAlertMessage,
+    showAlert,
+    setShowAlert,
+    alertSeverity,
+    setAlertSeverity,
+  } = useAlert();
+
   const persistedDeviceData = useAppSelector(
     (state) => state.deviceStates.deviceData
   );
-  const tenantConfig = useAppSelector(
-    (state) => state.deviceStates.tenantConfig
-  );
+
   const user = useAppSelector((state) => state.authState.user);
 
-  const cartItems = useAppSelector((state) => state.cartState.cartItems);
   const cartData = useAppSelector((state) => state.cartState.cartData);
 
   const dispatch = useAppDispatch();
-  const client = new ClientJS();
-  const fingerprint = client.getFingerprint();
-  const agent = client.getUserAgent();
+
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [searchName, setSearchName] = useState('');
   const [filteredSubCategory, setFilteredSubCategory] = useState<Array<any>>(
     []
   );
-  const [alertMsg, setAlertMsg] = useState('');
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success');
   const [FAQs, setFAQs] = useState(null);
 
   const { isLoading: isCategoryLoading, data: categoryData } =
@@ -83,20 +77,6 @@ function HomePage() {
       subCategoryTrigger(categoryData.data[0].id);
     }
   }, [isCategoryLoading, categoryData, subCategoryTrigger]);
-
-  async function fetchIp() {
-    const url = new URL('https://api.ipify.org');
-    url.searchParams.append('format', 'json');
-    const ipPromise = network.get(url.toString());
-    const [ipResult, ipError] = await promiseHandler(ipPromise);
-    if (!ipResult) {
-      setAlertSeverity('error');
-      setAlertMsg('Error Occurred');
-      setShowAlert(true);
-      return null;
-    }
-    return ipResult.data.ip;
-  }
 
   const addItemHandler = async (item: any) => {
     setSelectedItem(item);
@@ -117,79 +97,6 @@ function HomePage() {
     setFAQs(faqResult.data.data.homeCatItemFaq);
   };
 
-  const getTenantConfig = async () => {
-    const getTenantConfigPromise = tenantService.getTenantConfig();
-    const [getTenantConfigResult, getTenantConfigError] = await promiseHandler(
-      getTenantConfigPromise
-    );
-    if (!getTenantConfigResult) {
-      setAlertSeverity('error');
-      setAlertMsg(getTenantConfigError.message);
-      setShowAlert(true);
-      return;
-    }
-    if (!getTenantConfigResult.data.success) {
-      setAlertSeverity('error');
-      setAlertMsg(getTenantConfigResult.data.message);
-      setShowAlert(true);
-      return;
-    }
-    dispatch(setTenantConfig(getTenantConfigResult.data.data));
-  };
-
-  useEffect(() => {
-    async function initializeDeviceData() {
-      if (persistedDeviceData) {
-        return;
-      }
-      const ip = await fetchIp();
-      if (!ip) {
-        return;
-      }
-      const nameValue = `${agent.slice(0, 11)}-${ip}-${fingerprint}`;
-      const getTenantPromise = tenantService.getTenant();
-      getTenantConfig();
-      const [getTenantResult, getTenantError] =
-        await promiseHandler(getTenantPromise);
-      if (!getTenantResult) {
-        setAlertSeverity('error');
-        setAlertMsg(getTenantError.message);
-        setShowAlert(true);
-        return;
-      }
-      if (!getTenantResult.data.success) {
-        setAlertSeverity('error');
-        setAlertMsg(getTenantResult.data.message);
-        setShowAlert(true);
-        return;
-      }
-      const deviceRegistrationPromise = tenantService.deviceRegistration({
-        deviceId: fingerprint.toString(),
-        deviceType: 'Web',
-        isNotificationAllowed: true,
-        name: nameValue,
-        tenant: getTenantResult.data.data.id,
-        token: 'Push notifications are not available on the web platform.',
-      });
-      const [deviceRegistrationResult, deviceRegistrationError] =
-        await promiseHandler(deviceRegistrationPromise);
-      if (!deviceRegistrationResult) {
-        setAlertSeverity('error');
-        setAlertMsg(deviceRegistrationError.message);
-        setShowAlert(true);
-        return;
-      }
-      if (!deviceRegistrationResult.data.success) {
-        setAlertSeverity('error');
-        setAlertMsg(deviceRegistrationResult.data.message);
-        setShowAlert(true);
-        return;
-      }
-      dispatch(setDeviceData(deviceRegistrationResult.data.data));
-    }
-    initializeDeviceData();
-  }, []);
-
   useEffect(() => {
     async function fetchAnonymousCart() {
       if (!persistedDeviceData) {
@@ -203,13 +110,13 @@ function HomePage() {
         await promiseHandler(getAnonymousCartPromise);
       if (!getAnonymousCartResult) {
         setAlertSeverity('error');
-        setAlertMsg(getAnonymousCartError.message);
+        setAlertMessage(getAnonymousCartError.message);
         setShowAlert(true);
         return;
       }
       if (!getAnonymousCartResult.data.success) {
         setAlertSeverity('error');
-        setAlertMsg(getAnonymousCartResult.data.message);
+        setAlertMessage(getAnonymousCartResult.data.message);
         setShowAlert(true);
         return;
       }
@@ -231,36 +138,11 @@ function HomePage() {
         })
         .catch((error) => {
           setAlertSeverity('error');
-          setAlertMsg(error.message);
+          setAlertMessage(error.message);
           setShowAlert(true);
         });
     }
   }, [cartData, dispatch, persistedDeviceData, user]);
-
-  /*  useEffect(() => {
-    if (user && cartData) {
-      const updateCartPayload: any = {
-        appUser: user?.id,
-        cartId: cartData?.id,
-        tenant: cartData?.tenant,
-        products: cartItems.map((item) => {
-          return { id: item.id, quantity: item.buyCount };
-        }),
-      };
-      cartService
-        .updateCart(updateCartPayload)
-        .then((cartResponse) => {
-          if (cartResponse.data.success) {
-            dispatch(setCartData(cartResponse.data.data.cart));
-          }
-        })
-        .catch((error) => {
-          setAlertSeverity('error');
-          setAlertMsg(error.message);
-          setShowAlert(true);
-        });
-    }
-  }, [cartItems, dispatch, user]); */
 
   useEffect(() => {
     if (subCategoryData?.data?.homeCatItems?.length > 0) {
@@ -298,14 +180,12 @@ function HomePage() {
 
   return (
     <>
-      {showAlert && (
-        <AlertBox
-          msg={alertMsg}
-          setSeverity={alertSeverity}
-          alertOpen={showAlert}
-          setAlertOpen={setShowAlert}
-        />
-      )}
+      <AlertBox
+        msg={alertMessage}
+        setSeverity={alertSeverity}
+        alertOpen={showAlert}
+        setAlertOpen={setShowAlert}
+      />
       <HomePagePopup
         open={dialogOpen}
         setOpen={setDialogOpen}

@@ -25,7 +25,7 @@ export type Order = {
   pickupDateTime: string;
   dropDateTime: string;
   appUserAddress: string;
-  promoCode?: string;
+  voucherCode?: string;
   gstPercentage: number;
   gstAmount: string;
   totalAmount: string;

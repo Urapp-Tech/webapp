@@ -13,7 +13,7 @@ import promiseHandler from '../../../utilities/promise-handler';
 
 function OTPVerificationPage() {
   const [OTP, setOTP] = useState('');
-  const signUpData = getItem('SIGN_UP_DATA');
+  const signUpData = getItem<any>('SIGN_UP_DATA');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const onsubmit = async () => {

@@ -6,7 +6,6 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
-import { AlertColor } from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
@@ -19,6 +18,7 @@ import noLocation from '../../assets/images/icon-noMapLocation.svg';
 import Loader from '../../components/common/Loader';
 import Map from '../../components/common/Map';
 import AlertBox from '../../components/common/SnackBar';
+import useAlert from '../../hooks/alert.hook';
 import {
   deleteUserAddress,
   setAddressStatus,
@@ -117,6 +117,15 @@ function DeliveryAddressPage() {
     formState: { errors },
   } = useForm<AddNewAddressType>(formOptions);
 
+  const {
+    alertMessage,
+    setAlertMessage,
+    showAlert,
+    setShowAlert,
+    alertSeverity,
+    setAlertSeverity,
+  } = useAlert();
+
   const addressList = useAppSelector((state) => state.deviceStates.addressList);
   const user = useAppSelector((state) => state.authState.user);
   const [delAddress, setDelAddress] = useState<boolean>(false);
@@ -127,9 +136,6 @@ function DeliveryAddressPage() {
   const [activeAddress, setActiveAddress] =
     useState<UpdateAddressStatusData | null>(null);
   const [addressObj, setAddressObj] = useState<any>('');
-  const [alertMsg, setAlertMsg] = useState<any>('');
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success');
   const [isLoading, setIsLoading] = useState(false);
   const [deleteItem, setDeleteItem] = useState<any>(null);
   const draggedAddress = useAppSelector(
@@ -156,13 +162,13 @@ function DeliveryAddressPage() {
       setIsLoading(false);
       if (!getUserAddressResult) {
         setAlertSeverity('error');
-        setAlertMsg(getUserAddressError.message);
+        setAlertMessage(getUserAddressError.message);
         setShowAlert(true);
         return;
       }
       if (!getUserAddressResult.data.success) {
         setAlertSeverity('error');
-        setAlertMsg(getUserAddressResult.data.message);
+        setAlertMessage(getUserAddressResult.data.message);
         setShowAlert(true);
         return;
       }
@@ -195,13 +201,13 @@ function DeliveryAddressPage() {
 
     if (!updateAddressStatusResult) {
       setAlertSeverity('error');
-      setAlertMsg(updateAddressStatusError.message);
+      setAlertMessage(updateAddressStatusError.message);
       setShowAlert(true);
       return;
     }
     if (!updateAddressStatusResult.data.success) {
       setAlertSeverity('error');
-      setAlertMsg(updateAddressStatusResult.data.message);
+      setAlertMessage(updateAddressStatusResult.data.message);
       setShowAlert(true);
       return;
     }
@@ -259,7 +265,7 @@ function DeliveryAddressPage() {
                   setValue('location', formattedAddress);
                 } else {
                   setAlertSeverity('error');
-                  setAlertMsg(status);
+                  setAlertMessage(status);
                   setShowAlert(true);
                 }
               }
@@ -268,13 +274,13 @@ function DeliveryAddressPage() {
         },
         (error) => {
           setAlertSeverity('error');
-          setAlertMsg(error);
+          setAlertMessage(error.message);
           setShowAlert(true);
         }
       );
     } else {
       setAlertSeverity('error');
-      setAlertMsg('Geolocation is not supported by this browser.');
+      setAlertMessage('Geolocation is not supported by this browser.');
       setShowAlert(true);
     }
   };
@@ -304,21 +310,21 @@ function DeliveryAddressPage() {
   }, [getValues('location')]);
 
   const addNewAddress = async (data: AddNewAddressType | any) => {
-    if (errors.name) {
+    if (errors.name && errors.name.message) {
       setAlertSeverity('error');
-      setAlertMsg(errors.name.message);
+      setAlertMessage(errors.name.message);
       setShowAlert(true);
       return;
     }
-    if (errors.location) {
+    if (errors.location && errors.location.message) {
       setAlertSeverity('error');
-      setAlertMsg(errors.location.message);
+      setAlertMessage(errors.location.message);
       setShowAlert(true);
       return;
     }
     if (errors.type) {
       setAlertSeverity('error');
-      setAlertMsg('type is required');
+      setAlertMessage('type is required');
       setShowAlert(true);
       return;
     }
@@ -334,13 +340,13 @@ function DeliveryAddressPage() {
     );
     if (!addUserAddressResult) {
       setAlertSeverity('error');
-      setAlertMsg(addUserAddressError.message);
+      setAlertMessage(addUserAddressError.message);
       setShowAlert(true);
       return;
     }
     if (!addUserAddressResult.data.success) {
       setAlertSeverity('error');
-      setAlertMsg(addUserAddressResult.data.message);
+      setAlertMessage(addUserAddressResult.data.message);
       setShowAlert(true);
       return;
     }
@@ -351,7 +357,7 @@ function DeliveryAddressPage() {
     const tempDeleteItemId: string | null = deleteItem ? deleteItem.id : null;
     if (!tempDeleteItemId) {
       setAlertSeverity('error');
-      setAlertMsg('Delete Id Not Set');
+      setAlertMessage('Delete Id Not Set');
       setShowAlert(true);
       return;
     }
@@ -362,31 +368,30 @@ function DeliveryAddressPage() {
       await promiseHandler(deleteUserAddressPromise);
     if (!deleteUserAddressResult) {
       setAlertSeverity('error');
-      setAlertMsg(deleteUserAddressError.message);
+      setAlertMessage(deleteUserAddressError.message);
       setShowAlert(true);
       return;
     }
     if (!deleteUserAddressResult.data.success) {
       setAlertSeverity('error');
-      setAlertMsg(deleteUserAddressResult.data.message);
+      setAlertMessage(deleteUserAddressResult.data.message);
       setShowAlert(true);
       return;
     }
     dispatch(deleteUserAddress(deleteUserAddressResult.data.data));
     setAlertSeverity('success');
-    setAlertMsg(deleteUserAddressResult.data.message);
+    setAlertMessage(deleteUserAddressResult.data.message);
     setShowAlert(true);
   };
 
   return (
     <>
       <AlertBox
-        msg={alertMsg}
+        msg={alertMessage}
         setSeverity={alertSeverity}
         alertOpen={showAlert}
         setAlertOpen={setShowAlert}
       />
-
       <DeleteAddressPopup
         open={delAddress}
         setOpen={setDelAddress}

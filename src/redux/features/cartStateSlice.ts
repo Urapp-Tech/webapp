@@ -22,7 +22,7 @@ export type CartData = {
   gstPercentage: number;
   id: string;
   pickupDateTime: string | null;
-  promoCode: string | null;
+  voucherCode: string | null;
   status: string;
   tenant: string;
   totalAmount: string;
@@ -102,8 +102,8 @@ export const cartSlice = createSlice({
       const cartItemIndex = state.cartItems.findIndex(
         (item) => item.id === action.payload
       );
-      if (state.cartItems[cartItemIndex].buyCount <= 0) {
-        state.cartItems[cartItemIndex].buyCount = 0;
+      if (state.cartItems[cartItemIndex].buyCount <= 1) {
+        state.cartItems[cartItemIndex].buyCount = 1;
         setItem('CART_ITEMS', state.cartItems);
         return;
       }

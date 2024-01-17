@@ -6,30 +6,39 @@ type Key =
   | 'DEVICE_DATA'
   | 'ADDRESS'
   | 'SIGN_UP_DATA'
-  | 'TENANT_CONFIG';
+  | 'TENANT_CONFIG'
+  | 'TENANT';
 
-export function setItem<T = any>(key: Key, value: T): void {
-  const stringifiedValue = JSON.stringify(value);
-  localStorage.setItem(key, stringifiedValue);
+function addKeyPrefix(key: string) {
+  const prefix = 'WEB_APP';
+  return `${prefix}_${key}`;
 }
 
-export function getItem<T = any>(key: Key): T | null {
-  const stringifiedValue = localStorage.getItem(key);
-  if (stringifiedValue) {
-    try {
-      return JSON.parse(stringifiedValue) as T;
-    } catch (error) {
-      localStorage.removeItem(key);
-      return null;
-    }
-  }
-  return null;
-}
-
-export function removeItem(key: Key): void {
-  localStorage.removeItem(key);
-}
-
-export function clear(): void {
+export function clear() {
   localStorage.clear();
+}
+
+export function getItem<T>(key: Key): T | null {
+  const newKey = addKeyPrefix(key);
+  try {
+    const stringifiedJson = localStorage.getItem(newKey);
+    if (stringifiedJson) {
+      return JSON.parse(stringifiedJson);
+    }
+    return null;
+  } catch {
+    localStorage.removeItem(newKey);
+    return null;
+  }
+}
+
+export function removeItem(key: Key) {
+  const newKey = addKeyPrefix(key);
+  localStorage.removeItem(newKey);
+}
+
+export function setItem<T>(key: Key, value: T) {
+  const newKey = addKeyPrefix(key);
+  const stringifiedJson = JSON.stringify(value);
+  localStorage.setItem(newKey, stringifiedJson);
 }

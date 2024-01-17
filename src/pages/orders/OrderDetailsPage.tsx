@@ -8,8 +8,6 @@ import DomainVerificationOutlinedIcon from '@mui/icons-material/DomainVerificati
 import FilterNoneOutlinedIcon from '@mui/icons-material/FilterNoneOutlined';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
-import { AlertColor } from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
@@ -17,6 +15,7 @@ import dayjs from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import AlertBox from '../../components/common/SnackBar';
+import useAlert from '../../hooks/alert.hook';
 import { useAppSelector } from '../../redux/redux-hooks';
 import orderService from '../../services/order.service';
 import { GetOrderListData } from '../../types/order.types';
@@ -24,22 +23,27 @@ import cn from '../../utilities/class-names';
 import { ORDER_STATUS, ORDER_STATUSES } from '../../utilities/constant';
 import { getItem } from '../../utilities/local-storage';
 import promiseHandler from '../../utilities/promise-handler';
-import DatePickerButton from '../my-basket/DatePickerButton';
 import OrderDetailsPagePopup from './OrderDetailsPagePopup';
 
 function OrderDetailsPage() {
+  const {
+    alertMessage,
+    setAlertMessage,
+    showAlert,
+    setShowAlert,
+    alertSeverity,
+    setAlertSeverity,
+  } = useAlert();
+
   const user = useAppSelector((state) => state.authState.user);
   const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [orderItemDetail, setOrderItemDetail] = useState<any>();
   const [pickUpTime, setPickUpTime] = useState<dayjs.Dayjs | null>(null);
   const [dropOffTime, setDropOffTime] = useState<dayjs.Dayjs | null>(null);
-  const [alertMsg, setAlertMsg] = useState<any>('');
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success');
   const [orderCanceled, setOrderCanceled] = useState(false);
   const items = getItem<GetOrderListData>('ORDER_ITEM');
-  const address = getItem('ADDRESS');
+  const address = getItem<any>('ADDRESS');
   const addressList = address.map((el: any) => el);
   const { id } = useParams();
   const userAddress = addressList?.find(
@@ -60,13 +64,13 @@ function OrderDetailsPage() {
     );
     if (!getOrderDetailsResult) {
       setAlertSeverity('error');
-      setAlertMsg(getOrderDetailsError.message);
+      setAlertMessage(getOrderDetailsError.message);
       setShowAlert(true);
       return;
     }
     if (!getOrderDetailsResult.data.success) {
       setAlertSeverity('error');
-      setAlertMsg(getOrderDetailsResult.data.message);
+      setAlertMessage(getOrderDetailsResult.data.message);
       setShowAlert(true);
       return;
     }
@@ -135,16 +139,13 @@ function OrderDetailsPage() {
   };
   return (
     <>
-      {showAlert && (
-        <AlertBox
-          msg={alertMsg}
-          setSeverity={alertSeverity}
-          alertOpen={showAlert}
-          setAlertOpen={setShowAlert}
-        />
-      )}
+      <AlertBox
+        msg={alertMessage}
+        setSeverity={alertSeverity}
+        alertOpen={showAlert}
+        setAlertOpen={setShowAlert}
+      />
       <OrderDetailsPagePopup open={dialogOpen} setOpen={setDialogOpen} />
-
       <div className="order-details-page p-4 sm:p-5 xl:p-7">
         <div className="mb-4 flex items-center md:mb-6">
           <IconButton

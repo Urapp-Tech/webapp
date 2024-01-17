@@ -5,7 +5,6 @@ import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOut
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-import { AlertColor } from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -13,7 +12,8 @@ import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
 import { useCallback, useEffect, useState } from 'react';
 import AlertBox from '../../components/common/SnackBar';
-import { addToCart, setCartData } from '../../redux/features/cartStateSlice';
+import useAlert from '../../hooks/alert.hook';
+import { addToCart } from '../../redux/features/cartStateSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import cartService, { UpdateCartPayload } from '../../services/cart.service';
 import { tenantId } from '../../utilities/constant';
@@ -27,6 +27,15 @@ type Props = {
 };
 
 function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
+  const {
+    alertMessage,
+    setAlertMessage,
+    showAlert,
+    setShowAlert,
+    alertSeverity,
+    setAlertSeverity,
+  } = useAlert();
+
   const user = useAppSelector((state) => state.authState.user);
   const { cartData, cartItems } = useAppSelector((state) => state.cartState);
   const deviceData = useAppSelector((state) => state.deviceStates.deviceData);
@@ -34,9 +43,6 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
 
   const [expanded, setExpanded] = useState<string | false>(false);
   const [count, setCount] = useState(1);
-  const [alertMsg, setAlertMsg] = useState<any>('');
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success');
 
   const handleChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -80,25 +86,25 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
       appUserAddress: undefined,
       pickupDateTime: undefined,
       dropDateTime: undefined,
-      promoCode: undefined,
+      voucherCode: undefined,
     };
     const updateCartPromise = cartService.updateCart(updateCartPayload);
     const [updateCartResult, updateCartError] =
       await promiseHandler(updateCartPromise);
     if (!updateCartResult) {
       setAlertSeverity('error');
-      setAlertMsg(updateCartError.message);
+      setAlertMessage(updateCartError.message);
       setShowAlert(true);
       return;
     }
     if (!updateCartResult.data.success) {
       setAlertSeverity('error');
-      setAlertMsg(updateCartResult.data.message);
+      setAlertMessage(updateCartResult.data.message);
       setShowAlert(true);
       return;
     }
     setAlertSeverity('success');
-    setAlertMsg(updateCartResult.data.message);
+    setAlertMessage(updateCartResult.data.message);
     setShowAlert(true);
   }, [cartItems]);
 
@@ -108,6 +114,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
 
   const onCloseHandler = (event: object, reason: string) => {
     if (reason === 'backdropClick') {
+      setCount(1);
       setOpen(false);
     }
   };
@@ -118,27 +125,35 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
 
   return (
     <>
-      {showAlert && (
-        <AlertBox
-          msg={alertMsg}
-          setSeverity={alertSeverity}
-          alertOpen={showAlert}
-          setAlertOpen={setShowAlert}
-        />
-      )}
+      <AlertBox
+        msg={alertMessage}
+        setSeverity={alertSeverity}
+        alertOpen={showAlert}
+        setAlertOpen={setShowAlert}
+      />
       <Dialog
         open={open}
         onClose={onCloseHandler}
         className="modal-add-to-cart"
       >
-        <IconButton onClick={() => setOpen(false)} className="btn-close">
+        <IconButton
+          onClick={() => {
+            setCount(1);
+            setOpen(false);
+          }}
+          className="btn-close"
+        >
           <ClearIcon />
         </IconButton>
         <DialogContent className="modal-content">
           <div className="main-grid">
             <div>
               <div className="product-img">
-                <img src={data?.icon} alt="" />
+                <img
+                  className="aspect-square w-80 object-contain"
+                  src={data?.icon}
+                  alt=""
+                />
               </div>
               <div className="p-4">
                 <h4 className="product-name">{data?.name}</h4>

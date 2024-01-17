@@ -1,10 +1,10 @@
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import DiscountIcon from '@mui/icons-material/Discount';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
-import { AlertColor } from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
@@ -16,8 +16,11 @@ import dayjs from 'dayjs';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AlertBox from '../../components/common/SnackBar';
+import useAlert from '../../hooks/alert.hook';
 import { setDropOff, setPickup } from '../../redux/features/DateAndTime';
 import {
+  decrementQuantity,
+  incrementQuantity,
   removeFromCart,
   resetCart,
   setCartData,
@@ -33,27 +36,35 @@ import PayFastForm from './PayFastForm';
 import PaymentOptionPopup from './PaymentOptionPopup';
 
 function MyBasketPage() {
-  const { cartItems, cartData }: any = useAppSelector(
-    (state) => state.cartState
-  );
+  const {
+    alertMessage,
+    setAlertMessage,
+    showAlert,
+    setShowAlert,
+    alertSeverity,
+    setAlertSeverity,
+  } = useAlert();
+
+  const { cartItems, cartData } = useAppSelector((state) => state.cartState);
+  const tenant = useAppSelector((state) => state.deviceStates.tenant);
   const { DropOff, PickUp } = useAppSelector((state) => state.dateState);
   const user = useAppSelector((state) => state.authState.user);
   const userAddress = useAppSelector((state) => state.deviceStates.addressList);
   const dispatch = useAppDispatch();
-  const [promoCode, setPromoCode] = useState('');
+  const [voucherCode, setVoucherCode] = useState('');
   const navigate = useNavigate();
-  const [alertMsg, setAlertMsg] = useState('');
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success');
   const [isLoading, setIsLoading] = useState(false);
   const [payFastFormData, setPayFastFormData] = useState<any>(null);
   const [openPaymentSelectPopup, setOpenPaymentSelectPopup] = useState(false);
-
+  const minimumDeliveryTime = tenant?.tenantConfig?.minimumDeliveryTime ?? 1;
   const formSubmitButtonRef = useRef<HTMLButtonElement>(null);
 
   const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
     if (value) {
       dispatch(setPickup(value.toISOString()));
+      dispatch(
+        setDropOff(value.add(minimumDeliveryTime, 'days').toISOString())
+      );
     }
   };
   const handleDropOffTimeChange = (value: dayjs.Dayjs | null) => {
@@ -70,98 +81,88 @@ function MyBasketPage() {
       cartId: cartData?.id,
       dropDateTime: DropOff,
       pickupDateTime: PickUp,
-      promoCode,
+      voucherCode,
       tenant: cartData?.tenant,
       products: cartItems.map((item: any) => {
         return { id: item.id, quantity: item.buyCount };
       }),
     };
-    if (!user) {
-      navigate('/auth/login');
-    }
-    if (PickUp && DropOff) {
-      const updateCartPromise = cartService.updateCart(updateCartPayload);
-      const [updateCartResult, updateCartError] =
-        await promiseHandler(updateCartPromise);
-      if (!updateCartResult) {
-        setAlertSeverity('error');
-        setAlertMsg(updateCartError.message);
-        setShowAlert(true);
-        return;
-      }
-      if (!updateCartResult.data.success) {
-        setAlertSeverity('error');
-        setAlertMsg(updateCartResult.data.message);
-        setShowAlert(true);
-        return;
-      }
-      dispatch(setCartData(updateCartResult.data.data.cart));
-      const addOrderPromise = orderService.addPayFastOrder({
-        cartId: updateCartResult.data.data.cart.id,
-      });
-      const [addOrderResult, addOrderError] =
-        await promiseHandler(addOrderPromise);
-      if (!addOrderResult) {
-        setAlertSeverity('error');
-        setAlertMsg(addOrderError.message);
-        setShowAlert(true);
-        return;
-      }
-      if (!addOrderResult.data.success) {
-        setAlertSeverity('error');
-        setAlertMsg(addOrderResult.data.message);
-        setShowAlert(true);
-        return;
-      }
-      dispatch(setPickup(null));
-      dispatch(setDropOff(null));
-      dispatch(resetCart());
-      // window.location.replace(orderResponse.data.data.paymentUrl);
-
-      const payFastTokenPromise = orderService.getPayFastToken();
-      const [payFastTokenResult, payFastTokenError] =
-        await promiseHandler(payFastTokenPromise);
-      if (!payFastTokenResult) {
-        setAlertSeverity('error');
-        setAlertMsg(payFastTokenError.message);
-        setShowAlert(true);
-        return;
-      }
-      if (!payFastTokenResult.data.success) {
-        setAlertSeverity('error');
-        setAlertMsg(payFastTokenResult.data.message);
-        setShowAlert(true);
-        return;
-      }
-      setPayFastFormData({
-        merchantId: payFastTokenResult.data.data.merchantId,
-        token: payFastTokenResult.data.data.accessToken,
-        merchantName: payFastTokenResult.data.data.name,
-        generatedDateTime: payFastTokenResult.data.data.generatedDateTime,
-        // successURL: payFastTokenResult.data.data.successUrl,
-        successURL: window.location.href,
-        failureURL: window.location.href,
-        webHookURL: payFastTokenResult.data.data.payFastHookUrl,
-        userName: user?.firstName,
-        totalPrice: addOrderResult.data.data.order.grandTotal,
-        phoneNumber: user?.phone,
-        emailAddress: user?.email,
-        items: addOrderResult.data.data.orderItems.map((item: any) => ({
-          id: item.itemId,
-          quantity: item.quantity,
-          price: item.unitPrice.replace('$', ''),
-        })),
-        orderId: addOrderResult.data.data.order.id,
-        currencyType: 'USD',
-      });
-      setTimeout(() => {
-        formSubmitButtonRef?.current?.click();
-      }, 0);
-    } else {
+    const updateCartPromise = cartService.updateCart(updateCartPayload);
+    const [updateCartResult, updateCartError] =
+      await promiseHandler(updateCartPromise);
+    if (!updateCartResult) {
       setAlertSeverity('error');
-      setAlertMsg('Pickup Date & Drop off time is Required');
+      setAlertMessage(updateCartError.message);
       setShowAlert(true);
+      return;
     }
+    if (!updateCartResult.data.success) {
+      setAlertSeverity('error');
+      setAlertMessage(updateCartResult.data.message);
+      setShowAlert(true);
+      return;
+    }
+    dispatch(setCartData(updateCartResult.data.data.cart));
+    const addOrderPromise = orderService.addPayFastOrder({
+      cartId: updateCartResult.data.data.cart.id,
+    });
+    const [addOrderResult, addOrderError] =
+      await promiseHandler(addOrderPromise);
+    if (!addOrderResult) {
+      setAlertSeverity('error');
+      setAlertMessage(addOrderError.message);
+      setShowAlert(true);
+      return;
+    }
+    if (!addOrderResult.data.success) {
+      setAlertSeverity('error');
+      setAlertMessage(addOrderResult.data.message);
+      setShowAlert(true);
+      return;
+    }
+    dispatch(setPickup(null));
+    dispatch(setDropOff(null));
+    dispatch(resetCart());
+    // window.location.replace(orderResponse.data.data.paymentUrl);
+    const payFastTokenPromise = orderService.getPayFastToken();
+    const [payFastTokenResult, payFastTokenError] =
+      await promiseHandler(payFastTokenPromise);
+    if (!payFastTokenResult) {
+      setAlertSeverity('error');
+      setAlertMessage(payFastTokenError.message);
+      setShowAlert(true);
+      return;
+    }
+    if (!payFastTokenResult.data.success) {
+      setAlertSeverity('error');
+      setAlertMessage(payFastTokenResult.data.message);
+      setShowAlert(true);
+      return;
+    }
+    setPayFastFormData({
+      merchantId: payFastTokenResult.data.data.merchantId,
+      token: payFastTokenResult.data.data.accessToken,
+      merchantName: payFastTokenResult.data.data.name,
+      generatedDateTime: payFastTokenResult.data.data.generatedDateTime,
+      // successURL: payFastTokenResult.data.data.successUrl,
+      successURL: window.location.href,
+      failureURL: window.location.href,
+      webHookURL: payFastTokenResult.data.data.payFastHookUrl,
+      userName: user?.firstName,
+      totalPrice: addOrderResult.data.data.order.grandTotal,
+      phoneNumber: user?.phone,
+      emailAddress: user?.email,
+      items: addOrderResult.data.data.orderItems.map((item: any) => ({
+        id: item.itemId,
+        quantity: item.quantity,
+        price: item.unitPrice.replace('$', ''),
+      })),
+      orderId: addOrderResult.data.data.order.id,
+      currencyType: 'USD',
+    });
+    setTimeout(() => {
+      formSubmitButtonRef?.current?.click();
+    }, 0);
   };
 
   const onCheckoutCash = async () => {
@@ -173,61 +174,53 @@ function MyBasketPage() {
       cartId: cartData?.id,
       dropDateTime: DropOff,
       pickupDateTime: PickUp,
-      promoCode,
+      voucherCode,
       tenant: cartData?.tenant,
       products: cartItems.map((item: any) => {
         return { id: item.id, quantity: item.buyCount };
       }),
     };
-    if (!user) {
-      navigate('/auth/login');
-    }
-    if (PickUp && DropOff) {
-      const updateCartPromise = cartService.updateCart(updateCartPayload);
-      const [updateCartResult, updateCartError] =
-        await promiseHandler(updateCartPromise);
-      if (!updateCartResult) {
-        setAlertSeverity('error');
-        setAlertMsg(updateCartError.message);
-        setShowAlert(true);
-        return;
-      }
-      if (!updateCartResult.data.success) {
-        setAlertSeverity('error');
-        setAlertMsg(updateCartResult.data.message);
-        setShowAlert(true);
-        return;
-      }
-      dispatch(setCartData(updateCartResult.data.data.cart));
-      const addOrderPromise = orderService.addCashOrder({
-        cartId: updateCartResult.data.data.cart.id,
-      });
-      const [addOrderResult, addOrderError] =
-        await promiseHandler(addOrderPromise);
-      if (!addOrderResult) {
-        setAlertSeverity('error');
-        setAlertMsg(addOrderError.message);
-        setShowAlert(true);
-        return;
-      }
-      if (!addOrderResult.data.success) {
-        setAlertSeverity('error');
-        setAlertMsg(addOrderResult.data.message);
-        setShowAlert(true);
-        return;
-      }
-      dispatch(setPickup(null));
-      dispatch(setDropOff(null));
-      dispatch(resetCart());
 
-      setAlertSeverity('success');
-      setAlertMsg('Order Placed');
-      setShowAlert(true);
-    } else {
+    const updateCartPromise = cartService.updateCart(updateCartPayload);
+    const [updateCartResult, updateCartError] =
+      await promiseHandler(updateCartPromise);
+    if (!updateCartResult) {
       setAlertSeverity('error');
-      setAlertMsg('Pickup Date & Drop off time is Required');
+      setAlertMessage(updateCartError.message);
       setShowAlert(true);
+      return;
     }
+    if (!updateCartResult.data.success) {
+      setAlertSeverity('error');
+      setAlertMessage(updateCartResult.data.message);
+      setShowAlert(true);
+      return;
+    }
+    dispatch(setCartData(updateCartResult.data.data.cart));
+    const addOrderPromise = orderService.addCashOrder({
+      cartId: updateCartResult.data.data.cart.id,
+    });
+    const [addOrderResult, addOrderError] =
+      await promiseHandler(addOrderPromise);
+    if (!addOrderResult) {
+      setAlertSeverity('error');
+      setAlertMessage(addOrderError.message);
+      setShowAlert(true);
+      return;
+    }
+    if (!addOrderResult.data.success) {
+      setAlertSeverity('error');
+      setAlertMessage(addOrderResult.data.message);
+      setShowAlert(true);
+      return;
+    }
+    dispatch(setPickup(null));
+    dispatch(setDropOff(null));
+    dispatch(resetCart());
+
+    setAlertSeverity('success');
+    setAlertMessage('Order Placed');
+    setShowAlert(true);
   };
 
   const updateCart = useCallback(async () => {
@@ -242,7 +235,7 @@ function MyBasketPage() {
       cartId: cartData?.id,
       dropDateTime: DropOff,
       pickupDateTime: PickUp,
-      promoCode,
+      voucherCode,
       tenant: cartData?.tenant,
       products: cartItems.map((item: any) => {
         return { id: item.id, quantity: item.buyCount };
@@ -253,13 +246,13 @@ function MyBasketPage() {
       await promiseHandler(updateCartPromise);
     if (!updateCartResult) {
       setAlertSeverity('error');
-      setAlertMsg(updateCartError.message);
+      setAlertMessage(updateCartError.message);
       setShowAlert(true);
       return;
     }
     if (!updateCartResult.data.success) {
       setAlertSeverity('error');
-      setAlertMsg(updateCartResult.data.message);
+      setAlertMessage(updateCartResult.data.message);
       setShowAlert(true);
       return;
     }
@@ -297,13 +290,13 @@ function MyBasketPage() {
       setIsLoading(false);
       if (!getUserAddressResult) {
         setAlertSeverity('error');
-        setAlertMsg(getUserAddressError.message);
+        setAlertMessage(getUserAddressError.message);
         setShowAlert(true);
         return;
       }
       if (!getUserAddressResult.data.success) {
         setAlertSeverity('error');
-        setAlertMsg(getUserAddressResult.data.message);
+        setAlertMessage(getUserAddressResult.data.message);
         setShowAlert(true);
         return;
       }
@@ -318,18 +311,16 @@ function MyBasketPage() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <AlertBox
-        msg={alertMsg}
+        msg={alertMessage}
         setSeverity={alertSeverity}
         alertOpen={showAlert}
         setAlertOpen={setShowAlert}
       />
-
       <PaymentOptionPopup
         handlePopupClose={handlePopupClose}
         open={openPaymentSelectPopup}
         setOpen={setOpenPaymentSelectPopup}
       />
-
       <div className="cart-page p-4 sm:p-5 xl:p-7">
         <div className="mb-4 flex items-center justify-start md:mb-6">
           <h4 className="page-heading">My Basket</h4>
@@ -344,6 +335,7 @@ function MyBasketPage() {
                       <th>Products</th>
                       <th>Price</th>
                       <th>Items</th>
+                      <th>Amount</th>
                       <th>Subtotal</th>
                     </tr>
                   </thead>
@@ -364,8 +356,31 @@ function MyBasketPage() {
                             </div>
                           </div>
                         </td>
+
                         <td>${Number(item?.price ?? 0).toFixed(2)}</td>
                         <td>{Number(item?.buyCount ?? 0).toFixed(2)}</td>
+                        <td>
+                          <span className="flex w-full flex-row items-center justify-start">
+                            <IconButton
+                              className="p-0 text-neutral-900"
+                              onClick={() =>
+                                dispatch(decrementQuantity(item.id))
+                              }
+                            >
+                              <RemoveCircleOutlineOutlinedIcon className="text-lg" />
+                            </IconButton>
+                            <span className="mx-2">{item?.buyCount}</span>
+
+                            <IconButton
+                              className="p-0 text-neutral-900"
+                              onClick={() =>
+                                dispatch(incrementQuantity(item.id))
+                              }
+                            >
+                              <AddCircleOutlineOutlinedIcon className="text-lg" />
+                            </IconButton>
+                          </span>
+                        </td>
                         <td>
                           $
                           {(
@@ -388,8 +403,8 @@ function MyBasketPage() {
                       inputProps={{
                         placeholder: 'Enter Promo Code',
                       }}
-                      value={promoCode}
-                      onChange={(e) => setPromoCode(e.target.value)}
+                      value={voucherCode}
+                      onChange={(e) => setVoucherCode(e.target.value)}
                       startAdornment={
                         <InputAdornment
                           className="text-orange-100"
@@ -425,21 +440,10 @@ function MyBasketPage() {
                     initialValue={dayjs(PickUp ?? new Date())}
                   />
                   <div className="mb-2 flex items-center">
-                    <DateRangeIcon className="mr-2 text-xl" />
                     <p className="selected-value">
                       {PickUp
-                        ? dayjs(PickUp ?? new Date()).format('ddd, MMM D, YYYY')
+                        ? dayjs(PickUp).format('ddd, MMM D, YYYY HH:mm a')
                         : 'Select a date'}
-                    </p>
-                  </div>
-                  <div className="flex items-center">
-                    <AccessTimeIcon className="mr-2 text-xl" />
-                    <p className="selected-value">
-                      {PickUp
-                        ? `${dayjs(PickUp)?.format('HH:mm')}-${dayjs(PickUp)
-                            ?.add(1, 'hours')
-                            .format('HH:mm')}`
-                        : 'Select time'}
                     </p>
                   </div>
                 </div>
@@ -448,26 +452,19 @@ function MyBasketPage() {
                     onChange={handleDropOffTimeChange}
                     id="drop-off-date-time-picker"
                     icon={<DateRangeIcon />}
-                    text="Drop off time"
+                    text="Urgent time"
                     initialValue={dayjs(DropOff)}
                   />
-                  <div className="mb-2 flex items-center">
-                    <DateRangeIcon className="mr-2 text-xl" />
-                    <p className="selected-value">
-                      {DropOff
-                        ? dayjs(DropOff).format('ddd, MMM D, YYYY')
-                        : 'Select a date'}
+                  <div className="mb-2 flex flex-col items-center">
+                    <p className="selected-value w-full">
+                      {DropOff && dayjs(DropOff).isValid()
+                        ? dayjs(DropOff).format('ddd, MMM D, YYYY HH:mm a')
+                        : null}
                     </p>
-                  </div>
-                  <div className="flex items-center">
-                    <AccessTimeIcon className="mr-2 text-xl" />
-                    <p className="selected-value">
-                      {DropOff
-                        ? `${dayjs(DropOff)?.format('HH:mm')}-${dayjs(DropOff)
-                            ?.add(1, 'hours')
-                            .format('HH:mm')}`
-                        : 'Select time'}
-                    </p>
+                    <br />
+                    <div className="w-full text-end text-[0.625rem]">
+                      minimum time is {minimumDeliveryTime} days
+                    </div>
                   </div>
                 </div>
               </div>
@@ -482,7 +479,7 @@ function MyBasketPage() {
                 ''
               )}
               <div className="total-amount">
-                <h5 className="heading">Total Amount</h5>
+                <h5 className="heading">Amount</h5>
                 <div className="mb-4 flex items-center justify-between">
                   <p className="key">Total Amount</p>
                   <p className="value">
@@ -511,9 +508,19 @@ function MyBasketPage() {
               <Button
                 type="button"
                 onClick={() => {
+                  if (!user) {
+                    navigate('/auth/login');
+                    return;
+                  }
                   if (!cartItems.length) {
                     setAlertSeverity('error');
-                    setAlertMsg(`No Products In Cart`);
+                    setAlertMessage(`No Products In Cart`);
+                    setShowAlert(true);
+                    return;
+                  }
+                  if (!PickUp && !DropOff) {
+                    setAlertSeverity('error');
+                    setAlertMessage('Pickup Date time is Required');
                     setShowAlert(true);
                     return;
                   }

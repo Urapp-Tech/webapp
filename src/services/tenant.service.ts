@@ -1,8 +1,8 @@
+import { DeviceRegistration } from '../types/device.types';
 import {
-  DeviceRegistration,
   GetTenantConfigResponse,
-  GetTenantResponse,
-} from '../types/device.types';
+  GetTenantDetailsResponse,
+} from '../types/tenant.types';
 import API_PATHS from '../utilities/API-PATHS';
 import { getHeaders } from '../utilities/constant';
 import network from './network';
@@ -12,7 +12,7 @@ const getTenantWithController = () => {
   return () => {
     getTenantController.abort();
     getTenantController = new AbortController();
-    return network.get<GetTenantResponse>(API_PATHS.getTenant, {
+    return network.get<GetTenantDetailsResponse>(API_PATHS.getTenant, {
       signal: getTenantController.signal,
       headers: getHeaders(),
     });

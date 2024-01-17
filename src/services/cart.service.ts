@@ -18,7 +18,7 @@ export interface UpdateCartPayload {
   appUserAddress: string | null | undefined;
   pickupDateTime: string | null | undefined;
   dropDateTime: string | null | undefined;
-  promoCode: string | null | undefined;
+  voucherCode: string | null | undefined;
   products: Array<ProductPayload>;
 }
 

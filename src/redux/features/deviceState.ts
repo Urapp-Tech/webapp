@@ -5,7 +5,7 @@ import {
   UpdateAddressStatusData,
   UserAddressData,
 } from '../../types/address.types';
-import { TenantConfigData } from '../../types/device.types';
+import { TenantConfigData, TenantDetails } from '../../types/tenant.types';
 import { getItem, setItem } from '../../utilities/local-storage';
 
 type DevicePayload = {
@@ -25,18 +25,22 @@ type DeviceState = {
   address: string;
   addressList: Array<UserAddressData>;
   tenantConfig: TenantConfigPayload | null;
+  tenant: TenantDetails | null;
 };
 
 const initialDeviceData = getItem<DevicePayload>('DEVICE_DATA');
-const initialAddressList = getItem('ADDRESS') ?? [];
+const initialAddressList = getItem<any[]>('ADDRESS') ?? [];
 const initialTenantConfig = getItem<TenantConfigPayload>('TENANT_CONFIG');
+const initialTenant = getItem<TenantDetails>('TENANT');
 
 const initialState: DeviceState = {
   deviceData: initialDeviceData,
   address: '',
   addressList: initialAddressList,
   tenantConfig: initialTenantConfig,
+  tenant: initialTenant,
 };
+
 export const deviceStateSlice = createSlice({
   name: 'device',
   initialState,
@@ -48,6 +52,10 @@ export const deviceStateSlice = createSlice({
     setTenantConfig: (state, action: PayloadAction<TenantConfigPayload>) => {
       state.tenantConfig = action.payload;
       setItem('TENANT_CONFIG', action.payload);
+    },
+    setTenant: (state, action: PayloadAction<TenantDetails>) => {
+      state.tenant = action.payload;
+      setItem('TENANT', action.payload);
     },
     setUserAddress: (state, action: PayloadAction<string>) => {
       state.address = action.payload;
@@ -112,6 +120,7 @@ export const deviceStateSlice = createSlice({
 export const {
   setDeviceData,
   setTenantConfig,
+  setTenant,
   setUserAddress,
   setUserAddressList,
   setAddressStatus,

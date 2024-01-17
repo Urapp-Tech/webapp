@@ -21,7 +21,7 @@ type AuthState = {
   user: RegisteredUser | null;
 };
 
-const storedUser = getItem('USER');
+const storedUser = getItem<any>('USER');
 setToken(storedUser?.token || null);
 
 const initialState: AuthState = {

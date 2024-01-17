@@ -1,14 +1,13 @@
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
-import { AlertColor } from '@mui/material/Alert';
 import Popover, { PopoverVirtualElement } from '@mui/material/Popover';
 import dayjs from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { logout } from '../../redux/features/authStateSlice';
+import useAlert from '../../hooks/alert.hook';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import notificationService from '../../services/notification.service';
-import AlertBox from './SnackBar';
 import promiseHandler from '../../utilities/promise-handler';
+import AlertBox from './SnackBar';
 
 type Props = {
   notification: HTMLButtonElement | null;
@@ -37,9 +36,14 @@ function NotificationPopover({
   const open = Boolean(notification);
   const idProp = open ? 'notification-popover' : undefined;
   const [notificationList, setNotificationList] = useState([]);
-  const [alertMsg, setAlertMsg] = useState<any>('');
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success');
+  const {
+    alertMessage,
+    setAlertMessage,
+    showAlert,
+    setShowAlert,
+    alertSeverity,
+    setAlertSeverity,
+  } = useAlert();
 
   const getNotificationList = useCallback(async () => {
     const getNotificationListPromise = notificationService.notificationList();
@@ -47,13 +51,13 @@ function NotificationPopover({
       await promiseHandler(getNotificationListPromise);
     if (!getNotificationListResult) {
       setAlertSeverity('error');
-      setAlertMsg(getNotificationListError.message);
+      setAlertMessage(getNotificationListError.message);
       setShowAlert(true);
       return;
     }
     if (!getNotificationListResult.data.success) {
       setAlertSeverity('error');
-      setAlertMsg(getNotificationListResult.data.message);
+      setAlertMessage(getNotificationListResult.data.message);
       setShowAlert(true);
       return;
     }
@@ -67,14 +71,12 @@ function NotificationPopover({
   }, [user]);
   return (
     <>
-      {showAlert && (
-        <AlertBox
-          msg={alertMsg}
-          setSeverity={alertSeverity}
-          alertOpen={showAlert}
-          setAlertOpen={setShowAlert}
-        />
-      )}
+      <AlertBox
+        msg={alertMessage}
+        setSeverity={alertSeverity}
+        alertOpen={showAlert}
+        setAlertOpen={setShowAlert}
+      />
       <Popover
         id={idProp}
         open={open}

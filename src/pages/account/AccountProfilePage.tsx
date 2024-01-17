@@ -1,11 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AlertColor } from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import { useEffect, useState } from 'react';
 import { Controller, FieldErrors, FieldValues, useForm } from 'react-hook-form';
 import * as z from 'zod';
 import Loader from '../../components/common/Loader';
 import AlertBox from '../../components/common/SnackBar';
+import useAlert from '../../hooks/alert.hook';
 import profileService from '../../services/profile.service';
 import promiseHandler from '../../utilities/promise-handler';
 
@@ -25,9 +25,14 @@ type AccountProfileType = z.infer<typeof accountProfileSchema>;
 const formOptions = { resolver: zodResolver(accountProfileSchema) };
 
 function AccountProfilePage() {
-  const [alertMsg, setAlertMsg] = useState<any>('');
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success');
+  const {
+    alertMessage,
+    setAlertMessage,
+    showAlert,
+    setShowAlert,
+    alertSeverity,
+    setAlertSeverity,
+  } = useAlert();
   const [isLoading, setIsLoading] = useState(false);
   const {
     handleSubmit,
@@ -46,13 +51,13 @@ function AccountProfilePage() {
       setIsLoading(false);
       if (!getUserProfileResult) {
         setAlertSeverity('error');
-        setAlertMsg(getUserProfileError.message);
+        setAlertMessage(getUserProfileError.message);
         setShowAlert(true);
         return;
       }
       if (!getUserProfileResult.data.success) {
         setAlertSeverity('error');
-        setAlertMsg(getUserProfileResult.data.message);
+        setAlertMessage(getUserProfileResult.data.message);
         setShowAlert(true);
         return;
       }
@@ -68,7 +73,7 @@ function AccountProfilePage() {
     const newData = data as AccountProfileType;
     if (newData.newPassword !== newData.verifyPassword) {
       setAlertSeverity('error');
-      setAlertMsg('Password Does Not Match');
+      setAlertMessage('Password Does Not Match');
       setShowAlert(true);
       setValue('newPassword', '');
       setValue('verifyPassword', '');
@@ -87,18 +92,18 @@ function AccountProfilePage() {
       await promiseHandler(updateProfilePromise);
     if (!updateProfileResult) {
       setAlertSeverity('error');
-      setAlertMsg(updateProfileError.message);
+      setAlertMessage(updateProfileError.message);
       setShowAlert(true);
       return;
     }
     if (!updateProfileResult.data.success) {
       setAlertSeverity('error');
-      setAlertMsg(updateProfileResult.data.message);
+      setAlertMessage(updateProfileResult.data.message);
       setShowAlert(true);
       return;
     }
     setAlertSeverity('success');
-    setAlertMsg(updateProfileResult.data.message);
+    setAlertMessage(updateProfileResult.data.message);
     setShowAlert(true);
   };
 
@@ -110,14 +115,12 @@ function AccountProfilePage() {
     <Loader />
   ) : (
     <>
-      {showAlert && (
-        <AlertBox
-          msg={alertMsg}
-          setSeverity={alertSeverity}
-          alertOpen={showAlert}
-          setAlertOpen={setShowAlert}
-        />
-      )}
+      <AlertBox
+        msg={alertMessage}
+        setSeverity={alertSeverity}
+        alertOpen={showAlert}
+        setAlertOpen={setShowAlert}
+      />
       <h4 className="main-heading">Profile</h4>
       <div className="tab-content-card">
         <form action="">

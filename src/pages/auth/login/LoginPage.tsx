@@ -3,7 +3,6 @@ import FacebookLogin, {
 } from '@greatsumini/react-facebook-login';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { AlertColor } from '@mui/material/Alert';
 import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -16,6 +15,7 @@ import { useForm } from 'react-hook-form';
 import { NavLink, useNavigate } from 'react-router-dom';
 import assets from '../../../assets';
 import AlertBox from '../../../components/common/SnackBar';
+import useAlert from '../../../hooks/alert.hook';
 import { login } from '../../../redux/features/authStateSlice';
 import { setUserAddressList } from '../../../redux/features/deviceState';
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
@@ -25,12 +25,18 @@ import { LoginPayload } from '../../../types/auth.types';
 import promiseHandler from '../../../utilities/promise-handler';
 
 function LoginPage() {
+  const {
+    alertMessage,
+    setAlertMessage,
+    showAlert,
+    setShowAlert,
+    alertSeverity,
+    setAlertSeverity,
+  } = useAlert();
+
   const cartItem = useAppSelector((state: any) => state.cartState.cartItems);
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [showAlert, setShowAlert] = useState<boolean>(false);
-  const [alertMessage, setAlertMessage] = useState('');
-  const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success');
   const dispatch = useAppDispatch();
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (
@@ -127,6 +133,12 @@ function LoginPage() {
 
   return (
     <>
+      <AlertBox
+        msg={alertMessage}
+        setSeverity={alertSeverity}
+        alertOpen={showAlert}
+        setAlertOpen={setShowAlert}
+      />
       <div className="fixed-at-top-left">
         <img className="logo" src={assets.images.logo} alt="" />
       </div>
@@ -247,13 +259,6 @@ function LoginPage() {
           <img className="" src={assets.images.loginImage} alt="" />
         </div>
       </div>
-
-      <AlertBox
-        alertOpen={showAlert}
-        msg={alertMessage}
-        setSeverity={alertSeverity}
-        setAlertOpen={setShowAlert}
-      />
     </>
   );
 }

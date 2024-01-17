@@ -1,15 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
-import { AlertColor } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
-import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import * as z from 'zod';
 import assets from '../../../assets';
 import AlertBox from '../../../components/common/SnackBar';
+import useAlert from '../../../hooks/alert.hook';
 import authService from '../../../services/auth.service';
 import promiseHandler from '../../../utilities/promise-handler';
 
@@ -25,9 +24,15 @@ type ForgotPasswordType = z.infer<typeof forgotPasswordSchema>;
 const formOptions = { resolver: zodResolver(forgotPasswordSchema) };
 
 function ForgotPasswordPage() {
-  const [showAlert, setShowAlert] = useState<boolean>(false);
-  const [alertMessage, setAlertMessage] = useState('');
-  const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success');
+  const {
+    alertMessage,
+    setAlertMessage,
+    showAlert,
+    setShowAlert,
+    alertSeverity,
+    setAlertSeverity,
+  } = useAlert();
+
   const {
     handleSubmit,
     control,
@@ -59,9 +64,9 @@ function ForgotPasswordPage() {
   return (
     <>
       <AlertBox
-        alertOpen={showAlert}
         msg={alertMessage}
         setSeverity={alertSeverity}
+        alertOpen={showAlert}
         setAlertOpen={setShowAlert}
       />
       <div className="fixed-at-top-left">
