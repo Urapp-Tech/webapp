@@ -1,115 +1,75 @@
+/*
+  Based on TailwindCSS recommendations,
+  consider using classes instead of the `@apply` directive
+  @see https://tailwindcss.com/docs/reusing-styles#avoiding-premature-abstraction
+*/
 .left-sidebar {
-  @apply box-border border-r-0;
-  height: auto !important;
-  width: 300px !important;
-  background-color: var(--dark-200) !important;
-  padding: 30px 0 !important;
-  top: 86px !important;
-  bottom: 0 !important;
-  transition: all 225ms cubic-bezier(0, 0, 0.2, 1) 0ms !important;
+  @apply bottom-0 top-[86px] box-border h-auto w-[300px] border-r-0 bg-[var(--dark-200)] px-0 py-[30px] transition-all delay-[0ms] duration-[225ms] ease-out !important;
 }
 .left-sidebar::-webkit-scrollbar-track {
-  border-radius: 8px;
-  background-color: var(--dark-400);
+  @apply rounded-lg bg-[color:var(--dark-400)];
 }
 .left-sidebar::-webkit-scrollbar {
-  width: 8px;
-  background-color: var(--dark-400);
+  @apply w-2 bg-[color:var(--dark-400)];
 }
 .left-sidebar::-webkit-scrollbar-thumb {
-  border-radius: 8px;
-  background-color: var(--light-700);
+  @apply rounded-lg bg-[color:var(--light-700)];
 }
 .left-sidebar .sidebar-links {
   @apply mb-5;
 }
 .left-sidebar .sidebar-links a {
-  @apply flex w-full items-center gap-x-3 px-6 py-3 md:gap-x-4 md:px-7;
-  background-color: transparent;
-  font-size: var(--fs-16);
-  font-weight: var(--fw-400);
-  color: var(--light-600);
-  transition: all 0.3s;
+  @apply flex w-full items-center gap-x-3 bg-transparent px-6 py-3 text-base font-normal text-[color:var(--light-600)] transition-all duration-[0.3s] md:gap-x-4 md:px-7;
 }
 .left-sidebar .sidebar-links a.active {
-  background-color: #c9c9c91a;
-  font-weight: var(--fw-600);
-  color: var(--white);
+  @apply bg-[#c9c9c91a] font-semibold text-white;
 }
 .left-sidebar .sidebar-links a .aside-list-icon {
-  @apply h-auto w-5;
-  color: var(--dark-300);
-  transition: all 0.3s;
+  @apply h-auto w-5 text-[var(--dark-300)] transition-all duration-[0.3s];
 }
 .left-sidebar .sidebar-links a.active .aside-list-icon {
-  color: var(--white);
+  @apply text-white;
 }
 .left-sidebar .sidebar-footer-content {
   @apply mt-auto;
 }
 .sidebar-footer-content .share-via {
-  padding: 0 30px;
+  @apply px-[30px] py-0;
 }
 .left-sidebar .sidebar-footer-content .share-via .heading {
-  @apply mb-3;
-  font-size: var(--fs-16);
-  font-weight: var(--fw-600);
-  color: var(--white);
-  line-height: 1;
+  @apply mb-3 text-base font-semibold leading-none text-white;
 }
 .left-sidebar .sidebar-footer-content .share-via .social-icons {
   @apply mb-4 flex items-center gap-x-2.5 md:mb-7;
 }
 .left-sidebar .sidebar-footer-content .share-via .social-icons .social-btn {
-  @apply p-0;
-  color: var(--light-200);
+  @apply p-0 text-[color:var(--light-200)];
 }
 .left-sidebar .sidebar-footer-content .share-via hr {
-  border-top: 0.5px solid var(--light-400);
+  @apply border-t-[0.5px] border-solid border-t-[color:var(--light-400)];
 }
 .left-sidebar .sidebar-footer-content .share-via .link {
-  @apply block;
-  font-size: var(--fs-14);
-  font-weight: var(--fw-400);
-  color: var(--light-600);
-  line-height: 1.4;
+  @apply block text-sm font-normal leading-snug text-[color:var(--light-600)];
 }
 .left-sidebar .sidebar-footer-content .logout-link {
-  @apply mt-3 flex w-full items-center gap-x-4 px-7 py-3 md:mt-7;
-  background-color: transparent;
-  font-size: var(--fs-16);
-  font-weight: var(--fw-400);
-  color: var(--light-600);
-  transition: all 0.3s;
+  @apply mt-3 flex w-full items-center gap-x-4 bg-transparent px-7 py-3 text-base font-normal text-[color:var(--light-600)] transition-all duration-[0.3s] md:mt-7;
 }
 .left-sidebar .sidebar-footer-content .logout-link:active,
 .left-sidebar .sidebar-footer-content .logout-link:focus {
-  background-color: #c9c9c91a;
-  font-weight: var(--fw-600);
-  color: var(--white);
+  @apply bg-[#c9c9c91a] font-semibold text-white;
 }
 .left-sidebar .sidebar-footer-content .logout-link .icon {
-  @apply h-auto w-5 rotate-180;
-  color: var(--dark-300);
-  transition: all 0.3s;
+  @apply h-auto w-5 rotate-180 text-[var(--dark-300)] transition-all duration-[0.3s];
 }
 .left-sidebar .sidebar-footer-content .logout-link:active .icon,
 .left-sidebar .sidebar-footer-content .logout-link:focus .icon {
-  color: var(--white);
-}
-
-@media only screen and (max-width: 1023.98px) and (min-width: 768px) {
+  @apply text-white;
 }
 @media only screen and (max-width: 1023.98px) {
   .left-sidebar {
-    width: 250px !important;
-    padding: 20px 0 !important;
-    top: 80px !important;
-    transform: translateX(-300px);
+    @apply top-20 w-[250px] translate-x-[-300px] px-0 py-5;
   }
   body.sidebar-opened .left-sidebar {
-    transform: translateX(0);
+    @apply translate-x-0;
   }
-}
-@media only screen and (max-width: 767.98px) {
 }

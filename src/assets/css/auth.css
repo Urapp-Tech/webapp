@@ -1,23 +1,19 @@
+/* Auth CSS Start */
+
 .auth-main {
-  @apply relative md:grid md:grid-cols-1 lg:grid-cols-2;
-  min-height: 100vh !important;
-  /* background-color: green; */
-  background-color: var(--dark-200);
+  @apply relative !min-h-screen bg-[var(--dark-200)] md:grid md:grid-cols-1 lg:grid-cols-2;
 }
 .auth-main .fixed-at-top-left {
-  @apply absolute flex items-start gap-x-9;
-  top: 60px;
-  left: 80px;
+  @apply absolute left-20 top-[3.75rem] flex items-start gap-x-9;
 }
 .auth-main .fixed-at-top-left .go-back {
   @apply flex h-7 w-7 items-center justify-center rounded-full border-2 border-solid border-white;
 }
 .auth-main .fixed-at-top-left .go-back .icon-arrow {
-  @apply w-5;
-  color: var(--white);
+  @apply w-5 text-white;
 }
 .auth-main .fixed-at-top-left .logo {
-  width: 180px;
+  @apply w-44;
 }
 
 /* Left Side - Forms */
@@ -26,23 +22,13 @@
   @apply flex items-center justify-center;
 }
 .auth-main .auth-form .custom-width {
-  width: 100%;
-  max-width: 22rem;
+  @apply w-full max-w-[22rem];
 }
 .auth-main .auth-form .heading {
-  @apply mb-0 text-center;
-  font-size: var(--fs-24);
-  font-weight: var(--fw-700);
-  color: var(--white);
-  line-height: 1.2;
+  @apply mb-0 text-center text-2xl font-bold leading-tight text-white;
 }
 .auth-main .auth-form .desc {
-  @apply mx-auto mb-0 mt-6 text-center;
-  width: 75%;
-  font-size: var(--fs-14);
-  font-weight: var(--fw-400);
-  color: var(--white);
-  line-height: 1.5;
+  @apply mx-auto mb-0 mt-6 w-3/4 text-center text-sm font-normal leading-normal text-white;
 }
 .auth-main .auth-form .otp-container {
   @apply mt-8 flex items-center justify-center gap-x-5;
@@ -51,20 +37,16 @@
   @apply mb-6 w-full;
 }
 .auth-main .auth-form .field .label {
-  font-family: var(--ff-open-sans);
-  font-size: var(--fs-12);
-  font-weight: var(--fw-400);
-  color: var(--white);
-  line-height: 1.2;
+  @apply font-open-sans text-xs font-normal leading-tight text-white;
 }
 .auth-main .auth-form .field .input-container::before {
-  border-bottom: 1px solid rgb(255 255 255);
+  @apply border-b border-solid border-white;
 }
 .auth-main .auth-form .field .input-container::after {
-  border-bottom: 2px solid rgb(255 255 255);
+  @apply border-b-2 border-solid border-white;
 }
 .auth-main .auth-form .field .input-container input {
-  color: var(--white);
+  @apply text-white;
 }
 .auth-main .auth-form .field .input-container input:-webkit-autofill,
 .auth-main .auth-form .field .input-container input:-webkit-autofill:hover,
@@ -73,66 +55,38 @@
   -webkit-box-shadow: 0 0 0 30px var(--dark-200) inset !important;
 }
 .auth-main .auth-form .field .input-container input:-webkit-autofill {
-  -webkit-text-fill-color: var(--white) !important;
+  -webkit-text-fill-color: white !important;
 }
 .auth-main .auth-form .field .input-container .field-icon {
-  color: var(--white);
+  @apply text-white;
 }
 .auth-main .auth-form .remember-me {
-  @apply ml-0 mr-0 gap-x-1.5;
-  font-size: var(--fs-14);
-  font-weight: var(--fw-400);
-  color: var(--white);
+  @apply ml-0 mr-0 gap-x-1.5 text-sm font-normal text-white;
 }
 .auth-main .auth-form .remember-me .checkbox {
-  @apply p-0;
-  color: var(--white);
+  @apply p-0 text-white;
 }
 .auth-main .auth-form .forgot-pass-link {
-  font-size: var(--fs-14);
-  font-weight: var(--fw-600);
-  color: var(--white);
+  @apply text-sm font-semibold text-white;
 }
 .auth-main .auth-form .btn-submit {
-  @apply w-full shadow-none outline-0;
-  min-height: 40px;
-  font-size: var(--fs-16);
-  font-weight: var(--fw-600);
-  color: var(--dark-100);
-  background-color: var(--white);
-  border-radius: 10px;
+  @apply min-h-10 w-full rounded-[0.625rem] bg-white text-base font-semibold text-[var(--dark-100)] shadow-none outline-0;
 }
 .auth-main .auth-form .btn-login-fb {
-  @apply mt-5 flex w-full items-center justify-center shadow-none outline-0;
-  min-height: 40px;
-  font-size: var(--fs-16);
-  font-weight: var(--fw-600);
-  color: var(--white);
-  background-color: #255d9a;
-  border-radius: 10px;
+  @apply mt-5 flex min-h-10 w-full items-center justify-center rounded-[0.625rem] bg-[#255d9a] text-base font-semibold text-white shadow-none outline-0;
 }
 
 .auth-main .auth-form .login-other-options .text {
-  @apply flex items-center justify-center gap-x-2;
-  font-size: var(--fs-14);
-  font-weight: var(--fw-400);
-  color: var(--white);
+  @apply flex items-center justify-center gap-x-2 text-sm font-normal text-white;
 }
 .auth-main .auth-form .login-other-options .signup-link {
-  @apply no-underline;
-  font-size: var(--fs-16);
-  font-weight: var(--fw-600);
-  color: var(--white);
+  @apply text-base font-semibold text-white no-underline;
 }
 .auth-main .auth-form .t-n-c {
-  font-size: var(--fs-14);
-  font-weight: var(--fw-400);
-  color: var(--white);
-  line-height: 1.5;
+  @apply text-sm font-normal leading-normal text-white;
 }
 .auth-main .auth-form .t-n-c a {
-  font-weight: var(--fw-600);
-  color: var(--white);
+  @apply font-semibold text-white;
 }
 
 /* Right Side - Join Community */
@@ -141,80 +95,67 @@
   @apply relative hidden md:block;
 }
 .auth-main .join-community .content-container {
-  @apply absolute bottom-14 left-0 right-16 top-0 flex flex-col items-center justify-end text-center;
-  border-radius: 0 0 50% 50%;
+  @apply absolute bottom-14 left-0 right-16 top-0 flex flex-col items-center justify-end rounded-[0rem_0rem_50%_50%] text-center;
 }
 .auth-main .join-community.login-community .content-container {
-  background-color: #d4e2d4;
+  @apply bg-[#d4e2d4];
 }
 .auth-main .join-community.register-community .content-container {
-  background-color: #c8d9eb;
+  @apply bg-[#c8d9eb];
 }
 .auth-main .join-community.forgot-pass-community .content-container {
-  @apply overflow-hidden;
-  background-color: #f4efd3;
+  @apply overflow-hidden bg-[#f4efd3];
 }
 .auth-main .join-community .content-container .content {
   @apply lg:px-8 xl:px-20 2xl:px-24;
 }
 .auth-main .join-community .content-container .content .heading {
-  @apply mb-3;
-  font-size: var(--fs-40);
-  font-weight: var(--fw-700);
-  color: var(--dark-200);
-  line-height: 1.2;
+  @apply mb-3 text-[2.5rem] font-bold leading-tight text-[var(--dark-200)] text-[var(--dark-200)];
 }
 .auth-main .join-community .content-container .content .desc {
-  @apply mb-6;
-  font-size: var(--fs-18);
-  font-weight: var(--fw-400);
-  color: var(--dark-200);
-  line-height: 1.4;
+  @apply mb-6 text-lg font-normal leading-snug text-[var(--dark-200)];
 }
 .auth-main .login-community .content-container img {
-  max-width: 70%;
-  margin-bottom: 5px;
+  @apply mb-1 max-w-[70%];
 }
 .auth-main .forgot-pass-community .content-container img {
-  max-width: 80%;
-  margin-bottom: -5px;
+  @apply -mb-1 max-w-[80%];
 }
 .auth-main .register-community .content-container img {
-  max-width: 80%;
-  margin-bottom: -30px;
+  @apply -mb-8 max-w-[80%];
 }
 
 @media only screen and (max-width: 1535.98px) and (min-width: 1280px) {
   .auth-main .join-community .content-container {
-    border-radius: 0 0 325px 325px;
+    @apply rounded-[0rem_0rem_20.25rem_20.25rem];
   }
 }
 @media only screen and (max-width: 1279.98px) and (min-width: 1024px) {
   .auth-main .auth-form .custom-width {
-    max-width: 20rem;
+    @apply max-w-80;
   }
   .auth-main .join-community .content-container {
-    border-radius: 0 0 325px 325px;
+    @apply rounded-[0rem_0rem_20.25rem_20.25rem];
   }
 }
 @media only screen and (max-width: 1023.98px) and (min-width: 768px) {
   .auth-main .auth-form .custom-width {
-    max-width: 18rem;
+    @apply max-w-72;
   }
 }
 @media only screen and (max-width: 767.98px) {
   .auth-main {
-    @apply flex flex-col items-center justify-center;
-    padding: 30px 0;
+    @apply flex flex-col items-center justify-center px-0 py-8;
   }
   .auth-main .fixed-at-top-left {
     @apply grow-0 justify-between;
-    position: initial;
   }
   .auth-main .auth-form {
     @apply grow;
   }
   .auth-main .auth-form .custom-width {
-    max-width: 85%;
+    @apply max-w-[85%];
   }
 }
+
+/* Auth CSS End */

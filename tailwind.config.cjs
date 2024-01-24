@@ -5,7 +5,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'open-sans': ['Open Sans'],
+        'open-sans': ['Open Sans', 'sans-serif'],
+        'kumbh-sans': ['Kumbh Sans', 'sans-serif'],
       },
     },
   },

@@ -1,79 +1,36 @@
 /* Account Page CSS */
-
 .account-page .tab-pills {
-  @apply h-full;
-  border-right: 1px solid var(--light-400);
+  @apply h-full border-r border-solid border-r-[color:var(--light-400)];
 }
 .account-page .tab-pills .main-heading {
-  @apply mb-6;
-  font-size: var(--fs-24);
-  font-weight: var(--fw-600);
-  color: var(--dark-100);
-  line-height: 1.1;
+  @apply mb-6 text-2xl font-semibold leading-none text-[var(--dark-100)];
 }
 .account-page .tab-pills .item {
-  @apply flex items-center justify-start gap-x-5 py-5;
-  font-size: var(--fs-16);
-  font-weight: var(--fw-400);
-  color: var(--dark-300);
-  border-bottom: 1px solid var(--light-400);
-  transition: all 0.3s ease;
+  @apply flex items-center justify-start gap-x-5 border-b border-solid border-b-[color:var(--light-400)] py-5 text-base font-normal text-[var(--dark-300)] transition-all duration-[0.3s] ease-[ease];
 }
 .account-page .tab-pills .item.active {
-  font-weight: var(--fw-600);
-  color: var(--dark-100);
+  @apply font-semibold text-[var(--dark-100)];
 }
-
 .account-page .tab-content .main-heading {
-  @apply mb-6;
-  font-size: var(--fs-24);
-  font-weight: var(--fw-600);
-  color: var(--dark-100);
-  line-height: 1.1;
+  @apply mb-6 text-2xl font-semibold leading-none text-[var(--dark-100)];
 }
 .account-page .tab-content .tab-content-card {
-  @apply p-5;
-  background: var(--white);
-  box-shadow: 2px 4px 6px 0px rgba(0, 0, 0, 0.06);
-  border-radius: 10px;
+  @apply rounded-[0.625rem] bg-white p-5 shadow-[2px_4px_6px_0px_rgba(0,0,0,0.06)];
 }
 .tab-content-card .heading-sm {
-  @apply mb-8;
-  font-size: var(--fs-20);
-  font-weight: var(--fw-600);
-  color: var(--dark-100);
-  line-height: 1.1;
+  @apply mb-8 text-xl font-semibold leading-none text-[var(--dark-100)];
 }
 .tab-content-card .label {
-  @apply mb-2 select-none;
-  font-size: var(--fs-14);
-  font-weight: var(--fw-400);
-  color: var(--dark-300);
-  line-height: 1.1;
+  @apply mb-2 select-none text-sm font-normal leading-none text-[var(--dark-300)];
 }
 .tab-content-card .field {
-  @apply w-full shadow-none outline-none;
-  min-height: 30px;
-  padding: 5px 12px;
-  font-size: var(--fs-14);
-  font-weight: var(--fw-400);
-  color: var(--dark-100);
-  border: 1px solid var(--light-400);
-  border-radius: 5px;
+  @apply min-h-[30px] w-full rounded-[5px] border border-solid border-[color:var(--light-400)] px-3 py-[5px] text-sm font-normal text-[var(--dark-100)] shadow-none outline-none;
 }
 .tab-content-card .btn-submit {
-  @apply w-full;
-  min-height: 40px;
-  padding: 6px 30px;
-  font-size: var(--fs-16);
-  font-weight: var(--fw-600);
-  color: var(--white);
-  text-transform: capitalize;
-  background-color: var(--dark-200);
-  border-radius: 10px;
+  @apply min-h-10 w-full rounded-[0.625rem] bg-[var(--dark-200)] px-[30px] py-1.5 text-base font-semibold capitalize text-white;
 }
 .tab-content-card .btn-submit:hover {
-  background-color: var(--dark-200);
+  @apply bg-[var(--dark-200)];
 }
 
 /* Account Page CSS */
