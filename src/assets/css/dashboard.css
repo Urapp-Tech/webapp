@@ -1,113 +1,71 @@
+/* Start */
 .all-categories {
   @apply mb-8;
 }
 .all-categories .heading {
-  @apply mb-5 sm:mb-7;
-  font-size: var(--fs-24);
-  font-weight: var(--fw-600);
-  color: var(--dark-100);
-  line-height: 1.2;
+  @apply mb-5 text-2xl font-semibold leading-tight text-[var(--dark-100)] sm:mb-7;
 }
 .all-categories .categories-list {
   @apply grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4;
 }
 .all-categories .categories-list .item {
-  @apply relative flex items-center justify-between py-3 pl-3 xl:pl-6;
-  min-height: 150px;
-  border-radius: 10px;
-  transition: all 0.2s;
+  @apply relative flex min-h-[150px] items-center justify-between rounded-[0.625rem] py-3 pl-3 transition-all duration-[0.2s] xl:pl-6;
 }
 .all-categories .categories-list .item.active {
-  transform: translateY(-5px);
+  @apply translate-y-[-5px];
 }
-
 .all-categories .categories-list .item .cat-name {
-  @apply mb-0 grow-0 text-left capitalize;
-  font-size: var(--fs-24);
-  font-weight: var(--fw-700);
-  color: var(--dark-100);
-  line-height: 1.2;
+  @apply mb-0 grow-0 text-left text-2xl font-bold capitalize leading-tight text-[var(--dark-100)];
 }
 .all-categories .categories-list .item .cat-img {
-  @apply relative;
-  width: 100px;
-  right: -10px;
+  @apply relative -right-2.5 w-[100px];
 }
 .all-categories .categories-list .item .cat-img img {
   @apply h-auto w-full;
 }
-
 .selected-categories .heading {
-  @apply mb-4 sm:mb-0;
-  font-size: var(--fs-24);
-  font-weight: var(--fw-600);
-  color: var(--dark-100);
-  line-height: 1.2;
+  @apply mb-4 text-2xl font-semibold leading-tight text-[var(--dark-100)] sm:mb-0;
 }
 .selected-categories .search-sub-cats {
-  @apply w-full;
-  max-width: 350px;
-  background: var(--white);
-  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.06);
-  border-radius: 10px;
+  @apply w-full max-w-[350px] rounded-[0.625rem] bg-white shadow-[2px_4px_6px_rgba(0,0,0,0.06)];
 }
 .selected-categories .search-sub-cats .field {
-  @apply m-0 gap-x-3 px-5 py-2;
-  font-size: var(--fs-14);
-  font-weight: var(--fw-400);
-  color: var(--dark-300);
+  @apply m-0 gap-x-3 px-5 py-2 text-sm font-normal text-[var(--dark-300)];
 }
 .selected-categories .categories-list {
   @apply grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5;
 }
 .selected-categories .categories-list .item {
-  @apply relative px-2.5 pb-2.5 pt-4 md:px-3.5 md:pt-5;
-  background-color: var(--white);
-  border-radius: 10px;
+  @apply relative rounded-[0.625rem] bg-white px-2.5 pb-2.5 pt-4 md:px-3.5 md:pt-5;
 }
 .selected-categories .categories-list .item .name {
-  @apply mb-2 basis-full text-center sm:mb-3 sm:text-left;
-  font-size: var(--fs-16);
-  font-weight: var(--fw-600);
-  color: var(--dark-100);
-  line-height: 1.1;
+  @apply mb-2 basis-full text-center text-base font-semibold leading-none text-[var(--dark-100)] sm:mb-3 sm:text-left;
 }
 .selected-categories .categories-list .item .price {
-  @apply mb-3 flex-1 basis-full text-center sm:mb-0 sm:flex sm:basis-0 sm:text-left;
-  font-size: var(--fs-16);
-  font-weight: var(--fw-600);
-  color: var(--dark-100);
+  @apply mb-3 flex-1 basis-full text-center text-base font-semibold text-[var(--dark-100)] sm:mb-0 sm:flex sm:basis-0 sm:text-left;
 }
 .selected-categories .categories-list .item .btn-add {
-  @apply w-full sm:w-auto;
-  background-color: var(--dark);
-  font-size: var(--fs-14);
-  font-weight: var(--fw-600);
-  color: var(--white);
-  border-radius: 10px;
+  @apply w-full rounded-[0.625rem] bg-[color:var(--dark)] text-sm font-semibold text-white sm:w-auto;
 }
-
 @media only screen and (max-width: 1279.98px) and (min-width: 1024px) {
   .all-categories .categories-list .item .cat-name {
-    font-size: var(--fs-20);
+    @apply text-xl;
   }
 }
 @media only screen and (max-width: 1023.98px) {
   .all-categories .categories-list .item .cat-name {
-    font-size: var(--fs-20);
+    @apply text-xl;
   }
 }
 @media only screen and (max-width: 767.98px) {
   .all-categories .heading,
   .selected-categories .heading {
-    font-size: var(--fs-22);
-    font-weight: var(--fw-700);
+    @apply text-[1.375rem] font-bold;
   }
-}
-@media only screen and (max-width: 767.98px) and (min-width: 640px) {
 }
 @media only screen and (max-width: 639.98px) {
   .selected-categories .search-sub-cats {
-    max-width: 100%;
+    @apply max-w-full;
   }
 }
+/* End */

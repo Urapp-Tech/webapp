@@ -1,85 +1,30 @@
-/*********************General Page CSS***************** 
-Faqs Page, Terms & Conditions Page, Privacy Policy Page
-******************************************************/
 .general-page .page-heading {
-  @apply mb-0;
-  font-size: var(--fs-24);
-  font-weight: var(--fw-600);
-  color: var(--dark-100);
-  line-height: 1.1;
+  @apply mb-0 text-2xl font-semibold leading-none text-[var(--dark-100)];
 }
 .general-page .general-card {
-  @apply p-6;
-  background: var(--white);
-  box-shadow: 2px 4px 6px 0px rgba(0, 0, 0, 0.06);
-  border-radius: 10px;
+  @apply rounded-[0.625rem] bg-white p-6 shadow-[2px_4px_6px_0px_rgba(0,0,0,0.06)];
 }
 .general-page .general-card .heading-sm {
-  @apply mb-4;
-  font-size: var(--fs-16);
-  font-weight: var(--fw-600);
-  color: var(--dark);
-  line-height: 1.1;
+  @apply mb-4 text-base font-semibold leading-none text-[color:var(--dark)];
 }
 .general-page .general-card .text {
-  @apply mb-5;
-  font-size: var(--fs-14);
-  font-weight: var(--fw-400);
-  color: var(--dark-300);
-  line-height: 1.5;
+  @apply mb-5 text-sm font-normal leading-normal text-[var(--dark-300)];
 }
-
 .faqs-accordion .accordion-item {
-  @apply shadow-none;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  margin: 0 !important;
-  border-top: 0.5px solid var(--light-400);
-}
-.faqs-accordion .accordion-item:last-of-type {
-  border-bottom: 0.5px solid var(--light-400);
-}
-.faqs-accordion .accordion-item:first-of-type {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-.faqs-accordion .accordion-item:before {
-  display: none;
-}
-.faqs-accordion .accordion-item:last-of-type {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
+  @apply m-0 rounded-t-none border-t-[0.5px] border-solid border-t-[color:var(--light-400)] shadow-none before:hidden first-of-type:rounded-t-none last-of-type:rounded-bl-none last-of-type:rounded-br-none last-of-type:border-b-[0.5px] last-of-type:border-solid last-of-type:border-b-[color:var(--light-400)];
 }
 .faqs-accordion .accordion-item .accordion-header {
   @apply px-0;
 }
 .faqs-accordion .accordion-item .accordion-header.Mui-expanded {
-  min-height: auto;
+  @apply min-h-[auto];
 }
-
 .faqs-accordion .accordion-item .accordion-header .heading {
-  @apply mb-0 leading-none;
-  font-size: var(--fs-14);
-  font-weight: var(--fw-400);
-  color: var(--dark-300);
+  @apply mb-0 text-sm font-normal leading-none text-[var(--dark-300)];
 }
 .faqs-accordion .accordion-item .accordion-body {
   @apply px-0 pb-4 pt-0;
 }
 .faqs-accordion .accordion-item .accordion-body .desc {
-  @apply mb-0;
-  font-size: var(--fs-14);
-  font-weight: var(--fw-400);
-  color: var(--dark-300);
-  line-height: 1.5;
-}
-
-/*********************General Page CSS***************** 
-Faqs Page, Terms & Conditions Page, Privacy Policy Page
-******************************************************/
-
-@media only screen and (max-width: 1535.98px) and (min-width: 1280px) {
-}
-
-@media only screen and (max-width: 639.98px) {
+  @apply mb-0 text-sm font-normal leading-normal text-[var(--dark-300)];
 }

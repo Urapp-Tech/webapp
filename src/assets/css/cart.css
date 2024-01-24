@@ -1,53 +1,37 @@
 /* Cart Page CSS */
 
 .cart-page .page-heading {
-  @apply mb-0;
-  font-size: var(--fs-24);
-  font-weight: var(--fw-600);
-  color: var(--dark-100);
-  line-height: 1.1;
+  @apply mb-0 text-2xl text-2xl font-semibold font-semibold font-semibold leading-none text-[var(--dark-100)] text-[var(--dark-100)];
 }
 
 /* Products List Card */
 .cart-page .cart-products-card {
-  @apply mb-5 lg:mb-5 xl:mb-0;
-  background: var(--white);
-  box-shadow: 2px 4px 6px 0px rgba(0, 0, 0, 0.06);
-  border-radius: 10px;
-  overflow-x: auto;
+  @apply mb-5 overflow-x-auto rounded-[0.625rem] bg-white bg-white shadow-[0.125rem_0.25rem_0.375rem_0rem_rgba(0,_0,_0,_0.06)] lg:mb-5 xl:mb-0;
 }
 .cart-page .cart-products-card .cart-products-table {
   @apply w-full;
 }
 .cart-products-table thead {
-  border-bottom: 1px solid var(--light-400);
+  @apply border-b border-solid border-[var(--light-400)];
 }
 .cart-products-table thead tr th:first-child {
-  padding-left: 64px;
+  @apply pl-16;
 }
 .cart-products-table thead tr th:last-child,
 .cart-products-table tbody tr td:last-child {
-  @apply text-center;
-  font-weight: var(--fw-600);
+  @apply text-center font-semibold;
 }
 .cart-products-table thead tr th {
-  @apply whitespace-nowrap px-5 py-5 text-left;
-  font-size: var(--fs-14);
-  font-weight: var(--fw-600);
-  color: var(--dark-100);
+  @apply whitespace-nowrap px-5 py-5 text-left text-sm font-semibold text-[var(--dark-100)];
 }
 .cart-products-table tbody tr {
-  border-bottom: 1px solid var(--light-400);
+  @apply border-b border-solid border-[var(--light-400)];
 }
 .cart-products-table tbody tr td {
-  @apply whitespace-nowrap px-5 py-3;
-  font-size: var(--fs-14);
-  font-weight: var(--fw-400);
-  color: var(--dark-100);
+  @apply whitespace-nowrap px-5 py-3 text-sm font-normal text-[var(--dark-100)];
 }
 .cart-products-table tbody tr td .btn-delete {
-  @apply p-0;
-  color: var(--dark-100);
+  @apply p-0 text-[var(--dark-100)];
 }
 .cart-products-table tbody tr td .product {
   @apply flex items-center gap-x-3;
@@ -59,134 +43,75 @@
   @apply m-0;
 }
 .cart-page .cart-products-card .promo-label {
-  @apply mr-2;
-  font-size: var(--fs-12);
-  font-weight: var(--fw-600);
-  color: var(--dark-100);
+  @apply mr-2 text-xs font-semibold text-[var(--dark-100)];
 }
 .cart-page .cart-products-card .promo-field {
-  @apply p-2;
-  min-height: 40px;
-  min-width: 236px;
-  font-size: var(--fs-12);
-  font-weight: var(--fw-400);
-  color: var(--dark-300);
-  border-radius: 10px;
-  border: 1px solid var(--light-400);
+  @apply min-h-10 min-w-60 rounded-[0.625rem] border border-solid border-[var(--light-400)] p-2 text-xs font-normal text-[var(--dark-300)];
 }
 .cart-page .cart-products-card .promo-field input {
-  padding: initial;
+  @apply p-[initial];
 }
 .cart-page .cart-products-card .btn-add-more {
-  @apply flex items-center border-none;
-  font-size: var(--fs-12);
-  font-weight: var(--fw-600);
-  color: var(--dark-100);
-  text-transform: capitalize;
+  @apply flex items-center border-none text-xs font-semibold capitalize text-[var(--dark-100)];
 }
 
 /* Checkout Card */
 .cart-page .cart-checkout-card {
-  @apply p-5;
-  background: var(--white);
-  box-shadow: 2px 4px 6px 0px rgba(0, 0, 0, 0.06);
-  border-radius: 10px;
-  overflow-x: auto;
+  @apply overflow-x-auto rounded-[0.625rem] bg-white p-5 shadow-[0.125rem_0.25rem_0.375rem_0rem_rgba(0,_0,_0,_0.06)];
 }
 .cart-checkout-card .select-date-time:first-of-type {
-  border-right: 1px solid var(--light-600);
+  @apply border-r border-solid border-r-[var(--light-600)];
 }
 .cart-checkout-card .select-date-time .label {
-  @apply mb-0 leading-none;
-  font-size: var(--fs-14);
-  font-weight: var(--fw-600);
-  color: var(--dark-100);
+  @apply mb-0 text-sm font-semibold leading-none text-[var(--dark-100)];
 }
 .cart-checkout-card .select-date-time > button {
-  @apply mb-3 flex items-center gap-x-2;
-  font-size: var(--fs-14) !important;
-  font-weight: var(--fw-600) !important;
-  color: var(--dark-100) !important;
-  text-transform: capitalize;
+  @apply mb-3 flex items-center gap-x-2 !text-sm !font-semibold capitalize !text-[var(--dark-100)];
 }
 .cart-checkout-card .select-date-time .selected-value {
-  @apply leading-tight;
-  font-size: var(--fs-12);
-  font-weight: var(--fw-400);
-  color: var(--dark-300);
+  @apply text-xs font-normal leading-tight text-[var(--dark-300)];
 }
 .cart-checkout-card .address-card {
-  @apply flex items-center justify-between py-3.5;
-  border-top: 1px solid var(--light-600);
+  @apply flex items-center justify-between border-b border-solid border-[var(--light-600)] py-3.5;
 }
 .cart-checkout-card .address-card:nth-child(3) {
-  border-bottom: 1px solid var(--light-600);
+  @apply border-b border-solid border-[var(--light-600)];
 }
 .cart-checkout-card .address-card .key {
   @apply flex items-center;
 }
 .cart-checkout-card .address-card .key .text {
-  @apply leading-tight;
-  font-size: var(--fs-12);
-  font-weight: var(--fw-400);
-  color: var(--dark-300);
+  @apply text-xs font-normal leading-tight text-[var(--dark-300)];
 }
 .cart-checkout-card .address-card .value {
-  @apply leading-tight;
-  font-size: var(--fs-14);
-  font-weight: var(--fw-400);
-  color: var(--dark-100);
+  @apply text-lg font-semibold leading-tight text-[var(--dark-100)];
 }
 .cart-checkout-card .total-amount {
   @apply mt-7;
 }
 .cart-checkout-card .total-amount .heading {
-  @apply mb-6 leading-tight;
-  font-size: var(--fs-18);
-  font-weight: var(--fw-600);
-  color: var(--dark-100);
+  @apply mb-6 text-lg font-semibold leading-tight text-[var(--dark-100)];
 }
 .cart-checkout-card .total-amount .key {
-  @apply leading-tight;
-  font-size: var(--fs-14);
-  font-weight: var(--fw-400);
-  color: var(--dark-100);
+  @apply text-sm font-normal leading-tight text-[var(--dark-100)];
 }
 .cart-checkout-card .total-amount .value {
-  @apply leading-tight;
-  font-size: var(--fs-14);
-  font-weight: var(--fw-700);
-  color: var(--dark-100);
+  @apply text-sm font-bold leading-tight text-[var(--dark-100)];
 }
 .cart-checkout-card .grand-total {
   @apply mb-6 mt-4 flex items-center justify-between;
 }
 .cart-checkout-card .grand-total .key {
-  @apply leading-tight;
-  font-size: var(--fs-18);
-  font-weight: var(--fw-600);
-  color: var(--dark-100);
+  @apply text-lg font-semibold leading-tight text-[var(--dark-100)];
 }
 .cart-checkout-card .grand-total .value {
-  @apply leading-tight;
-  font-size: var(--fs-14);
-  font-weight: var(--fw-700);
-  color: var(--dark-100);
+  @apply text-sm font-bold leading-tight text-[var(--dark-100)];
 }
 .cart-checkout-card .btn-checkout {
-  @apply w-full;
-  min-height: 40px;
-  font-family: var(--ff-open-sans);
-  font-size: var(--fs-16);
-  font-weight: var(--fw-600);
-  color: var(--white);
-  text-transform: capitalize;
-  background-color: var(--dark-200);
-  border-radius: 10px;
+  @apply min-h-10 w-full rounded-[0.625rem] bg-[var(--dark-200)] font-open-sans text-base font-semibold capitalize text-white;
 }
 .cart-checkout-card .btn-checkout:hover {
-  color: var(--white);
-  background-color: var(--dark-200);
+  @apply bg-[var(--dark-200)] text-white;
 }
 
 /* Order Success Modal */
@@ -203,30 +128,16 @@
   @apply mb-5 h-14 w-14;
 }
 .modal-order-success .modal-content .heading {
-  @apply mb-3 leading-none;
-  font-size: var(--fs-30);
-  font-weight: var(--fw-600);
-  color: var(--dark-100);
+  @apply mb-3 text-3xl font-semibold leading-none text-[var(--dark-100)];
 }
 .modal-order-success .modal-content .desc {
-  @apply mb-0 px-2 sm:px-4;
-  font-size: var(--fs-16);
-  font-weight: var(--fw-600);
-  color: var(--dark-100);
+  @apply mb-0 px-2 text-base font-semibold text-[var(--dark-100)] sm:px-4;
 }
 .modal-order-success .modal-footer {
   @apply gap-x-5 p-5;
 }
 .modal-order-success .modal-footer .btn-close {
-  @apply m-0 w-full capitalize;
-  min-height: 40px;
-  background-color: var(--dark-200);
-  border: 1px solid var(--dark-200);
-  font-family: var(--ff-open-sans);
-  font-size: var(--fs-16);
-  font-weight: var(--fw-600);
-  color: var(--white);
-  border-radius: 10px;
+  @apply m-0 min-h-10 w-full rounded-[0.625rem] border border-solid border-[var(--dark-200)] bg-[var(--dark-200)] font-open-sans text-base font-semibold capitalize text-white;
 }
 /* Order Success Modal */
 
