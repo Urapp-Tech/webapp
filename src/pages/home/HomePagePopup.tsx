@@ -145,7 +145,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
             setCount(1);
             setOpen(false);
           }}
-          className="btn-close"
+          className="absolute -top-3 right-[-15px] z-[1] flex h-11 w-11 items-center justify-center rounded-full bg-primary text-xl font-semibold text-white hover:bg-primary"
         >
           <ClearIcon />
         </IconButton>

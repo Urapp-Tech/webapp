@@ -27,6 +27,7 @@ function getCategoryClasses(isActive: boolean) {
   }
   return classes;
 }
+
 const colorArray = [
   '#e1ccec',
   '#dfd3c3',
@@ -193,7 +194,7 @@ function HomePage() {
         FAQs={FAQs}
       />
 
-      <div className="px-4 pt-6 sm:px-5 sm:pt-4 xl:px-7">
+      <div className="bg-background px-4 pt-6 sm:px-5 sm:pt-4 xl:px-7">
         <div className="all-categories">
           <h4 className="heading">Categories</h4>
           {categoryList()}
@@ -231,7 +232,7 @@ function HomePage() {
                     <h5 className="name">{item.name}</h5>
                     <h6 className="price">$ {item.price.toFixed(2)}</h6>
                     <Button
-                      className="btn-add"
+                      className="btn-add w-full rounded-[0.625rem] bg-primary text-sm font-semibold text-foreground sm:w-auto"
                       variant="contained"
                       endIcon={<ShoppingBagOutlinedIcon />}
                       onClick={() => addItemHandler(item)}

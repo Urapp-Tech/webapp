@@ -1,3 +1,5 @@
+import { useAppSelector } from '../../redux/redux-hooks';
+
 function getCategoryClasses(isActive: boolean) {
   const classes = 'item';
 
@@ -11,16 +13,18 @@ interface ICategoryProps {
   onClick: (item: any) => void;
 }
 
-const colorArray = [
-  '#e1ccec',
-  '#dfd3c3',
-  '#c8d9eb',
-  'rgba(200, 217, 223, 0.956863)',
-  'rgba(217, 217, 217, 0.956863)',
-  '#ffe2e2',
-];
-
 function CategoriesCard({ categories, onClick }: ICategoryProps) {
+  const categoryColor = useAppSelector(
+    (state) => state.appState.systemConfig?.theme.value.categoryColor
+  );
+  const colorArray = categoryColor || [
+    '#e1ccec',
+    '#dfd3c3',
+    '#c8d9eb',
+    'rgba(200, 217, 223, 0.956863)',
+    'rgba(217, 217, 217, 0.956863)',
+    '#ffe2e2',
+  ];
   return (
     <div className="categories-list">
       {categories.length &&

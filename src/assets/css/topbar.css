@@ -1,10 +1,5 @@
-/*
-  Based on TailwindCSS recommendations,
-  consider using classes instead of the `@apply` directive
-  @see https://tailwindcss.com/docs/reusing-styles#avoiding-premature-abstraction
-*/
 .topbar {
-  @apply w-full bg-[var(--dark-200)] shadow-none !important;
+  @apply bg-primary w-full shadow-none !important;
 }
 .topbar .MuiToolbar-regular {
   @apply flex items-center justify-between px-4 py-4 lg:px-14 lg:py-7;
@@ -19,7 +14,7 @@
   @apply px-4 pb-5;
 }
 .notification-popover .all-notifications .day {
-  @apply mb-3 mt-4 text-base font-semibold leading-tight text-[var(--dark-100)];
+  @apply text-primary mb-3 mt-4 text-base font-semibold leading-tight;
 }
 .notification-popover .all-notifications .item {
   @apply flex items-center gap-x-4 border-t-[0.5px] border-solid border-t-[color:var(--light-400)] py-4 last:border-b-[0.5px] last:border-solid last:border-b-[color:var(--light-400)];
@@ -31,13 +26,13 @@
   @apply mb-1 flex items-center justify-between;
 }
 .notification-popover .all-notifications .item .title {
-  @apply mb-0 max-w-[200px] flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold leading-tight text-[var(--dark-100)];
+  @apply text-primary mb-0 max-w-[200px] flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold leading-tight;
 }
 .notification-popover .all-notifications .item .date {
-  @apply mb-0 whitespace-nowrap text-xs font-normal leading-tight text-[var(--dark-300)];
+  @apply text-faded mb-0 whitespace-nowrap text-xs font-normal leading-tight;
 }
 .notification-popover .all-notifications .item .desc {
-  @apply mb-0 text-xs font-normal leading-tight text-[var(--dark-300)];
+  @apply text-faded mb-0 text-xs font-normal leading-tight;
 }
 @media only screen and (max-width: 639.98px) {
   .selected-categories .search-sub-cats {

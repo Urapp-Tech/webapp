@@ -4,15 +4,8 @@ import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import createTheme from '@mui/material/styles/createTheme';
 import { StaticDateTimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
-import { useRef, useState } from 'react';
-
-const darkTheme = createTheme({
-  palette: {
-    primary: {
-      main: '#171717',
-    },
-  },
-});
+import { useMemo, useRef, useState } from 'react';
+import { useAppSelector } from '../../redux/redux-hooks';
 
 type Props = {
   icon: JSX.Element;
@@ -22,6 +15,16 @@ type Props = {
   initialValue: dayjs.Dayjs | null;
 };
 function DatePickerButton({ onChange, text, id, icon, initialValue }: Props) {
+  const systemConfig = useAppSelector((state) => state.appState.systemConfig);
+  const muiThemeColor = systemConfig?.theme.value.themeColor.primary ?? '';
+  const theme = useMemo(() => {
+    return createTheme({
+      palette: {
+        primary: { main: muiThemeColor },
+      },
+    });
+  }, [systemConfig]);
+
   const [datePicker, setDatePicker] = useState<HTMLButtonElement | null>(null);
   const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(
     initialValue
@@ -65,7 +68,7 @@ function DatePickerButton({ onChange, text, id, icon, initialValue }: Props) {
           horizontal: 'left',
         }}
       >
-        <ThemeProvider theme={darkTheme}>
+        <ThemeProvider theme={theme}>
           <StaticDateTimePicker
             displayStaticWrapperAs="desktop"
             onAccept={handleChange}

@@ -14,18 +14,20 @@ export const orderAPI = createApi({
     },
   }),
   endpoints: (builder) => ({
-    addOrder: builder.query({ query: () => `appOrder/newPayFastOrder` }),
+    addOrder: builder.query({
+      query: () => `/api/v1/app/appOrder/newPayFastOrder`,
+    }),
     orderList: builder.query({
       query: (queryArguments) => {
         const { search = 0, limit = 0, offset = 0 } = queryArguments;
         return {
-          url: `appOrder/webapp/list`,
+          url: `/api/v1/app/appOrder/webapp/list`,
           params: { limit, offset, search },
         };
       },
     }),
     orderDetail: builder.query({
-      query: (id: string) => `appOrder/webapp/detail/${id}`,
+      query: (id: string) => `/api/v1/app/appOrder/webapp/detail/${id}`,
     }),
   }),
 });

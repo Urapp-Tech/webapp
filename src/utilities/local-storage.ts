@@ -1,13 +1,14 @@
 type Key =
-  | 'ORDER_ITEM'
-  | 'USER'
-  | 'REGISTERED_CART'
+  | 'ADDRESS'
   | 'CART_ITEMS'
   | 'DEVICE_DATA'
-  | 'ADDRESS'
+  | 'ORDER_ITEM'
+  | 'REGISTERED_CART'
   | 'SIGN_UP_DATA'
+  | 'SYSTEM_CONFIG'
   | 'TENANT_CONFIG'
-  | 'TENANT';
+  | 'TENANT'
+  | 'USER';
 
 function addKeyPrefix(key: string) {
   const prefix = 'WEB_APP';

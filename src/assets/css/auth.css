@@ -1,7 +1,7 @@
 /* Auth CSS Start */
 
 .auth-main {
-  @apply relative !min-h-screen bg-[var(--dark-200)] md:grid md:grid-cols-1 lg:grid-cols-2;
+  @apply bg-primary relative !min-h-screen md:grid md:grid-cols-1 lg:grid-cols-2;
 }
 .auth-main .fixed-at-top-left {
   @apply absolute left-20 top-[3.75rem] flex items-start gap-x-9;
@@ -110,7 +110,7 @@
   @apply lg:px-8 xl:px-20 2xl:px-24;
 }
 .auth-main .join-community .content-container .content .heading {
-  @apply mb-3 text-[2.5rem] font-bold leading-tight text-[var(--dark-200)] text-[var(--dark-200)];
+  @apply mb-3 text-[2.5rem] font-bold leading-tight text-[var(--dark-200)];
 }
 .auth-main .join-community .content-container .content .desc {
   @apply mb-6 text-lg font-normal leading-snug text-[var(--dark-200)];

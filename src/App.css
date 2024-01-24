@@ -33,7 +33,7 @@ body {
   @apply !font-open-sans;
 }
 .main {
-  @apply min-h-screen w-full bg-[color:var(--light-100)] pl-[300px] pt-[86px] transition-all delay-[0ms] duration-[225ms] ease-in-out;
+  @apply bg-background min-h-screen w-full pl-[300px] pt-[86px] transition-all delay-[0ms] duration-[225ms] ease-in-out;
 }
 
 /* width */

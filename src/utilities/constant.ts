@@ -2,7 +2,10 @@ import { SignUpPayload } from '../types/auth.types';
 import { setItem } from './local-storage';
 
 // export const BASE_URL = import.meta.env.VITE_SERVICE_BASE_URL;
-export const BASE_URL = 'https://dev.urapptech.com/api/v1/app/';
+export const LIVE_URL = 'https://dev.urapptech.com';
+export const TAQI_DEV = 'http://192.168.8.68:3200';
+export const BASE_URL = TAQI_DEV;
+
 export const APP_USER_PREFIXES = 'app-user';
 export const tenantId = '9e63e0ed-1b53-4509-bf9c-4768bb7ce35c';
 export const ORDER_STATUS = {

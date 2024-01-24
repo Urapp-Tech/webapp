@@ -15,10 +15,11 @@ export const categoryAPI = createApi({
   }),
   endpoints: (builder) => ({
     getAllCategory: builder.query({
-      query: () => `homemenu/list/${tenantId}`,
+      query: () => `/api/v1/app/homemenu/list/${tenantId}`,
     }),
     getSubCategory: builder.query({
-      query: (menuId: string) => `homemenu/view/${tenantId}/${menuId}`,
+      query: (menuId: string) =>
+        `/api/v1/app/homemenu/view/${tenantId}/${menuId}`,
     }),
   }),
 });

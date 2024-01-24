@@ -1,10 +1,5 @@
-/*
-  Based on TailwindCSS recommendations,
-  consider using classes instead of the `@apply` directive
-  @see https://tailwindcss.com/docs/reusing-styles#avoiding-premature-abstraction
-*/
 .left-sidebar {
-  @apply bottom-0 top-[86px] box-border h-auto w-[300px] border-r-0 bg-[var(--dark-200)] px-0 py-[30px] transition-all delay-[0ms] duration-[225ms] ease-out !important;
+  @apply bottom-0 top-[86px] box-border h-auto w-[300px] border-r-0 bg-primary px-0 py-[30px] transition-all delay-[0ms] duration-[225ms] ease-out !important;
 }
 .left-sidebar::-webkit-scrollbar-track {
   @apply rounded-lg bg-[color:var(--dark-400)];
@@ -19,10 +14,10 @@
   @apply mb-5;
 }
 .left-sidebar .sidebar-links a {
-  @apply flex w-full items-center gap-x-3 bg-transparent px-6 py-3 text-base font-normal text-[color:var(--light-600)] transition-all duration-[0.3s] md:gap-x-4 md:px-7;
+  @apply flex w-full items-center gap-x-3 bg-transparent px-6 py-3 text-base font-normal text-faded transition-all duration-[0.3s] md:gap-x-4 md:px-7;
 }
 .left-sidebar .sidebar-links a.active {
-  @apply bg-[#c9c9c91a] font-semibold text-white;
+  @apply bg-faded font-semibold text-white;
 }
 .left-sidebar .sidebar-links a .aside-list-icon {
   @apply h-auto w-5 text-[var(--dark-300)] transition-all duration-[0.3s];
@@ -37,33 +32,33 @@
   @apply px-[30px] py-0;
 }
 .left-sidebar .sidebar-footer-content .share-via .heading {
-  @apply mb-3 text-base font-semibold leading-none text-white;
+  @apply mb-3 text-base font-semibold leading-none text-foreground;
 }
 .left-sidebar .sidebar-footer-content .share-via .social-icons {
   @apply mb-4 flex items-center gap-x-2.5 md:mb-7;
 }
 .left-sidebar .sidebar-footer-content .share-via .social-icons .social-btn {
-  @apply p-0 text-[color:var(--light-200)];
+  @apply p-0 text-foreground;
 }
 .left-sidebar .sidebar-footer-content .share-via hr {
   @apply border-t-[0.5px] border-solid border-t-[color:var(--light-400)];
 }
 .left-sidebar .sidebar-footer-content .share-via .link {
-  @apply block text-sm font-normal leading-snug text-[color:var(--light-600)];
+  @apply block text-sm font-normal leading-snug text-foreground;
 }
 .left-sidebar .sidebar-footer-content .logout-link {
-  @apply mt-3 flex w-full items-center gap-x-4 bg-transparent px-7 py-3 text-base font-normal text-[color:var(--light-600)] transition-all duration-[0.3s] md:mt-7;
+  @apply mt-3 flex w-full items-center gap-x-4 bg-transparent px-7 py-3 text-base font-normal text-faded transition-all duration-[0.3s] md:mt-7;
 }
 .left-sidebar .sidebar-footer-content .logout-link:active,
 .left-sidebar .sidebar-footer-content .logout-link:focus {
-  @apply bg-[#c9c9c91a] font-semibold text-white;
+  @apply bg-faded font-semibold text-foreground;
 }
 .left-sidebar .sidebar-footer-content .logout-link .icon {
-  @apply h-auto w-5 rotate-180 text-[var(--dark-300)] transition-all duration-[0.3s];
+  @apply h-auto w-5 rotate-180 text-faded transition-all duration-[0.3s];
 }
 .left-sidebar .sidebar-footer-content .logout-link:active .icon,
 .left-sidebar .sidebar-footer-content .logout-link:focus .icon {
-  @apply text-white;
+  @apply text-foreground;
 }
 @media only screen and (max-width: 1023.98px) {
   .left-sidebar {
