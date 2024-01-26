@@ -6,7 +6,7 @@ import {
   SignUpPayload,
 } from '../types/auth.types';
 import API_PATHS from '../utilities/API-PATHS';
-import { getHeaders, tenantId } from '../utilities/constant';
+import { getHeaders, getTenantId } from '../utilities/constant';
 import network from './network';
 
 const signUp = (signupData: SignUpPayload) => {
@@ -20,7 +20,7 @@ const getOTP = (data: OTPPayload) => {
 const loginService = (data: LoginPayload) => {
   return network.post(
     API_PATHS.loginService,
-    { ...data, tenant: tenantId },
+    { ...data, tenant: getTenantId() },
     { headers: getHeaders() }
   );
 };
@@ -28,7 +28,7 @@ const loginService = (data: LoginPayload) => {
 const loginWithFacebook = (data: FacebookLoginPayload) => {
   return network.post(
     API_PATHS.loginWithFacebook,
-    { ...data, tenant: tenantId },
+    { ...data, tenant: getTenantId() },
     { headers: getHeaders() }
   );
 };
@@ -36,7 +36,7 @@ const loginWithFacebook = (data: FacebookLoginPayload) => {
 const forgotPassword = (data: ForgotPasswordPayload) => {
   return network.post(
     API_PATHS.forgotPassword,
-    { ...data, tenant: tenantId },
+    { ...data, tenant: getTenantId() },
     { headers: getHeaders() }
   );
 };

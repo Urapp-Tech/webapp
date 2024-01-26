@@ -16,7 +16,8 @@ type Props = {
 };
 function DatePickerButton({ onChange, text, id, icon, initialValue }: Props) {
   const systemConfig = useAppSelector((state) => state.appState.systemConfig);
-  const muiThemeColor = systemConfig?.theme.value.themeColor.primary ?? '';
+  const muiThemeColor =
+    systemConfig?.theme.value.themeColor.primary ?? '#1D1D1D';
   const theme = useMemo(() => {
     return createTheme({
       palette: {

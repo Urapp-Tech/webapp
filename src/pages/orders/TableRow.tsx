@@ -7,8 +7,15 @@ import CircularProgress from '@mui/material/CircularProgress';
 import dayjs from 'dayjs';
 import { NavLink } from 'react-router-dom';
 import { ORDER_STATUSES } from '../../utilities/constant';
+import cn from '../../utilities/class-names';
 
-type Status = 'New' | 'Processing';
+type Status =
+  | 'New'
+  | 'Processing'
+  | 'In-Delivery'
+  | 'Delivered'
+  | 'Cancelled'
+  | 'PickedUp';
 
 type Props = {
   id: string;
@@ -19,28 +26,6 @@ type Props = {
   appOrderNumber: 'string';
 };
 
-function getProgressClasses(type: Status) {
-  const temp = 'relative inline-flex';
-  if (type === 'New') {
-    return `${temp} icon-order-placed`;
-  }
-  if (type === 'Processing') {
-    return `${temp} icon-order-out-for-delivery`;
-  }
-  if (type === 'In-Delivery') {
-    return `${temp} icon-order-delivered`;
-  }
-  if (type === 'Delivered') {
-    return `${temp} icon-order-drop-off`;
-  }
-  if (type === 'Cancelled') {
-    return `${temp} icon-order-cancelled`;
-  }
-  if (type === 'PickedUp') {
-    return `${temp} icon-order-picked-up`;
-  }
-  return `${temp} icon-order-delivered`;
-}
 function getStatusText(type: Status) {
   if (type === 'New') {
     return 'New';
@@ -145,7 +130,18 @@ function TableRow({ id, appOrderNumber, type, date, progress, item }: Props) {
           {ORDER_STATUSES.map(
             (status, index) =>
               type === status.status && (
-                <div className={getProgressClasses(type)} key={index}>
+                <div
+                  className={cn(
+                    'relative inline-flex',
+                    type === 'New' && 'text-[#4283f4]',
+                    type === 'Processing' && 'text-[#2cd285]',
+                    type === 'In-Delivery' && 'text-[#fd2f2f]',
+                    type === 'Delivered' && 'text-[#ff8c39]',
+                    type === 'Cancelled' && 'text-[#ee0404]',
+                    type === 'PickedUp' && 'text-[#c367f1]'
+                  )}
+                  key={index}
+                >
                   <CircularProgress
                     thickness={1.5}
                     className="z-10"
@@ -173,7 +169,19 @@ function TableRow({ id, appOrderNumber, type, date, progress, item }: Props) {
       </td>
       <td>{dayjs(date).format('HH:mm , DD-MM-YYYY')}</td>
       <td>
-        <div className={getStatusClasses(type)}>{getStatusText(type)}</div>
+        <div
+          className={cn(
+            'inline-flex min-h-8 min-w-32 items-center text-xs font-semibold',
+            type === 'New' && 'text-[#4283f4]',
+            type === 'Processing' && 'text-[#c367f1]',
+            type === 'In-Delivery' && 'text-[#2cd285]',
+            type === 'Delivered' && 'text-[#ff8c39]',
+            type === 'Cancelled' && 'text-[#ee0404]',
+            type === 'PickedUp' && 'text-[#c367f1]'
+          )}
+        >
+          {getStatusText(type)}
+        </div>
       </td>
       <td>{item} Items</td>
       <td>

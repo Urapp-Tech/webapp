@@ -167,7 +167,7 @@ function OrderDetailsPage() {
                     (status, index) =>
                       orderItemDetail?.status === status.status && (
                         <div
-                          className="icon-order-out-for-delivery relative inline-flex"
+                          className="relative inline-flex text-[#2cd285]"
                           key={index}
                         >
                           <CircularProgress

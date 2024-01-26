@@ -7,7 +7,7 @@ const getSystemConfigWithController = () => {
   return () => {
     getSystemConfigController.abort();
     getSystemConfigController = new AbortController();
-    return network.get<GetSystemConfigResponse>(API_PATHS.getSystemConfig, {
+    return network.get<GetSystemConfigResponse>(API_PATHS.getSystemConfig(), {
       signal: getSystemConfigController.signal,
     });
   };

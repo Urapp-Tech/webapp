@@ -4,6 +4,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 
 import assets from '../../assets';
+import cn from '../../utilities/class-names';
 
 type Props = {
   open: boolean;
@@ -22,10 +23,12 @@ function PaymentOptionPopup({ open, setOpen, handlePopupClose }: Props) {
     <Dialog
       onClose={onCloseHandler}
       open={open}
-      classes={{ paper: 'm-4 w-full max-w-sm rounded-xl shadow-md' }}
-      BackdropProps={{
-        classes: {
-          root: 'backdrop-blur-xl',
+      classes={{ paper: cn('m-4 w-full max-w-sm rounded-xl shadow-md') }}
+      slotProps={{
+        backdrop: {
+          classes: {
+            root: cn('backdrop-blur-xl'),
+          },
         },
       }}
     >

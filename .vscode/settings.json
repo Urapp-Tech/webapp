@@ -1,0 +1,13 @@
+{
+  "cSpell.words": [
+    "clientjs",
+    "clsx",
+    "geocode",
+    "googlemaps",
+    "homemenu",
+    "reduxjs",
+    "swiper",
+    "tailwindcss"
+  ],
+  "css.customData": [".vscode/tailwind.json"]
+}

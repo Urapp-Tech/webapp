@@ -1,15 +1,16 @@
+/* eslint-disable react/no-children-prop */
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import InstagramIcon from '@mui/icons-material/Instagram';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import YouTubeIcon from '@mui/icons-material/YouTube';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import YouTubeIcon from '@mui/icons-material/YouTube';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import { useState } from 'react';
@@ -17,40 +18,64 @@ import { NavLink } from 'react-router-dom';
 import { setDropOff, setPickup } from '../../redux/features/DateAndTime';
 import { logout } from '../../redux/features/authStateSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import cn from '../../utilities/class-names';
 
 const links = [
   {
     name: 'Home',
     path: 'home',
-    icon: <HomeOutlinedIcon className="aside-list-icon" fontSize="inherit" />,
+    icon: (isActive: boolean) => (
+      <HomeOutlinedIcon
+        className={cn(
+          'h-auto w-5 text-foreground transition-all duration-[0.3s]',
+          !isActive && 'opacity-75'
+        )}
+        fontSize="inherit"
+      />
+    ),
   },
   {
     name: 'Orders',
     path: 'orders',
-    icon: (
-      <AssignmentOutlinedIcon className="aside-list-icon" fontSize="inherit" />
+    icon: (isActive: boolean) => (
+      <AssignmentOutlinedIcon
+        className={cn(
+          'h-auto w-5 text-foreground transition-all duration-[0.3s]',
+          !isActive && 'opacity-75'
+        )}
+        fontSize="inherit"
+      />
     ),
   },
   // {
   //   name: 'Payment Setting',
   //   path: 'payment-setting',
-  //   icon: (
-  //     <CreditCardRoundedIcon className="aside-list-icon" fontSize="inherit" />
+  //   icon: (isActive:boolean) => (
+  //     <CreditCardRoundedIcon className={cn("h-auto w-5 text-foreground transition-all duration-[0.3s]",{"text-foreground":isActive})} fontSize="inherit" />
   //   ),
   // },
   {
     name: 'Delivery Address',
     path: 'delivery-address',
-    icon: (
-      <LocationOnOutlinedIcon className="aside-list-icon" fontSize="inherit" />
+    icon: (isActive: boolean) => (
+      <LocationOnOutlinedIcon
+        className={cn(
+          'h-auto w-5 text-foreground transition-all duration-[0.3s]',
+          !isActive && 'opacity-75'
+        )}
+        fontSize="inherit"
+      />
     ),
   },
   {
     name: 'Account',
     path: 'account',
-    icon: (
+    icon: (isActive: boolean) => (
       <PersonOutlineOutlinedIcon
-        className="aside-list-icon"
+        className={cn(
+          'h-auto w-5 text-foreground transition-all duration-[0.3s]',
+          !isActive && 'opacity-75'
+        )}
         fontSize="inherit"
       />
     ),
@@ -58,8 +83,14 @@ const links = [
   {
     name: 'FAQs',
     path: 'faqs',
-    icon: (
-      <HelpOutlineOutlinedIcon className="aside-list-icon" fontSize="inherit" />
+    icon: (isActive: boolean) => (
+      <HelpOutlineOutlinedIcon
+        className={cn(
+          'h-auto w-5 text-foreground transition-all duration-[0.3s]',
+          !isActive && 'opacity-75'
+        )}
+        fontSize="inherit"
+      />
     ),
   },
 ];
@@ -99,10 +130,11 @@ function Sidebar() {
     <Drawer
       variant="permanent"
       PaperProps={{
-        className: 'left-sidebar',
+        className:
+          'left-sidebar !bottom-0 !top-[86px] !box-border !h-auto !w-[300px] !border-r-0 !bg-primary !px-0 !py-[30px] !transition-all !delay-[0ms] !duration-[225ms] !ease-out',
       }}
     >
-      <div className="sidebar-links">
+      <div className="mb-5">
         {links.map((link) => {
           // If user exists, show all links, else show only Home link FAQs Link
           if (LoginUser || link.name === 'Home') {
@@ -110,23 +142,33 @@ function Sidebar() {
               <NavLink
                 key={link.path}
                 className={({ isActive }) =>
-                  isActive ? 'item active' : 'item'
+                  cn(
+                    'flex w-full items-center gap-x-3 bg-transparent px-6 py-3 text-base font-normal text-foreground transition-all duration-[0.3s] md:gap-x-4 md:px-7',
+                    { 'bg-faded font-semibold text-foreground': isActive }
+                  )
                 }
                 to={link.path}
-              >
-                {link.icon}
-                <span>{link.name}</span>
-              </NavLink>
+                children={({ isActive }) => (
+                  <>
+                    {link.icon(isActive)}
+                    <span className={cn(!isActive && 'opacity-75')}>
+                      {link.name}
+                    </span>
+                  </>
+                )}
+              />
             );
           }
           return null; // Skip rendering links other than Home & FAQs if user is not logged in
         })}
       </div>
-      <div className="sidebar-footer-content">
+      <div className="mt-auto">
         {tenantConfig && hasShopLinks() ? (
-          <div className="share-via">
-            <h6 className="heading">Share</h6>
-            <div className="social-icons">
+          <div className="px-[30px] py-0">
+            <h6 className="mb-3 text-base font-semibold leading-none text-foreground">
+              Share
+            </h6>
+            <div className="mb-4 flex items-center gap-x-2.5 md:mb-7">
               {tenantConfig.facebook ? (
                 <a
                   href={tenantConfig.facebook}
@@ -134,7 +176,10 @@ function Sidebar() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <IconButton className="social-btn" onClick={() => null}>
+                  <IconButton
+                    className="p-0 text-foreground"
+                    onClick={() => null}
+                  >
                     <FacebookIcon className="text-3xl" />
                   </IconButton>
                 </a>
@@ -147,7 +192,10 @@ function Sidebar() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <IconButton className="social-btn" onClick={() => null}>
+                  <IconButton
+                    className="p-0 text-foreground"
+                    onClick={() => null}
+                  >
                     <InstagramIcon className="text-3xl" />
                   </IconButton>
                 </a>
@@ -161,7 +209,10 @@ function Sidebar() {
                   rel="noopener noreferrer"
                   role="button"
                 >
-                  <IconButton className="social-btn" onClick={() => null}>
+                  <IconButton
+                    className="p-0 text-foreground"
+                    onClick={() => null}
+                  >
                     <LinkedInIcon className="text-3xl" />
                   </IconButton>
                 </a>
@@ -175,7 +226,10 @@ function Sidebar() {
                   rel="noopener noreferrer"
                   role="button"
                 >
-                  <IconButton className="social-btn" onClick={() => null}>
+                  <IconButton
+                    className="p-0 text-foreground"
+                    onClick={() => null}
+                  >
                     <TwitterIcon className="text-3xl" />
                   </IconButton>
                 </a>
@@ -189,7 +243,10 @@ function Sidebar() {
                   rel="noopener noreferrer"
                   role="button"
                 >
-                  <IconButton className="social-btn" onClick={() => null}>
+                  <IconButton
+                    className="p-0 text-foreground"
+                    onClick={() => null}
+                  >
                     <YouTubeIcon className="text-3xl" />
                   </IconButton>
                 </a>
@@ -203,36 +260,52 @@ function Sidebar() {
                   rel="noopener noreferrer"
                   role="button"
                 >
-                  <IconButton className="social-btn" onClick={() => null}>
+                  <IconButton
+                    className="p-0 text-foreground"
+                    onClick={() => null}
+                  >
                     <WhatsAppIcon className="text-3xl" />
                   </IconButton>
                 </a>
               ) : null}
             </div>
-            <hr className="mb-4" />
-            <NavLink className="link mb-2" to="./terms-and-conditions">
+            <hr className="mb-4 border-t-[0.5px] border-solid border-t-foreground" />
+            <NavLink
+              className="mb-2 block text-sm font-normal leading-snug text-foreground"
+              to="./terms-and-conditions"
+            >
               Terms & Conditions
             </NavLink>
-            <NavLink className="link" to="./privacy-policy">
+            <NavLink
+              className="block text-sm font-normal leading-snug text-foreground"
+              to="./privacy-policy"
+            >
               Privacy Policy
             </NavLink>
-            <hr className="mt-4" />
+            <hr className="mt-4 border-t-[0.5px] border-solid border-t-foreground" />
           </div>
         ) : null}
 
         {LoginUser ? (
           <NavLink
-            className="logout-link"
+            className="mt-3 flex w-full items-center gap-x-4 bg-transparent px-7 py-3 text-base font-normal text-foreground transition-all duration-[0.3s] focus:bg-faded focus:font-semibold focus:text-foreground active:bg-faded active:font-semibold active:text-foreground md:mt-7"
             to="/dashboard"
             onClick={() => handleLogout()}
           >
-            <LogoutOutlinedIcon className="icon" />
-            Logout
+            <LogoutOutlinedIcon className="h-auto w-5 transition-all duration-[0.3s] " />
+            <span className="text-foreground focus:text-foreground active:text-foreground">
+              Logout
+            </span>
           </NavLink>
         ) : (
-          <NavLink className="logout-link" to="/auth/login">
-            <LogoutOutlinedIcon />
-            Login
+          <NavLink
+            className="mt-3 flex w-full items-center gap-x-4 bg-transparent px-7 py-3 text-base font-normal text-foreground transition-all duration-[0.3s] focus:bg-faded focus:font-semibold focus:text-foreground active:bg-faded active:font-semibold active:text-foreground md:mt-7"
+            to="/auth/login"
+          >
+            <LogoutOutlinedIcon className="h-auto w-5 rotate-180 transition-all duration-[0.3s]" />
+            <span className="text-foreground focus:text-foreground active:text-foreground">
+              Login
+            </span>
           </NavLink>
         )}
       </div>

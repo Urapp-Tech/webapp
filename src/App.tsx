@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ClientJS } from 'clientjs';
 import { useEffect } from 'react';
-import { useRoutes } from 'react-router-dom';
+import { useNavigate, useRoutes } from 'react-router-dom';
 import 'swiper/css';
 import AlertBox from './components/common/SnackBar';
 import useAlert from './hooks/alert.hook';
+import { setSystemConfig } from './redux/features/appStateSlice';
 import {
   setDeviceData,
   setTenant,
@@ -12,11 +13,10 @@ import {
 } from './redux/features/deviceState';
 import { useAppDispatch, useAppSelector } from './redux/redux-hooks';
 import { routeObjects } from './routes/AppRoutes';
+import appService from './services/app.service';
 import network from './services/network';
 import tenantService from './services/tenant.service';
 import promiseHandler from './utilities/promise-handler';
-import appService from './services/app.service';
-import { setSystemConfig } from './redux/features/appStateSlice';
 
 function App() {
   const {
@@ -31,6 +31,7 @@ function App() {
     (state) => state.deviceStates.deviceData
   );
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const client = new ClientJS();
   const agent = client.getUserAgent();
   const fingerprint = client.getFingerprint();
@@ -47,7 +48,30 @@ function App() {
     }
     return ipResult.data.ip;
   }
+
   useEffect(() => {
+    async function getSystemConfig() {
+      const getSystemConfigPromise = appService.getSystemConfig();
+      const [getSystemConfigResult, getSystemConfigError] =
+        await promiseHandler(getSystemConfigPromise);
+      if (!getSystemConfigResult) {
+        setAlertSeverity('error');
+        setAlertMessage(getSystemConfigError.message);
+        setShowAlert(true);
+        navigate('/error-404');
+        return;
+      }
+      if (!getSystemConfigResult.data.success) {
+        setAlertSeverity('error');
+        setAlertMessage(getSystemConfigResult.data.message);
+        setShowAlert(true);
+        navigate('/error-404');
+        return;
+      }
+      dispatch(setSystemConfig(getSystemConfigResult.data.data));
+    }
+    getSystemConfig();
+
     async function initializeDeviceData() {
       if (persistedDeviceData) {
         return;
@@ -99,28 +123,6 @@ function App() {
       dispatch(setDeviceData(deviceRegistrationResult.data.data));
     }
     initializeDeviceData();
-  }, []);
-
-  useEffect(() => {
-    async function getSystemConfig() {
-      const getSystemConfigPromise = appService.getSystemConfig();
-      const [getSystemConfigResult, getSystemConfigError] =
-        await promiseHandler(getSystemConfigPromise);
-      if (!getSystemConfigResult) {
-        setAlertSeverity('error');
-        setAlertMessage(getSystemConfigError.message);
-        setShowAlert(true);
-        return;
-      }
-      if (!getSystemConfigResult.data.success) {
-        setAlertSeverity('error');
-        setAlertMessage(getSystemConfigResult.data.message);
-        setShowAlert(true);
-        return;
-      }
-      dispatch(setSystemConfig(getSystemConfigResult.data.data));
-    }
-    getSystemConfig();
   }, []);
 
   if (process.env.NODE_ENV === 'production') {

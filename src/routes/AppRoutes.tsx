@@ -23,6 +23,7 @@ import MainLayout from '../components/layout/MainLayout';
 // import AccountHelpPage from '../pages/account/AccountHelpPage';
 // import AccountSettingsPage from '../pages/account/AccountSettingPage';
 import Loader from '../components/common/Loader';
+import Page404 from '../pages/404/404';
 
 const LoginPage = lazy(() => import('../pages/auth/login/LoginPage'));
 const SignUpPage = lazy(() => import('../pages/auth/sign-up/SignUpPage'));
@@ -66,6 +67,10 @@ export const routeObjects: Array<RouteObject> = [
   {
     index: true,
     element: <Navigate to="/dashboard" replace />,
+  },
+  {
+    path: 'error-404',
+    element: <Page404 />,
   },
   {
     path: 'auth',

@@ -10,6 +10,7 @@ import { NavLink } from 'react-router-dom';
 import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
 import notificationService from '../../services/notification.service';
+import cn from '../../utilities/class-names';
 import promiseHandler from '../../utilities/promise-handler';
 import NotificationPopover from './NotificationPopover';
 
@@ -45,10 +46,17 @@ function TopBar() {
     }
   }, [user]);
   return (
-    <AppBar position="fixed" className="topbar">
-      <Toolbar>
-        <NavLink className="logo" to="/dashboard/home">
-          <img className="logo" src={assets.images.logo} alt="" />
+    <AppBar position="fixed" className="!w-full !bg-primary !shadow-none">
+      <Toolbar
+        classes={{
+          regular: cn(
+            'flex items-center justify-between px-4 py-4',
+            'lg:px-14 lg:py-7'
+          ),
+        }}
+      >
+        <NavLink to="/dashboard/home">
+          <img className="w-40" src={assets.images.logo} alt="" />
         </NavLink>
         <div className="flex items-center">
           <IconButton
@@ -64,7 +72,9 @@ function TopBar() {
             badgeContent={notificationList?.length}
             max={99}
             classes={{
-              badge: 'custom-badge',
+              badge: cn(
+                '!pointer-events-none !right-1 !top-1 !h-5 !w-5 !rounded-full !bg-[#FF4848] !font-open-sans !text-[.625rem] !font-semibold !text-white'
+              ),
             }}
           >
             <IconButton
@@ -90,7 +100,9 @@ function TopBar() {
               badgeContent={cartItems.length}
               max={99}
               classes={{
-                badge: 'custom-badge',
+                badge: cn(
+                  '!pointer-events-none !right-1 !top-1 !h-5 !w-5 !rounded-full !bg-[#FF4848] !font-open-sans !text-[.625rem] !font-semibold !text-white'
+                ),
               }}
             >
               <IconButton

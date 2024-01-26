@@ -1,7 +1,7 @@
 /* Auth CSS Start */
 
 .auth-main {
-  @apply bg-primary relative !min-h-screen md:grid md:grid-cols-1 lg:grid-cols-2;
+  @apply relative !min-h-screen bg-primary md:grid md:grid-cols-1 lg:grid-cols-2;
 }
 .auth-main .fixed-at-top-left {
   @apply absolute left-20 top-[3.75rem] flex items-start gap-x-9;
@@ -73,7 +73,7 @@
   @apply min-h-10 w-full rounded-[0.625rem] bg-white text-base font-semibold text-[var(--dark-100)] shadow-none outline-0;
 }
 .auth-main .auth-form .btn-login-fb {
-  @apply mt-5 flex min-h-10 w-full items-center justify-center rounded-[0.625rem] bg-[#255d9a] text-base font-semibold text-white shadow-none outline-0;
+  @apply mt-5 flex min-h-10 w-full items-center justify-center rounded-[0.625rem] bg-[#255D9A] text-base font-semibold text-white shadow-none outline-0;
 }
 
 .auth-main .auth-form .login-other-options .text {
@@ -98,13 +98,13 @@
   @apply absolute bottom-14 left-0 right-16 top-0 flex flex-col items-center justify-end rounded-[0rem_0rem_50%_50%] text-center;
 }
 .auth-main .join-community.login-community .content-container {
-  @apply bg-[#d4e2d4];
+  @apply bg-[#D4E2D4];
 }
 .auth-main .join-community.register-community .content-container {
-  @apply bg-[#c8d9eb];
+  @apply bg-[#C8D9EB];
 }
 .auth-main .join-community.forgot-pass-community .content-container {
-  @apply overflow-hidden bg-[#f4efd3];
+  @apply overflow-hidden bg-[#F4EFD3];
 }
 .auth-main .join-community .content-container .content {
   @apply lg:px-8 xl:px-20 2xl:px-24;

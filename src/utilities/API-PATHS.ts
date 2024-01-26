@@ -1,4 +1,12 @@
-import { BASE_URL, tenantId } from './constant';
+import { BASE_URL, getTenantId } from './constant';
+
+function getDomainName() {
+  const domain = window.location.hostname;
+  if (domain === 'localhost') {
+    return 'devwebapp';
+  }
+  return domain.split('.')[0];
+}
 
 const API_PATHS = {
   // Address
@@ -14,13 +22,13 @@ const API_PATHS = {
 
   updateAddressStatus: (id: string) =>
     new URL(
-      `/api/v1/app/appUserAddress/update/status/${tenantId}/${id}`,
+      `/api/v1/app/appUserAddress/update/status/${getTenantId()}/${id}`,
       BASE_URL
     ).toString(),
 
   deleteUserAddress: (id: string) =>
     new URL(
-      `/api/v1/app/appUserAddress/delete/${tenantId}/${id}`,
+      `/api/v1/app/appUserAddress/delete/${getTenantId()}/${id}`,
       BASE_URL
     ).toString(),
 
@@ -61,20 +69,18 @@ const API_PATHS = {
   ).toString(),
 
   // Category
-  categoryList: new URL(
-    `/api/v1/app/homemenu/list/${tenantId}`,
-    BASE_URL
-  ).toString(),
+  categoryList: () =>
+    new URL(`/api/v1/app/homemenu/list/${getTenantId()}`, BASE_URL).toString(),
 
   subCategory: (menuId: string) =>
     new URL(
-      `/api/v1/app/homemenu/view/${tenantId}/${menuId}`,
+      `/api/v1/app/homemenu/view/${getTenantId()}/${menuId}`,
       BASE_URL
     ).toString(),
 
   faqService: (menuId: string, submenuId: string) =>
     new URL(
-      `/api/v1/app/homemenu/view/submenu/${tenantId}/${menuId}/${submenuId}`,
+      `/api/v1/app/homemenu/view/submenu/${getTenantId()}/${menuId}/${submenuId}`,
       BASE_URL
     ).toString(),
 
@@ -115,22 +121,22 @@ const API_PATHS = {
   ).toString(),
 
   // Tenant
-  getTenant: new URL(`/api/v1/app/shop/view/${tenantId}`, BASE_URL).toString(),
-  getTenantConfig: new URL(
-    `/api/v1/app/config/view/${tenantId}`,
-    BASE_URL
-  ).toString(),
+  getTenant: () =>
+    new URL(`/api/v1/app/shop/view/${getTenantId()}`, BASE_URL).toString(),
+  getTenantConfig: () =>
+    new URL(`/api/v1/app/config/view/${getTenantId()}`, BASE_URL).toString(),
 
   deviceRegistration: new URL(
     `/api/v1/app/app-user-device/register-device`,
     BASE_URL
   ).toString(),
 
-  // System COnfig
-  getSystemConfig: new URL(
-    `/api/v1/system/config/get/${tenantId}`,
-    BASE_URL
-  ).toString(),
+  // System Config
+  getSystemConfig: () =>
+    new URL(
+      `/api/v1/system/config/get/theme/${getDomainName()}`,
+      BASE_URL
+    ).toString(),
 } as const;
 
 export default API_PATHS;

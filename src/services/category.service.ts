@@ -3,7 +3,7 @@ import { getHeaders } from '../utilities/constant';
 import network from './network';
 
 const categoryList = () => {
-  return network.get(API_PATHS.categoryList, { headers: getHeaders() });
+  return network.get(API_PATHS.categoryList(), { headers: getHeaders() });
 };
 
 const subCategory = (menuId: string) => {

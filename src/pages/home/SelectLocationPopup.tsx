@@ -83,7 +83,7 @@ function SelectLocationPopup({ open, setOpen }: Props) {
                       elementType: 'geometry',
                       stylers: [
                         {
-                          color: '#f5f5f5',
+                          color: '#F5F5F5',
                         },
                       ],
                     },
@@ -115,7 +115,7 @@ function SelectLocationPopup({ open, setOpen }: Props) {
                       elementType: 'labels.text.stroke',
                       stylers: [
                         {
-                          color: '#f5f5f5',
+                          color: '#F5F5F5',
                         },
                       ],
                     },
@@ -159,7 +159,7 @@ function SelectLocationPopup({ open, setOpen }: Props) {
                       elementType: 'geometry',
                       stylers: [
                         {
-                          color: '#e5e5e5',
+                          color: '#E5E5E5',
                         },
                       ],
                     },
@@ -177,7 +177,7 @@ function SelectLocationPopup({ open, setOpen }: Props) {
                       elementType: 'geometry',
                       stylers: [
                         {
-                          color: '#ffffff',
+                          color: '#FFFFFF',
                         },
                       ],
                     },
@@ -222,7 +222,7 @@ function SelectLocationPopup({ open, setOpen }: Props) {
                       elementType: 'geometry',
                       stylers: [
                         {
-                          color: '#e5e5e5',
+                          color: '#E5E5E5',
                         },
                       ],
                     },

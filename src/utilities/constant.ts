@@ -7,7 +7,6 @@ export const TAQI_DEV = 'http://192.168.8.68:3200';
 export const BASE_URL = TAQI_DEV;
 
 export const APP_USER_PREFIXES = 'app-user';
-export const tenantId = '9e63e0ed-1b53-4509-bf9c-4768bb7ce35c';
 export const ORDER_STATUS = {
   NEW: 'New',
   PICKED_UP: 'PickedUp',
@@ -19,13 +18,20 @@ export const ORDER_STATUS = {
 };
 
 let token = '';
-
 export const setToken = (data: string) => {
   token = data;
 };
-
 export const getToken = () => {
   return token;
+};
+
+let tenantId = '';
+export const setTenantId = (data: string) => {
+  tenantId = data;
+};
+export const getTenantId = () => {
+  console.log('getTenantId tenantId :>> ', tenantId);
+  return tenantId;
 };
 
 export function getHeaders() {
