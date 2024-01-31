@@ -15,7 +15,7 @@ export const ORDER_STATUS = {
   DELIVERED: 'Delivered',
   CANCELLED: 'Cancelled',
   PENDING: 'Pending',
-};
+} as const;
 
 let token = '';
 export const setToken = (data: string) => {
@@ -88,4 +88,4 @@ export const ORDER_STATUSES = [
     text: 'Your order has been cancelled',
     iconText: 'DomainVerificationOutlinedIcon',
   },
-];
+] as const;

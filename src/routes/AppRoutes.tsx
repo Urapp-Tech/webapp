@@ -37,7 +37,7 @@ const ResetPasswordPage = lazy(
   () => import('../pages/auth/reset-password/ResetPasswordPage')
 );
 const HomePage = lazy(() => import('../pages/home/HomePage'));
-const OrdersPage = lazy(() => import('../pages/orders/OrdersHistoryPage'));
+const OrdersPage = lazy(() => import('../pages/orders/OrdersPage'));
 const PaymentSettingPage = lazy(
   () => import('../pages/payment-setting/PaymentSettingPage')
 );

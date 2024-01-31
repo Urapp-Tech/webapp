@@ -14,7 +14,7 @@ const signUp = (signupData: SignUpPayload) => {
 };
 
 const getOTP = (data: OTPPayload) => {
-  return network.post(API_PATHS.getOTP, data, { headers: getHeaders() });
+  return network.post(API_PATHS.getOTP(), data, { headers: getHeaders() });
 };
 
 const loginService = (data: LoginPayload) => {

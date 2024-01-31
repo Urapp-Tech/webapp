@@ -36,3 +36,45 @@ export type Order = {
   paymentType: string;
   items: string;
 };
+
+export type GetOrderReviewItemsResponse = {
+  success: boolean;
+  code: number;
+  message: string;
+  data: OrderReviewItemsData;
+};
+
+export type OrderReviewItemsData = {
+  list: Array<OrderReviewItem>;
+  total: number;
+};
+
+export type OrderReviewItem = {
+  id: string;
+  quantity: number;
+  createdDate: string;
+  updatedDate: string;
+  unitPrice: string;
+  appOrder: string;
+  itemId: string;
+  isRating: boolean;
+  homeCatItem: HomeCatItem;
+};
+
+export type HomeCatItem = {
+  id: string;
+  name: string;
+  icon: string;
+  banner: string;
+  desc: string;
+  price: number;
+  isActive: boolean;
+  homeCategory: string;
+  createdBy: string;
+  updatedBy: string;
+  createdDate: string;
+  updatedDate: string;
+  quantity: number;
+  isDeleted: boolean;
+  loyaltyCoins: number;
+};

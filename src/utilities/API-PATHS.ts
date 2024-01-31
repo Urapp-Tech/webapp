@@ -2,9 +2,6 @@ import { BASE_URL, getTenantId } from './constant';
 
 function getDomainName() {
   const domain = window.location.hostname;
-  if (domain === 'localhost') {
-    return 'devwebapp';
-  }
   return domain.split('.')[0];
 }
 
@@ -35,7 +32,11 @@ const API_PATHS = {
   // Auth
   signUp: new URL(`/api/v1/app/app-user/sign-up/app`, BASE_URL).toString(),
 
-  getOTP: new URL(`/api/v1/app/app-user/get-otp`, BASE_URL).toString(),
+  getOTP: () =>
+    new URL(
+      `/api/v1/app/app-user/get-otp/${getTenantId()}`,
+      BASE_URL
+    ).toString(),
 
   loginService: new URL(
     `/api/v1/app/app-user/sign-in/app`,

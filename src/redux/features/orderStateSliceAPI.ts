@@ -1,4 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import {
+  GetOrderListResponse,
+  GetOrderReviewItemsResponse,
+} from '../../types/order.types';
 import { BASE_URL, getToken } from '../../utilities/constant';
 
 export const orderAPI = createApi({
@@ -17,9 +21,9 @@ export const orderAPI = createApi({
     addOrder: builder.query({
       query: () => `/api/v1/app/appOrder/newPayFastOrder`,
     }),
-    orderList: builder.query({
+    orderList: builder.query<GetOrderListResponse, any>({
       query: (queryArguments) => {
-        const { search = 0, limit = 0, offset = 0 } = queryArguments;
+        const { search = '', limit = 10, offset = 0 } = queryArguments;
         return {
           url: `/api/v1/app/appOrder/webapp/list`,
           params: { limit, offset, search },
@@ -29,7 +33,28 @@ export const orderAPI = createApi({
     orderDetail: builder.query({
       query: (id: string) => `/api/v1/app/appOrder/webapp/detail/${id}`,
     }),
+    orderReviewItems: builder.query<GetOrderReviewItemsResponse, any>({
+      query: (queryArguments) => {
+        const { page = 0, size = 10 } = queryArguments;
+        return {
+          url: `/api/v1/app/rating/list/${page}/${size}`,
+        };
+      },
+    }),
+    reviewItem: builder.mutation<GetOrderReviewItemsResponse, any>({
+      query: ({ appOrderItemId, ...body }) => {
+        return {
+          url: `/api/v1/app/rating/insert/${appOrderItemId}`,
+          method: 'POST',
+          body,
+        };
+      },
+    }),
   }),
 });
 
-export const { useLazyOrderListQuery } = orderAPI;
+export const {
+  useLazyOrderListQuery,
+  useLazyOrderReviewItemsQuery,
+  useReviewItemMutation,
+} = orderAPI;
