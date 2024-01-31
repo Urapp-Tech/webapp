@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BASE_URL, getToken, tenantId } from '../../utilities/constant';
+import { BASE_URL, getTenantId, getToken } from '../../utilities/constant';
 
 export const categoryAPI = createApi({
   reducerPath: 'category-api',
@@ -15,10 +15,11 @@ export const categoryAPI = createApi({
   }),
   endpoints: (builder) => ({
     getAllCategory: builder.query({
-      query: () => `homemenu/list/${tenantId}`,
+      query: () => `/api/v1/app/homemenu/list/${getTenantId()}`,
     }),
     getSubCategory: builder.query({
-      query: (menuId: string) => `homemenu/view/${tenantId}/${menuId}`,
+      query: (menuId: string) =>
+        `/api/v1/app/homemenu/view/${getTenantId()}/${menuId}`,
     }),
   }),
 });

@@ -6,7 +6,7 @@
   @apply mb-6 text-2xl font-semibold leading-none text-[var(--dark-100)];
 }
 .account-page .tab-pills .item {
-  @apply flex items-center justify-start gap-x-5 border-b border-solid border-b-[color:var(--light-400)] py-5 text-base font-normal text-[var(--dark-300)] transition-all duration-[0.3s] ease-[ease];
+  @apply flex items-center justify-start gap-x-5 border-b border-solid border-b-[color:var(--light-400)] py-5 text-base font-normal text-faded transition-all duration-[0.3s] ease-[ease];
 }
 .account-page .tab-pills .item.active {
   @apply font-semibold text-[var(--dark-100)];
@@ -21,16 +21,16 @@
   @apply mb-8 text-xl font-semibold leading-none text-[var(--dark-100)];
 }
 .tab-content-card .label {
-  @apply mb-2 select-none text-sm font-normal leading-none text-[var(--dark-300)];
+  @apply mb-2 select-none text-sm font-normal leading-none text-faded;
 }
 .tab-content-card .field {
   @apply min-h-[30px] w-full rounded-[5px] border border-solid border-[color:var(--light-400)] px-3 py-[5px] text-sm font-normal text-[var(--dark-100)] shadow-none outline-none;
 }
 .tab-content-card .btn-submit {
-  @apply min-h-10 w-full rounded-[0.625rem] bg-[var(--dark-200)] px-[30px] py-1.5 text-base font-semibold capitalize text-white;
+  @apply min-h-10 w-full rounded-[0.625rem] bg-primary px-[30px] py-1.5 text-base font-semibold capitalize text-foreground;
 }
 .tab-content-card .btn-submit:hover {
-  @apply bg-[var(--dark-200)];
+  @apply bg-primary;
 }
 
 /* Account Page CSS */

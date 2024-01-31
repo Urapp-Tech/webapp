@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import useAlert from '../../hooks/alert.hook';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import notificationService from '../../services/notification.service';
+import cn from '../../utilities/class-names';
 import promiseHandler from '../../utilities/promise-handler';
 import AlertBox from './SnackBar';
 
@@ -84,8 +85,9 @@ function NotificationPopover({
         onClose={handleClose}
         className="notification-popover"
         classes={{
-          paper:
-            'max-w-[calc(100%_-_2rem)] w-[25rem] shadow-md rounded-xl overflow-visible',
+          paper: cn(
+            'w-[25rem] max-w-[calc(100%_-_2rem)] overflow-visible rounded-xl shadow-md'
+          ),
         }}
         anchorOrigin={{
           vertical: 40,

@@ -1,85 +1,143 @@
-import { BASE_URL, tenantId } from './constant';
+import { BASE_URL, getTenantId } from './constant';
+
+function getDomainName() {
+  const domain = window.location.hostname;
+  return domain.split('.')[0];
+}
 
 const API_PATHS = {
   // Address
-  getUserAddress: new URL(`appUserAddress/list`, BASE_URL).toString(),
+  getUserAddress: new URL(
+    `/api/v1/app/appUserAddress/list`,
+    BASE_URL
+  ).toString(),
 
-  addUserAddress: new URL(`appUserAddress/add`, BASE_URL).toString(),
+  addUserAddress: new URL(
+    `/api/v1/app/appUserAddress/add`,
+    BASE_URL
+  ).toString(),
 
   updateAddressStatus: (id: string) =>
     new URL(
-      `appUserAddress/update/status/${tenantId}/${id}`,
+      `/api/v1/app/appUserAddress/update/status/${getTenantId()}/${id}`,
       BASE_URL
     ).toString(),
 
   deleteUserAddress: (id: string) =>
-    new URL(`appUserAddress/delete/${tenantId}/${id}`, BASE_URL).toString(),
+    new URL(
+      `/api/v1/app/appUserAddress/delete/${getTenantId()}/${id}`,
+      BASE_URL
+    ).toString(),
 
   // Auth
-  signUp: new URL(`app-user/sign-up/app`, BASE_URL).toString(),
+  signUp: new URL(`/api/v1/app/app-user/sign-up/app`, BASE_URL).toString(),
 
-  getOTP: new URL(`app-user/get-otp`, BASE_URL).toString(),
+  getOTP: () =>
+    new URL(
+      `/api/v1/app/app-user/get-otp/${getTenantId()}`,
+      BASE_URL
+    ).toString(),
 
-  loginService: new URL(`app-user/sign-in/app`, BASE_URL).toString(),
-
-  loginWithFacebook: new URL(
-    `app-user/sign-in/app/facebook`,
+  loginService: new URL(
+    `/api/v1/app/app-user/sign-in/app`,
     BASE_URL
   ).toString(),
 
-  forgotPassword: new URL(`app-user/forgotPassword/app`, BASE_URL).toString(),
+  loginWithFacebook: new URL(
+    `/api/v1/app/app-user/sign-inapp/facebook`,
+    BASE_URL
+  ).toString(),
+
+  forgotPassword: new URL(
+    `/api/v1/app/app-user/forgotPassword/app`,
+    BASE_URL
+  ).toString(),
 
   // Cart
-  anonymousCart: new URL(`appUserCart/getCart/device`, BASE_URL).toString(),
+  anonymousCart: new URL(
+    `/api/v1/app/appUserCart/getCart/device`,
+    BASE_URL
+  ).toString(),
 
-  userCart: new URL(`appUserCart/getCart/user`, BASE_URL).toString(),
+  userCart: new URL(
+    `/api/v1/app/appUserCart/getCart/user`,
+    BASE_URL
+  ).toString(),
 
-  updateCart: new URL(`appUserCart/updateCart`, BASE_URL).toString(),
+  updateCart: new URL(
+    `/api/v1/app/appUserCart/updateCart`,
+    BASE_URL
+  ).toString(),
 
   // Category
-  categoryList: new URL(`homemenu/list/${tenantId}`, BASE_URL).toString(),
+  categoryList: () =>
+    new URL(`/api/v1/app/homemenu/list/${getTenantId()}`, BASE_URL).toString(),
 
   subCategory: (menuId: string) =>
-    new URL(`homemenu/view/${tenantId}/${menuId}`, BASE_URL).toString(),
+    new URL(
+      `/api/v1/app/homemenu/view/${getTenantId()}/${menuId}`,
+      BASE_URL
+    ).toString(),
 
   faqService: (menuId: string, submenuId: string) =>
     new URL(
-      `homemenu/view/submenu/${tenantId}/${menuId}/${submenuId}`,
+      `/api/v1/app/homemenu/view/submenu/${getTenantId()}/${menuId}/${submenuId}`,
       BASE_URL
     ).toString(),
 
   // Notification
-  notificationList: new URL(`appNotification/list`, BASE_URL).toString(),
+  notificationList: new URL(
+    `/api/v1/app/appNotification/list`,
+    BASE_URL
+  ).toString(),
 
   // Order
-  addOrder: new URL(`appOrder/newOrder`, BASE_URL).toString(),
+  addOrder: new URL(`/api/v1/app/appOrder/newOrder`, BASE_URL).toString(),
 
-  addPayFastOrder: new URL(`appOrder/newPayFastOrder`, BASE_URL).toString(),
+  addPayFastOrder: new URL(
+    `/api/v1/app/appOrder/newPayFastOrder`,
+    BASE_URL
+  ).toString(),
 
-  addCashOrder: new URL(`appOrder/newCashOrder`, BASE_URL).toString(),
+  addCashOrder: new URL(
+    `/api/v1/app/appOrder/newCashOrder`,
+    BASE_URL
+  ).toString(),
 
   getPayFastToken: new URL(
-    `appOrder/pay-fast/access-token`,
+    `/api/v1/app/appOrder/pay-fast/access-token`,
     BASE_URL
   ).toString(),
 
-  orderList: new URL(`appOrder/webapp/list`, BASE_URL).toString(),
+  orderList: new URL(`/api/v1/app/appOrder/webapp/list`, BASE_URL).toString(),
 
   orderDetail: (id: string) =>
-    new URL(`appOrder/webapp/detail/${id}`, BASE_URL).toString(),
+    new URL(`/api/v1/app/appOrder/webapp/detail/${id}`, BASE_URL).toString(),
 
   // Profile
-  getUserProfile: new URL(`app-user/profile`, BASE_URL).toString(),
-  updateUserProfile: new URL(`app-user/update`, BASE_URL).toString(),
-
-  // Tenant
-  getTenant: new URL(`shop/view/${tenantId}`, BASE_URL).toString(),
-  getTenantConfig: new URL(`config/view/${tenantId}`, BASE_URL).toString(),
-
-  deviceRegistration: new URL(
-    `app-user-device/register-device`,
+  getUserProfile: new URL(`/api/v1/app/app-user/profile`, BASE_URL).toString(),
+  updateUserProfile: new URL(
+    `/api/v1/app/app-user/update`,
     BASE_URL
   ).toString(),
+
+  // Tenant
+  getTenant: () =>
+    new URL(`/api/v1/app/shop/view/${getTenantId()}`, BASE_URL).toString(),
+  getTenantConfig: () =>
+    new URL(`/api/v1/app/config/view/${getTenantId()}`, BASE_URL).toString(),
+
+  deviceRegistration: new URL(
+    `/api/v1/app/app-user-device/register-device`,
+    BASE_URL
+  ).toString(),
+
+  // System Config
+  getSystemConfig: () =>
+    new URL(
+      `/api/v1/system/config/get/theme/${getDomainName()}`,
+      BASE_URL
+    ).toString(),
 } as const;
 
 export default API_PATHS;

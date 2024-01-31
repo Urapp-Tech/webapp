@@ -1,17 +1,12 @@
-/*
-  Based on TailwindCSS recommendations,
-  consider using classes instead of the `@apply` directive
-  @see https://tailwindcss.com/docs/reusing-styles#avoiding-premature-abstraction
-*/
 /* Start Orders List Page */
 .orders-page .page-heading {
-  @apply mb-4 text-2xl font-semibold leading-none text-[var(--dark-100)] md:mb-0;
+  @apply mb-4 text-2xl font-semibold leading-none text-secondary md:mb-0;
 }
 .orders-page .search-orders {
   @apply w-full max-w-[350px] rounded-[0.625rem] border border-solid border-[color:var(--light-400)] bg-white shadow-[2px_4px_6px_rgba(0,0,0,0.06)];
 }
 .orders-page .search-orders .field {
-  @apply m-0 gap-x-3 px-5 py-2 text-sm font-normal text-[var(--dark-300)];
+  @apply m-0 gap-x-3 px-5 py-2 text-sm font-normal text-faded;
 }
 .orders-page .orders-card {
   @apply overflow-x-auto rounded-[0.625rem] bg-white pb-4 shadow-[2px_4px_6px_0px_rgba(0,0,0,0.06)];
@@ -26,28 +21,10 @@
   @apply whitespace-nowrap bg-[rgba(201,201,201,0.15)] px-5 py-3.5 text-left text-base font-semibold text-[var(--dark-100)] md:px-10;
 }
 .orders-table tr td {
-  @apply whitespace-nowrap px-5 py-3 text-sm font-normal text-[var(--dark-300)] md:px-10;
+  @apply whitespace-nowrap px-5 py-3 text-sm font-normal text-faded md:px-10;
 }
 .orders-table tr td .order-id {
   @apply font-semibold text-[var(--dark-100)];
-}
-.icon-order-placed {
-  @apply text-[#4283f4];
-}
-.icon-order-picked-up {
-  @apply text-[#c367f1];
-}
-.icon-order-out-for-delivery {
-  @apply text-[#2cd285];
-}
-.icon-order-delivered {
-  @apply text-[#fd2f2f];
-}
-.icon-order-drop-off {
-  @apply text-[#ff8c39];
-}
-.icon-order-cancelled {
-  @apply text-[#ee0404];
 }
 .orders-table tr td .order-status {
   @apply inline-flex min-h-[30px] min-w-[125px] items-center justify-center rounded-[5px] px-3 text-xs font-semibold text-white;
@@ -107,7 +84,7 @@
   @apply text-base font-semibold;
 }
 .order-details-card .basic-details .order-date-time {
-  @apply mb-2 whitespace-nowrap text-sm font-normal leading-none text-[var(--dark-300)];
+  @apply mb-2 whitespace-nowrap text-sm font-normal leading-none text-faded;
 }
 .order-details-card .basic-details .order-status {
   @apply mb-0 whitespace-nowrap text-sm font-semibold leading-none;
@@ -132,10 +109,10 @@
 }
 .order-details-card .btn-cancel-order {
   @apply min-w-[220px];
-  @apply min-h-10 rounded-[0.625rem] bg-[var(--dark-200)] font-open-sans text-sm font-semibold capitalize text-white;
+  @apply min-h-10 rounded-[0.625rem] bg-primary font-open-sans text-sm font-semibold capitalize text-white;
 }
 .order-details-card .btn-cancel-order:hover {
-  @apply bg-[var(--dark-200)] text-white;
+  @apply bg-primary text-white;
 }
 .order-details-card .edit-date-time:first-of-type {
   @apply border-r border-solid border-r-[color:var(--light-600)];
@@ -144,7 +121,7 @@
   @apply mb-0 text-sm font-semibold leading-none text-[var(--dark-100)];
 }
 .order-details-card .edit-date-time .selected-value {
-  @apply text-sm font-normal leading-tight text-[var(--dark-300)];
+  @apply text-sm font-normal leading-tight text-faded;
 }
 .order-details-page .order-details-card .ordered-items-table {
   @apply mb-3 mt-4 w-full;
@@ -156,7 +133,7 @@
   @apply border-b border-solid border-b-[color:var(--light-400)];
 }
 .ordered-items-table tr td {
-  @apply whitespace-nowrap px-5 py-5 text-sm font-normal text-[var(--dark-300)];
+  @apply whitespace-nowrap px-5 py-5 text-sm font-normal text-faded;
 }
 .ordered-items-table tr:nth-child(3) td,
 .ordered-items-table tr:nth-child(4) td,
@@ -180,7 +157,7 @@
   @apply text-right text-sm font-semibold text-[var(--dark-100)];
 }
 .order-details-page .order-details-card .sub-total .key {
-  @apply mb-0 text-sm font-normal leading-tight text-[var(--dark-300)];
+  @apply mb-0 text-sm font-normal leading-tight text-faded;
 }
 .order-details-page .order-details-card .sub-total .value {
   @apply mb-0 text-sm font-semibold leading-tight text-[var(--dark-100)];
@@ -247,10 +224,10 @@
   @apply text-[#949eae];
 }
 .timeline-item .status-desc {
-  @apply mb-0 text-sm font-normal leading-none text-[var(--dark-300)];
+  @apply mb-0 text-sm font-normal leading-none text-faded;
 }
 .timeline-item .date {
-  @apply mb-0 ml-auto text-sm font-normal leading-none text-[var(--dark-300)];
+  @apply mb-0 ml-auto text-sm font-normal leading-none text-faded;
 }
 .timeline-item.disabled * {
   @apply !text-[var(--light-300)];
@@ -282,7 +259,7 @@
   @apply m-0 min-h-[50px] w-full rounded-[0.625rem] border border-solid border-[color:var(--dark-200)] bg-transparent font-open-sans text-lg font-semibold capitalize text-[var(--dark-200)];
 }
 .modal-cancel-order .modal-footer .btn-no {
-  @apply m-0 min-h-[50px] w-full rounded-[0.625rem] border border-solid border-[color:var(--dark-200)] bg-[var(--dark-200)] font-open-sans text-lg font-semibold capitalize text-white;
+  @apply m-0 min-h-[50px] w-full rounded-[0.625rem] border border-solid border-[color:var(--dark-200)] bg-primary font-open-sans text-lg font-semibold capitalize text-white;
 }
 /* Cancel Order Modal */
 

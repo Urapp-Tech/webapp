@@ -16,7 +16,8 @@ import useAlert from '../../hooks/alert.hook';
 import { addToCart } from '../../redux/features/cartStateSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import cartService, { UpdateCartPayload } from '../../services/cart.service';
-import { tenantId } from '../../utilities/constant';
+import cn from '../../utilities/class-names';
+import { getTenantId } from '../../utilities/constant';
 import promiseHandler from '../../utilities/promise-handler';
 
 type Props = {
@@ -81,7 +82,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
       appUser: user?.id ?? null,
       appUserDevice: deviceData?.id ?? null,
       cartId: cartData.id,
-      tenant: tenantId,
+      tenant: getTenantId(),
       products: tempCartItems,
       appUserAddress: undefined,
       pickupDateTime: undefined,
@@ -136,8 +137,10 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
         onClose={onCloseHandler}
         className="modal-add-to-cart"
         classes={{
-          paper:
-            'max-w-[56rem] overflow-y-visible rounded-xl shadow-md md:m-4 md:max-h-[calc(100%_-_2rem)]',
+          paper: cn(
+            'max-w-[56rem] overflow-y-visible rounded-xl shadow-md',
+            'md:m-4 md:max-h-[calc(100%_-_2rem)]'
+          ),
         }}
       >
         <IconButton
@@ -145,7 +148,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
             setCount(1);
             setOpen(false);
           }}
-          className="btn-close"
+          className="absolute -top-3 right-[-15px] z-[1] flex h-11 w-11 items-center justify-center rounded-full bg-primary text-xl font-semibold text-white hover:bg-primary"
         >
           <ClearIcon />
         </IconButton>

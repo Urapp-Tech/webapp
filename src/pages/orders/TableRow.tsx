@@ -6,9 +6,16 @@ import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import CircularProgress from '@mui/material/CircularProgress';
 import dayjs from 'dayjs';
 import { NavLink } from 'react-router-dom';
+import cn from '../../utilities/class-names';
 import { ORDER_STATUSES } from '../../utilities/constant';
 
-type Status = 'New' | 'Processing';
+type Status =
+  | 'New'
+  | 'Processing'
+  | 'In-Delivery'
+  | 'Delivered'
+  | 'Cancelled'
+  | 'PickedUp';
 
 type Props = {
   id: string;
@@ -19,28 +26,28 @@ type Props = {
   appOrderNumber: 'string';
 };
 
-function getProgressClasses(type: Status) {
-  const temp = 'relative inline-flex';
+function getProgress(type: Status) {
   if (type === 'New') {
-    return `${temp} icon-order-placed`;
+    return 20;
   }
   if (type === 'Processing') {
-    return `${temp} icon-order-out-for-delivery`;
+    return 40;
   }
   if (type === 'In-Delivery') {
-    return `${temp} icon-order-delivered`;
+    return 80;
   }
   if (type === 'Delivered') {
-    return `${temp} icon-order-drop-off`;
+    return 100;
   }
   if (type === 'Cancelled') {
-    return `${temp} icon-order-cancelled`;
+    return 100;
   }
   if (type === 'PickedUp') {
-    return `${temp} icon-order-picked-up`;
+    return 60;
   }
-  return `${temp} icon-order-delivered`;
+  return 20;
 }
+
 function getStatusText(type: Status) {
   if (type === 'New') {
     return 'New';
@@ -52,7 +59,7 @@ function getStatusText(type: Status) {
     return 'Order Is In Delivery';
   }
   if (type === 'Delivered') {
-    return 'Order In Progress';
+    return 'Order Delivered';
   }
   if (type === 'Cancelled') {
     return 'Order Is Cancelled';
@@ -63,46 +70,18 @@ function getStatusText(type: Status) {
   return 'New';
 }
 
-function getStatusClasses(type: Status) {
-  const statusClass =
-    'inline-flex min-h-8 min-w-32 items-center text-xs font-semibold';
-  if (type === 'New') {
-    return `${statusClass} text-[#4283f4]`;
-  }
-  if (type === 'Processing') {
-    return `${statusClass} text-[#c367f1]`;
-  }
-  if (type === 'In-Delivery') {
-    return `${statusClass} text-[#2cd285]`;
-  }
-  if (type === 'Delivered') {
-    return `${statusClass} text-[#ff8c39]`;
-  }
-  if (type === 'Cancelled') {
-    return `${statusClass} text-[#ee0404]`;
-  }
-  if (type === 'PickedUp') {
-    return `${statusClass} text-[#c367f1]`;
-  }
-  return `${statusClass} text-[#fd2f2f]`;
-}
-
 const getIcon = ORDER_STATUSES.map((status: any, index) => {
   let icon;
   if (status.iconText === 'AssignmentTurnedInOutlinedIcon') {
-    icon = (
-      <AssignmentTurnedInOutlinedIcon className={`text-xl ${status.color}`} />
-    );
+    icon = <AssignmentTurnedInOutlinedIcon />;
   } else if (status.iconText === 'FilterNoneOutlinedIcon') {
-    icon = <FilterNoneOutlinedIcon className={`text-xl ${status.color}`} />;
+    icon = <FilterNoneOutlinedIcon />;
   } else if (status.iconText === 'LocationOnOutlinedIcon') {
-    icon = <LocationOnOutlinedIcon className={`text-xl ${status.color}`} />;
+    icon = <LocationOnOutlinedIcon />;
   } else if (status.iconText === 'DomainVerificationOutlinedIcon') {
-    icon = (
-      <DomainVerificationOutlinedIcon className={`text-xl ${status.color}`} />
-    );
+    icon = <DomainVerificationOutlinedIcon />;
   } else if (status.iconText === 'AccessTimeIcon') {
-    icon = <AccessTimeIcon className={`text-xl ${status.color}`} />;
+    icon = <AccessTimeIcon />;
   }
 
   return (
@@ -145,22 +124,54 @@ function TableRow({ id, appOrderNumber, type, date, progress, item }: Props) {
           {ORDER_STATUSES.map(
             (status, index) =>
               type === status.status && (
-                <div className={getProgressClasses(type)} key={index}>
+                <div
+                  className={cn(
+                    'relative inline-flex',
+                    type === 'New' && 'text-[#4283f4]',
+                    type === 'Processing' && 'text-[#2cd285]',
+                    type === 'In-Delivery' && 'text-[#fd2f2f]',
+                    type === 'Delivered' && 'text-[#ff8c39]',
+                    type === 'Cancelled' && 'text-[#ee0404]',
+                    type === 'PickedUp' && 'text-[#c367f1]'
+                  )}
+                  key={index}
+                >
                   <CircularProgress
-                    thickness={1.5}
+                    thickness={2}
                     className="z-10"
                     variant="determinate"
-                    value={(index + 1) * (100 / 6)}
-                    color={getColorFromCode(status.color)}
+                    classes={{
+                      colorPrimary: cn(
+                        'relative inline-flex',
+                        type === 'New' && 'text-[#4283f4]',
+                        type === 'Processing' && 'text-[#2cd285]',
+                        type === 'In-Delivery' && 'text-[#fd2f2f]',
+                        type === 'Delivered' && 'text-[#ff8c39]',
+                        type === 'Cancelled' && 'text-[#ee0404]',
+                        type === 'PickedUp' && 'text-[#c367f1]'
+                      ),
+                    }}
+                    value={getProgress(type)}
+                    // color={getColorFromCode(status.color)}
                   />
                   <CircularProgress
-                    thickness={1.5}
+                    thickness={2}
                     className="absolute z-0 text-neutral-200"
                     variant="determinate"
                     value={100}
                     color="inherit"
                   />
-                  <div className="absolute inset-0 flex items-center justify-center">
+                  <div
+                    className={cn(
+                      'absolute inset-0 flex items-center justify-center text-lg',
+                      type === 'New' && 'text-[#4283f4]',
+                      type === 'Processing' && 'text-[#2cd285]',
+                      type === 'In-Delivery' && 'text-[#fd2f2f]',
+                      type === 'Delivered' && 'text-[#ff8c39]',
+                      type === 'Cancelled' && 'text-[#ee0404]',
+                      type === 'PickedUp' && 'text-[#c367f1]'
+                    )}
+                  >
                     {getIcon[index]}
                   </div>
                 </div>
@@ -173,7 +184,19 @@ function TableRow({ id, appOrderNumber, type, date, progress, item }: Props) {
       </td>
       <td>{dayjs(date).format('HH:mm , DD-MM-YYYY')}</td>
       <td>
-        <div className={getStatusClasses(type)}>{getStatusText(type)}</div>
+        <div
+          className={cn(
+            'inline-flex min-h-8 min-w-32 items-center text-xs font-semibold',
+            type === 'New' && 'text-[#4283f4]',
+            type === 'Processing' && 'text-[#c367f1]',
+            type === 'In-Delivery' && 'text-[#2cd285]',
+            type === 'Delivered' && 'text-[#ff8c39]',
+            type === 'Cancelled' && 'text-[#ee0404]',
+            type === 'PickedUp' && 'text-[#c367f1]'
+          )}
+        >
+          {getStatusText(type)}
+        </div>
       </td>
       <td>{item} Items</td>
       <td>

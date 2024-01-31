@@ -12,7 +12,7 @@ const getTenantWithController = () => {
   return () => {
     getTenantController.abort();
     getTenantController = new AbortController();
-    return network.get<GetTenantDetailsResponse>(API_PATHS.getTenant, {
+    return network.get<GetTenantDetailsResponse>(API_PATHS.getTenant(), {
       signal: getTenantController.signal,
       headers: getHeaders(),
     });
@@ -24,7 +24,7 @@ const getTenantConfigWithController = () => {
   return () => {
     getTenantConfigController.abort();
     getTenantConfigController = new AbortController();
-    return network.get<GetTenantConfigResponse>(API_PATHS.getTenantConfig, {
+    return network.get<GetTenantConfigResponse>(API_PATHS.getTenantConfig(), {
       signal: getTenantConfigController.signal,
       headers: getHeaders(),
     });

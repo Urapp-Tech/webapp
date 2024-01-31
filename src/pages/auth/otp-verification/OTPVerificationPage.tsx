@@ -7,7 +7,7 @@ import assets from '../../../assets';
 import { login } from '../../../redux/features/authStateSlice';
 import { useAppDispatch } from '../../../redux/redux-hooks';
 import authService from '../../../services/auth.service';
-import { tenantId } from '../../../utilities/constant';
+import { getTenantId } from '../../../utilities/constant';
 import { getItem, removeItem } from '../../../utilities/local-storage';
 import promiseHandler from '../../../utilities/promise-handler';
 
@@ -19,7 +19,7 @@ function OTPVerificationPage() {
   const onsubmit = async () => {
     const code = Object.assign(signUpData, {
       otp: OTP,
-      tenant: tenantId,
+      tenant: getTenantId(),
       createdDate: dayjs().format(),
       updatedDate: dayjs().format(),
     });
@@ -60,7 +60,7 @@ function OTPVerificationPage() {
               borderRadius: '0.625rem',
               outlineStyle: 'solid',
               outlineWidth: '1px',
-              outlineColor: '#e5e5e5',
+              outlineColor: '#E5E5E5',
               fontFamily: 'Open Sans',
               fontSize: '1.25rem',
               lineHeight: '1.5rem',

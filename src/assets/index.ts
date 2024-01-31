@@ -16,15 +16,16 @@ import forgotPassImage from './images/forgotPass-screen-img.svg';
 import googleMapMarker from './images/google-map-marker.png';
 import iconMap from './images/icon-map.png';
 import loginImage from './images/login-screen-img.svg';
+import card from './images/logo-bank-card.png';
 import cash from './images/logo-cash.png';
 import mastercard from './images/logo-mastercard.png';
 import paypal from './images/logo-paypal.png';
 import visa from './images/logo-visa.svg';
 import logo from './images/logo.svg';
 import registerImage from './images/register-screen-img.svg';
+import speechBubble from './images/speech-bubble.png';
 import logoBlack from './images/ur-laundry-logo-black.svg';
 import logoWhite from './images/ur-laundry-logo-white.svg';
-import card from './images/logo-bank-card.png';
 
 import clothes from './temp-images/clothes.png';
 import frocks1 from './temp-images/frocks-1.png';
@@ -50,57 +51,58 @@ import wash from './temp-images/wash.png';
 
 const assets = {
   css: {
+    accountCss,
     authCss,
-    topbarCss,
-    sidebarCss,
+    cartCss,
     dashboardCss,
+    deliveryAddressCss,
+    generalCss,
     modalAddToCartCss,
     ordersCss,
-    generalCss,
-    accountCss,
-    cartCss,
-    deliveryAddressCss,
     paymentSettingsCss,
+    sidebarCss,
+    topbarCss,
   },
   images: {
+    bubbleBackground,
+    card,
+    cash,
+    facebook,
+    forgotPassImage,
+    googleMapMarker,
+    iconMap,
+    loginImage,
     logo,
     logoBlack,
     logoWhite,
-    loginImage,
-    registerImage,
-    forgotPassImage,
-    bubbleBackground,
-    facebook,
-    cash,
     mastercard,
-    visa,
     paypal,
-    googleMapMarker,
-    iconMap,
-    card,
+    registerImage,
+    speechBubble,
+    visa,
   },
   tempImages: {
-    home,
+    clothes,
     curtain,
     dryCleaning,
-    ironing,
-    jacket,
-    laundry,
-    itemPlaceholderImage,
-    clothes,
-    wash,
-    pants,
-    shirt,
-    map,
-    jacket1,
     frocks1,
+    home,
+    ironing,
+    itemPlaceholderImage,
+    jacket,
+    jacket1,
+    laundry,
+    map,
     neckScarf1,
     neckScarf2,
+    pants,
     pants1,
     printedTShirt1,
     printedTShirt2,
-    shirt2,
+    shirt,
     shirt1,
+    shirt2,
+    wash,
   },
 };
 

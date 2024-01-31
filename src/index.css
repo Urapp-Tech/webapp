@@ -1,1 +1,10 @@
 @import './App.css';
+
+:root {
+  --color-faded: #6a6a6a;
+  --color-primary: #1d1d1d;
+  --color-secondary: #1a1a1a;
+  --color-background: #f0f0f0;
+  --color-foreground: #fff;
+  --color-secondary2: #003e80;
+}

@@ -1,17 +1,7 @@
-/*
-  Based on TailwindCSS recommendations,
-  consider using classes instead of the `@apply` directive
-  @see https://tailwindcss.com/docs/reusing-styles#avoiding-premature-abstraction
-*/
 .modal-add-to-cart .MuiModal-backdrop {
   @apply backdrop-blur-[25px];
 }
-.modal-add-to-cart .btn-close {
-  @apply absolute -right-0 -top-0 -top-3 right-[-15px] z-[1] flex h-11 w-11 items-center justify-center rounded-full bg-[var(--dark-200)] text-xl font-semibold text-white;
-}
-.modal-add-to-cart .btn-close:hover {
-  @apply bg-[var(--dark-200)];
-}
+
 .modal-add-to-cart .main-grid {
   @apply grid grid-cols-1 md:grid-cols-2;
 }
@@ -31,7 +21,7 @@
   @apply mb-2 text-xl font-semibold leading-tight text-[var(--dark-100)];
 }
 .modal-add-to-cart .product-desc {
-  @apply mb-3 text-sm font-normal text-[var(--dark-300)] md:mb-5;
+  @apply mb-3 text-sm font-normal text-faded md:mb-5;
 }
 .modal-add-to-cart .flex-container {
   @apply flex items-center justify-between;
@@ -43,13 +33,13 @@
   @apply mb-0 text-xl font-bold leading-none text-[var(--dark-100)];
 }
 .modal-add-to-cart .price .text {
-  @apply mb-0 text-sm font-normal leading-none text-[var(--dark-300)];
+  @apply mb-0 text-sm font-normal leading-none text-faded;
 }
 .modal-add-to-cart .count {
   @apply flex items-center gap-x-1.5;
 }
 .modal-add-to-cart .count .number {
-  @apply font-kumbh-sans mb-0 text-xl font-bold leading-none text-[var(--dark-100)];
+  @apply mb-0 font-kumbh-sans text-xl font-bold leading-none text-[var(--dark-100)];
 }
 .modal-add-to-cart .btn-increment,
 .modal-add-to-cart .btn-decrement {
@@ -78,13 +68,13 @@
   @apply px-0 pb-4 pt-0 md:px-2;
 }
 .product-accordion .accordion-item .accordion-body .desc {
-  @apply mb-0 text-sm font-normal text-[var(--dark-300)];
+  @apply mb-0 text-sm font-normal text-faded;
 }
 .modal-add-to-cart .modal-footer {
   @apply justify-start px-4 py-4;
 }
 .modal-add-to-cart .modal-footer .btn-add {
-  @apply font-kumbh-sans w-full rounded-[0.625rem] bg-[var(--dark-200)] text-base font-semibold capitalize text-white md:w-1/2;
+  @apply w-full rounded-[0.625rem] bg-primary font-kumbh-sans text-base font-semibold capitalize text-white md:w-1/2;
 }
 @media only screen and (max-width: 767.98px) {
   .modal-add-to-cart .product-img {
