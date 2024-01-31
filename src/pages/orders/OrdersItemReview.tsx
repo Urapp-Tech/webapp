@@ -68,7 +68,6 @@ function OrdersItemsReview({
     }
     if (orderReviewItemsError) {
       setAlertSeverity('error');
-      console.log('orderReviewItemsError :>> ', orderReviewItemsError);
       setAlertMessage('Unknown Error Occurred');
       setShowAlert(true);
       return;

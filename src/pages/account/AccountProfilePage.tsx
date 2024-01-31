@@ -108,7 +108,7 @@ function AccountProfilePage() {
   };
 
   const onSubmitError = (fieldErrors: FieldErrors<FieldValues>) => {
-    console.log('fieldErrors :>> ', fieldErrors);
+    console.error('fieldErrors :>> ', fieldErrors);
   };
 
   return isLoading ? (

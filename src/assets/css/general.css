@@ -8,7 +8,7 @@
   @apply mb-4 text-base font-semibold leading-none text-[color:var(--dark)];
 }
 .general-page .general-card .text {
-  @apply text-faded mb-5 text-sm font-normal leading-normal;
+  @apply mb-5 text-sm font-normal leading-normal text-faded;
 }
 .faqs-accordion .accordion-item {
   @apply m-0 rounded-t-none border-t-[0.5px] border-solid border-t-[color:var(--light-400)] shadow-none before:hidden first-of-type:rounded-t-none last-of-type:rounded-bl-none last-of-type:rounded-br-none last-of-type:border-b-[0.5px] last-of-type:border-solid last-of-type:border-b-[color:var(--light-400)];
@@ -20,11 +20,11 @@
   @apply min-h-[auto];
 }
 .faqs-accordion .accordion-item .accordion-header .heading {
-  @apply text-faded mb-0 text-sm font-normal leading-none;
+  @apply mb-0 text-sm font-normal leading-none text-faded;
 }
 .faqs-accordion .accordion-item .accordion-body {
   @apply px-0 pb-4 pt-0;
 }
 .faqs-accordion .accordion-item .accordion-body .desc {
-  @apply text-faded mb-0 text-sm font-normal leading-normal;
+  @apply mb-0 text-sm font-normal leading-normal text-faded;
 }

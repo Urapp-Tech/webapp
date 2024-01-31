@@ -4,7 +4,7 @@ import { setItem } from './local-storage';
 // export const BASE_URL = import.meta.env.VITE_SERVICE_BASE_URL;
 export const LIVE_URL = 'https://dev.urapptech.com';
 export const TAQI_DEV = 'http://192.168.8.68:3200';
-export const BASE_URL = TAQI_DEV;
+export const BASE_URL = LIVE_URL;
 
 export const APP_USER_PREFIXES = 'app-user';
 export const ORDER_STATUS = {
@@ -30,7 +30,6 @@ export const setTenantId = (data: string) => {
   tenantId = data;
 };
 export const getTenantId = () => {
-  console.log('getTenantId tenantId :>> ', tenantId);
   return tenantId;
 };
 
