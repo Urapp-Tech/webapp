@@ -27,7 +27,7 @@
   @apply min-h-[30px] w-full rounded-[5px] border border-solid border-[color:var(--light-400)] px-3 py-[5px] text-sm font-normal text-[var(--dark-100)] shadow-none outline-none;
 }
 .tab-content-card .btn-submit {
-  @apply min-h-10 w-full rounded-[0.625rem] bg-primary px-[30px] py-1.5 text-base font-semibold capitalize text-foreground;
+  @apply min-h-[10px] w-full rounded-[0.625rem] bg-primary px-[30px] py-1.5 text-base font-semibold capitalize text-foreground;
 }
 .tab-content-card .btn-submit:hover {
   @apply bg-primary;

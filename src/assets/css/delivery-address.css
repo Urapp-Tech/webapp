@@ -132,7 +132,7 @@
   @apply text-white;
 }
 .select-location .btn-add-address {
-  @apply mt-7 min-h-10 w-full rounded-[0.625rem] bg-primary px-[30px] py-1.5 font-kumbh-sans text-xl font-semibold capitalize text-white;
+  @apply mt-7 min-h-[10px] w-full rounded-[0.625rem] bg-primary px-[30px] py-1.5 font-kumbh-sans text-xl font-semibold capitalize text-white;
 }
 .select-location .btn-add-address:hover {
   @apply bg-primary;

@@ -109,7 +109,7 @@
 }
 .order-details-card .btn-cancel-order {
   @apply min-w-[220px];
-  @apply min-h-10 rounded-[0.625rem] bg-primary font-open-sans text-sm font-semibold capitalize text-white;
+  @apply min-h-[10px] rounded-[0.625rem] bg-primary font-open-sans text-sm font-semibold capitalize text-white;
 }
 .order-details-card .btn-cancel-order:hover {
   @apply bg-primary text-white;
