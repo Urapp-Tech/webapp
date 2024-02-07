@@ -400,7 +400,7 @@ function MyBasketPage() {
                   </p>
                   <FormControl variant="standard" size="small">
                     <Input
-                      className="min-h-10 min-w-60 rounded-[0.625rem] border border-solid border-[var(--light-400)] p-2 text-xs font-normal text-faded"
+                      className="min-w-60 min-h-[10px] rounded-[0.625rem] border border-solid border-[var(--light-400)] p-2 text-xs font-normal text-faded"
                       disableUnderline
                       inputProps={{
                         placeholder: 'Enter Promo Code',

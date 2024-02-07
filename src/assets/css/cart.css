@@ -96,7 +96,7 @@
   @apply text-sm font-bold leading-tight text-[var(--dark-100)];
 }
 .cart-checkout-card .btn-checkout {
-  @apply min-h-10 w-full rounded-[0.625rem] bg-primary font-open-sans text-base font-semibold capitalize text-white;
+  @apply min-h-[10px] w-full rounded-[0.625rem] bg-primary font-open-sans text-base font-semibold capitalize text-white;
 }
 .cart-checkout-card .btn-checkout:hover {
   @apply bg-primary text-white;
@@ -125,7 +125,7 @@
   @apply gap-x-5 p-5;
 }
 .modal-order-success .modal-footer .btn-close {
-  @apply m-0 min-h-10 w-full rounded-[0.625rem] border border-solid border-[var(--dark-200)] bg-primary font-open-sans text-base font-semibold capitalize text-white;
+  @apply m-0 min-h-[10px] w-full rounded-[0.625rem] border border-solid border-[var(--dark-200)] bg-primary font-open-sans text-base font-semibold capitalize text-white;
 }
 /* Order Success Modal */
 

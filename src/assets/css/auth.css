@@ -70,10 +70,10 @@
   @apply text-sm font-semibold text-white;
 }
 .auth-main .auth-form .btn-submit {
-  @apply min-h-10 w-full rounded-[0.625rem] bg-white text-base font-semibold text-[var(--dark-100)] shadow-none outline-0;
+  @apply min-h-[10px] w-full rounded-[0.625rem] bg-white text-base font-semibold text-[var(--dark-100)] shadow-none outline-0;
 }
 .auth-main .auth-form .btn-login-fb {
-  @apply mt-5 flex min-h-10 w-full items-center justify-center rounded-[0.625rem] bg-[#255D9A] text-base font-semibold text-white shadow-none outline-0;
+  @apply mt-5 flex min-h-[10px] w-full items-center justify-center rounded-[0.625rem] bg-[#255D9A] text-base font-semibold text-white shadow-none outline-0;
 }
 
 .auth-main .auth-form .login-other-options .text {
@@ -132,7 +132,7 @@
 }
 @media only screen and (max-width: 1279.98px) and (min-width: 1024px) {
   .auth-main .auth-form .custom-width {
-    @apply max-w-80;
+    @apply max-w-[80%];
   }
   .auth-main .join-community .content-container {
     @apply rounded-[0rem_0rem_20.25rem_20.25rem];
@@ -140,7 +140,7 @@
 }
 @media only screen and (max-width: 1023.98px) and (min-width: 768px) {
   .auth-main .auth-form .custom-width {
-    @apply max-w-72;
+    @apply max-w-[72%];
   }
 }
 @media only screen and (max-width: 767.98px) {
