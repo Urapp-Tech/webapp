@@ -53,13 +53,13 @@ function NotificationPopover({
     if (!getNotificationListResult) {
       setAlertSeverity('error');
       setAlertMessage(getNotificationListError.message);
-      setShowAlert(true);
+      // setShowAlert(true);
       return;
     }
     if (!getNotificationListResult.data.success) {
       setAlertSeverity('error');
       setAlertMessage(getNotificationListResult.data.message);
-      setShowAlert(true);
+      // setShowAlert(true);
       return;
     }
     setNotificationList(getNotificationListResult.data.data.notifications);

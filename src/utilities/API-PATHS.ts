@@ -138,6 +138,19 @@ const API_PATHS = {
       `/api/v1/system/config/get/theme/${getDomainName()}`,
       BASE_URL
     ).toString(),
+
+  ratingReviews: (homeCatItemId: string, page: string, size: string) =>
+    new URL(
+      `/api/v1/app/rating/reviews/${homeCatItemId}/${page}/${size}`,
+      BASE_URL
+    ).toString(),
+
+  ratingReviewStarList: (homeCatItemId: string) =>
+    new URL(
+      `/api/v1/app/rating/reviews/${homeCatItemId}`,
+      BASE_URL
+    ).toString(),
+
 } as const;
 
 export default API_PATHS;

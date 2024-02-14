@@ -18,6 +18,7 @@ import cartService from '../../services/cart.service';
 import categoryService from '../../services/category.service';
 import promiseHandler from '../../utilities/promise-handler';
 import HomePagePopup from './HomePagePopup';
+import { useNavigate } from 'react-router-dom';
 
 function getCategoryClasses(isActive: boolean) {
   const classes = 'item';
@@ -56,6 +57,7 @@ function HomePage() {
   const cartData = useAppSelector((state) => state.cartState.cartData);
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -72,6 +74,8 @@ function HomePage() {
 
   const { isLoading: isSubCategoryLoading, data: subCategoryData } =
     subCategoryResult;
+
+  console.log("subCategoryData", subCategoryData);
 
   useEffect(() => {
     if (!isCategoryLoading && categoryData && categoryData.success) {
@@ -172,7 +176,7 @@ function HomePage() {
       return (
         <CategoriesCard
           categories={categoryData.data}
-          onClick={(id: string) => subCategoryTrigger(id)}
+          onClick={(id: string) => subCategoryTrigger({ menuId: id })}
         />
       );
     }
@@ -230,11 +234,14 @@ function HomePage() {
                   key={item.id}
                   className="relative rounded-[0.625rem] bg-white px-2.5 pb-2.5 pt-4 md:px-3.5 md:pt-5"
                 >
-                  <img
-                    className="mb-4 aspect-[4/3] w-full object-contain md:mb-6"
-                    src={item.icon}
-                    alt=""
-                  />
+                  <div>
+                    <img
+                      className="cursor-pointer mb-4 aspect-[4/3] w-full object-contain md:mb-6"
+                      src={item.icon}
+                      alt=""
+                      onClick={() => navigate(`../detail/${item.id}`, { state: { menuId: item.homeCategory, itemId: item.id } })}
+                    />
+                  </div>
                   <div className="flex flex-wrap items-center justify-between">
                     <h5 className="mb-2 basis-full text-center text-base font-semibold leading-none text-secondary sm:mb-3 sm:text-left">
                       {item.name}

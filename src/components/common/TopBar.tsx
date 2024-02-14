@@ -30,11 +30,12 @@ function TopBar() {
     const [getNotificationListResult, getNotificationListError] =
       await promiseHandler(getNotificationListPromise);
     if (!getNotificationListResult) {
-      console.error('error', getNotificationListError.message);
+      console.error('error1', getNotificationListError.message);
       return;
     }
+
     if (!getNotificationListResult.data.success) {
-      console.error('error', getNotificationListResult.data.message);
+      console.error('error2', getNotificationListResult.data.message);
       return;
     }
     setNotificationList(getNotificationListResult.data.data.notifications);
@@ -45,6 +46,9 @@ function TopBar() {
       getNotificationList();
     }
   }, [user]);
+
+  console.log("error Notification List is ",notificationElement)
+
   return (
     <AppBar position="fixed" className="!w-full !bg-primary !shadow-none">
       <Toolbar
