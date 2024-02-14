@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { store } from '../redux/store';
 import { logout } from '../redux/features/authStateSlice';
+import { BASE_URL } from '../utilities/constant';
 
 const network = axios.create();
 
@@ -19,5 +20,20 @@ network.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export const getWithQueryParam = (
+  endPoint: string,
+  queryParams: Record<string, string> = {}
+) => {
+  const url = new URL(endPoint, BASE_URL);
+  Object.entries(queryParams).forEach(([key, value]) => {
+    url.searchParams.append(key, value);
+  });
+  return axios.get(url.toString(), {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  });
+};
 
 export default network;

@@ -24,6 +24,7 @@ import MainLayout from '../components/layout/MainLayout';
 // import AccountSettingsPage from '../pages/account/AccountSettingPage';
 import Loader from '../components/common/Loader';
 import Page404 from '../pages/404/404';
+import HomeItemDetail from '../pages/home/HomeItemDetail';
 
 const LoginPage = lazy(() => import('../pages/auth/login/LoginPage'));
 const SignUpPage = lazy(() => import('../pages/auth/sign-up/SignUpPage'));
@@ -129,6 +130,14 @@ export const routeObjects: Array<RouteObject> = [
         element: (
           <Suspense fallback={<Loader />}>
             <HomePage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'detail/:itemId',
+        element: (
+          <Suspense fallback={<Loader />}>
+            <HomeItemDetail />
           </Suspense>
         ),
       },
@@ -239,6 +248,7 @@ export const routeObjects: Array<RouteObject> = [
           </Suspense>
         ),
       },
+
     ],
   },
 ];

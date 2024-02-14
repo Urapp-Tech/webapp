@@ -8,3 +8,12 @@
   --color-foreground: #fff;
   --color-secondary2: #003e80;
 }
+
+.boxShadow {
+  box-shadow: none !important;
+  position: static !important;
+}
+
+.css-1m4ljmh-MuiTypography-root {
+  flex-grow: 1 !important;
+}

@@ -59,7 +59,7 @@ function RatingCard({
       <button
         type="button"
         className="w-full rounded-md bg-primary py-1 text-base font-semibold text-foreground"
-        onClick={() => submitReview(data, 'Completed', comment, rating)}
+        onClick={() => submitReview(data, 'Completed', comment, rating??1)}
       >
         Submit
       </button>

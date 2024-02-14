@@ -1,7 +1,7 @@
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
+import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
 import ClearIcon from '@mui/icons-material/Clear';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -28,6 +28,8 @@ type Props = {
 };
 
 function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
+  console.log("data",data);
+  
   const {
     alertMessage,
     setAlertMessage,
@@ -62,6 +64,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
   };
 
   const addToBasketHandler = (tempCartData: any) => {
+    console.log("tempCartData",tempCartData);
     dispatch(addToCart(tempCartData));
     setOpen(false);
     setCount(1);

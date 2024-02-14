@@ -4,7 +4,8 @@ import { setItem } from './local-storage';
 // export const BASE_URL = import.meta.env.VITE_SERVICE_BASE_URL;
 export const LIVE_URL = 'https://dev.urapptech.com';
 export const TAQI_DEV = 'http://192.168.8.68:3200';
-export const BASE_URL = LIVE_URL;
+export const RAFAY_DEV = 'http://192.168.8.97:3200';
+export const BASE_URL = RAFAY_DEV;
 
 export const APP_USER_PREFIXES = 'app-user';
 export const ORDER_STATUS = {

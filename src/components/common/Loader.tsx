@@ -1,13 +1,25 @@
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
-function Loader() {
+type Props = {
+  type?: string;
+}
+
+function Loader({ type }: Props) {
   return (
     <>
-      <div className="h-full w-full" />
-      <Backdrop open sx={{ color: '#F9FAFB', zIndex: 9999 }}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      {type === "spinner" ?
+        <div>
+          <CircularProgress color="inherit" size={20}/>
+        </div>
+        :
+        <>
+          <div className="h-full w-full" />
+          <Backdrop open sx={{ color: '#F9FAFB', zIndex: 9999 }}>
+            <CircularProgress color="inherit" />
+          </Backdrop>
+        </>
+      }
     </>
   );
 }
