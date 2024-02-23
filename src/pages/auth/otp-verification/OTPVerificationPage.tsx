@@ -10,6 +10,7 @@ import authService from '../../../services/auth.service';
 import { getTenantId } from '../../../utilities/constant';
 import { getItem, removeItem } from '../../../utilities/local-storage';
 import promiseHandler from '../../../utilities/promise-handler';
+import { Button, Input } from '@mui/material';
 
 function OTPVerificationPage() {
   const [OTP, setOTP] = useState('');
@@ -40,7 +41,7 @@ function OTPVerificationPage() {
 
   return (
     <>
-      <div className="fixed-at-top-left">
+      {/* <div className="fixed-at-top-left">
         <NavLink to="../login" className="go-back">
           <ArrowBackRoundedIcon className="icon-arrow" />
         </NavLink>
@@ -96,7 +97,84 @@ function OTPVerificationPage() {
           </div>
           <img className="" src={assets.images.forgotPassImage} alt="" />
         </div>
+      </div> */}
+        <div
+      className="flex h-full w-full items-center justify-center bg-[#F0F0F0]
+  "
+    >
+      <div className="mx-auto  flex w-full  items-start justify-around max-[1560px]:items-center">
+        <div className="w-[30%] self-start px-[30px]">
+          <div className="max-h-[29px] w-full max-w-[150px] px-[25px] py-[40px]">
+            <img
+              src={assets.images.logo}
+              alt="urlaundry"
+              className="h-auto w-full object-contain"
+            />
+          </div>
+          <div className="pt-[100px]">
+            {/* <h1 className='text-[36px] text-black leading-[normal] font-bold capitalize mb-4 text-center'>log in</h1> */}
+            <div className=" text-center">
+              <img
+                src={assets.images.otpMSg}
+                alt="email"
+                className="mx-auto h-[80px] w-[80px]"
+              />
+            </div>
+            <div className="mt-2 ">
+              <span className="block text-center text-[14px] font-normal leading-[normal] text-[#6A6A6A]">
+                An 4 digit code has been sent to
+              </span>
+              <span className="block text-center text-[14px] font-medium leading-[normal] text-[#6A6A6A]">
+                Vincent-bo@gmail.com
+              </span>
+              <div className="mt-[42px] w-full text-center">
+              
+                <Input
+                  type="text"
+                  placeholder="3"
+                  className="otp-v border-1 mr-[14px] h-[60px] w-[60px] rounded-[10px] border-solid border-[#949EAE] text-[36px] font-semibold leading-[normal] text-[#1a1a1a]"
+                />
+                <Input
+                  type="text"
+                  placeholder="3"
+                  className="otp-v border-1 mr-[14px] h-[60px] w-[60px] rounded-[10px] border-solid border-[#949EAE] text-[36px] font-semibold leading-[normal] text-[#1a1a1a]"
+                />
+                <Input
+                  type="text"
+                  placeholder="3"
+                  className="otp-v border-1 mr-[14px] h-[60px] w-[60px] rounded-[10px] border-solid border-[#949EAE] text-[36px] font-semibold leading-[normal] text-[#1a1a1a]"
+                />
+                <Input
+                  type="text"
+                  placeholder="3"
+                  className="otp-v border-1 text-center mr-2 h-[60px] w-[60px] rounded-[10px] border-solid border-[#949EAE] text-[36px] font-semibold leading-[normal] text-[#1a1a1a]"
+                />
+              </div>
+
+              <div className="mt-[100px] w-full">
+                <Button
+                  className="w-full rounded-[10px] bg-neutral-900 px-16 py-2 text-gray-50"
+                  variant="contained"
+                  color="inherit"
+                  title="get code"
+                >
+                  Submit
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="w-[70%] px-3 py-2">
+          <div className="mx-auto  flex max-h-[834px] items-center justify-center overflow-hidden rounded-lg max-[1560px]:max-h-[96vh]">
+            <img
+              src={assets.images.forgotBg}
+              alt="urlaundry"
+              className="h-full w-full object-contain"
+            />
+          </div>
+        </div>
       </div>
+    </div>
     </>
   );
 }
