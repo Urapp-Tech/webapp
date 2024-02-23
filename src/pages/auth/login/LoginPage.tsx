@@ -38,6 +38,7 @@ function LoginPage() {
   const cartItem = useAppSelector((state: any) => state.cartState.cartItems);
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoader, setIsLoader] = useState(false);
   const dispatch = useAppDispatch();
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (
@@ -95,18 +96,21 @@ function LoginPage() {
   const password = register('password');
 
   const submitHandler = async (data: LoginPayload) => {
+    setIsLoader(true);
     const loginPromise = authService.loginService(data);
     const [loginResponse, loginError] = await promiseHandler(loginPromise);
     if (!loginResponse) {
       setAlertSeverity('error');
       setAlertMessage(loginError.message);
       setShowAlert(true);
+      setIsLoader(false);
       return;
     }
     if (!loginResponse.data.success) {
       setAlertSeverity('error');
       setAlertMessage(loginResponse.data.message);
       setShowAlert(true);
+      setIsLoader(false);
       return;
     }
     dispatch(login(loginResponse.data.data));
@@ -115,6 +119,7 @@ function LoginPage() {
     } else {
       navigate('/dashboard/home');
     }
+    setIsLoader(false);
     const addressPromise = addressService.getUserAddress();
     const [addressResult, addressError] = await promiseHandler(addressPromise);
     if (!addressResult) {
@@ -255,7 +260,13 @@ function LoginPage() {
           <img className="" src={assets.images.loginImage} alt="" />
         </div>
       </div> */}
-      <div className="flex  h-full w-full items-center justify-center bg-[#F0F0F0]">
+      <AlertBox
+        msg={alertMessage}
+        setSeverity={alertSeverity}
+        alertOpen={showAlert}
+        setAlertOpen={setShowAlert}
+      />
+      <div className="flex h-full w-full items-center justify-center bg-[#F0F0F0]">
         <div className="mx-auto  flex w-full  items-center justify-around max-[1560px]:items-center">
           <div className="w-[30%]  self-start px-[30px]">
             <div className="max-h-[29px] w-full max-w-[150px] px-[25px] py-[40px]">
@@ -266,13 +277,11 @@ function LoginPage() {
                 className="h-auto w-full object-contain"
               />
             </div>
-            <div className="pt-[150px]">
+            <div className="xl:pt-[100px] 2xl:pt-[150px]">
               <h1 className="mb-4 text-center text-[36px] font-bold capitalize leading-[normal] text-black">
                 log in
               </h1>
-              <form
-                // onSubmit={handleSubmit(loginHandler)}
-              >
+              <form>
                 <div className="">
                   <div className="form-group w-full">
                     <span className='text-[14px] font-medium leading-[normal] text-[#06152B]'>
@@ -281,48 +290,49 @@ function LoginPage() {
                     <FormControl className="my-1 w-full" variant="standard">
                       <Input
                         className="input-with-icon"
+                        placeholder='urlaundry@gmail.com'
                         id="email"
                         type="email"
-                        {...register('email', {
-                          required: 'Please enter your email.',
-                        })}
+                        onChange={email.onChange}
+                        onBlur={email.onBlur}
+                        name={email.name}
+                        ref={email.ref}
                         disableUnderline
                       />
-                      {/* {errors.email && (
-                        <ErrorSpanBox error={errors.email?.message} />
-                      )} */}
+                      {errors.email && (
+                        <span className="text-red-500">Email is required</span>
+                      )}
                     </FormControl>
                   </div>
                   <div className="form-group w-full">
-                  <span className='text-[14px] font-medium leading-[normal] text-[#06152B]'>Password</span>
+                    <span className='text-[14px] font-medium leading-[normal] text-[#06152B]'>Password</span>
                     <FormControl className="my-1 w-full" variant="filled">
                       <Input
                         className="input-with-icon after:border-b-secondary"
                         id="password"
+                        placeholder='*******'
                         type={showPassword ? 'text' : 'password'}
-                        {...register('password', {
-                          required: 'Please enter your password.',
-                        })}
                         endAdornment={
                           <InputAdornment position="end">
                             <IconButton
+                              className="field-icon"
                               aria-label="toggle password visibility"
                               onClick={handleClickShowPassword}
                               onMouseDown={handleMouseDownPassword}
                             >
-                              {showPassword ? (
-                                <Visibility />
-                              ) : (
-                                <VisibilityOff />
-                              )}
+                              {showPassword ? <VisibilityOff /> : <Visibility />}
                             </IconButton>
                           </InputAdornment>
                         }
+                        onChange={password.onChange}
+                        onBlur={password.onBlur}
+                        name={password.name}
+                        ref={password.ref}
                         disableUnderline
                       />
-                      {/* {errors.password && (
-                        <ErrorSpanBox error={errors.password?.message} />
-                      )} */}
+                      {errors.password && (
+                        <span className="text-red-500">Password is required</span>
+                      )}
                     </FormControl>
                   </div>
                   <div className="form-group text-end mt-1">
@@ -333,22 +343,37 @@ function LoginPage() {
                       Forget Password?
                     </NavLink>
                   </div>
-                  <div className="mt-8 w-full ">
+                  <div className="mt-2 w-full">
                     <Button
-                      // disabled={!!isLoader}
+                      disabled={!!isLoader}
                       className="w-full bg-neutral-900 px-16 py-2 text-gray-50"
                       variant="contained"
                       color="inherit"
                       title="Login"
-                      type="submit"
+                      onClick={handleSubmit(submitHandler)}
                     >
                       Login
-                      {/* {!isLoader ? (
-                        `Login`
-                      ) : (
-                        <CircularProgress color="inherit" size={24} />
-                      )} */}
                     </Button>
+                    <FacebookLogin
+                      appId="246641688446576"
+                      onSuccess={handleLoginWithFacebook}
+                      render={({ onClick }) => (
+                        <Button
+                          className="w-full mt-3 bg-blue-900 px-16 py-2 text-gray-50"
+                          variant="contained"
+                          color="inherit"
+                          title="Login with Facebook"
+                          onClick={onClick}
+                        >
+                          <img
+                            className="mr-2.5 w-2.5"
+                            src={assets.images.facebook}
+                            alt=""
+                          />
+                          Login with Facebook
+                        </Button>
+                      )}
+                    />
                   </div>
                 </div>
               </form>
@@ -359,17 +384,17 @@ function LoginPage() {
             <div className="mx-auto  flex max-h-[834px] items-center justify-center overflow-hidden rounded-lg max-[1560px]:max-h-[96vh]">
               {/* {systemConfig?.logoffImage  */}
               {/* ?  */}
-              
-                <img
-                  // src={systemConfig?.logoffImage || assets.images.bgLogin}
-                  src={assets.images.forgotBg}
-                  alt="urlaundry"
-                  className="h-full w-full object-contain"
-                />
-             
+
+              <img
+                // src={systemConfig?.logoffImage || assets.images.bgLogin}
+                src={assets.images.forgotBg}
+                alt="urlaundry"
+                className="h-full w-full object-contain"
+              />
+
               {/* : */}
-               
-                {/* <div className="flex flex-col items-center justify-center">
+
+              {/* <div className="flex flex-col items-center justify-center">
                   <p className="text-xl font-semibold">
                     Image is not uploaded yet
                   </p>
@@ -378,7 +403,7 @@ function LoginPage() {
                     tab
                   </span>
                 </div> */}
-            
+
             </div>
           </div>
           {/* {notification && (

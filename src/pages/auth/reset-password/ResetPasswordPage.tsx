@@ -116,7 +116,7 @@ function ResetPasswordPage() {
                 className="h-auto w-full object-contain"
               />
             </div>
-            <div className="pt-[150px]">
+            <div className="pt-[100px]">
               <div className=" mb-[20px] text-center">
                 <img
                   src={assets.images.keyIcon}
@@ -127,7 +127,7 @@ function ResetPasswordPage() {
               <span className="block text-center text-[14px] font-normal leading-[normal] text-[#6A6A6A]">
                 Enter New Password
               </span>
-              <div className="mt-[24px]">
+              <div className="mt-[20px]">
                 <div className="form-group w-full">
                   <span className='text-[14px] font-medium leading-[normal] text-[#06152B]'>New Password</span>
                   <FormControl className="my-1 w-full" variant="filled">
@@ -175,7 +175,7 @@ function ResetPasswordPage() {
                   </FormControl>
                 </div>
 
-                <div className="mt-[100px] w-full ">
+                <div className="xl:mt-[40px] 2xl:mt-[100px] w-full ">
                   <Button
                     className="w-full bg-neutral-900 px-16 py-2 text-gray-50"
                     variant="contained"
