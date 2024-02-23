@@ -48,6 +48,12 @@ import shirt1 from './temp-images/shirt-1.png';
 import shirt2 from './temp-images/shirt-2.png';
 import shirt from './temp-images/shirt.png';
 import wash from './temp-images/wash.png';
+import bgLogin from './images/bg-login.png';
+import forgotBg from './images/forgot-bg.png';
+import envelopeMsg from './images/envelope-msg.png';
+import otpMSg from './images/otp-msg.png';
+import keyIcon from './images/keyIcon.png';
+
 
 const assets = {
   css: {
@@ -80,6 +86,11 @@ const assets = {
     registerImage,
     speechBubble,
     visa,
+    bgLogin,
+    forgotBg,
+    envelopeMsg,
+    otpMSg,
+    keyIcon,
   },
   tempImages: {
     clothes,

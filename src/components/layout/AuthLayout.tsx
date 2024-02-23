@@ -2,7 +2,8 @@ import { Outlet } from 'react-router-dom';
 
 function AuthLayout() {
   return (
-    <div className="auth-main">
+    <div className="auth-mainS bg-super-admin-auth-background h-screen bg-[#f0f0f0]">
+   
       <Outlet />
       {/* <div className="join-community login-community">
         <div className="content-container">

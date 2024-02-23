@@ -11,6 +11,7 @@ import AlertBox from '../../../components/common/SnackBar';
 import useAlert from '../../../hooks/alert.hook';
 import authService from '../../../services/auth.service';
 import promiseHandler from '../../../utilities/promise-handler';
+import { Button } from '@mui/material';
 
 const forgotPasswordSchema = z.object({
   email: z
@@ -63,7 +64,7 @@ function ForgotPasswordPage() {
 
   return (
     <>
-      <AlertBox
+      {/*      <AlertBox
         msg={alertMessage}
         setSeverity={alertSeverity}
         alertOpen={showAlert}
@@ -130,6 +131,72 @@ function ForgotPasswordPage() {
             </p>
           </div>
           <img className="" src={assets.images.forgotPassImage} alt="" />
+        </div>
+                </div>*/}
+      <div className="flex h-full w-full items-center justify-center bg-[#F0F0F0]">
+        <div className="mx-auto  flex w-full  items-start justify-around max-[1560px]:items-center">
+          <div className="w-[30%] self-start px-[30px]">
+            <div className="max-h-[29px] w-full max-w-[150px] px-[25px] py-[40px]">
+              <img
+                src={assets.images.logo}
+                alt="urlaundry"
+                className="h-auto w-full object-contain"
+              />
+            </div>
+            <div className="pt-[100px]">
+              {/* <h1 className='text-[36px] text-black leading-[normal] font-bold capitalize mb-4 text-center'>log in</h1> */}
+              <div className=" text-center">
+                <img
+                  src={assets.images.envelopeMsg}
+                  alt="email"
+                  className="h-[100[px] mx-auto w-[100px]"
+                />
+              </div>
+              <div className="mt-2 ">
+                <span className="block text-center text-[14px] font-normal leading-[normal] text-[#6A6A6A]">
+                  Enter registered email
+                </span>
+                <span className="block text-center text-[14px] font-normal leading-[normal] text-[#6A6A6A]">
+                  to receive password reset link
+                </span>
+                <div className="form-group mt-[42px]">
+                  <span className='text-[14px] font-medium leading-[normal] text-[#06152B]'>Email</span>
+                    
+                
+                  <FormControl className="my-2 w-full" variant="standard">
+                    <Input
+                      className="border-[1px] border-solid border-[#949EAE] bg-white px-1 rounded-md text-[14px]"
+                      id="email"
+                      type="email"
+                      name="email"
+                      placeholder="haris@urlaundry.com"
+                      disableUnderline
+                    />
+                  </FormControl>
+                </div>
+
+                <div className="mt-[100px] w-full ">
+                  <Button
+                    className="w-full bg-neutral-900 px-16 py-2 text-gray-50"
+                    variant="contained"
+                    color="inherit"
+                    title="get code"
+                  >
+                    Get Code
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="w-[70%] px-3 py-2">
+            <div className="mx-auto  flex max-h-[834px] items-center justify-center overflow-hidden rounded-lg max-[1560px]:max-h-[96vh]">
+              <img
+                src={assets.images.forgotBg}
+                alt="urlaundry"
+                className="h-full w-full object-contain"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </>

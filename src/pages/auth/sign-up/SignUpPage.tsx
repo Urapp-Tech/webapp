@@ -67,12 +67,14 @@ function SignUpPage() {
   };
   return (
     <>
-      <AlertBox
+        <div className="auth-main">
+        <AlertBox
         msg={alertMessage}
         setSeverity={alertSeverity}
         alertOpen={showAlert}
         setAlertOpen={setShowAlert}
       />
+
       <div className="fixed-at-top-left">
         <NavLink to="../login" className="go-back">
           <ArrowBackRoundedIcon className="icon-arrow" />
@@ -208,6 +210,9 @@ function SignUpPage() {
           <img className="" src={assets.images.registerImage} alt="" />
         </div>
       </div>
+      
+        </div>
+     
     </>
   );
 }

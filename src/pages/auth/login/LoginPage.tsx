@@ -1,14 +1,14 @@
 import FacebookLogin, {
   SuccessResponse,
 } from '@greatsumini/react-facebook-login';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import InputLabel from '@mui/material/InputLabel';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -23,6 +23,7 @@ import addressService from '../../../services/address.service';
 import authService from '../../../services/auth.service';
 import { LoginPayload } from '../../../types/auth.types';
 import promiseHandler from '../../../utilities/promise-handler';
+import Button from '@mui/material/Button';
 
 function LoginPage() {
   const {
@@ -133,7 +134,7 @@ function LoginPage() {
 
   return (
     <>
-      <AlertBox
+      {/* <AlertBox
         msg={alertMessage}
         setSeverity={alertSeverity}
         alertOpen={showAlert}
@@ -216,11 +217,6 @@ function LoginPage() {
           >
             Login
           </button>
-          {/*     <button type="button" className="btn-login-fb">
-            <img className="mr-2.5 w-2.5" src={assets.images.facebook} alt="" />
-            Login with Facebook
-          </button> */}
-
           <FacebookLogin
             appId="246641688446576"
             onSuccess={handleLoginWithFacebook}
@@ -257,6 +253,141 @@ function LoginPage() {
             </p>
           </div>
           <img className="" src={assets.images.loginImage} alt="" />
+        </div>
+      </div> */}
+      <div className="flex  h-full w-full items-center justify-center bg-[#F0F0F0]">
+        <div className="mx-auto  flex w-full  items-center justify-around max-[1560px]:items-center">
+          <div className="w-[30%]  self-start px-[30px]">
+            <div className="max-h-[29px] w-full max-w-[150px] px-[25px] py-[40px]">
+              <img
+                // src={systemConfig?.shopLogo ?? systemConfig?.shopName}
+                src={assets.images.logo}
+                alt="urlaundry"
+                className="h-auto w-full object-contain"
+              />
+            </div>
+            <div className="pt-[150px]">
+              <h1 className="mb-4 text-center text-[36px] font-bold capitalize leading-[normal] text-black">
+                log in
+              </h1>
+              <form
+                // onSubmit={handleSubmit(loginHandler)}
+              >
+                <div className="">
+                  <div className="form-group w-full">
+                    <span className='text-[14px] font-medium leading-[normal] text-[#06152B]'>
+                      Email
+                    </span>
+                    <FormControl className="my-1 w-full" variant="standard">
+                      <Input
+                        className="input-with-icon"
+                        id="email"
+                        type="email"
+                        {...register('email', {
+                          required: 'Please enter your email.',
+                        })}
+                        disableUnderline
+                      />
+                      {/* {errors.email && (
+                        <ErrorSpanBox error={errors.email?.message} />
+                      )} */}
+                    </FormControl>
+                  </div>
+                  <div className="form-group w-full">
+                  <span className='text-[14px] font-medium leading-[normal] text-[#06152B]'>Password</span>
+                    <FormControl className="my-1 w-full" variant="filled">
+                      <Input
+                        className="input-with-icon after:border-b-secondary"
+                        id="password"
+                        type={showPassword ? 'text' : 'password'}
+                        {...register('password', {
+                          required: 'Please enter your password.',
+                        })}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={handleClickShowPassword}
+                              onMouseDown={handleMouseDownPassword}
+                            >
+                              {showPassword ? (
+                                <Visibility />
+                              ) : (
+                                <VisibilityOff />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                        disableUnderline
+                      />
+                      {/* {errors.password && (
+                        <ErrorSpanBox error={errors.password?.message} />
+                      )} */}
+                    </FormControl>
+                  </div>
+                  <div className="form-group text-end mt-1">
+                    <NavLink
+                      className="text-[14px] font-medium leading-[normal] text-[#06152B] "
+                      to="../forgot-password"
+                    >
+                      Forget Password?
+                    </NavLink>
+                  </div>
+                  <div className="mt-8 w-full ">
+                    <Button
+                      // disabled={!!isLoader}
+                      className="w-full bg-neutral-900 px-16 py-2 text-gray-50"
+                      variant="contained"
+                      color="inherit"
+                      title="Login"
+                      type="submit"
+                    >
+                      Login
+                      {/* {!isLoader ? (
+                        `Login`
+                      ) : (
+                        <CircularProgress color="inherit" size={24} />
+                      )} */}
+                    </Button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div className="w-[70%] px-3 py-2">
+            {/* <div className="mx-auto max-w-[800px] overflow-hidden rounded-lg flex justify-center items-center min-h-[800px] min-[1600px]:max-w-[934px] "> */}
+            <div className="mx-auto  flex max-h-[834px] items-center justify-center overflow-hidden rounded-lg max-[1560px]:max-h-[96vh]">
+              {/* {systemConfig?.logoffImage  */}
+              {/* ?  */}
+              
+                <img
+                  // src={systemConfig?.logoffImage || assets.images.bgLogin}
+                  src={assets.images.forgotBg}
+                  alt="urlaundry"
+                  className="h-full w-full object-contain"
+                />
+             
+              {/* : */}
+               
+                {/* <div className="flex flex-col items-center justify-center">
+                  <p className="text-xl font-semibold">
+                    Image is not uploaded yet
+                  </p>
+                  <span className="text-sm font-medium">
+                    Hint: You can upload under setting module from setting config
+                    tab
+                  </span>
+                </div> */}
+            
+            </div>
+          </div>
+          {/* {notification && (
+            <Notify
+              isOpen
+              setIsOpen={hideNotification}
+              displayMessage={notification}
+            />
+          )} */}
         </div>
       </div>
     </>
