@@ -19,13 +19,18 @@ export const categoryAPI = createApi({
     }),
     getSubCategory: builder.query({
       query: ({ menuId }: { menuId: string }) =>
-        `api/v1/app/homemenu/view/${getTenantId()}/${menuId}`
+        `api/v1/app/homemenu/view/${getTenantId()}/${menuId}`,
     }),
     getSubCategoryItem: builder.query({
-      query: ({ itemId, menuId }: { menuId: string, itemId: string }) => `/api/v1/app/homemenu/view/submenu/${getTenantId()}/${menuId}/${itemId}`
+      query: ({ menuId, itemId }: { menuId: string; itemId: string }) =>
+        `/api/v1/app/homemenu/view/submenu/${getTenantId()}/${menuId}/${itemId}`,
     }),
   }),
 });
 
-export const { useGetAllCategoryQuery, useLazyGetSubCategoryQuery, useGetSubCategoryQuery,useLazyGetSubCategoryItemQuery } =
-  categoryAPI;
+export const {
+  useGetAllCategoryQuery,
+  useLazyGetSubCategoryQuery,
+  useGetSubCategoryQuery,
+  useLazyGetSubCategoryItemQuery,
+} = categoryAPI;

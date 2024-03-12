@@ -1,11 +1,8 @@
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import DateRangeIcon from '@mui/icons-material/DateRange';
-import DomainVerificationOutlinedIcon from '@mui/icons-material/DomainVerificationOutlined';
-import FilterNoneOutlinedIcon from '@mui/icons-material/FilterNoneOutlined';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import Button from '@mui/material/Button';
@@ -88,34 +85,6 @@ function OrderDetailsPage() {
     setOrderCanceled(true);
   };
 
-  const getIcon = ORDER_STATUSES.map((status: any, index) => {
-    let icon;
-    if (status.iconText === 'AssignmentTurnedInOutlinedIcon') {
-      icon = (
-        <AssignmentTurnedInOutlinedIcon className={`text-xl ${status.color}`} />
-      );
-    } else if (status.iconText === 'FilterNoneOutlinedIcon') {
-      icon = <FilterNoneOutlinedIcon className={`text-xl ${status.color}`} />;
-    } else if (status.iconText === 'LocationOnOutlinedIcon') {
-      icon = <LocationOnOutlinedIcon className={`text-xl ${status.color}`} />;
-    } else if (status.iconText === 'DomainVerificationOutlinedIcon') {
-      icon = (
-        <DomainVerificationOutlinedIcon className={`text-xl ${status.color}`} />
-      );
-    } else if (status.iconText === 'AccessTimeIcon') {
-      icon = <AccessTimeIcon className={`text-xl ${status.color}`} />;
-    }
-
-    return (
-      <div
-        className="absolute inset-0 flex items-center justify-center"
-        key={index}
-      >
-        {icon}
-      </div>
-    );
-  });
-
   const getColorFromCode = (colorCode: any) => {
     if (colorCode.includes('blue')) {
       return 'primary';
@@ -163,7 +132,7 @@ function OrderDetailsPage() {
             <div className="px-5 pb-1 pt-6">
               <div className="items-center justify-between gap-x-5 sm:flex">
                 <div className="mb-5 flex items-center gap-x-3 sm:mb-0">
-                  {ORDER_STATUSES.map(
+                  {[...ORDER_STATUSES.values()].map(
                     (status, index) =>
                       orderItemDetail?.status === status.status && (
                         <div
@@ -172,11 +141,10 @@ function OrderDetailsPage() {
                         >
                           <CircularProgress
                             thickness={1.5}
-                            className="z-10"
+                            className={cn('z-10', status.color)}
                             size="4rem"
                             variant="determinate"
-                            value={(index + 1) * (100 / 6)}
-                            color={getColorFromCode(status.color)}
+                            value={status.progress}
                           />
                           <CircularProgress
                             thickness={1.5}
@@ -186,8 +154,13 @@ function OrderDetailsPage() {
                             value={100}
                             color="inherit"
                           />
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            {getIcon[index]}
+                          <div
+                            className={cn(
+                              'absolute inset-0 flex items-center justify-center',
+                              status.color
+                            )}
+                          >
+                            <CheckCircleOutlineOutlinedIcon />
                           </div>
                         </div>
                       )
@@ -209,9 +182,7 @@ function OrderDetailsPage() {
                   onClick={HandleCancelOrder}
                   className="btn-cancel-order"
                   color="inherit"
-                  disabled={
-                    orderItemDetail?.status === ORDER_STATUS.IN_DELIVERY
-                  }
+                  disabled={orderItemDetail?.status !== ORDER_STATUS.NEW}
                 >
                   Cancel Order
                 </Button>
@@ -321,33 +292,18 @@ function OrderDetailsPage() {
               <h6 className="heading">Your order is in progress...</h6>
             </div>
             <div className="body">
-              {ORDER_STATUSES.map((el, index) => (
+              {[...ORDER_STATUSES.values()].map((el, index) => (
                 <div
                   className={cn('timeline-item', {
-                    disabled:
-                      index >
-                        ORDER_STATUSES.findIndex(
-                          (status) => status.status === orderItemDetail?.status
-                        ) ||
-                      (orderCanceled &&
-                        index >
-                          ORDER_STATUSES.findIndex(
-                            (status) =>
-                              status.status === orderItemDetail?.status
-                          )),
+                    disabled: !orderItemDetail?.appOrderStatuses?.some(
+                      (item: any) => item.status === el.status
+                    ),
                   })}
-                  key={index}
+                  key={el.status}
                 >
                   <div className="dot">
-                    {index !==
-                    ORDER_STATUSES.findIndex(
-                      (status) =>
-                        status.status === orderItemDetail?.status &&
-                        index >
-                          ORDER_STATUSES.findIndex(
-                            (SecondStatus) =>
-                              SecondStatus.status === orderItemDetail?.status
-                          )
+                    {orderItemDetail?.appOrderStatuses?.some(
+                      (item: any) => item.status === el.status
                     ) ? (
                       <CheckCircleOutlineOutlinedIcon />
                     ) : (
@@ -357,12 +313,18 @@ function OrderDetailsPage() {
                   <div className="order-placed relative inline-flex">
                     <CircularProgress
                       thickness={1.5}
-                      className="circular-icon"
+                      className={cn('circular-icon', el.color)}
                       variant="determinate"
                       value={100}
-                      color={getColorFromCode(el.color)}
                     />
-                    <div>{getIcon[index]}</div>
+                    <div
+                      className={cn(
+                        'absolute inset-0 flex items-center justify-center',
+                        el.color
+                      )}
+                    >
+                      <CheckCircleOutlineOutlinedIcon />
+                    </div>
                   </div>
                   <div className="flex-grow">
                     <h6 className={`status-title ${el.color}`}>{el.title}</h6>

@@ -21,19 +21,14 @@ function Page404() {
           </div>
           <div className="flex items-center justify-start">
             <Button
+              onClick={() => {
+                window.location.reload();
+              }}
               type="button"
               variant="contained"
               className="text-normal mr-5 w-[120px] bg-black py-[14px] text-[14px] leading-[normal] text-white"
             >
-              Home
-            </Button>
-
-            <Button
-              type="button"
-              variant="contained"
-              className="text-normal mr-5 w-[120px] bg-black py-[14px] text-[14px] leading-[normal] text-white"
-            >
-              Back
+              Refresh
             </Button>
           </div>
         </div>

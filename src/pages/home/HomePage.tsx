@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CategoriesCard from '../../components/common/CategoriesCard';
 import Loader from '../../components/common/Loader';
 import AlertBox from '../../components/common/SnackBar';
@@ -18,7 +19,6 @@ import cartService from '../../services/cart.service';
 import categoryService from '../../services/category.service';
 import promiseHandler from '../../utilities/promise-handler';
 import HomePagePopup from './HomePagePopup';
-import { useNavigate } from 'react-router-dom';
 
 function getCategoryClasses(isActive: boolean) {
   const classes = 'item';
@@ -75,11 +75,9 @@ function HomePage() {
   const { isLoading: isSubCategoryLoading, data: subCategoryData } =
     subCategoryResult;
 
-  console.log("subCategoryData", subCategoryData);
-
   useEffect(() => {
     if (!isCategoryLoading && categoryData && categoryData.success) {
-      subCategoryTrigger(categoryData.data[0].id);
+      subCategoryTrigger({ menuId: categoryData.data[0].id });
     }
   }, [isCategoryLoading, categoryData, subCategoryTrigger]);
 
@@ -236,10 +234,14 @@ function HomePage() {
                 >
                   <div>
                     <img
-                      className="cursor-pointer mb-4 aspect-[4/3] w-full object-contain md:mb-6"
+                      className="mb-4 aspect-[4/3] w-full cursor-pointer object-contain md:mb-6"
                       src={item.icon}
                       alt=""
-                      onClick={() => navigate(`../detail/${item.id}`, { state: { menuId: item.homeCategory, itemId: item.id } })}
+                      onClick={() =>
+                        navigate(`../detail/${item.id}`, {
+                          state: { menuId: item.homeCategory, itemId: item.id },
+                        })
+                      }
                     />
                   </div>
                   <div className="flex flex-wrap items-center justify-between">

@@ -2,6 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ClientJS } from 'clientjs';
 import { useEffect } from 'react';
+import { useErrorBoundary } from 'react-error-boundary';
 import { useNavigate, useRoutes } from 'react-router-dom';
 import 'swiper/css';
 import AlertBox from './components/common/SnackBar';
@@ -36,6 +37,7 @@ function App() {
   const client = new ClientJS();
   const agent = client.getUserAgent();
   const fingerprint = client.getFingerprint();
+  const { showBoundary } = useErrorBoundary();
   async function fetchIp() {
     const url = new URL('https://api.ipify.org');
     url.searchParams.append('format', 'json');
@@ -59,14 +61,14 @@ function App() {
         setAlertSeverity('error');
         setAlertMessage(getSystemConfigError.message);
         setShowAlert(true);
-        navigate('/error-404');
+        showBoundary(new Error(getSystemConfigError.message));
         return;
       }
       if (!getSystemConfigResult.data.success) {
         setAlertSeverity('error');
         setAlertMessage(getSystemConfigResult.data.message);
         setShowAlert(true);
-        navigate('/error-404');
+        showBoundary(new Error(getSystemConfigResult.data.message));
         return;
       }
       dispatch(setSystemConfig(getSystemConfigResult.data.data));
@@ -132,6 +134,7 @@ function App() {
     console.warn = () => {};
   }
   const routes = useRoutes(routeObjects);
+
   return (
     <>
       <AlertBox
