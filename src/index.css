@@ -17,22 +17,27 @@
 .css-1m4ljmh-MuiTypography-root {
   flex-grow: 1 !important;
 }
-.css-q0jhri-MuiInputBase-root-MuiInput-root:after, .css-q0jhri-MuiInputBase-root-MuiInput-root::before{
+.css-q0jhri-MuiInputBase-root-MuiInput-root:after,
+.css-q0jhri-MuiInputBase-root-MuiInput-root::before {
   border-bottom: none !important;
   left: 0;
   bottom: 0;
-  content: "";
+  content: '';
 }
-.css-q0jhri-MuiInputBase-root-MuiInput-root.otp-v input{
+.css-q0jhri-MuiInputBase-root-MuiInput-root.otp-v input {
   text-align: center;
-  border: 1px solid #949EAE;
+  border: 1px solid #949eae;
   border-radius: 10px;
   background-color: #fff;
 }
 
-.form-group .input-with-icon{
-  border: 1px solid #949EAE;
+.form-group .input-with-icon {
+  border: 1px solid #949eae;
   border-radius: 10px;
   background-color: #fff;
   padding-left: 10px;
+}
+
+.css-18lrjg1-MuiCircularProgress-root {
+  animation: animation-61bdi0 0.4s linear infinite !important;
 }

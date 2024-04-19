@@ -9,6 +9,7 @@ import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Button from '@mui/material/Button';
 import InputLabel from '@mui/material/InputLabel';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -23,7 +24,6 @@ import addressService from '../../../services/address.service';
 import authService from '../../../services/auth.service';
 import { LoginPayload } from '../../../types/auth.types';
 import promiseHandler from '../../../utilities/promise-handler';
-import Button from '@mui/material/Button';
 
 function LoginPage() {
   const {
@@ -36,6 +36,9 @@ function LoginPage() {
   } = useAlert();
 
   const cartItem = useAppSelector((state: any) => state.cartState.cartItems);
+  const systemConfigData = useAppSelector(
+    (state: any) => state.appState.systemConfig
+  );
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
@@ -91,6 +94,8 @@ function LoginPage() {
     }
     dispatch(setUserAddressList(addressResult.data.data));
   };
+
+  // console.log('login res', login);
 
   const email = register('email');
   const password = register('password');
@@ -270,12 +275,16 @@ function LoginPage() {
         <div className="mx-auto  flex w-full  items-center justify-around max-[1560px]:items-center">
           <div className="w-[30%]  self-start px-[30px]">
             <div className="max-h-[29px] w-full max-w-[150px] px-[25px] py-[40px]">
-              <img
-                // src={systemConfig?.shopLogo ?? systemConfig?.shopName}
-                src={assets.images.logo}
-                alt="urlaundry"
-                className="h-auto w-full object-contain"
-              />
+              {systemConfigData?.tenantConfig?.logo ? (
+                <img
+                  // src={systemConfig?.shopLogo ?? systemConfig?.shopName}
+                  src={systemConfigData.tenantConfig.logo}
+                  alt="urlaundry"
+                  className="h-auto w-full object-contain"
+                />
+              ) : (
+                <span>Logo</span>
+              )}
             </div>
             <div className="xl:pt-[100px] 2xl:pt-[150px]">
               <h1 className="mb-4 text-center text-[36px] font-bold capitalize leading-[normal] text-black">
@@ -284,13 +293,13 @@ function LoginPage() {
               <form>
                 <div className="">
                   <div className="form-group w-full">
-                    <span className='text-[14px] font-medium leading-[normal] text-[#06152B]'>
+                    <span className="text-[14px] font-medium leading-[normal] text-[#06152B]">
                       Email
                     </span>
                     <FormControl className="my-1 w-full" variant="standard">
                       <Input
                         className="input-with-icon"
-                        placeholder='urlaundry@gmail.com'
+                        placeholder="urlaundry@gmail.com"
                         id="email"
                         type="email"
                         onChange={email.onChange}
@@ -305,12 +314,14 @@ function LoginPage() {
                     </FormControl>
                   </div>
                   <div className="form-group w-full">
-                    <span className='text-[14px] font-medium leading-[normal] text-[#06152B]'>Password</span>
+                    <span className="text-[14px] font-medium leading-[normal] text-[#06152B]">
+                      Password
+                    </span>
                     <FormControl className="my-1 w-full" variant="filled">
                       <Input
                         className="input-with-icon after:border-b-secondary"
                         id="password"
-                        placeholder='*******'
+                        placeholder="*******"
                         type={showPassword ? 'text' : 'password'}
                         endAdornment={
                           <InputAdornment position="end">
@@ -320,7 +331,11 @@ function LoginPage() {
                               onClick={handleClickShowPassword}
                               onMouseDown={handleMouseDownPassword}
                             >
-                              {showPassword ? <VisibilityOff /> : <Visibility />}
+                              {showPassword ? (
+                                <VisibilityOff />
+                              ) : (
+                                <Visibility />
+                              )}
                             </IconButton>
                           </InputAdornment>
                         }
@@ -331,17 +346,29 @@ function LoginPage() {
                         disableUnderline
                       />
                       {errors.password && (
-                        <span className="text-red-500">Password is required</span>
+                        <span className="text-red-500">
+                          Password is required
+                        </span>
                       )}
                     </FormControl>
                   </div>
-                  <div className="form-group text-end mt-1">
-                    <NavLink
-                      className="text-[14px] font-medium leading-[normal] text-[#06152B] "
-                      to="../forgot-password"
-                    >
-                      Forget Password?
-                    </NavLink>
+                  <div className="flex items-center justify-end">
+                    <div className="form-group mt-1 text-end">
+                      <NavLink
+                        className="px-3 text-[14px] font-medium leading-[normal] text-[#06152B] "
+                        to="../sign-up"
+                      >
+                        Sign up
+                      </NavLink>
+                    </div>
+                    <div className="form-group mt-1 text-end">
+                      <NavLink
+                        className="text-[14px] font-medium leading-[normal] text-[#06152B] "
+                        to="../forgot-password"
+                      >
+                        Forget Password?
+                      </NavLink>
+                    </div>
                   </div>
                   <div className="mt-2 w-full">
                     <Button
@@ -359,7 +386,7 @@ function LoginPage() {
                       onSuccess={handleLoginWithFacebook}
                       render={({ onClick }) => (
                         <Button
-                          className="w-full mt-3 bg-blue-900 px-16 py-2 text-gray-50"
+                          className="mt-3 w-full bg-blue-900 px-16 py-2 text-gray-50"
                           variant="contained"
                           color="inherit"
                           title="Login with Facebook"
@@ -382,28 +409,19 @@ function LoginPage() {
           <div className="w-[70%] px-3 py-2">
             {/* <div className="mx-auto max-w-[800px] overflow-hidden rounded-lg flex justify-center items-center min-h-[800px] min-[1600px]:max-w-[934px] "> */}
             <div className="mx-auto  flex max-h-[834px] items-center justify-center overflow-hidden rounded-lg max-[1560px]:max-h-[96vh]">
-              {/* {systemConfig?.logoffImage  */}
-              {/* ?  */}
-
-              <img
-                // src={systemConfig?.logoffImage || assets.images.bgLogin}
-                src={assets.images.forgotBg}
-                alt="urlaundry"
-                className="h-full w-full object-contain"
-              />
-
-              {/* : */}
-
-              {/* <div className="flex flex-col items-center justify-center">
+              {systemConfigData?.logoffImage ? (
+                <img
+                  src={systemConfigData?.logoffImage || assets.images.bgLogin}
+                  alt="urlaundry"
+                  className="h-full w-full object-contain"
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center">
                   <p className="text-xl font-semibold">
                     Image is not uploaded yet
                   </p>
-                  <span className="text-sm font-medium">
-                    Hint: You can upload under setting module from setting config
-                    tab
-                  </span>
-                </div> */}
-
+                </div>
+              )}
             </div>
           </div>
           {/* {notification && (

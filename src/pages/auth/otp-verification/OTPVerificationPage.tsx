@@ -1,7 +1,7 @@
-import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
+import { Button } from '@mui/material';
 import dayjs from 'dayjs';
 import { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import OTPInput from 'react18-otp-input';
 import assets from '../../../assets';
 import { login } from '../../../redux/features/authStateSlice';
@@ -10,14 +10,18 @@ import authService from '../../../services/auth.service';
 import { getTenantId } from '../../../utilities/constant';
 import { getItem, removeItem } from '../../../utilities/local-storage';
 import promiseHandler from '../../../utilities/promise-handler';
-import { Button, Input } from '@mui/material';
+import FastSpinner from '../../../components/common/CustomSpinner';
 
 function OTPVerificationPage() {
+  const location = useLocation();
+  const state = location;
   const [OTP, setOTP] = useState('');
+  const [isLoader, setIsLoader] = useState(false);
   const signUpData = getItem<any>('SIGN_UP_DATA');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const onsubmit = async () => {
+    setIsLoader(true);
     const code = Object.assign(signUpData, {
       otp: OTP,
       tenant: getTenantId(),
@@ -28,16 +32,20 @@ function OTPVerificationPage() {
     const [signUpResult, signUpError] = await promiseHandler(signUpPromise);
     removeItem('SIGN_UP_DATA');
     if (!signUpResult) {
+      setIsLoader(false);
       console.error('error :>> ', signUpError.message);
       return;
     }
     if (!signUpResult.data.success) {
+      setIsLoader(false);
       console.error('error :>> ', signUpResult.data.message);
       return;
     }
     dispatch(login(signUpResult.data.data));
     navigate('../../dashboard/home');
+    setIsLoader(false);
   };
+  console.log('email', state);
 
   return (
     <>
@@ -122,12 +130,12 @@ function OTPVerificationPage() {
                   An 4 digit code has been sent to
                 </span>
                 <span className="block text-center text-[14px] font-medium leading-[normal] text-[#6A6A6A]">
-                  Vincent-bo@gmail.com
+                  {state.state ?? ''}
                 </span>
-                <div className="mt-[42px] flex justify-center items-center w-full text-center">
+                <div className="mt-[42px] flex w-full items-center justify-center text-center">
                   <OTPInput
-                    placeholder='1234'
-                    className='mx-2'
+                    placeholder="1234"
+                    className="mx-2"
                     containerStyle="otp-container"
                     inputStyle={{
                       width: '3rem',
@@ -159,7 +167,7 @@ function OTPVerificationPage() {
                     title="get code"
                     onClick={() => onsubmit()}
                   >
-                    Submit
+                    {isLoader ? <FastSpinner /> : 'Submit'}
                   </Button>
                 </div>
               </div>
