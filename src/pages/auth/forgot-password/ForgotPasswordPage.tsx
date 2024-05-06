@@ -6,12 +6,12 @@ import InputLabel from '@mui/material/InputLabel';
 import { Controller, useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
 import * as z from 'zod';
+import { Button } from '@mui/material';
 import assets from '../../../assets';
 import AlertBox from '../../../components/common/SnackBar';
 import useAlert from '../../../hooks/alert.hook';
 import authService from '../../../services/auth.service';
 import promiseHandler from '../../../utilities/promise-handler';
-import { Button } from '@mui/material';
 
 const forgotPasswordSchema = z.object({
   email: z
@@ -132,7 +132,7 @@ function ForgotPasswordPage() {
           </div>
           <img className="" src={assets.images.forgotPassImage} alt="" />
         </div>
-                </div>*/}
+                </div> */}
       <div className="flex h-full w-full items-center justify-center bg-[#F0F0F0]">
         <div className="mx-auto  flex w-full  items-start justify-around max-[1560px]:items-center">
           <div className="w-[30%] self-start px-[30px]">
@@ -160,12 +160,13 @@ function ForgotPasswordPage() {
                   to receive password reset link
                 </span>
                 <div className="form-group mt-[42px]">
-                  <span className='text-[14px] font-medium leading-[normal] text-[#06152B]'>Email</span>
-                    
-                
+                  <span className="text-[14px] font-medium leading-[normal] text-[#06152B]">
+                    Email
+                  </span>
+
                   <FormControl className="my-2 w-full" variant="standard">
                     <Input
-                      className="border-[1px] border-solid border-[#949EAE] bg-white px-1 rounded-md text-[14px]"
+                      className="rounded-md border-[1px] border-solid border-[#949EAE] bg-white px-1 text-[14px]"
                       id="email"
                       type="email"
                       name="email"
@@ -175,7 +176,7 @@ function ForgotPasswordPage() {
                   </FormControl>
                 </div>
 
-                <div className="xl:mt-[60px] 2xl:mt-[100px] w-full ">
+                <div className="w-full xl:mt-[60px] 2xl:mt-[100px] ">
                   <Button
                     className="w-full bg-neutral-900 px-16 py-2 text-gray-50"
                     variant="contained"

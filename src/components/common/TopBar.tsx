@@ -47,7 +47,7 @@ function TopBar() {
     }
   }, [user]);
 
-  console.log("error Notification List is ",notificationElement)
+  console.log('error Notification List is ', notificationElement);
 
   return (
     <AppBar position="fixed" className="!w-full !bg-primary !shadow-none">

@@ -53,7 +53,7 @@ import forgotBg from './images/forgot-bg.png';
 import envelopeMsg from './images/envelope-msg.png';
 import otpMSg from './images/otp-msg.png';
 import keyIcon from './images/keyIcon.png';
-
+import Star from './images/Star.png';
 
 const assets = {
   css: {
@@ -91,6 +91,7 @@ const assets = {
     envelopeMsg,
     otpMSg,
     keyIcon,
+    Star,
   },
   tempImages: {
     clothes,

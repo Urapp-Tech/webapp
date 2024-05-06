@@ -34,7 +34,10 @@ function HomeItemDetailAccordin({ data }: Props) {
                   aria-controls="panel1bh-content"
                   id="panel1bh-header"
                 >
-                  <Typography className='flex-grow-1' sx={{ width: '33%', flexShrink: 0 }}>
+                  <Typography
+                    className="flex-grow-1"
+                    sx={{ width: '33%', flexShrink: 0 }}
+                  >
                     {item.question}
                   </Typography>
                 </AccordionSummary>

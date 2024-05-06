@@ -1,4 +1,5 @@
 import axios from 'axios';
+// eslint-disable-next-line import/no-cycle
 import { store } from '../redux/store';
 import { logout } from '../redux/features/authStateSlice';
 import { BASE_URL } from '../utilities/constant';
@@ -31,7 +32,7 @@ export const getWithQueryParam = (
   });
   return axios.get(url.toString(), {
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
   });
 };

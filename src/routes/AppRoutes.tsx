@@ -25,6 +25,7 @@ import MainLayout from '../components/layout/MainLayout';
 import Loader from '../components/common/Loader';
 import Page404 from '../pages/404/404';
 import HomeItemDetail from '../pages/home/HomeItemDetail';
+import AddAppointmentPage from '../pages/appointments/AddAppointmentPage';
 
 const LoginPage = lazy(() => import('../pages/auth/login/LoginPage'));
 const SignUpPage = lazy(() => import('../pages/auth/sign-up/SignUpPage'));
@@ -38,6 +39,7 @@ const ResetPasswordPage = lazy(
   () => import('../pages/auth/reset-password/ResetPasswordPage')
 );
 const HomePage = lazy(() => import('../pages/home/HomePage'));
+const ProductPage = lazy(() => import('../pages/home/ProductPage'));
 const OrdersPage = lazy(() => import('../pages/orders/OrdersPage'));
 const PaymentSettingPage = lazy(
   () => import('../pages/payment-setting/PaymentSettingPage')
@@ -62,6 +64,12 @@ const AccountChatPage = lazy(() => import('../pages/account/AccountChatPage'));
 const AccountHelpPage = lazy(() => import('../pages/account/AccountHelpPage'));
 const AccountSettingsPage = lazy(
   () => import('../pages/account/AccountSettingPage')
+);
+// const StoreAppointmentsList = lazy(
+//   () => import('../pages/appointments/StoreAppointmentsList')
+// );
+const AppointmentHistoryPage = lazy(
+  () => import('../pages/appointments/AppointmentHistoryPage')
 );
 
 export const routeObjects: Array<RouteObject> = [
@@ -130,6 +138,30 @@ export const routeObjects: Array<RouteObject> = [
         element: (
           <Suspense fallback={<Loader />}>
             <HomePage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'book-service',
+        element: (
+          <Suspense fallback={<Loader />}>
+            <AddAppointmentPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'appointments-history',
+        element: (
+          <Suspense fallback={<Loader />}>
+            <AppointmentHistoryPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'products',
+        element: (
+          <Suspense fallback={<Loader />}>
+            <ProductPage />
           </Suspense>
         ),
       },
@@ -248,7 +280,6 @@ export const routeObjects: Array<RouteObject> = [
           </Suspense>
         ),
       },
-
     ],
   },
 ];

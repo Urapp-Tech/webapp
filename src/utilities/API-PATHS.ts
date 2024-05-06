@@ -146,11 +146,37 @@ const API_PATHS = {
     ).toString(),
 
   ratingReviewStarList: (homeCatItemId: string) =>
+    new URL(`/api/v1/app/rating/reviews/${homeCatItemId}`, BASE_URL).toString(),
+  getStoreCategories: (tenant: string) =>
+    new URL(`/api/v1/app/categories/list/${tenant}`, BASE_URL).toString(),
+  getStoreCategoriesItems: (tenant: string) =>
+    new URL(`/api/v1/app/categories/items/list/${tenant}`, BASE_URL).toString(),
+  // APPOINTMENTS REST API
+  getBarbersList: (storeServiceCatItemId: string) =>
     new URL(
-      `/api/v1/app/rating/reviews/${homeCatItemId}`,
+      `/api/v1/app/store/appointment/employee/${storeServiceCatItemId}`,
       BASE_URL
     ).toString(),
-
+  getBarberBookedTimeSlots: (storeEmp: any, date: any) =>
+    new URL(
+      `/api/v1/app/store/appointment/linedUp/${storeEmp}/${date}`,
+      BASE_URL
+    ).toString(),
+  appointmentCreate: () =>
+    new URL(`/api/v1/app/store/appointment/create`, BASE_URL).toString(),
+  getAllPreviousAppointments: (tenant: string) =>
+    new URL(
+      `/api/v1/app/store/appointment/list/${tenant}`,
+      BASE_URL
+    ).toString(),
+  getBanners: () => new URL(`/api/v1/app/banner/list`, BASE_URL).toString(),
+  getStoreEmployeeRating: () =>
+    new URL(`/api/v1/app/store/appointment-ratings/list`, BASE_URL).toString(),
+  updateEmployeeRating: (id: string) =>
+    new URL(
+      `/api/v1/app/store/appointment-ratings/update/${id}`,
+      BASE_URL
+    ).toString(),
 } as const;
 
 export default API_PATHS;

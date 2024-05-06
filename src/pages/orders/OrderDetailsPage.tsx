@@ -231,34 +231,38 @@ function OrderDetailsPage() {
 
               <div className="overflow-x-auto">
                 <table className="ordered-items-table">
-                  <tr>
-                    <td colSpan={3}>
-                      <div className="flex items-center gap-x-2">
-                        <LocationOnOutlinedIcon className="text-xl" />
-                        <p className="adress">
-                          {!userAddress
-                            ? 'No Address Active'
-                            : userAddress?.address}
-                        </p>
-                      </div>
-                    </td>
-                  </tr>
-                  {orderItemDetail?.appOrderItem.map(
-                    (el: any, index: number) => (
-                      <tr key={index}>
-                        <td>
-                          <div className="flex items-center gap-x-2 sm:gap-x-4">
-                            <img className="order-pic" src={el.icon} alt="" />
-                            <p className="name">{el.name}</p>
-                          </div>
-                        </td>
-                        <td>{el.quantity} Items</td>
-                        <td>
-                          <p className="price">{el.unitPrice}</p>
-                        </td>
-                      </tr>
-                    )
-                  )}
+                  <thead>
+                    <tr>
+                      <td colSpan={3}>
+                        <div className="flex items-center gap-x-2">
+                          <LocationOnOutlinedIcon className="text-xl" />
+                          <p className="adress">
+                            {!userAddress
+                              ? 'No Address Active'
+                              : userAddress?.address}
+                          </p>
+                        </div>
+                      </td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orderItemDetail?.orderItems.map(
+                      (el: any, index: number) => (
+                        <tr key={index}>
+                          <td>
+                            <div className="flex items-center gap-x-2 sm:gap-x-4">
+                              <img className="order-pic" src={el.icon} alt="" />
+                              <p className="name">{el.name}</p>
+                            </div>
+                          </td>
+                          <td>{el.quantity} Items</td>
+                          <td>
+                            <p className="price">{el.unitPrice}</p>
+                          </td>
+                        </tr>
+                      )
+                    )}
+                  </tbody>
                 </table>
               </div>
 

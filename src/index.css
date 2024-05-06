@@ -17,6 +17,7 @@
 .css-1m4ljmh-MuiTypography-root {
   flex-grow: 1 !important;
 }
+
 .css-q0jhri-MuiInputBase-root-MuiInput-root:after,
 .css-q0jhri-MuiInputBase-root-MuiInput-root::before {
   border-bottom: none !important;
@@ -24,6 +25,7 @@
   bottom: 0;
   content: '';
 }
+
 .css-q0jhri-MuiInputBase-root-MuiInput-root.otp-v input {
   text-align: center;
   border: 1px solid #949eae;
@@ -40,4 +42,157 @@
 
 .css-18lrjg1-MuiCircularProgress-root {
   animation: animation-61bdi0 0.4s linear infinite !important;
+}
+
+.error-color {
+  color: red;
+}
+
+
+.btn-black-outline {
+  border-color: var(--theme-primary) !important;
+  color: var(--theme-primary) !important;
+  opacity: 1 !important;
+}
+
+.btn-black-outline {
+  width: 15% !important;
+  border-radius: 0.5rem !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-color: var(--theme-secondary) !important;
+  background-color: transparent !important;
+  padding-left: 0.75rem !important;
+  padding-right: 0.75rem !important;
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+  font-weight: 400 !important;
+  text-transform: capitalize !important;
+  color: var(--theme-secondary) !important;
+  --tw-shadow: 0 0 #0000 !important;
+  --tw-shadow-colored: 0 0 #0000 !important;
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow) !important;
+}
+
+.btn-black-fill, .btn-gray-fill {
+  border-color: var(--color-primary) !important;
+  background-color: var(--color-primary) !important;
+  color: var(--color-foreground) !important;
+}
+
+.btn-black-fill {
+  border-radius: 0.5rem !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-color: var(--color-secondary) !important;
+  --tw-bg-opacity: 1 !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+  font-weight: 400 !important;
+  text-transform: capitalize !important;
+  --tw-text-opacity: 1 !important;
+  /* color: rgb(255 255 255 / 1) !important; */
+  --tw-shadow: 0 0 #0000 !important;
+  --tw-shadow-colored: 0 0 #0000 !important;
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow) !important;
+}
+
+/* SWIPER STYLES */
+
+/* swiper css */
+.swiper {
+  height: 100% !important;
+}
+
+.swiper-slide {
+  /* width: 15% !important; */
+}
+
+.custom-swiper-slider .swiper-slide {
+  width: 15% !important;
+}
+
+.swiper-wrapper {
+  padding-left: 150px;
+}
+
+.custom-swiper {
+  padding-left: 0px !important;
+}
+
+.custom-swiper-slide {
+  width: 100% !important;
+}
+
+.custom-swiper .swiper-wrapper {
+  padding-left: 0 !important;
+}
+
+.swiper-button-next {
+  left: 4% !important;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  width: 45px !important;
+  /* Adjust the width */
+
+  /* height: 20px !important; */
+  /* margin-top: .1px; */
+  /* Adjust the height */
+}
+
+:root {
+  --swiper-navigation-size: 13px !important;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  @apply text-primary;
+  font-size: 12px;
+  font-weight: bold;
+  margin-top: 2px;
+  /* Adjust the arrow icon size */
+}
+
+.css-1ka5eyc-MuiPaper-root-MuiMenu-paper-MuiPopover-paper {
+  @apply bg-background;
+}
+
+
+
+/* Swiper pagination  */
+
+.swiper-pagination-bullet {
+  width: var(
+    --swiper-pagination-bullet-width,
+    var(--swiper-pagination-bullet-size, 30px)
+  ) !important;
+  height: var(
+    --swiper-pagination-bullet-height,
+    var(--swiper-pagination-bullet-size, 4px)
+  ) !important;
+  border-radius: var(
+    --swiper-pagination-bullet-border-radius,
+    100px
+  ) !important;
+}
+
+.swiper-pagination-bullet-active {
+  background: #000000 !important;
+  width: var(
+    --swiper-pagination-bullet-width,
+    var(--swiper-pagination-bullet-size, 50px)
+  ) !important;
+}
+
+.swiper-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet,
+.swiper-pagination-horizontal.swiper-pagination-bullets
+  .swiper-pagination-bullet {
+  margin: 0 var(--swiper-pagination-bullet-horizontal-gap, 3px) !important;
+}
+.swiper-pagination-bullets.swiper-pagination-horizontal {
+  transform: translateY(15px);
 }

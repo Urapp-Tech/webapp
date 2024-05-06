@@ -2,18 +2,19 @@ import ClearIcon from '@mui/icons-material/Clear';
 import IconButton from '@mui/material/IconButton';
 import Rating from '@mui/material/Rating';
 import { useState } from 'react';
-import { OrderReviewItem } from '../../types/order.types';
+import dayjs from 'dayjs';
+import { EmployeeRatingData } from '../../interfaces/employee-ratings';
 
-function RatingCard({
+function AppointmentRatingCard({
   data,
   submitReview,
 }: {
-  data: OrderReviewItem;
+  data: EmployeeRatingData;
   submitReview: (
-    item: OrderReviewItem,
-    type: 'Completed' | 'Leave',
-    comment: string,
-    rating: number
+    item: EmployeeRatingData,
+    status: 'Completed' | 'Leave',
+    review: string,
+    star: number
   ) => void;
 }) {
   const [rating, setRating] = useState(0);
@@ -29,11 +30,23 @@ function RatingCard({
       </IconButton>
       <img
         className="mb-4 aspect-square w-32"
-        src={data.homeCatItem.icon}
+        src={data.employee.avatar}
         alt=""
       />
       <div className="self-start text-base font-semibold">
-        {data.homeCatItem.name}
+        {data.employee.name}
+      </div>
+      <div className="w-full self-start text-base font-semibold">
+        Service:
+        <span className="float-right capitalize">{data.categoryItem.name}</span>
+      </div>
+      <div className="w-full self-start text-base font-semibold">
+        Time:
+        <span className="float-right capitalize">
+          {dayjs(data.appointment.appointmentTime).format(
+            'MMM D, YYYY hh:mm A'
+          )}
+        </span>
       </div>
       <div className="mb-4 flex self-stretch">
         <div className="text-base font-semibold">Rating:</div>
@@ -59,7 +72,7 @@ function RatingCard({
       <button
         type="button"
         className="w-full rounded-md bg-primary py-1 text-base font-semibold text-foreground"
-        onClick={() => submitReview(data, 'Completed', comment, rating ?? 1)}
+        onClick={() => submitReview(data, 'Completed', comment, rating)}
       >
         Submit
       </button>
@@ -67,4 +80,4 @@ function RatingCard({
   );
 }
 
-export default RatingCard;
+export default AppointmentRatingCard;

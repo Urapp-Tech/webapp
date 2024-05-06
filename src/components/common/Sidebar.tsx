@@ -15,6 +15,8 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import HistoryIcon from '@mui/icons-material/History';
 import { setDropOff, setPickup } from '../../redux/features/DateAndTime';
 import { logout } from '../../redux/features/authStateSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
@@ -22,10 +24,36 @@ import cn from '../../utilities/class-names';
 
 const links = [
   {
-    name: 'Home',
+    name: 'Appointments',
     path: 'home',
     icon: (isActive: boolean) => (
       <HomeOutlinedIcon
+        className={cn(
+          'h-auto w-5 text-foreground transition-all duration-[0.3s]',
+          !isActive && 'opacity-75'
+        )}
+        fontSize="inherit"
+      />
+    ),
+  },
+  {
+    name: 'Appointments History',
+    path: 'appointments-history',
+    icon: (isActive: boolean) => (
+      <HistoryIcon
+        className={cn(
+          'h-auto w-5 text-foreground transition-all duration-[0.3s]',
+          !isActive && 'opacity-75'
+        )}
+        fontSize="inherit"
+      />
+    ),
+  },
+  {
+    name: 'Products',
+    path: 'products',
+    icon: (isActive: boolean) => (
+      <ShoppingCartIcon
         className={cn(
           'h-auto w-5 text-foreground transition-all duration-[0.3s]',
           !isActive && 'opacity-75'
@@ -95,6 +123,8 @@ const links = [
   },
 ];
 
+const InSecureRouts: string[] = [];
+
 function Sidebar() {
   const user = useAppSelector((state) => state.authState.user);
   const tenantConfig = useAppSelector(
@@ -137,7 +167,7 @@ function Sidebar() {
       <div className="mb-5">
         {links.map((link) => {
           // If user exists, show all links, else show only Home link FAQs Link
-          if (LoginUser || link.name === 'Home') {
+          if (LoginUser || InSecureRouts.find((r) => r === link.name)) {
             return (
               <NavLink
                 key={link.path}

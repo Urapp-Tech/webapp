@@ -8,10 +8,9 @@ import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from '@mui/material/InputLabel';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import assets from '../../../assets';
 import { Button } from '@mui/material';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
-
+import assets from '../../../assets';
 
 function ResetPasswordPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -21,7 +20,7 @@ function ResetPasswordPage() {
   ) => {
     event.preventDefault();
   };
-  const handleClick = () => {}
+  const handleClick = () => {};
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const handleClickShowConfirmPassword = () =>
     setShowConfirmPassword((show) => !show);
@@ -103,7 +102,7 @@ function ResetPasswordPage() {
           <img className="" src={assets.images.forgotPassImage} alt="" />
         </div>
       </div> */}
-       <div
+      <div
         className="flex h-full w-full items-center justify-center bg-[#F0F0F0]
       "
       >
@@ -129,10 +128,12 @@ function ResetPasswordPage() {
               </span>
               <div className="mt-[20px]">
                 <div className="form-group w-full">
-                  <span className='text-[14px] font-medium leading-[normal] text-[#06152B]'>New Password</span>
+                  <span className="text-[14px] font-medium leading-[normal] text-[#06152B]">
+                    New Password
+                  </span>
                   <FormControl className="my-1 w-full" variant="filled">
                     <Input
-                      className="input-with-icon after:border-b-neutral-900 px-4"
+                      className="input-with-icon px-4 after:border-b-neutral-900"
                       id="password"
                       type=""
                       name="password"
@@ -152,10 +153,12 @@ function ResetPasswordPage() {
                   </FormControl>
                 </div>
                 <div className="form-group w-full">
-                    <span className='text-[14px] font-medium leading-[normal] text-[#06152B]'>Confirm Password</span>
+                  <span className="text-[14px] font-medium leading-[normal] text-[#06152B]">
+                    Confirm Password
+                  </span>
                   <FormControl className="my-1 w-full" variant="filled">
                     <Input
-                      className="input-with-icon after:border-b-neutral-900 px-4"
+                      className="input-with-icon px-4 after:border-b-neutral-900"
                       id="password"
                       type=""
                       name="password"
@@ -175,7 +178,7 @@ function ResetPasswordPage() {
                   </FormControl>
                 </div>
 
-                <div className="xl:mt-[40px] 2xl:mt-[100px] w-full ">
+                <div className="w-full xl:mt-[40px] 2xl:mt-[100px] ">
                   <Button
                     className="w-full bg-neutral-900 px-16 py-2 text-gray-50"
                     variant="contained"
@@ -199,7 +202,6 @@ function ResetPasswordPage() {
           </div>
         </div>
       </div>
-      
     </>
   );
 }

@@ -28,8 +28,8 @@ type Props = {
 };
 
 function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
-  console.log("data",data);
-  
+  console.log('data', data);
+
   const {
     alertMessage,
     setAlertMessage,
@@ -64,7 +64,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
   };
 
   const addToBasketHandler = (tempCartData: any) => {
-    console.log("tempCartData",tempCartData);
+    console.log('tempCartData', tempCartData);
     dispatch(addToCart(tempCartData));
     setOpen(false);
     setCount(1);
