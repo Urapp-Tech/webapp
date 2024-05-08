@@ -36,9 +36,33 @@ const fetchAllAppointments = (tenant: any, body: any) => {
   });
 };
 
+const findAppointment = (appointment: any, body?: any) => {
+  return network.get(API_PATHS.findAppointment(appointment), {
+    headers: getHeaders(),
+    params: body,
+  });
+};
+
+const rescheduleAppointment = (appointment: any, data: any, body?: any) => {
+  return network.post(API_PATHS.rescheduleAppointment(appointment), data, {
+    headers: getHeaders(),
+    params: body,
+  });
+};
+
+const CheckEmployeeAvailable = (employeeId: any, date: any, body?: any) => {
+  return network.get(API_PATHS.CheckEmployeeAvailable(employeeId, date), {
+    headers: getHeaders(),
+    params: body,
+  });
+};
+
 export default {
   getBarbersList,
   getBarberBookedTimeSlots,
   appointmentCreate,
   fetchAllAppointments,
+  findAppointment,
+  rescheduleAppointment,
+  CheckEmployeeAvailable,
 };

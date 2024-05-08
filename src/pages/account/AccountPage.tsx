@@ -17,7 +17,7 @@ function AccountPage() {
             >
               <PersonOutlineOutlinedIcon /> <span>Profile</span>
             </NavLink>
-            <NavLink
+            {/* <NavLink
               className={({ isActive }) => (isActive ? 'item active' : 'item')}
               to="settings"
             >
@@ -34,7 +34,7 @@ function AccountPage() {
               to="chat"
             >
               <CommentOutlinedIcon /> <span>Chat With Us</span>
-            </NavLink>
+            </NavLink> */}
           </div>
         </div>
         <div className="tab-content col-span-4">

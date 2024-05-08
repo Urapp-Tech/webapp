@@ -48,7 +48,6 @@
   color: red;
 }
 
-
 .btn-black-outline {
   border-color: var(--theme-primary) !important;
   color: var(--theme-primary) !important;
@@ -71,10 +70,12 @@
   color: var(--theme-secondary) !important;
   --tw-shadow: 0 0 #0000 !important;
   --tw-shadow-colored: 0 0 #0000 !important;
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow) !important;
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow) !important;
 }
 
-.btn-black-fill, .btn-gray-fill {
+.btn-black-fill,
+.btn-gray-fill {
   border-color: var(--color-primary) !important;
   background-color: var(--color-primary) !important;
   color: var(--color-foreground) !important;
@@ -96,7 +97,27 @@
   /* color: rgb(255 255 255 / 1) !important; */
   --tw-shadow: 0 0 #0000 !important;
   --tw-shadow-colored: 0 0 #0000 !important;
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow) !important;
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow) !important;
+}
+
+.btn-style {
+  border-radius: 0.5rem !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  --tw-bg-opacity: 1 !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+  font-weight: 400 !important;
+  text-transform: capitalize !important;
+  --tw-text-opacity: 1 !important;
+  /* color: rgb(255 255 255 / 1) !important; */
+  --tw-shadow: 0 0 #0000 !important;
+  --tw-shadow-colored: 0 0 #0000 !important;
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow) !important;
 }
 
 /* SWIPER STYLES */
@@ -161,8 +182,6 @@
   @apply bg-background;
 }
 
-
-
 /* Swiper pagination  */
 
 .swiper-pagination-bullet {
@@ -195,4 +214,8 @@
 }
 .swiper-pagination-bullets.swiper-pagination-horizontal {
   transform: translateY(15px);
+}
+
+.form-group .MuiInputBase-root {
+  @apply rounded-lg border border-solid border-foreground bg-[#fff] !important;
 }

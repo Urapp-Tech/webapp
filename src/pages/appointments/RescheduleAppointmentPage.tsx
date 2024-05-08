@@ -1,4 +1,5 @@
-/* eslint-disable consistent-return */
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
@@ -8,6 +9,7 @@
 /* eslint-disable no-restricted-syntax */
 
 import CloseIcon from '@mui/icons-material/Close';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Avatar from '@mui/material/Avatar';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
@@ -19,12 +21,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, IconButton } from '@mui/material';
 import isBetween from 'dayjs/plugin/isBetween';
 import assets from '../../assets';
 import '../../assets/css/PopupStyle.css';
@@ -61,15 +63,16 @@ const darkTheme = createTheme({
   },
 });
 
-export default function AddAppointmentPage() {
+export default function RescheduleAppointmentPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [isLoader, setIsLoader] = useState(false);
   const [isPageLoader, setIsPageLoader] = useState(false);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
-  const [disabledButton, setDisabledButton] = useState<any>([]);
   const [activeBarber, setActiveBarber] = useState<any>();
+  const [disabledButton, setDisabledButton] = useState<any>([]);
+  const [_appointmentData, setAppointmentData] = useState<any>();
   const [selectedItem, setSelectedItem] = useState<{
     id: string;
     name: string;
@@ -117,6 +120,47 @@ export default function AddAppointmentPage() {
     control,
   } = useForm<AddAppointmentForm>();
 
+  const params = useParams();
+  const { id } = params;
+
+  function capitalizeFirstLetter(s: string) {
+    return s.charAt(0).toUpperCase() + s.toLowerCase().slice(1);
+  }
+
+  const getAppointment = async () => {
+    setIsLoader(true);
+    await storeAppointmentService
+      .findAppointment(id)
+      .then((res: any) => {
+        if (res.data.success) {
+          setValue('name', res.data.data.name);
+          setValue('email', res.data.data.email);
+          setValue('phone', res.data.data.phone);
+          setValue('note', res.data.data.note);
+          setValue('gender', capitalizeFirstLetter(res.data.data.gender));
+          setAppointmentData(res.data.data);
+          setBarberList(res.data.data);
+          console.log('getAppointment', res.data.data);
+          setIsLoader(false);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err: Error) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'appointments', // Name of the array field
@@ -141,13 +185,6 @@ export default function AddAppointmentPage() {
     return tempAr?.find((el: any) => el.id === id)?.name;
   };
 
-  const pagination = {
-    clickable: true,
-    renderBullet(index: number, className: any) {
-      return `<span class="${className}"></span>`;
-    },
-  };
-
   const shopEvents = async (id: any, date: any) => {
     try {
       const resp = await storeAppointmentService.CheckEmployeeAvailable(
@@ -160,6 +197,13 @@ export default function AddAppointmentPage() {
       // Handle error if necessary
       return false; // or throw error if you want to propagate it
     }
+  };
+
+  const pagination = {
+    clickable: true,
+    renderBullet(index: number, className: any) {
+      return `<span class="${className}"></span>`;
+    },
   };
 
   const {
@@ -335,6 +379,9 @@ export default function AddAppointmentPage() {
 
   useEffect(() => {
     dispatch(fetchCategories(systemConfig?.tenant));
+    if (id) {
+      getAppointment();
+    }
   }, []);
 
   const getBarbers = async (id: any) => {
@@ -608,7 +655,7 @@ export default function AddAppointmentPage() {
     });
     data.appointments = updatedAppointmentArray;
     storeAppointmentService
-      .appointmentCreate(data, {
+      .rescheduleAppointment(_appointmentData.id, data, {
         tenant: systemConfig?.tenant,
         app_user: user?.id,
       })
@@ -675,7 +722,18 @@ export default function AddAppointmentPage() {
         displayMessage={notifyMessage}
       />
       {/* <TopBar isNestedRoute title="Fill Appointment Form" /> */}
+
       <div className="container m-auto mt-5">
+        <div className="mb-4 flex items-center md:mb-6">
+          <IconButton
+            onClick={() => navigate(-1)}
+            color="inherit"
+            className="p-1"
+          >
+            <ArrowBackIcon />
+          </IconButton>
+          <h4 className="page-heading">Fill Reschedule Appointment Form</h4>
+        </div>
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="p-3">
             <span className="text-base font-bold text-[#1A1A1A]">Add Info</span>
@@ -694,6 +752,7 @@ export default function AddAppointmentPage() {
                           variant="standard"
                         >
                           <CustomInputBox
+                            disable
                             maxLetterLimit={50}
                             pattern={PATTERN.CHAR_SPACE_DASH}
                             inputTitle="Full Name"
@@ -713,6 +772,7 @@ export default function AddAppointmentPage() {
                           variant="standard"
                         >
                           <CustomDropDown
+                            disabled
                             validateRequired
                             id="gender"
                             control={control}
@@ -735,6 +795,7 @@ export default function AddAppointmentPage() {
                           variant="standard"
                         >
                           <CustomInputBox
+                            disable
                             pattern={PATTERN.ONLY_NUM}
                             maxLetterLimit={15}
                             inputTitle="Phone"
@@ -755,6 +816,7 @@ export default function AddAppointmentPage() {
                           variant="standard"
                         >
                           <CustomInputBox
+                            disable
                             pattern={PATTERN.CHAR_NUM_DOT_AT}
                             inputTitle="Email"
                             placeholder="Enter email address"
@@ -1108,8 +1170,8 @@ export default function AddAppointmentPage() {
                   buttonType="button"
                   title="Submit"
                   className="btn-black-outline"
-                  type="submit"
                   iconRight={isLoader ? <CircularProgress size={14} /> : null}
+                  type="submit"
                   // onclick={handleFormClose}
                   sx={{
                     padding: '0.375rem 2rem !important',

@@ -1,6 +1,7 @@
 import {
   Button,
   Divider,
+  IconButton,
   MenuItem,
   Select,
   TablePagination,
@@ -12,6 +13,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Controller, useForm } from 'react-hook-form';
 import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import BorderColorIcon from '@mui/icons-material/BorderColor';
+import { useNavigate } from 'react-router-dom';
 import TopBar from '../../components/common/TopBar';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 // import { fetchAppointments } from '../../redux/features/AppointmentSlice';
@@ -44,6 +47,7 @@ function StoreAppointmentsList() {
   const [search, setSearch] = useState<string>('');
   const [status, setStatus] = useState<string>('All');
   const { control, handleSubmit, getValues } = useForm();
+  const navigate = useNavigate();
 
   const fetchAppointmentsData = () => {
     // const { startDate, endDate } = formData;
@@ -173,6 +177,7 @@ function StoreAppointmentsList() {
                 <th className="font-bold">Phone</th>
                 <th className="font-bold">Time</th>
                 <th className="font-bold">Status</th>
+                <th className="font-bold">{}</th>
               </tr>
             </thead>
             <tbody>
@@ -188,6 +193,17 @@ function StoreAppointmentsList() {
                     {dayjs(x.appointmentTime).format('MMM D, YYYY hh:mm A')}
                   </td>
                   <td>{x.status}</td>
+                  <td>
+                    <IconButton
+                      aria-label="Reschedule"
+                      title="Reschedule"
+                      onClick={() =>
+                        navigate(`/dashboard/reschedule-appointment/${x.id}`)
+                      }
+                    >
+                      <BorderColorIcon />
+                    </IconButton>
+                  </td>
                 </tr>
               ))}
             </tbody>

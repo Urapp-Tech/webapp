@@ -373,7 +373,7 @@ function LoginPage() {
                   <div className="mt-2 w-full">
                     <Button
                       disabled={!!isLoader}
-                      className="w-full bg-neutral-900 px-16 py-2 text-gray-50"
+                      className="btn-black-fill w-full bg-neutral-900 px-16 py-2 text-gray-50"
                       variant="contained"
                       color="inherit"
                       title="Login"
@@ -386,7 +386,7 @@ function LoginPage() {
                       onSuccess={handleLoginWithFacebook}
                       render={({ onClick }) => (
                         <Button
-                          className="mt-3 w-full bg-blue-900 px-16 py-2 text-gray-50"
+                          className="btn-style mt-3 w-full bg-blue-900 px-16 py-2 text-gray-50"
                           variant="contained"
                           color="inherit"
                           title="Login with Facebook"

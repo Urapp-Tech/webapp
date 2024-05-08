@@ -108,19 +108,19 @@ const links = [
       />
     ),
   },
-  {
-    name: 'FAQs',
-    path: 'faqs',
-    icon: (isActive: boolean) => (
-      <HelpOutlineOutlinedIcon
-        className={cn(
-          'h-auto w-5 text-foreground transition-all duration-[0.3s]',
-          !isActive && 'opacity-75'
-        )}
-        fontSize="inherit"
-      />
-    ),
-  },
+  // {
+  //   name: 'FAQs',
+  //   path: 'faqs',
+  //   icon: (isActive: boolean) => (
+  //     <HelpOutlineOutlinedIcon
+  //       className={cn(
+  //         'h-auto w-5 text-foreground transition-all duration-[0.3s]',
+  //         !isActive && 'opacity-75'
+  //       )}
+  //       fontSize="inherit"
+  //     />
+  //   ),
+  // },
 ];
 
 const InSecureRouts: string[] = [];

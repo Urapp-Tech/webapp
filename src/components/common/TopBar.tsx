@@ -17,6 +17,9 @@ import NotificationPopover from './NotificationPopover';
 function TopBar() {
   const user = useAppSelector((state) => state.authState.user);
   const { cartItems }: any = useAppSelector((state) => state.cartState);
+  const systemConfigData = useAppSelector(
+    (state: any) => state.appState.systemConfig
+  );
   const [notificationElement, setNotificationElement] =
     useState<HTMLButtonElement | null>(null);
   const notificationIconButtonElement = useRef(null);
@@ -60,7 +63,15 @@ function TopBar() {
         }}
       >
         <NavLink to="/dashboard/home">
-          <img className="w-40" src={assets.images.logo} alt="" />
+          {systemConfigData?.tenantConfig?.logo ? (
+            <img
+              className="h-10 w-40"
+              src={systemConfigData.tenantConfig.logo}
+              alt=""
+            />
+          ) : (
+            <span>Logo</span>
+          )}
         </NavLink>
         <div className="flex items-center">
           <IconButton

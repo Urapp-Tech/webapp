@@ -41,10 +41,19 @@ const forgotPassword = (data: ForgotPasswordPayload) => {
   );
 };
 
+const resetPassword = (data: ForgotPasswordPayload) => {
+  return network.post(
+    API_PATHS.resetPassword,
+    { ...data, tenant: getTenantId() },
+    { headers: getHeaders() }
+  );
+};
+
 export default {
   signUp,
   getOTP,
   loginService,
   forgotPassword,
   loginWithFacebook,
+  resetPassword,
 };

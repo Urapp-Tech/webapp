@@ -240,6 +240,9 @@ export const PATTERN = {
 };
 
 export const MAX_LENGTH_EXCEEDED = 'Maximum length exceeded';
+export const INVALID_CHAR = 'Invalid characters';
+export const PASSWORD_SHOULD_SAME = 'Password must same to the new one.';
+export const PH_MINI_LENGTH = 'Minimum length should be 15';
 
 export const GENDER = [
   {

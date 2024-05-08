@@ -53,6 +53,11 @@ const API_PATHS = {
     BASE_URL
   ).toString(),
 
+  resetPassword: new URL(
+    `/api/v1/app/app-user/resetPassword/app`,
+    BASE_URL
+  ).toString(),
+
   // Cart
   anonymousCart: new URL(
     `/api/v1/app/appUserCart/getCart/device`,
@@ -169,7 +174,22 @@ const API_PATHS = {
       `/api/v1/app/store/appointment/list/${tenant}`,
       BASE_URL
     ).toString(),
+  findAppointment: (appointment_id: string) =>
+    new URL(
+      `/api/v1/app/store/appointment/get/${appointment_id}`,
+      BASE_URL
+    ).toString(),
+  rescheduleAppointment: (appointment_id: string) =>
+    new URL(
+      `/api/v1/app/store/appointment/re-schedule/${appointment_id}`,
+      BASE_URL
+    ).toString(),
   getBanners: () => new URL(`/api/v1/app/banner/list`, BASE_URL).toString(),
+  CheckEmployeeAvailable: (employeeId: string, date: string) =>
+    new URL(
+      `/api/v1/app/appointment/leave/management/${employeeId}/${date}`,
+      BASE_URL
+    ).toString(),
   getStoreEmployeeRating: () =>
     new URL(`/api/v1/app/store/appointment-ratings/list`, BASE_URL).toString(),
   updateEmployeeRating: (id: string) =>

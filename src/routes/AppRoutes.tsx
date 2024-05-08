@@ -71,6 +71,9 @@ const AccountSettingsPage = lazy(
 const AppointmentHistoryPage = lazy(
   () => import('../pages/appointments/AppointmentHistoryPage')
 );
+const RescheduleAppointmentPage = lazy(
+  () => import('../pages/appointments/RescheduleAppointmentPage')
+);
 
 export const routeObjects: Array<RouteObject> = [
   {
@@ -146,6 +149,14 @@ export const routeObjects: Array<RouteObject> = [
         element: (
           <Suspense fallback={<Loader />}>
             <AddAppointmentPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'reschedule-appointment/:id',
+        element: (
+          <Suspense fallback={<Loader />}>
+            <RescheduleAppointmentPage />
           </Suspense>
         ),
       },
