@@ -1,5 +1,4 @@
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import DateRangeIcon from '@mui/icons-material/DateRange';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import DiscountIcon from '@mui/icons-material/Discount';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
@@ -31,7 +30,6 @@ import addressService from '../../services/address.service';
 import cartService, { UpdateCartPayload } from '../../services/cart.service';
 import orderService from '../../services/order.service';
 import promiseHandler from '../../utilities/promise-handler';
-import DatePickerButton from './DatePickerButton';
 import PayFastForm from './PayFastForm';
 import PaymentOptionPopup from './PaymentOptionPopup';
 
@@ -47,7 +45,9 @@ function MyBasketPage() {
 
   const { cartItems, cartData } = useAppSelector((state) => state.cartState);
   const tenant = useAppSelector((state) => state.deviceStates.tenant);
-  const { DropOff, PickUp } = useAppSelector((state) => state.dateState);
+  const tenantConfig = useAppSelector(
+    (state) => state.deviceStates.tenantConfig
+  );
   const user = useAppSelector((state) => state.authState.user);
   const userAddress = useAppSelector((state) => state.deviceStates.addressList);
   const dispatch = useAppDispatch();
@@ -74,13 +74,17 @@ function MyBasketPage() {
   };
   const onCheckoutPayFast = async () => {
     const tempAddress = userAddress[0] ? userAddress[0].id : null;
+    const pickupDateTime = dayjs(new Date()).toISOString();
+    const dropDateTime = dayjs(pickupDateTime)
+      .add(tenantConfig?.minimumDeliveryTime ?? 3, 'day')
+      .toISOString();
     const updateCartPayload: UpdateCartPayload = {
       appUser: user?.id,
       appUserAddress: tempAddress,
       appUserDevice: cartData?.appUserDevice,
       cartId: cartData?.id,
-      dropDateTime: DropOff,
-      pickupDateTime: PickUp,
+      dropDateTime,
+      pickupDateTime,
       voucherCode,
       tenant: cartData?.tenant,
       products: cartItems.map((item: any) => {
@@ -167,13 +171,17 @@ function MyBasketPage() {
 
   const onCheckoutCash = async () => {
     const tempAddress = userAddress[0] ? userAddress[0].id : null;
+    const pickupDateTime = dayjs(new Date()).toISOString();
+    const dropDateTime = dayjs(pickupDateTime)
+      .add(tenantConfig?.minimumDeliveryTime ?? 3, 'day')
+      .toISOString();
     const updateCartPayload: UpdateCartPayload = {
       appUser: user?.id,
       appUserAddress: tempAddress,
       appUserDevice: cartData?.appUserDevice,
       cartId: cartData?.id,
-      dropDateTime: DropOff,
-      pickupDateTime: PickUp,
+      dropDateTime,
+      pickupDateTime,
       voucherCode,
       tenant: cartData?.tenant,
       products: cartItems.map((item: any) => {
@@ -227,14 +235,18 @@ function MyBasketPage() {
     if (!cartData?.id) {
       return;
     }
+    const pickupDateTime = dayjs(new Date()).toISOString();
+    const dropDateTime = dayjs(pickupDateTime)
+      .add(tenantConfig?.minimumDeliveryTime ?? 3, 'day')
+      .toISOString();
     const tempAddress = userAddress[0] ? userAddress[0].id : null;
     const updateCartPayload: UpdateCartPayload = {
       appUser: user?.id,
       appUserAddress: tempAddress,
       appUserDevice: cartData?.appUserDevice,
       cartId: cartData?.id,
-      dropDateTime: DropOff,
-      pickupDateTime: PickUp,
+      dropDateTime: pickupDateTime,
+      pickupDateTime: dropDateTime,
       voucherCode,
       tenant: cartData?.tenant,
       products: cartItems.map((item: any) => {
@@ -400,7 +412,7 @@ function MyBasketPage() {
                   </p>
                   <FormControl variant="standard" size="small">
                     <Input
-                      className="min-w-60 min-h-[10px] rounded-[0.625rem] border border-solid border-[var(--light-400)] p-2 text-xs font-normal text-faded"
+                      className="min-h-[10px] min-w-60 rounded-[0.625rem] border border-solid border-[var(--light-400)] p-2 text-xs font-normal text-faded"
                       disableUnderline
                       inputProps={{
                         placeholder: 'Enter Promo Code',
@@ -433,7 +445,11 @@ function MyBasketPage() {
           </div>
           <div className="col-span-2">
             <div className="cart-checkout-card">
-              <div className="mb-5 grid grid-cols-1 sm:grid-cols-2">
+              <div className="w-full text-end text-sm ">
+                minimum time is
+                <span className="font-bold"> {minimumDeliveryTime}</span> days
+              </div>
+              {/*   <div className="mb-5 grid grid-cols-1 sm:grid-cols-2">
                 <div className="select-date-time sm:pr-4 lg:pr-7">
                   <DatePickerButton
                     onChange={handlePickUpTimeChange}
@@ -470,7 +486,7 @@ function MyBasketPage() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               {user ? (
                 <div className="address-card">
                   <div className="key" style={{ width: '500px' }}>
@@ -521,12 +537,12 @@ function MyBasketPage() {
                     setShowAlert(true);
                     return;
                   }
-                  if (!PickUp && !DropOff) {
+                  /* if (!PickUp && !DropOff) {
                     setAlertSeverity('error');
                     setAlertMessage('Pickup Date time is Required');
                     setShowAlert(true);
                     return;
-                  }
+                  } */
                   setOpenPaymentSelectPopup(true);
                 }}
                 color="inherit"
