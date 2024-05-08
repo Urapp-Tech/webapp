@@ -429,8 +429,8 @@ function LoginPage() {
         setAlertOpen={setShowAlert}
       />
       <div className="flex h-full w-full items-center justify-center bg-[#F0F0F0]">
-        <div className="mx-auto  flex w-full  items-center justify-around max-[1560px]:items-center">
-          <div className="w-[30%]  self-start px-[30px]">
+        <div className="mx-auto  grid w-full grid-cols-12 items-center justify-around max-[1560px]:items-center">
+          <div className=" col-span-12 self-start px-[30px]  md:col-span-4 lg:col-span-4">
             <div className="max-h-[29px] w-full max-w-[150px] px-[25px] py-[40px]">
               {userData?.tenantConfig?.logo ? (
                 <img
@@ -617,7 +617,7 @@ function LoginPage() {
               </form>
             </div>
           </div>
-          <div className="w-[70%] px-3 py-2">
+          <div className=" col-span-12 px-3 py-10 md:col-span-8 md:py-2 lg:col-span-8">
             {/* <div className="mx-auto max-w-[800px] overflow-hidden rounded-lg flex justify-center items-center min-h-[800px] min-[1600px]:max-w-[934px] "> */}
             <div className="mx-auto  flex max-h-[834px] items-center justify-center overflow-hidden rounded-lg max-[1560px]:max-h-[96vh]">
               {userData?.logoffImage ? (

@@ -399,11 +399,11 @@ function DeliveryAddressPage() {
       />
       <div className="delivery-address-page p-4 sm:p-5 xl:p-7">
         <h4 className="main-heading">Delivery Address</h4>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-12 gap-4">
           {isLoading ? (
             <Loader />
           ) : (
-            <div>
+            <div className="col-span-12 md:col-span-6">
               <div className="saved-addresses">
                 <h5 className="heading">Saved Addresses</h5>
                 <div
@@ -452,7 +452,7 @@ function DeliveryAddressPage() {
             </div>
           )}
 
-          <div className="select-location">
+          <div className="select-location col-span-12 md:col-span-6">
             {user === null && <NoLocationAvailable />}
             {user !== null && addressObj?.latitude === 0 && <NoLocationFound />}
             {user !== null && addressObj?.latitude !== 0 && (

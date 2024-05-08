@@ -7,8 +7,8 @@ import { NavLink, Outlet } from 'react-router-dom';
 function AccountPage() {
   return (
     <div className="account-page p-4 sm:p-5 xl:p-7">
-      <div className="grid grid-cols-5 gap-5">
-        <div className="tab-pills col-span-1 h-full">
+      <div className="grid grid-cols-12 gap-5">
+        <div className="tab-pills col-span-12 h-full md:col-span-4">
           <h4 className="main-heading">Account</h4>
           <div className="flex flex-col">
             <NavLink
@@ -37,7 +37,7 @@ function AccountPage() {
             </NavLink> */}
           </div>
         </div>
-        <div className="tab-content col-span-4">
+        <div className="tab-content col-span-12 md:col-span-8">
           <Outlet />
         </div>
       </div>

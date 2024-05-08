@@ -337,8 +337,8 @@ function MyBasketPage() {
         <div className="mb-4 flex items-center justify-start md:mb-6">
           <h4 className="page-heading">My Basket</h4>
         </div>
-        <div className="grid grid-cols-5 gap-4">
-          <div className="col-span-3">
+        <div className="grid grid-cols-12 gap-4">
+          <div className="col-span-12 md:col-span-7">
             <div className="cart-products-card">
               <div className="overflow-x-auto">
                 <table className="cart-products-table">
@@ -412,7 +412,7 @@ function MyBasketPage() {
                   </p>
                   <FormControl variant="standard" size="small">
                     <Input
-                      className="min-h-[10px] min-w-60 rounded-[0.625rem] border border-solid border-[var(--light-400)] p-2 text-xs font-normal text-faded"
+                      className="min-w-60 min-h-[10px] rounded-[0.625rem] border border-solid border-[var(--light-400)] p-2 text-xs font-normal text-faded"
                       disableUnderline
                       inputProps={{
                         placeholder: 'Enter Promo Code',
@@ -443,7 +443,7 @@ function MyBasketPage() {
               </div>
             </div>
           </div>
-          <div className="col-span-2">
+          <div className="col-span-12 md:col-span-5">
             <div className="cart-checkout-card">
               <div className="w-full text-end text-sm ">
                 minimum time is

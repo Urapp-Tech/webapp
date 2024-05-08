@@ -110,28 +110,29 @@ function StoreAppointmentsList() {
   ) : (
     <div className="cs-dialog container mx-auto mt-5 w-full rounded-lg bg-white px-4 py-5 shadow-lg">
       <div className="grid grid-cols-12">
-        <div className="flex items-center md:col-span-12 md:mb-8 lg:col-span-4 lg:mb-0">
+        <div className="col-span-12 flex items-center md:col-span-12 md:mb-8 lg:col-span-4 lg:mb-0">
           <span className="font-open-sans text-xl font-semibold text-[#252733]">
             Appointments History
           </span>
         </div>
-        <div className="flex justify-end gap-3 md:col-span-12 lg:col-span-8 ">
+        <div className="col-span-12 mt-3 flex justify-end gap-3 md:col-span-12 md:mt-1 lg:col-span-8 ">
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <form
               onSubmit={handleSubmit(fetchAppointmentsData)}
-              className="flex items-center gap-3"
+              className="grid grid-cols-12 items-center gap-3"
             >
               <Controller
                 name="startDate"
                 control={control}
-                defaultValue={dayjs().startOf('month').toDate()}
+                defaultValue={dayjs().subtract(6, 'month').toDate()}
                 render={({ field }) => (
                   <DesktopDatePicker
                     {...field}
                     label="Start Date"
+                    className="col-span-6 md:col-span-4"
                     format="YYYY-MM-DD"
                     value={dayjs(field.value)}
-                    defaultValue={dayjs().startOf('month')}
+                    defaultValue={dayjs().subtract(6, 'month')}
                     onChange={(date) => handleDateChange(date, field)}
                     // renderInput={(params: any) => <TextField {...params} />}
                   />
@@ -140,14 +141,15 @@ function StoreAppointmentsList() {
               <Controller
                 name="endDate"
                 control={control}
-                defaultValue={dayjs().toDate()}
+                defaultValue={dayjs().add(6, 'month').toDate()}
                 render={({ field }) => (
                   <DesktopDatePicker
                     {...field}
                     label="End Date"
                     format="YYYY-MM-DD"
+                    className="col-span-6 md:col-span-4"
                     value={dayjs(field.value)}
-                    defaultValue={dayjs()}
+                    defaultValue={dayjs().add(6, 'month')}
                     onChange={(date) => handleDateChange(date, field)}
                     // renderInput={(params: any) => <TextField {...params} />}
                   />
@@ -156,7 +158,7 @@ function StoreAppointmentsList() {
               <Button
                 type="submit"
                 variant="contained"
-                className="btn-black-fill btn-icon"
+                className="btn-black-fill btn-icon col-span-12 md:col-span-4"
               >
                 <SearchIcon />
                 Search Appointments
@@ -167,7 +169,7 @@ function StoreAppointmentsList() {
       </div>
       <Divider className="mt-4" />
       <div className="grid grid-cols-12">
-        <div className="col-span-12">
+        <div className="col-span-12 overflow-x-scroll md:overflow-x-auto">
           <table className="orders-table w-full">
             <thead>
               <tr>
@@ -194,15 +196,17 @@ function StoreAppointmentsList() {
                   </td>
                   <td>{x.status}</td>
                   <td>
-                    <IconButton
-                      aria-label="Reschedule"
-                      title="Reschedule"
-                      onClick={() =>
-                        navigate(`/dashboard/reschedule-appointment/${x.id}`)
-                      }
-                    >
-                      <BorderColorIcon />
-                    </IconButton>
+                    {!x.status.toLowerCase().includes('reschedule') && (
+                      <IconButton
+                        aria-label="Reschedule"
+                        title="Reschedule"
+                        onClick={() =>
+                          navigate(`/dashboard/reschedule-appointment/${x.id}`)
+                        }
+                      >
+                        <BorderColorIcon />
+                      </IconButton>
+                    )}
                   </td>
                 </tr>
               ))}

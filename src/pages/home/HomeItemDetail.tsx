@@ -180,11 +180,11 @@ function HomeItemDetail() {
   };
 
   return (
-    <div className="bg-background px-4 pt-6 sm:px-5 sm:pt-4 xl:px-7">
+    <div className="cs-dialog container mx-auto mt-5 w-full rounded-lg px-4 py-5 ">
       <CustomHeader title="Item Details" isNestedRoute />
       <div className="grid grid-cols-12 gap-8 xl:gap-4">
-        <div className="rounded-xl bg-white shadow-md xl:col-span-7 2xl:col-span-8">
-          <div className="m-auto my-5 h-[266px] w-[637px]">
+        <div className="col-span-12 rounded-xl bg-white shadow-md xl:col-span-7 2xl:col-span-8">
+          <div className="m-auto my-5 h-[266px] ">
             <img
               alt="rating-detail"
               className="h-full w-full object-contain"
@@ -236,7 +236,7 @@ function HomeItemDetail() {
             </div>
           </div>
         </div>
-        <div className="rounded-xl bg-white p-3 shadow-md xl:col-span-5 2xl:col-span-4">
+        <div className="col-span-12 rounded-xl bg-white p-3 shadow-md xl:col-span-5 2xl:col-span-4">
           <HomeItemDetailAccordin
             data={subCategoryItemData?.data.homeCatItemFaq}
           />

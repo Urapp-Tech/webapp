@@ -17,6 +17,7 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import HistoryIcon from '@mui/icons-material/History';
+import { useMediaQuery, useTheme } from '@mui/material';
 import { setDropOff, setPickup } from '../../redux/features/DateAndTime';
 import { logout } from '../../redux/features/authStateSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
@@ -125,7 +126,13 @@ const links = [
 
 const InSecureRouts: string[] = [];
 
-function Sidebar() {
+type Props = {
+  openDrawer: boolean;
+};
+
+function Sidebar({ openDrawer = true }: Props) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const user = useAppSelector((state) => state.authState.user);
   const tenantConfig = useAppSelector(
     (state) => state.deviceStates.tenantConfig
@@ -158,7 +165,9 @@ function Sidebar() {
 
   return (
     <Drawer
-      variant="permanent"
+      // variant="permanent"
+      variant={isMobile ? 'temporary' : 'permanent'}
+      open={openDrawer}
       PaperProps={{
         className:
           'left-sidebar !bottom-0 !top-[86px] !box-border !h-auto !w-[300px] !border-r-0 !bg-primary !px-0 !py-[30px] !transition-all !delay-[0ms] !duration-[225ms] !ease-out',

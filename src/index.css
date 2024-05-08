@@ -55,7 +55,7 @@
 }
 
 .btn-black-outline {
-  width: 15% !important;
+  /* width: 15% !important; */
   border-radius: 0.5rem !important;
   border-width: 1px !important;
   border-style: solid !important;
@@ -131,9 +131,9 @@
   /* width: 15% !important; */
 }
 
-.custom-swiper-slider .swiper-slide {
+/* .custom-swiper-slider .swiper-slide {
   width: 15% !important;
-}
+} */
 
 .swiper-wrapper {
   padding-left: 150px;

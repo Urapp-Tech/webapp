@@ -90,7 +90,7 @@ function NotificationPopover({
           ),
         }}
         anchorOrigin={{
-          vertical: 40,
+          vertical: 80,
           horizontal: 37,
         }}
         transformOrigin={{

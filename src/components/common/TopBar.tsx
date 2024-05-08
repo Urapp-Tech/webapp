@@ -14,7 +14,11 @@ import cn from '../../utilities/class-names';
 import promiseHandler from '../../utilities/promise-handler';
 import NotificationPopover from './NotificationPopover';
 
-function TopBar() {
+type Props = {
+  setDrawerState: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+function TopBar({ setDrawerState }: Props) {
   const user = useAppSelector((state) => state.authState.user);
   const { cartItems }: any = useAppSelector((state) => state.cartState);
   const systemConfigData = useAppSelector(
@@ -53,7 +57,10 @@ function TopBar() {
   console.log('error Notification List is ', notificationElement);
 
   return (
-    <AppBar position="fixed" className="!w-full !bg-primary !shadow-none">
+    <AppBar
+      position="fixed"
+      className="z-[5000] !w-full !bg-primary !shadow-none"
+    >
       <Toolbar
         classes={{
           regular: cn(
@@ -80,6 +87,7 @@ function TopBar() {
             edge="start"
             color="inherit"
             aria-label="menu"
+            onClick={() => setDrawerState((prev: boolean) => !prev)}
           >
             <MenuIcon />
           </IconButton>

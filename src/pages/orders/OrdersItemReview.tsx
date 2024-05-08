@@ -92,7 +92,7 @@ function OrdersItemsReview({
     return <div>Error Occurred</div>;
   }
   return (
-    <div className="grid grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
       {orderReviewItemsData.success &&
         orderReviewItemsData.data.list.map((item) => (
           <RatingCard

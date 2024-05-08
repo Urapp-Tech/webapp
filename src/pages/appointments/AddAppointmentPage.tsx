@@ -24,7 +24,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, useMediaQuery, useTheme } from '@mui/material';
 import isBetween from 'dayjs/plugin/isBetween';
 import assets from '../../assets';
 import '../../assets/css/PopupStyle.css';
@@ -70,6 +70,8 @@ export default function AddAppointmentPage() {
   const [notifyMessage, setNotifyMessage] = useState({});
   const [disabledButton, setDisabledButton] = useState<any>([]);
   const [activeBarber, setActiveBarber] = useState<any>();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [selectedItem, setSelectedItem] = useState<{
     id: string;
     name: string;
@@ -686,7 +688,7 @@ export default function AddAppointmentPage() {
             >
               <div className="FormBody">
                 <div className="grid grid-cols-12 gap-4">
-                  <div className="col-span-8">
+                  <div className="col-span-12 md:col-span-8">
                     <div className="FormFields grid grid-cols-12 gap-6">
                       <div className="col-span-6">
                         <FormControl
@@ -812,7 +814,7 @@ export default function AddAppointmentPage() {
                       </div>
                     </div>
                   </div>
-                  <div className="col-span-4">
+                  <div className="col-span-12 md:md:col-span-4">
                     <div className="w-full">
                       <FormControl
                         className="FormControl w-full"
@@ -861,7 +863,7 @@ export default function AddAppointmentPage() {
                           }
                         >
                           <Swiper
-                            slidesPerView={6}
+                            slidesPerView={isMobile ? 1.5 : 6}
                             spaceBetween={30}
                             pagination={pagination}
                             modules={[Pagination]}
@@ -894,7 +896,10 @@ export default function AddAppointmentPage() {
                           {activeBarberData?.storeEmployeeSchedule?.map(
                             (item: any, index: number) => {
                               return (
-                                <div key={index} className="col-span-2 p-3">
+                                <div
+                                  key={index}
+                                  className="col-span-4 p-3 md:col-span-2"
+                                >
                                   <div className="h-[100px] flex-col">
                                     <div>
                                       <span className="font-semibold">
@@ -1019,7 +1024,10 @@ export default function AddAppointmentPage() {
                               ? dayjs(endTime)?.format('h:mm A')
                               : '--';
                             return (
-                              <div key={index} className="col-span-2 p-3">
+                              <div
+                                key={index}
+                                className="col-span-6 p-3 md:col-span-4 lg:col-span-2"
+                              >
                                 <div className="flex-col rounded-xl bg-background">
                                   <div className="flex items-center justify-center p-3">
                                     <span className="text-sm">
@@ -1039,51 +1047,55 @@ export default function AddAppointmentPage() {
                     </div>
                   </>
                 )}
-              <div className="mt-3">
-                <span className="text-base font-bold text-[#1A1A1A]">
-                  Selected Barber & Service
-                </span>
-                {fields?.length > 0 && <hr className="my-4 border-[#949EAE]" />}
-                {fields?.length > 0 &&
-                  fields?.map((items: any, index: number) => {
-                    return (
-                      <div className="my-4 grid grid-cols-12" key={index}>
-                        <div className="col-span-1">
-                          <div
-                            onClick={() => {
-                              remove(index);
-                              removeBookinkList(items);
-                            }}
-                            className="flex w-[40%] cursor-pointer items-center justify-center rounded-2xl bg-background p-2"
-                          >
-                            <CloseIcon />
+              <div className="w-full overflow-x-scroll md:overflow-x-auto">
+                <div className="mt-3 w-[200%] md:w-full">
+                  <span className="text-base font-bold text-[#1A1A1A]">
+                    Selected Barber & Service
+                  </span>
+                  {fields?.length > 0 && (
+                    <hr className="my-4 border-[#949EAE]" />
+                  )}
+                  {fields?.length > 0 &&
+                    fields?.map((items: any, index: number) => {
+                      return (
+                        <div className="my-4 grid grid-cols-12" key={index}>
+                          <div className="col-span-1">
+                            <div
+                              onClick={() => {
+                                remove(index);
+                                removeBookinkList(items);
+                              }}
+                              className="flex w-[40%] cursor-pointer items-center justify-center rounded-2xl bg-background p-2"
+                            >
+                              <CloseIcon />
+                            </div>
+                          </div>
+                          <div className="col-span-2">
+                            <p className="font-semibold">Barber</p>
+                            <span>{items.barber}</span>
+                          </div>
+                          <div className="col-span-2 mx-7">
+                            <p className="font-semibold">Service</p>
+                            <span>
+                              {getCatItemName(items.storeServiceCategoryItem)}
+                            </span>
+                          </div>
+                          <div className="col-span-2">
+                            <p className="font-semibold">Appointment Amount</p>
+                            <span>{items.amount}</span>
+                          </div>
+                          <div className="col-span-2 mx-7">
+                            <p className="font-semibold">Appointment Date</p>
+                            <span>{items.appointmentTime.split(' ')[0]}</span>
+                          </div>
+                          <div className="col-span-2">
+                            <p className="font-semibold">Appointment Time</p>
+                            <span>{items.appointmentTime.split(' ')[1]}</span>
                           </div>
                         </div>
-                        <div className="col-span-2">
-                          <p className="font-semibold">Barber</p>
-                          <span>{items.barber}</span>
-                        </div>
-                        <div className="col-span-2 mx-7">
-                          <p className="font-semibold">Service</p>
-                          <span>
-                            {getCatItemName(items.storeServiceCategoryItem)}
-                          </span>
-                        </div>
-                        <div className="col-span-2">
-                          <p className="font-semibold">Appointment Amount</p>
-                          <span>{items.amount}</span>
-                        </div>
-                        <div className="col-span-2 mx-7">
-                          <p className="font-semibold">Appointment Date</p>
-                          <span>{items.appointmentTime.split(' ')[0]}</span>
-                        </div>
-                        <div className="col-span-2">
-                          <p className="font-semibold">Appointment Time</p>
-                          <span>{items.appointmentTime.split(' ')[1]}</span>
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                </div>
               </div>
               <hr className="my-4 border-[#949EAE]" />
               <div className="mt-3 flex w-full items-center justify-end">
@@ -1113,7 +1125,7 @@ export default function AddAppointmentPage() {
                   // onclick={handleFormClose}
                   sx={{
                     padding: '0.375rem 2rem !important',
-                    width: '15%',
+                    width: '150px',
                     height: '35px',
                   }}
                 />
