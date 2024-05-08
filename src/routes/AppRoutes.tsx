@@ -24,8 +24,8 @@ import MainLayout from '../components/layout/MainLayout';
 // import AccountSettingsPage from '../pages/account/AccountSettingPage';
 import Loader from '../components/common/Loader';
 import Page404 from '../pages/404/404';
-import HomeItemDetail from '../pages/home/HomeItemDetail';
 import AddAppointmentPage from '../pages/appointments/AddAppointmentPage';
+import HomeItemDetail from '../pages/home/HomeItemDetail';
 
 const LoginPage = lazy(() => import('../pages/auth/login/LoginPage'));
 const SignUpPage = lazy(() => import('../pages/auth/sign-up/SignUpPage'));
@@ -37,7 +37,7 @@ const OTPVerificationPage = lazy(
 );
 const SignOTPVerificationPage = lazy(
   () =>
-    import('../pages/auth/signup-otp-verification/SignupOTPVerificationPage')
+    import('../pages/auth/signup-otp-verification/SignUpOTPVerificationPage')
 );
 const ResetPasswordPage = lazy(
   () => import('../pages/auth/reset-password/ResetPasswordPage')
