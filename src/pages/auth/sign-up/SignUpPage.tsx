@@ -290,7 +290,7 @@ function LoginPage() {
       return;
     }
     setIsLoader(false);
-    navigate('../otp-verification', { state: data.email });
+    navigate('../signup-otp-verification', { state: data.email });
   };
 
   const onsubmit = async (data: SignUpPayload) => {

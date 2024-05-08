@@ -78,11 +78,14 @@ function OTPVerificationPage() {
           setTimeout(() => {
             setAlertSeverity('success');
             setAlertMessage(res.data.message);
+            setShowAlert(true);
             navigate('../login', { replace: true });
           }, 500);
         } else {
           setIsLoader(false);
           setAlertSeverity('error');
+          setShowAlert(true);
+
           setAlertMessage(res.data.message);
         }
       })
@@ -90,6 +93,7 @@ function OTPVerificationPage() {
         setIsLoader(false);
         setAlertSeverity('error');
         setAlertMessage(err.message);
+        setShowAlert(true);
       });
   };
 

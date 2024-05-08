@@ -35,6 +35,10 @@ const ForgotPasswordPage = lazy(
 const OTPVerificationPage = lazy(
   () => import('../pages/auth/otp-verification/OTPVerificationPage')
 );
+const SignOTPVerificationPage = lazy(
+  () =>
+    import('../pages/auth/signup-otp-verification/SignupOTPVerificationPage')
+);
 const ResetPasswordPage = lazy(
   () => import('../pages/auth/reset-password/ResetPasswordPage')
 );
@@ -118,6 +122,14 @@ export const routeObjects: Array<RouteObject> = [
         element: (
           <Suspense fallback={<Loader />}>
             <OTPVerificationPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'signup-otp-verification',
+        element: (
+          <Suspense fallback={<Loader />}>
+            <SignOTPVerificationPage />
           </Suspense>
         ),
       },
