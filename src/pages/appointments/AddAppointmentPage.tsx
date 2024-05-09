@@ -610,9 +610,11 @@ export default function AddAppointmentPage() {
     });
     data.appointments = updatedAppointmentArray;
     storeAppointmentService
-      .appointmentCreate(data, {
-        tenant: systemConfig?.tenant,
-        app_user: user?.id,
+      .appointmentCreate(
+        { ...data, status: 'New' },
+        {
+          tenant: systemConfig?.tenant,
+          app_user: user?.id,
       })
       .then((res: any) => {
         if (res.data.success) {
