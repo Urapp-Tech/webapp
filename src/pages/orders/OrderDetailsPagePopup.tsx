@@ -6,7 +6,9 @@ import DialogContent from '@mui/material/DialogContent';
 
 type Props = {
   open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpen:
+    | React.Dispatch<React.SetStateAction<boolean>>
+    | ((value: boolean) => void);
 };
 
 function OrderDetailsPagePopup({ open, setOpen }: Props) {
@@ -24,7 +26,7 @@ function OrderDetailsPagePopup({ open, setOpen }: Props) {
       </DialogContent>
       <DialogActions className="modal-footer">
         <Button
-          onClick={() => setOpen(false)}
+          onClick={() => setOpen(true)}
           className="btn-yes"
           type="button"
           color="inherit"

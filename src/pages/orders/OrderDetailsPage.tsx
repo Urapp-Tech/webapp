@@ -74,6 +74,37 @@ function OrderDetailsPage() {
     setOrderItemDetail(getOrderDetailsResult.data.data);
   }, []);
 
+  const cancelOrder = async () => {
+    orderService
+      .updateOrderStatus({
+        app_order: orderItemDetail.id,
+        status: ORDER_STATUS.CANCELLED,
+      })
+      .then((response) => {
+        if (response.data.success) {
+          if (user) {
+            getOrderDetails();
+          }
+          setAlertSeverity('success');
+          setAlertMessage(response.data.message);
+          setShowAlert(true);
+        } else {
+          setAlertSeverity('error');
+          setAlertMessage(response.data.message);
+          setShowAlert(true);
+        }
+      });
+  };
+
+  const handleCancelModalAction = (value: boolean = false) => {
+    if (value) {
+      cancelOrder();
+      setDialogOpen(false);
+      return;
+    }
+    setDialogOpen(value);
+  };
+
   useEffect(() => {
     if (user) {
       getOrderDetails();
@@ -114,7 +145,10 @@ function OrderDetailsPage() {
         alertOpen={showAlert}
         setAlertOpen={setShowAlert}
       />
-      <OrderDetailsPagePopup open={dialogOpen} setOpen={setDialogOpen} />
+      <OrderDetailsPagePopup
+        open={dialogOpen}
+        setOpen={handleCancelModalAction}
+      />
       <div className="order-details-page p-4 sm:p-5 xl:p-7">
         <div className="mb-4 flex items-center md:mb-6">
           <IconButton
@@ -168,7 +202,7 @@ function OrderDetailsPage() {
                   <div className="basic-details">
                     <p className="order-id">
                       Order Id:&nbsp;
-                      <span>{orderItemDetail?.appOrderNumber}</span>
+                      <span>{orderItemDetail?.orderNumber}</span>
                     </p>
                     <p className="order-date-time">08:35 , 05-01-2020</p>
                     <h6 className="order-status order-out-for-delivery">
@@ -176,23 +210,22 @@ function OrderDetailsPage() {
                     </h6>
                   </div>
                 </div>
-
-                <Button
-                  type="button"
-                  onClick={HandleCancelOrder}
-                  className="btn-cancel-order"
-                  color="inherit"
-                  disabled={orderItemDetail?.status !== ORDER_STATUS.NEW}
-                >
-                  Cancel Order
-                </Button>
+                {orderItemDetail?.status === ORDER_STATUS.NEW && (
+                  <Button
+                    type="button"
+                    onClick={HandleCancelOrder}
+                    className="btn-cancel-order"
+                    color="inherit"
+                  >
+                    Cancel Order
+                  </Button>
+                )}
               </div>
-              <hr className="my-4" />
-              <div className="grid grid-cols-1 sm:grid-cols-2">
+              {/* <hr className="my-4" /> */}
+              {/* <div className="grid grid-cols-1 sm:grid-cols-2">
                 <div className="edit-date-time mb-5 sm:pr-4">
                   <div className="mb-3.5 flex items-center justify-between">
                     <p className="label">Pick Up Time</p>
-                    {/* <ModeEditOutlineOutlinedIcon /> */}
                   </div>
                   <div className="mb-3 flex items-center gap-3">
                     <DateRangeIcon className="text-xl" />
@@ -211,7 +244,6 @@ function OrderDetailsPage() {
                 <div className="edit-date-time sm:pl-6">
                   <div className="mb-3.5 flex items-center justify-between">
                     <p className="label">Drop Off Time</p>
-                    {/* <ModeEditOutlineOutlinedIcon /> */}
                   </div>
                   <div className="mb-3 flex items-center gap-3">
                     <DateRangeIcon className="text-xl" />
@@ -227,7 +259,7 @@ function OrderDetailsPage() {
                     </p>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div className="overflow-x-auto">
                 <table className="ordered-items-table">

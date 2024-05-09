@@ -6,6 +6,11 @@ export interface NewOrder {
   cartId: string;
 }
 
+export interface OrderStatus {
+  app_order: string;
+  status: string;
+}
+
 const addOrder = (data: NewOrder) => {
   return network.post(API_PATHS.addOrder, data, { headers: getHeaders() });
 };
@@ -18,6 +23,12 @@ const addPayFastOrder = (data: NewOrder) => {
 
 const addCashOrder = (data: NewOrder) => {
   return network.post(API_PATHS.addCashOrder, data, { headers: getHeaders() });
+};
+
+const updateOrderStatus = (data: OrderStatus) => {
+  return network.post(API_PATHS.updateOrderStatus, data, {
+    headers: getHeaders(),
+  });
 };
 
 const getPayFastToken = () => {
@@ -39,4 +50,5 @@ export default {
   getPayFastToken,
   addPayFastOrder,
   addCashOrder,
+  updateOrderStatus,
 };

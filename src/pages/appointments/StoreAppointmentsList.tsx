@@ -196,7 +196,7 @@ function StoreAppointmentsList() {
                   </td>
                   <td>{x.status}</td>
                   <td>
-                    {!x.status.toLowerCase().includes('reschedule') && (
+                    {x.status.toLowerCase().includes('new') && (
                       <IconButton
                         aria-label="Reschedule"
                         title="Reschedule"

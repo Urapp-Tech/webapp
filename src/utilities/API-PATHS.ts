@@ -109,6 +109,11 @@ const API_PATHS = {
     BASE_URL
   ).toString(),
 
+  updateOrderStatus: new URL(
+    `/api/v1/app/appOrder/statuses/create`,
+    BASE_URL
+  ).toString(),
+
   getPayFastToken: new URL(
     `/api/v1/app/appOrder/pay-fast/access-token`,
     BASE_URL
