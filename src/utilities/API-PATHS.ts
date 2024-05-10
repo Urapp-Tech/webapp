@@ -195,6 +195,10 @@ const API_PATHS = {
       `/api/v1/app/appointment/leave/management/${employeeId}/${date}`,
       BASE_URL
     ).toString(),
+
+  getUserAppointmentsByDate: (date: string) =>
+    new URL(`/api/v1/app/appointment/users/${date}`, BASE_URL).toString(),
+
   getStoreEmployeeRating: () =>
     new URL(`/api/v1/app/store/appointment-ratings/list`, BASE_URL).toString(),
   updateEmployeeRating: (id: string) =>

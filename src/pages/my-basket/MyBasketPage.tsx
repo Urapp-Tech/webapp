@@ -347,7 +347,7 @@ function MyBasketPage() {
                       <th>Products</th>
                       <th>Price</th>
                       <th>Items</th>
-                      <th>Amount</th>
+                      <th>Quantity</th>
                       <th>Subtotal</th>
                     </tr>
                   </thead>

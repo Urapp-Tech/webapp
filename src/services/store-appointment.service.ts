@@ -57,6 +57,13 @@ const CheckEmployeeAvailable = (employeeId: any, date: any, body?: any) => {
   });
 };
 
+const getUserAppointmentsByDate = (date: any, body?: any) => {
+  return network.get(API_PATHS.getUserAppointmentsByDate(date), {
+    headers: getHeaders(),
+    params: body,
+  });
+};
+
 export default {
   getBarbersList,
   getBarberBookedTimeSlots,
@@ -65,4 +72,5 @@ export default {
   findAppointment,
   rescheduleAppointment,
   CheckEmployeeAvailable,
+  getUserAppointmentsByDate,
 };

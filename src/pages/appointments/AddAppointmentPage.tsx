@@ -35,7 +35,10 @@ import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import Notify from '../../components/common/Notify';
 import TimePicker from '../../components/common/TimePicker';
 import TopBar from '../../components/common/TopBar';
-import { AddAppointmentForm } from '../../interfaces/app.appointment';
+import {
+  AddAppointmentForm,
+  Appointment,
+} from '../../interfaces/app.appointment';
 import storeAppointmentService from '../../services/store-appointment.service';
 import AlertBox from '../../components/common/SnackBar';
 import useAlert from '../../hooks/alert.hook';
@@ -63,11 +66,17 @@ const darkTheme = createTheme({
 
 export default function AddAppointmentPage() {
   const navigate = useNavigate();
+  const officeTimings = useAppSelector(
+    (x) => x.deviceStates.tenantConfig?.officeTimeOut
+  );
+  const officeTimeOut = dayjs(officeTimings);
   const dispatch = useAppDispatch();
+  const [paymentMethod, setPaymentMethod] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
   const [isPageLoader, setIsPageLoader] = useState(false);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
+  const [userAppointments, setUserAppointments] = useState<Appointment[]>([]);
   const [disabledButton, setDisabledButton] = useState<any>([]);
   const [activeBarber, setActiveBarber] = useState<any>();
   const theme = useTheme();
@@ -125,8 +134,16 @@ export default function AddAppointmentPage() {
     keyName: 'key',
   });
 
+  const handlePaymentChange = () => {
+    setPaymentMethod(!paymentMethod);
+  };
+
   const checkIsSameDate = (date: any, appointmentDate: any) => {
     return dayjs(date).isSame(appointmentDate, 'day');
+  };
+
+  const checkIsAfterTime = (date: any, appointmentDate: any) => {
+    return dayjs(date).isAfter(appointmentDate, 'minutes');
   };
 
   const checkIsBetweenTime = (
@@ -173,7 +190,24 @@ export default function AddAppointmentPage() {
     setAlertSeverity,
   } = useAlert();
 
+  const getUserBookedSlotsByDate = async () => {
+    try {
+      const response = await storeAppointmentService.getUserAppointmentsByDate(
+        dayjs(getValues('appointmentDate'))?.format('YYYY-MM-DD')
+      );
+
+      if (response.data && response.data.success) {
+        return response.data.data;
+      }
+    } catch (error) {
+      console.log('getUserBookedSlotsByDate ~ error:', error);
+      return [];
+    }
+  };
+
   const getBookedTimeSlots: any = async (id: any, date: any) => {
+    setUserAppointments(await getUserBookedSlotsByDate());
+
     const resll = await shopEvents(
       id,
       dayjs(getValues('appointmentDate')).format('YYYY-MM-DD')
@@ -444,7 +478,48 @@ export default function AddAppointmentPage() {
     });
   }, [activeBarberData]);
 
+  /**
+   * Checks if a user has booked an appointment at a specified time.
+   * @returns {boolean} Returns true if the user has a booked appointment at the specified time, otherwise returns false.
+   */
+  const checkUserBookedOnTime = () => {
+    const ad = `${dayjs(getValues('appointmentDate'))?.format(
+      'YYYY-MM-DD'
+    )} ${dayjs(appointmentTime).format('HH:mm')}`;
+
+    const bookedSlot = userAppointments.filter((x) => {
+      const startTime = dayjs(x.appointmentTime);
+      const endTime = startTime.add(parseInt(x.serviceTime, 10), 'minute');
+
+      const isBetweenInSlot = dayjs(ad).isBetween(
+        startTime,
+        endTime,
+        null,
+        '[]'
+      );
+
+      return isBetweenInSlot;
+    });
+
+    if (bookedSlot.length > 0) {
+      return true;
+    }
+    return false;
+  };
+
   const addAppointmentServices = () => {
+    // Check if the user has already added a service for this appointment time
+    if (checkUserBookedOnTime()) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: `You have another appointment scheduled for this time. (${dayjs(
+          appointmentTime
+        )?.format('hh:mm A')})`,
+        type: 'error',
+      });
+      return;
+    }
+
     const obj = {
       id: 0,
       barber: activeBarberData?.storeEmployee?.name,
@@ -481,6 +556,9 @@ export default function AddAppointmentPage() {
       const addTime = dayjs(time).add(activeBarberData?.serviceTime, 'minutes');
 
       if (scheduleData.length > 0) {
+        // for (let j = 0; j < shopScheduleWorkDays.length; i += 1++) {
+        //   const elShop = appointmentBookedTime[j];
+        // }
         if (!checkIsBetweenTime(time, startTime, endTime)) {
           setIsNotify(true);
           setNotifyMessage({
@@ -514,7 +592,7 @@ export default function AddAppointmentPage() {
               ) {
                 setIsNotify(true);
                 setNotifyMessage({
-                  text: `Barber is not available at this time`,
+                  text: `Barber is engaged with another client`,
                   type: 'error',
                 });
                 return false;
@@ -528,9 +606,13 @@ export default function AddAppointmentPage() {
               'minute'
             );
 
-            if (time > dayjs(serviceTime)) {
+            if (
+              time > dayjs(serviceTime) &&
+              checkIsAfterTime(endTime, serviceTime)
+            ) {
               prevTime = dayjs(serviceTime);
             } else if (
+              !checkIsAfterTime(endTime, serviceTime) &&
               !checkIsBetweenTime(addTime, prevTime, dayjs(el.appointmentTime))
             ) {
               // break;
@@ -597,7 +679,6 @@ export default function AddAppointmentPage() {
     }
     return null;
   };
-
   const onSubmit = (data: any) => {
     setIsLoader(true);
     delete data.storeServiceCategoryItem;
@@ -605,7 +686,7 @@ export default function AddAppointmentPage() {
     delete data.categoryId;
     delete data.appointmentDate;
     const updatedAppointmentArray = data.appointments.map((item: any) => {
-      const { ...rest } = item;
+      const { amount, barber, id, ...rest } = item;
       return rest;
     });
     data.appointments = updatedAppointmentArray;
@@ -615,7 +696,8 @@ export default function AddAppointmentPage() {
         {
           tenant: systemConfig?.tenant,
           app_user: user?.id,
-      })
+        }
+      )
       .then((res: any) => {
         if (res.data.success) {
           setIsLoader(false);
@@ -984,8 +1066,8 @@ export default function AddAppointmentPage() {
                                     // timePickerSubLabel={"(Office in time)"}
                                     timePickerValue={appointmentTime}
                                     setTimePickerValue={setAppointmentTime}
-                                    minTime={selectedScheduleTime.startTime}
-                                    maxTime={selectedScheduleTime.endTime}
+                                    // minTime={selectedScheduleTime.startTime}
+                                    // maxTime={selectedScheduleTime.endTime}
                                     id="startTime"
                                     // setError={setError}
                                   />

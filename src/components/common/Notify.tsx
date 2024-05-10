@@ -29,12 +29,14 @@ function Notify({ isOpen, setIsOpen, displayMessage }: NotifyProps) {
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       open={isOpen}
       autoHideDuration={2000}
+      // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
+      sx={{ zIndex: 9999999999999999999 }}
       onClose={handleClose}
     >
       <Alert
         onClose={handleClose}
         severity={displayMessage?.type}
-        sx={{ width: '100%' }}
+        sx={{ width: '100%', zIndex: 1000000 }}
       >
         {displayMessage?.text}
       </Alert>
