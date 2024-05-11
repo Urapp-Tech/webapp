@@ -26,6 +26,7 @@ import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { CircularProgress, useMediaQuery, useTheme } from '@mui/material';
 import isBetween from 'dayjs/plugin/isBetween';
+import utcPlugin from 'dayjs/plugin/utc';
 import assets from '../../assets';
 import '../../assets/css/PopupStyle.css';
 import CustomButton from '../../components/common/CustomButton';
@@ -54,6 +55,7 @@ import Loader from '../../components/common/Loader';
 
 // Extend dayjs with necessary plugins
 dayjs.extend(isBetween);
+dayjs.extend(utcPlugin);
 // dayjs.extend(timezone);
 
 const darkTheme = createTheme({
@@ -689,7 +691,13 @@ export default function AddAppointmentPage() {
       const { amount, barber, id, ...rest } = item;
       return rest;
     });
-    data.appointments = updatedAppointmentArray;
+    data.appointments = updatedAppointmentArray.map((e: any) => {
+      const formattedDateTime = dayjs(e.appointmentTime)
+        .utc()
+        .format('YYYY-MM-DD HH:mm:ss');
+      e.appointmentTime = formattedDateTime;
+      return e;
+    });
     storeAppointmentService
       .appointmentCreate(
         { ...data, status: 'New' },
