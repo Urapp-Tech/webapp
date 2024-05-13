@@ -545,7 +545,9 @@ export default function AddAppointmentPage() {
       const scheduleData = activeBarberData?.storeEmployeeSchedule.filter(
         (item: any) => item.workDay === currentDay
       );
-      const time = dayjs(appointmentTime);
+      const time = dayjs(getValues('appointmentDate'))
+        .set('hours', dayjs(appointmentTime).hour())
+        .set('minute', dayjs(appointmentTime).minute());
       const startTime = dayjs(scheduleData[0]?.startTime)
         .set('date', time.date())
         .set('month', time.month())
@@ -583,6 +585,24 @@ export default function AddAppointmentPage() {
                 tempEl.serviceTime,
                 'minute'
               );
+
+              // Check Barber engagements
+              if (
+                dayjs(obj.appointmentTime).isBetween(
+                  dayjs(tempEl.appointmentTime),
+                  tempServiceTime,
+                  null,
+                  '[]'
+                )
+              ) {
+                setIsNotify(true);
+                setNotifyMessage({
+                  text: `Barber is engaged with another client`,
+                  type: 'error',
+                });
+                return false;
+              }
+              // END  OF Check Barber engagements
               if (time > dayjs(tempServiceTime)) {
                 prevTime = dayjs(tempServiceTime);
               } else if (
@@ -608,6 +628,24 @@ export default function AddAppointmentPage() {
               'minute'
             );
 
+            // Check Barber engagements
+            if (
+              dayjs(obj.appointmentTime).isBetween(
+                dayjs(el.appointmentTime),
+                serviceTime,
+                null,
+                '[]'
+              )
+            ) {
+              setIsNotify(true);
+              setNotifyMessage({
+                text: `Barber is engaged with another client`,
+                type: 'error',
+              });
+              return false;
+            }
+            // END  OF Check Barber engagements
+
             if (
               time > dayjs(serviceTime) &&
               checkIsAfterTime(endTime, serviceTime)
@@ -631,7 +669,7 @@ export default function AddAppointmentPage() {
           setTmpId((prevId: any) => prevId + 1);
           const newData = {
             id: tmpId,
-            appointmentTime,
+            appointmentTime: time,
             email: activeBarberData?.storeEmployee?.email ?? 'abc@gmail.com',
             gender: 'male',
             name: activeBarberData?.storeEmployee?.name ?? 'urapp',
