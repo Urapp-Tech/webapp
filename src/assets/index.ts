@@ -22,7 +22,9 @@ import paypal from './images/logo-paypal.png';
 import visa from './images/logo-visa.svg';
 import logo from './images/logo.svg';
 import registerImage from './images/register-screen-img.svg';
+import morningImage from './images/morning.svg';
 import speechBubble from './images/speech-bubble.png';
+import noonImage from './images/noon.png';
 
 import bgLogin from './images/bg-login.png';
 import forgotBg from './images/forgot-bg.png';
@@ -64,6 +66,8 @@ const assets = {
     envelopeMsg,
     otpMSg,
     keyIcon,
+    morningImage,
+    noonImage,
     Star,
   },
 };

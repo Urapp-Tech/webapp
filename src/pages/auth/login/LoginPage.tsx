@@ -11,9 +11,10 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
 import InputLabel from '@mui/material/InputLabel';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { NavLink, useNavigate } from 'react-router-dom';
+import FastSpinner from '../../../components/common/CustomSpinner';
 import assets from '../../../assets';
 import AlertBox from '../../../components/common/SnackBar';
 import useAlert from '../../../hooks/alert.hook';
@@ -42,6 +43,7 @@ function LoginPage() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
+  const [greeting, setGreeting] = useState('');
   const dispatch = useAppDispatch();
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (
@@ -94,7 +96,6 @@ function LoginPage() {
     }
     dispatch(setUserAddressList(addressResult.data.data));
   };
-
   // console.log('login res', login);
 
   const email = register('email');
@@ -141,6 +142,16 @@ function LoginPage() {
     }
     dispatch(setUserAddressList(addressResult.data.data));
   };
+
+  useEffect(() => {
+    const currentTime = new Date().getHours();
+
+    if (currentTime >= 0 && currentTime < 12) {
+      setGreeting('Hey, morning!');
+    } else {
+      setGreeting('Hey, evening!');
+    }
+  }, []);
 
   return (
     <>
@@ -271,24 +282,36 @@ function LoginPage() {
         alertOpen={showAlert}
         setAlertOpen={setShowAlert}
       />
-      <div className="flex h-full w-full items-center justify-center bg-[#F0F0F0]">
+      <div className="flex h-full w-full items-center justify-center bg-background">
         <div className="mx-auto  grid w-full grid-cols-12  items-center justify-around max-[1560px]:items-center">
           <div className="col-span-12  self-start  px-[30px] md:col-span-4 lg:col-span-4">
-            <div className="max-h-[29px] w-full max-w-[150px] px-[25px] py-[40px]">
+            <div className="flex max-h-[29px] w-full max-w-[600px] items-center justify-center px-[25px] py-[40px]">
               {systemConfigData?.tenantConfig?.logo ? (
                 <img
                   // src={systemConfig?.shopLogo ?? systemConfig?.shopName}
                   src={systemConfigData.tenantConfig.logo}
                   alt="urlaundry"
-                  className="h-auto w-full object-contain"
+                  className="mt-10 h-auto w-[100px] object-contain"
                 />
               ) : (
                 <span>Logo</span>
               )}
             </div>
-            <div className="xl:pt-[100px] 2xl:pt-[150px]">
+            <div className="xl:pt-[50px] 2xl:pt-[150px]">
+              <div className="flex justify-center">
+                {greeting === 'Hey, morning!' ? (
+                  <img src={assets.images.morningImage} alt="morning" />
+                ) : (
+                  <img
+                    height={80}
+                    width={80}
+                    src={assets.images.noonImage}
+                    alt="evening"
+                  />
+                )}
+              </div>
               <h1 className="mb-4 text-center text-[36px] font-bold capitalize leading-[normal] text-black">
-                log in
+                {greeting}
               </h1>
               <form>
                 <div className="">
@@ -298,8 +321,8 @@ function LoginPage() {
                     </span>
                     <FormControl className="my-1 w-full" variant="standard">
                       <Input
-                        className="input-with-icon"
-                        placeholder="urlaundry@gmail.com"
+                        className="input-with-icon h-[30px] text-[11px]"
+                        placeholder="salon@gmail.com"
                         id="email"
                         type="email"
                         onChange={email.onChange}
@@ -309,7 +332,9 @@ function LoginPage() {
                         disableUnderline
                       />
                       {errors.email && (
-                        <span className="text-red-500">Email is required</span>
+                        <span className="my-[1px] text-[10px] text-red-500">
+                          *Email is required
+                        </span>
                       )}
                     </FormControl>
                   </div>
@@ -319,7 +344,7 @@ function LoginPage() {
                     </span>
                     <FormControl className="my-1 w-full" variant="filled">
                       <Input
-                        className="input-with-icon after:border-b-secondary"
+                        className="input-with-icon h-[30px] text-[11px] after:border-b-secondary"
                         id="password"
                         placeholder="*******"
                         type={showPassword ? 'text' : 'password'}
@@ -346,31 +371,31 @@ function LoginPage() {
                         disableUnderline
                       />
                       {errors.password && (
-                        <span className="text-red-500">
-                          Password is required
+                        <span className="my-[1px] text-[10px] text-red-500">
+                          *Password is required
                         </span>
                       )}
                     </FormControl>
                   </div>
-                  <div className="flex items-center justify-end">
-                    <div className="form-group mt-1 text-end">
+                  <div className="flex items-center justify-between">
+                    <div className="form-group text-end">
                       <NavLink
-                        className="px-3 text-[14px] font-medium leading-[normal] text-[#06152B] "
+                        className="text-[11px] font-medium leading-[normal] text-[#06152B] hover:underline "
                         to="../sign-up"
                       >
-                        Sign up
+                        Dont have an account? Sign up
                       </NavLink>
                     </div>
-                    <div className="form-group mt-1 text-end">
+                    <div className="form-group text-end">
                       <NavLink
-                        className="text-[14px] font-medium leading-[normal] text-[#06152B] "
+                        className="text-[11px] font-medium leading-[normal] text-[#06152B] hover:underline "
                         to="../forgot-password"
                       >
                         Forget Password?
                       </NavLink>
                     </div>
                   </div>
-                  <div className="mt-2 w-full">
+                  <div className="mt-10 w-full">
                     <Button
                       disabled={!!isLoader}
                       className="btn-black-fill w-full bg-neutral-900 px-16 py-2 text-gray-50"
@@ -379,9 +404,9 @@ function LoginPage() {
                       title="Login"
                       onClick={handleSubmit(submitHandler)}
                     >
-                      Login
+                      {isLoader ? <FastSpinner /> : 'Login'}
                     </Button>
-                    <FacebookLogin
+                    {/* <FacebookLogin
                       appId="246641688446576"
                       onSuccess={handleLoginWithFacebook}
                       render={({ onClick }) => (
@@ -400,7 +425,7 @@ function LoginPage() {
                           Login with Facebook
                         </Button>
                       )}
-                    />
+                    /> */}
                   </div>
                 </div>
               </form>

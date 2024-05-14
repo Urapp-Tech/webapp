@@ -229,7 +229,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
 import InputLabel from '@mui/material/InputLabel';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { NavLink, useNavigate } from 'react-router-dom';
 import assets from '../../../assets';
@@ -255,6 +255,7 @@ function LoginPage() {
     setAlertSeverity,
   } = useAlert();
   const [isLoader, setIsLoader] = useState(false);
+  const [greeting, setGreeting] = useState('');
   const cartItem = useAppSelector((state: any) => state.cartState.cartItems);
   const userData = useAppSelector((state: any) => state.appState.systemConfig);
   const [showPassword, setShowPassword] = useState(false);
@@ -298,6 +299,16 @@ function LoginPage() {
     const dataOtp = { email: data.email };
     await OtpVerification(dataOtp);
   };
+
+  useEffect(() => {
+    const currentTime = new Date().getHours();
+
+    if (currentTime >= 0 && currentTime < 12) {
+      setGreeting('Hey, morning!');
+    } else {
+      setGreeting('Hey, evening!');
+    }
+  }, []);
 
   return (
     <>
@@ -428,52 +439,61 @@ function LoginPage() {
         alertOpen={showAlert}
         setAlertOpen={setShowAlert}
       />
-      <div className="flex h-full w-full items-center justify-center bg-[#F0F0F0]">
-        <div className="mx-auto  grid w-full grid-cols-12 items-center justify-around max-[1560px]:items-center">
-          <div className=" col-span-12 self-start px-[30px]  md:col-span-4 lg:col-span-4">
-            <div className="max-h-[29px] w-full max-w-[150px] px-[25px] py-[40px]">
+      <div className="flex w-full items-center justify-center bg-background xl:h-fit 2xl:h-full">
+        <div className="mx-auto  grid w-full grid-cols-12  items-center justify-around max-[1560px]:items-center">
+          <div className="col-span-12  self-start  px-[30px] md:col-span-4 lg:col-span-4">
+            <div className="flex max-h-[29px] w-full max-w-[600px] items-center justify-center px-[25px] py-[40px]">
               {userData?.tenantConfig?.logo ? (
                 <img
                   // src={systemConfig?.shopLogo ?? systemConfig?.shopName}
                   src={userData.tenantConfig.logo}
                   alt="urlaundry"
-                  className="h-auto w-full object-contain"
+                  className="mt-10 h-auto w-[100px] object-contain"
                 />
               ) : (
                 <span>Logo</span>
               )}
             </div>
-            <div className="xl:pt-[100px] 2xl:pt-[150px]">
+            <div className="xl:pt-[50px] 2xl:pt-[150px]">
+              <div className="flex justify-center">
+                {greeting === 'Hey, morning!' ? (
+                  <img src={assets.images.morningImage} alt="morning" />
+                ) : (
+                  <img
+                    height={80}
+                    width={80}
+                    src={assets.images.noonImage}
+                    alt="evening"
+                  />
+                )}
+              </div>
               <h1 className="mb-4 text-center text-[36px] font-bold capitalize leading-[normal] text-black">
-                Sign up
+                {greeting}
               </h1>
               <form>
                 <div className="">
                   <div className="form-group w-full">
-                    <span className="text-[14px] font-medium leading-[normal] text-[#06152B]">
+                    <span className="text-[11px] font-medium leading-[normal] text-[#06152B]">
                       First Name
                     </span>
-                    <FormControl
-                      className="my-1 w-full text-xs"
-                      variant="standard"
-                    >
+                    <FormControl className="my-1 w-full" variant="standard">
                       <Input
                         disableUnderline
-                        className="input-with-icon"
+                        className="input-with-icon h-[30px] text-[11px]"
                         id="firstName"
                         type="firstName"
                         placeholder="john"
                         {...register('firstName', { required: true })}
                       />
                       {errors.firstName && (
-                        <span className="text-red-500">
-                          First Name is required
+                        <span className="my-[1px] text-[10px] text-red-500">
+                          *First Name is required
                         </span>
                       )}
                     </FormControl>
                   </div>
                   <div className="form-group w-full">
-                    <span className="text-[14px] font-medium leading-[normal] text-[#06152B]">
+                    <span className="text-[11px] font-medium leading-[normal] text-[#06152B]">
                       Last Name
                     </span>
                     <FormControl
@@ -483,20 +503,20 @@ function LoginPage() {
                       <Input
                         disableUnderline
                         placeholder="martin"
-                        className="input-with-icon"
+                        className="input-with-icon h-[30px] text-[11px]"
                         id="lastName"
                         type="lastName"
                         {...register('lastName', { required: true })}
                       />
                       {errors.lastName && (
-                        <span className="text-red-500">
-                          Last Name is required
+                        <span className="my-[1px] text-[10px] text-red-500">
+                          *Last Name is required
                         </span>
                       )}
                     </FormControl>
                   </div>
                   <div className="form-group w-full">
-                    <span className="text-[14px] font-medium leading-[normal] text-[#06152B]">
+                    <span className="text-[11px] font-medium leading-[normal] text-[#06152B]">
                       Phone Number
                     </span>
                     <FormControl
@@ -505,21 +525,21 @@ function LoginPage() {
                     >
                       <Input
                         disableUnderline
-                        className="input-with-icon"
+                        className="input-with-icon h-[30px] text-[11px]"
                         id="phone"
                         type="phone"
                         placeholder="32234433"
                         {...register('phone', { required: true })}
                       />
                       {errors.phone && (
-                        <span className="text-red-500">
-                          Phone Number is required
+                        <span className="my-[1px] text-[10px] text-red-500">
+                          *Phone Number is required
                         </span>
                       )}
                     </FormControl>
                   </div>
                   <div className="form-group w-full">
-                    <span className="text-[14px] font-medium leading-[normal] text-[#06152B]">
+                    <span className="text-[11px] font-medium leading-[normal] text-[#06152B]">
                       Email
                     </span>
                     <FormControl
@@ -528,19 +548,21 @@ function LoginPage() {
                     >
                       <Input
                         disableUnderline
-                        className="input-with-icon"
+                        className="input-with-icon h-[30px] text-[11px]"
                         id="email"
                         type="email"
                         placeholder="johnmartin@urapp.com"
                         {...register('email', { required: true })}
                       />
                       {errors.email && (
-                        <span className="text-red-500">Email is required</span>
+                        <span className="my-[1px] text-[10px] text-red-500">
+                          *Email is required
+                        </span>
                       )}
                     </FormControl>
                   </div>
                   <div className="form-group w-full">
-                    <span className="text-[14px] font-medium leading-[normal] text-[#06152B]">
+                    <span className="text-[11px] font-medium leading-[normal] text-[#06152B]">
                       Password
                     </span>
                     <FormControl
@@ -549,7 +571,7 @@ function LoginPage() {
                     >
                       <Input
                         disableUnderline
-                        className="input-with-icon after:border-b-secondary"
+                        className="input-with-icon h-[30px] text-[11px] after:border-b-secondary"
                         id="password"
                         placeholder="*******"
                         type={showPassword ? 'text' : 'password'}
@@ -572,14 +594,14 @@ function LoginPage() {
                         {...register('password', { required: true })}
                       />
                       {errors.password && (
-                        <span className="text-red-500">
-                          Password is required
+                        <span className="my-[1px] text-[10px] text-red-500">
+                          *Password is required
                         </span>
                       )}
                     </FormControl>
                   </div>
                   <div className="form-group w-full">
-                    <span className="text-[14px] font-medium leading-[normal] text-[#06152B]">
+                    <span className="text-[11px] font-medium leading-[normal] text-[#06152B]">
                       Postal Code
                     </span>
                     <FormControl
@@ -589,22 +611,22 @@ function LoginPage() {
                       <Input
                         disableUnderline
                         placeholder="64500"
-                        className="input-with-icon"
+                        className="input-with-icon h-[30px] text-[11px]"
                         id="postalCode"
                         type="postalCode"
                         {...register('postalCode', { required: true })}
                       />
                       {errors.postalCode && (
-                        <span className="text-red-500">
-                          Postal code is required
+                        <span className="my-[1px] text-[10px] text-red-500">
+                          *Postal code is required
                         </span>
                       )}
                     </FormControl>
                   </div>
-                  <div className="mt-5 w-full">
+                  <div className="my-5 w-full">
                     <Button
                       disabled={!!isLoader}
-                      className="btn-style w-full bg-neutral-900 px-16 py-2 text-sm text-gray-50"
+                      className="btn-style w-full bg-primary px-16 py-2 text-sm text-gray-50"
                       variant="contained"
                       color="inherit"
                       title="Sign up"

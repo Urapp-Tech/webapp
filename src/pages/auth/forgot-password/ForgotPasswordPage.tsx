@@ -7,12 +7,14 @@ import { Controller, useForm } from 'react-hook-form';
 import { NavLink, useNavigate } from 'react-router-dom';
 import * as z from 'zod';
 import { Button } from '@mui/material';
+import { useState } from 'react';
 import assets from '../../../assets';
 import AlertBox from '../../../components/common/SnackBar';
 import useAlert from '../../../hooks/alert.hook';
 import authService from '../../../services/auth.service';
 import promiseHandler from '../../../utilities/promise-handler';
 import { useAppSelector } from '../../../redux/redux-hooks';
+import FastSpinner from '../../../components/common/CustomSpinner';
 
 const forgotPasswordSchema = z.object({
   email: z
@@ -29,6 +31,7 @@ function ForgotPasswordPage() {
   const systemConfigData = useAppSelector(
     (state: any) => state.appState.systemConfig
   );
+  const [isLoader, setIsLoader] = useState(false);
   const {
     alertMessage,
     setAlertMessage,
@@ -45,17 +48,20 @@ function ForgotPasswordPage() {
   } = useForm<ForgotPasswordType>(formOptions);
 
   const onSubmit = async (data: ForgotPasswordType) => {
+    setIsLoader(true);
     const forgotPasswordPromise = authService.forgotPassword(data);
     const [forgotPasswordResult, forgotPasswordError] = await promiseHandler(
       forgotPasswordPromise
     );
     if (!forgotPasswordResult) {
+      setIsLoader(false);
       setAlertSeverity('error');
       setAlertMessage(forgotPasswordError.message);
       setShowAlert(true);
       return;
     }
     if (!forgotPasswordResult.data.success) {
+      setIsLoader(false);
       setAlertSeverity('error');
       setAlertMessage(forgotPasswordResult.data.message);
       setShowAlert(true);
@@ -64,6 +70,7 @@ function ForgotPasswordPage() {
     setAlertSeverity('success');
     setAlertMessage(forgotPasswordResult.data.message);
     setShowAlert(true);
+    setIsLoader(false);
     setTimeout(() => {
       navigate('../otp-verification', { state: { email: data.email } });
     }, 500);
@@ -146,16 +153,16 @@ function ForgotPasswordPage() {
         alertOpen={showAlert}
         setAlertOpen={setShowAlert}
       />
-      <div className="flex h-full w-full items-center justify-center bg-[#F0F0F0]">
-        <div className="mx-auto  grid w-full grid-cols-12  items-start justify-around max-[1560px]:items-center">
-          <div className="col-span-12 self-start px-[30px]  md:col-span-4 lg:col-span-4">
-            <div className="max-h-[29px] w-full max-w-[150px] px-[25px] py-[40px]">
+      <div className="flex h-full w-full items-center justify-center bg-background">
+        <div className="mx-auto  grid w-full grid-cols-12  items-center justify-around max-[1560px]:items-center">
+          <div className="col-span-12  self-start  px-[30px] md:col-span-4 lg:col-span-4">
+            <div className="flex max-h-[29px] w-full max-w-[600px] items-center justify-center px-[25px] py-[40px]">
               {systemConfigData?.tenantConfig?.logo ? (
                 <img
                   // src={systemConfig?.shopLogo ?? systemConfig?.shopName}
                   src={systemConfigData.tenantConfig.logo}
                   alt="urlaundry"
-                  className="h-auto w-full object-contain"
+                  className="mt-10 h-auto w-[100px] object-contain"
                 />
               ) : (
                 <span>Logo</span>
@@ -171,14 +178,14 @@ function ForgotPasswordPage() {
                 />
               </div>
               <div className="mt-2 ">
-                <span className="block text-center text-[14px] font-normal leading-[normal] text-[#6A6A6A]">
+                <span className="block text-center text-[11px] font-normal leading-[normal] text-[#6A6A6A]">
                   Enter registered email
                 </span>
-                <span className="block text-center text-[14px] font-normal leading-[normal] text-[#6A6A6A]">
+                <span className="block text-center text-[11px] font-normal leading-[normal] text-[#6A6A6A]">
                   to receive password reset link
                 </span>
                 <div className="form-group mt-[42px]">
-                  <span className="text-[14px] font-medium leading-[normal] text-[#06152B]">
+                  <span className="text-[11px] font-medium leading-[normal] text-[#06152B]">
                     Email
                   </span>
 
@@ -188,10 +195,11 @@ function ForgotPasswordPage() {
                     defaultValue=""
                     rules={{ required: 'email is required' }}
                     render={({ field }) => (
-                      <FormControl className="my-2 w-full" variant="standard">
+                      <FormControl className="my-1 w-full" variant="standard">
                         <Input
                           type="email"
-                          className="rounded-md border-[1px] border-solid border-[#949EAE] bg-white px-1 text-[14px]"
+                          placeholder="salon@urapptech.com"
+                          className="h-[30px] rounded-md border-[1px] border-solid border-[#949EAE] bg-white px-1 text-[11px]"
                           id={field.name}
                           name={field.name}
                           onBlur={field.onBlur}
@@ -201,7 +209,7 @@ function ForgotPasswordPage() {
                           disableUnderline
                         />
                         {errors.email && (
-                          <p className="font-open-sans text-xs text-red-500">
+                          <p className="my-[1px] font-open-sans text-[10px] text-red-500">
                             {errors.email.message?.toString()}
                           </p>
                         )}
@@ -212,13 +220,14 @@ function ForgotPasswordPage() {
 
                 <div className="w-full xl:mt-[60px] 2xl:mt-[100px] ">
                   <Button
-                    className="btn-style w-full bg-neutral-900 px-16 py-2 text-gray-50"
+                    disabled={isLoader}
+                    className="btn-style w-full bg-primary px-16 py-2 text-gray-50"
                     variant="contained"
                     onClick={handleSubmit(onSubmit)}
                     color="inherit"
                     title="get code"
                   >
-                    Get Code
+                    {isLoader ? <FastSpinner /> : 'Get Code'}
                   </Button>
                 </div>
               </div>
@@ -226,11 +235,19 @@ function ForgotPasswordPage() {
           </div>
           <div className="col-span-12 px-3 py-10 md:col-span-8 md:py-2 lg:col-span-8">
             <div className="mx-auto  flex max-h-[834px] items-center justify-center overflow-hidden rounded-lg max-[1560px]:max-h-[96vh]">
-              <img
-                src={assets.images.forgotBg}
-                alt="urlaundry"
-                className="h-full w-full object-contain"
-              />
+              {systemConfigData?.logoffImage ? (
+                <img
+                  src={systemConfigData?.logoffImage || assets.images.bgLogin}
+                  alt="urlaundry"
+                  className="h-full w-full object-contain"
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center">
+                  <p className="text-xl font-semibold">
+                    Image is not uploaded yet
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
