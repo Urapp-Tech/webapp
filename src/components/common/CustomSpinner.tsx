@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
-import { styled } from '@mui/material/styles';
 
 // Custom CircularProgress component
 function FastSpinner(props: any) {

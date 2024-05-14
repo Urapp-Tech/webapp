@@ -2,7 +2,6 @@
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
@@ -23,6 +22,7 @@ import {
 } from '../../../utilities/constant';
 import AlertBox from '../../../components/common/SnackBar';
 import useAlert from '../../../hooks/alert.hook';
+import FastSpinner from '../../../components/common/CustomSpinner';
 
 type Pass = {
   newPassword: string;
@@ -99,22 +99,22 @@ function OTPVerificationPage() {
 
   return (
     <>
-      <div className="flex h-full w-full items-center justify-center bg-[#F0F0F0]">
-        <div className="mx-auto grid w-full grid-cols-12 items-start justify-around max-[1560px]:items-center">
-          <div className=" col-span-12 self-start px-[30px]  md:col-span-4 lg:col-span-4">
-            <div className="max-h-[29px] w-full max-w-[150px] px-[25px] py-[40px]">
+      <div className="flex w-full items-center justify-center bg-background xl:h-fit 2xl:h-full">
+        <div className="mx-auto  grid w-full grid-cols-12  items-center justify-around max-[1560px]:items-center">
+          <div className="col-span-12  self-start  px-[30px] md:col-span-4 lg:col-span-4">
+            <div className="flex max-h-[29px] w-full max-w-[600px] items-center justify-center px-[25px] py-[40px]">
               {systemConfigData?.tenantConfig?.logo ? (
                 <img
                   // src={systemConfig?.shopLogo ?? systemConfig?.shopName}
                   src={systemConfigData.tenantConfig.logo}
                   alt="urlaundry"
-                  className="h-auto w-full object-contain"
+                  className="mt-10 h-auto w-[100px] object-contain"
                 />
               ) : (
                 <span>Logo</span>
               )}
             </div>
-            <div className="pt-[100px]">
+            <div className="pt-[50px]">
               {/* <h1 className='text-[36px] text-black leading-[normal] font-bold capitalize mb-4 text-center'>log in</h1> */}
               <div className=" text-center">
                 <img
@@ -124,17 +124,17 @@ function OTPVerificationPage() {
                 />
               </div>
               <div className="mt-2 ">
-                <span className="block text-center text-[14px] font-normal leading-[normal] text-[#6A6A6A]">
+                <span className="block text-center text-[11px] font-normal leading-[normal] text-[#6A6A6A]">
                   An 4 digit code has been sent to
                 </span>
-                <span className="block text-center text-[14px] font-semibold leading-[normal] text-[#6A6A6A]">
+                <span className="block text-center text-[12px] font-semibold leading-[normal] text-[#6A6A6A]">
                   {state?.email}
                 </span>
-                <span className="mx-10 mt-2 block text-center text-[13px] font-normal leading-[normal] text-[#6A6A6A]">
+                <span className="mx-10 mt-2 block text-center text-[11px] font-normal leading-[normal] text-[#6A6A6A]">
                   Note : Please check your email for the OTP code and paste it
                   here; otherwise, it will expire within an hour.
                 </span>
-                <div className="mt-[42px] flex w-full items-center justify-center text-center">
+                <div className="mt-[30px] flex w-full items-center justify-center text-center">
                   <OtpInput
                     placeholder="1234"
                     className="mx-2"
@@ -165,19 +165,19 @@ function OTPVerificationPage() {
                   <form onSubmit={handleSubmit(submitHandler)}>
                     <div className="flex flex-col">
                       <FormControl className="FormControl" variant="standard">
-                        <div className="form-group mt-[42px] w-full">
+                        <div className="form-group mt-[20px] w-full">
                           <label
                             htmlFor="email"
-                            className="mb-1 text-[14px] font-normal leading-[normal] text-[#06152B]"
+                            className="text-[11px] font-normal leading-[normal] text-[#06152B]"
                           >
                             New Password
                           </label>
                           <br />
                           <Input
                             style={{ paddingRight: '0' }}
-                            className="input-with-icon my-3 w-full px-4 after:border-b-neutral-900"
+                            className="input-with-icon my-1 h-[30px] w-full px-4 text-[11px] after:border-b-neutral-900"
                             id="password"
-                            placeholder="Enter your password"
+                            placeholder="********"
                             autoComplete="new-password"
                             type={showPassword ? 'text' : 'password'}
                             {...register('newPassword', {
@@ -214,19 +214,19 @@ function OTPVerificationPage() {
                         </div>
                       </FormControl>
                       <FormControl className="FormControl" variant="standard">
-                        <div className="form-group mt-[2px] w-full">
+                        <div className="form-group w-full">
                           <label
                             htmlFor="email"
-                            className="mb-1 text-[14px] font-normal leading-[normal] text-[#06152B]"
+                            className="text-[11px] font-normal leading-[normal] text-[#06152B]"
                           >
                             Confirm New Password
                           </label>
                           <br />
                           <Input
                             style={{ paddingRight: '0' }}
-                            className="input-with-icon my-3 w-full px-4 after:border-b-neutral-900"
+                            className="input-with-icon my-1 h-[30px] w-full px-4 text-[11px] after:border-b-neutral-900"
                             id="reNewPassword"
-                            placeholder="Enter your password"
+                            placeholder="********"
                             autoComplete="new-password"
                             type={showNewPassword ? 'text' : 'password'}
                             {...register('reNewPassword', {
@@ -274,19 +274,16 @@ function OTPVerificationPage() {
                         </div>
                       </FormControl>
                     </div>
-                    <div className="mt-[100px] w-full px-4 ">
+                    <div className="mt-[10px] w-full px-4 py-4">
                       <Button
-                        className="w-full rounded-[10px] bg-neutral-900 px-16 py-2 text-gray-50"
+                        disabled={isLoader}
+                        className="w-full rounded-[10px] bg-primary px-16 py-2 text-gray-50"
                         variant="contained"
                         color="inherit"
                         title="Submit"
                         type="submit"
                       >
-                        {isLoader ? (
-                          <CircularProgress color="inherit" size={23} />
-                        ) : (
-                          'Submit'
-                        )}
+                        {isLoader ? <FastSpinner /> : 'Submit'}
                       </Button>
                     </div>
                   </form>
@@ -296,11 +293,19 @@ function OTPVerificationPage() {
           </div>
           <div className="col-span-12 px-3 py-10 md:col-span-8 md:py-2 lg:col-span-8">
             <div className="mx-auto  flex max-h-[834px] items-center justify-center overflow-hidden rounded-lg max-[1560px]:max-h-[96vh]">
-              <img
-                src={systemConfigData?.logoffImage || assets.images.bgLogin}
-                alt="urlaundry"
-                className="h-full w-full object-contain"
-              />
+              {systemConfigData?.logoffImage ? (
+                <img
+                  src={systemConfigData?.logoffImage || assets.images.bgLogin}
+                  alt="urlaundry"
+                  className="h-full w-full object-contain"
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center">
+                  <p className="text-xl font-semibold">
+                    Image is not uploaded yet
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
