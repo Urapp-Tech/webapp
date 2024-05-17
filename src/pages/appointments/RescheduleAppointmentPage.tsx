@@ -75,10 +75,14 @@ const darkTheme = createTheme({
 });
 
 export default function RescheduleAppointmentPage() {
-  const officeTimings = useAppSelector(
+  const officeTimingOut = useAppSelector(
     (x) => x.deviceStates.tenantConfig?.officeTimeOut
   );
-  const officeTimeOut = dayjs(officeTimings);
+  const officeTimingIn = useAppSelector(
+    (x) => x.deviceStates.tenantConfig?.officeTimeIn
+  );
+  const officeTimeIn = dayjs(officeTimingIn);
+  const officeTimeOut = dayjs(officeTimingOut);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [paymentMethod, setPaymentMethod] = useState(false);
@@ -288,7 +292,32 @@ export default function RescheduleAppointmentPage() {
           //   ]);
           //   setAppointmentBookedTime(tempBookedTime);
           // }
+          // const newArr = res.data.data;
+          // if (tempAppointmentBookedTime.length > 0) {
+          //   tempAppointmentBookedTime.filter((item: any) => {
+          //     if (
+          //       item.storeEmployee === id &&
+          //       checkIsSameDate(
+          //         getValues('appointmentDate'),
+          //         dayjs(item.appointmentTime)
+          //       )
+          //     ) {
+          //       newArr.push(item);
+          //       return item;
+          //     }
+          //     return false;
+          //   });
+          // }
+          // setAppointmentBookedTime(newArr);
           const newArr = res.data.data;
+          newArr.forEach((item: any) => {
+            const newAppTime = dayjs(item.appointmentTime)
+              .set('hours', dayjs(item.appointmentTime).hour())
+              .set('minute', dayjs(item.appointmentTime).minute());
+            delete item.appointmentTime;
+            item.appointmentTime = newAppTime;
+            return item;
+          });
           if (tempAppointmentBookedTime.length > 0) {
             tempAppointmentBookedTime.filter((item: any) => {
               if (
@@ -602,10 +631,24 @@ export default function RescheduleAppointmentPage() {
         .set('date', time.date())
         .set('month', time.month())
         .set('year', time.year());
-      const endTime = dayjs(scheduleData[0]?.endTime)
+      let endTime = dayjs(scheduleData[0]?.endTime)
         .set('date', time.date())
         .set('month', time.month())
         .set('year', time.year());
+      if (startTime.hour() > endTime.hour()) {
+        endTime = endTime.add(1, 'day');
+      }
+      const officeInTime = officeTimeIn
+        .set('date', time.date())
+        .set('month', time.month())
+        .set('year', time.year());
+      let officeOutTime = officeTimeOut
+        .set('date', time.date())
+        .set('month', time.month())
+        .set('year', time.year());
+      if (officeInTime.hour() > officeOutTime.hour()) {
+        officeOutTime = officeOutTime.add(1, 'day');
+      }
       let prevTime = startTime;
       const addTime = dayjs(time).add(activeBarberData?.serviceTime, 'minutes');
 

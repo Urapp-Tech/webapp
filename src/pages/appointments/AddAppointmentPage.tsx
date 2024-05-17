@@ -68,10 +68,14 @@ const darkTheme = createTheme({
 
 export default function AddAppointmentPage() {
   const navigate = useNavigate();
-  const officeTimings = useAppSelector(
+  const officeTimingOut = useAppSelector(
     (x) => x.deviceStates.tenantConfig?.officeTimeOut
   );
-  const officeTimeOut = dayjs(officeTimings);
+  const officeTimingIn = useAppSelector(
+    (x) => x.deviceStates.tenantConfig?.officeTimeIn
+  );
+  const officeTimeIn = dayjs(officeTimingIn);
+  const officeTimeOut = dayjs(officeTimingOut);
   const dispatch = useAppDispatch();
   const [paymentMethod, setPaymentMethod] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
@@ -242,7 +246,32 @@ export default function AddAppointmentPage() {
           //   ]);
           //   setAppointmentBookedTime(tempBookedTime);
           // }
+          // const newArr = res.data.data;
+          // if (tempAppointmentBookedTime.length > 0) {
+          //   tempAppointmentBookedTime.filter((item: any) => {
+          //     if (
+          //       item.storeEmployee === id &&
+          //       checkIsSameDate(
+          //         getValues('appointmentDate'),
+          //         dayjs(item.appointmentTime)
+          //       )
+          //     ) {
+          //       newArr.push(item);
+          //       return item;
+          //     }
+          //     return false;
+          //   });
+          // }
+          // setAppointmentBookedTime(newArr);
           const newArr = res.data.data;
+          newArr.forEach((item: any) => {
+            const newAppTime = dayjs(item.appointmentTime)
+              .set('hours', dayjs(item.appointmentTime).hour())
+              .set('minute', dayjs(item.appointmentTime).minute());
+            delete item.appointmentTime;
+            item.appointmentTime = newAppTime;
+            return item;
+          });
           if (tempAppointmentBookedTime.length > 0) {
             tempAppointmentBookedTime.filter((item: any) => {
               if (
@@ -552,18 +581,33 @@ export default function AddAppointmentPage() {
         .set('date', time.date())
         .set('month', time.month())
         .set('year', time.year());
-      const endTime = dayjs(scheduleData[0]?.endTime)
+      let endTime = dayjs(scheduleData[0]?.endTime)
         .set('date', time.date())
         .set('month', time.month())
         .set('year', time.year());
+      if (startTime.hour() > endTime.hour()) {
+        endTime = endTime.add(1, 'day');
+      }
+      const officeInTime = officeTimeIn
+        .set('date', time.date())
+        .set('month', time.month())
+        .set('year', time.year());
+      let officeOutTime = officeTimeOut
+        .set('date', time.date())
+        .set('month', time.month())
+        .set('year', time.year());
+      if (officeInTime.hour() > officeOutTime.hour()) {
+        officeOutTime = officeOutTime.add(1, 'day');
+      }
       let prevTime = startTime;
       const addTime = dayjs(time).add(activeBarberData?.serviceTime, 'minutes');
-
       if (scheduleData.length > 0) {
-        // for (let j = 0; j < shopScheduleWorkDays.length; i += 1++) {
-        //   const elShop = appointmentBookedTime[j];
-        // }
-        if (!checkIsBetweenTime(time, startTime, endTime)) {
+        if (
+          !checkIsBetweenTime(time, startTime, endTime) ||
+          !checkIsBetweenTime(time, officeInTime, officeOutTime)
+        ) {
+          console.log('hello 1');
+
           setIsNotify(true);
           setNotifyMessage({
             text: 'Barber is not available at this time',
@@ -587,21 +631,21 @@ export default function AddAppointmentPage() {
               );
 
               // Check Barber engagements
-              if (
-                dayjs(obj.appointmentTime).isBetween(
-                  dayjs(tempEl.appointmentTime),
-                  tempServiceTime,
-                  null,
-                  '[]'
-                )
-              ) {
-                setIsNotify(true);
-                setNotifyMessage({
-                  text: `Barber is engaged with another client`,
-                  type: 'error',
-                });
-                return false;
-              }
+              // if (
+              //   dayjs(obj.appointmentTime).isBetween(
+              //     dayjs(tempEl.appointmentTime),
+              //     tempServiceTime,
+              //     null,
+              //     '[]'
+              //   )
+              // ) {
+              //   setIsNotify(true);
+              //   setNotifyMessage({
+              //     text: `Barber is engaged with another client`,
+              //     type: 'error',
+              //   });
+              //   return false;
+              // }
               // END  OF Check Barber engagements
               if (time > dayjs(tempServiceTime)) {
                 prevTime = dayjs(tempServiceTime);
@@ -629,21 +673,21 @@ export default function AddAppointmentPage() {
             );
 
             // Check Barber engagements
-            if (
-              dayjs(obj.appointmentTime).isBetween(
-                dayjs(el.appointmentTime),
-                serviceTime,
-                null,
-                '[]'
-              )
-            ) {
-              setIsNotify(true);
-              setNotifyMessage({
-                text: `Barber is engaged with another client`,
-                type: 'error',
-              });
-              return false;
-            }
+            // if (
+            //   dayjs(obj.appointmentTime).isBetween(
+            //     dayjs(el.appointmentTime),
+            //     serviceTime,
+            //     null,
+            //     '[]'
+            //   )
+            // ) {
+            //   setIsNotify(true);
+            //   setNotifyMessage({
+            //     text: `Barber is engaged with another client`,
+            //     type: 'error',
+            //   });
+            //   return false;
+            // }
             // END  OF Check Barber engagements
 
             if (

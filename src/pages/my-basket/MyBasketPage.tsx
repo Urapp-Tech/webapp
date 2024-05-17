@@ -72,6 +72,7 @@ function MyBasketPage() {
       dispatch(setDropOff(value.toISOString()));
     }
   };
+
   const onCheckoutPayFast = async () => {
     const tempAddress = userAddress[0] ? userAddress[0].id : null;
     const pickupDateTime = dayjs(new Date()).toISOString();
@@ -320,6 +321,8 @@ function MyBasketPage() {
     getUserAddress();
   }, [user]);
 
+  console.log('cartItems', cartItems);
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <AlertBox
@@ -363,7 +366,11 @@ function MyBasketPage() {
                               <DeleteOutlineOutlinedIcon className="text-2xl" />
                             </IconButton>
                             <div className="product">
-                              <img className="pic" src={item.image} alt="" />
+                              <img
+                                className="pic"
+                                src={item.image || item.icon}
+                                alt=""
+                              />
                               <p className="name">{item.name}</p>
                             </div>
                           </div>

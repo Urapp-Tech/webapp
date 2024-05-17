@@ -28,6 +28,7 @@ type Props = {
 };
 
 function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
+  console.log('🚀 ~ HomePagePopup ~ FAQs:', FAQs);
   console.log('data', data);
 
   const {
@@ -156,11 +157,11 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
           <ClearIcon />
         </IconButton>
         <DialogContent className="modal-content">
-          <div className="main-grid">
-            <div>
+          <div className="grid grid-cols-7 gap-4">
+            <div className="col-span-3">
               <div className="product-img">
                 <img
-                  className="aspect-square w-80 object-contain"
+                  className="aspect-square w-80 object-contain p-4"
                   src={data?.icon}
                   alt=""
                 />
@@ -194,33 +195,45 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
                 </div>
               </div>
             </div>
-            {FAQs?.map((faq: any, index: any) => (
-              <div className="product-accordion" key={index}>
-                <Accordion
-                  key={index}
-                  className="accordion-item"
-                  expanded={expanded === `panel-${index}`}
-                  onChange={handleChange(`panel-${index}`)}
-                >
-                  <AccordionSummary
-                    className="accordion-header"
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls={`panel-${index}-content`}
-                    id={`panel-${index}-header`}
-                  >
-                    <h6 className="heading">{faq.question}</h6>
-                  </AccordionSummary>
-                  <AccordionDetails className="accordion-body">
-                    <p className="desc">{faq.answer}</p>
-                  </AccordionDetails>
-                </Accordion>
+            <div className="col-span-4">
+              <div className="px-3 py-1">
+                <span className="text-xl font-semibold">FAQS</span>
+                {FAQs === null && (
+                  <div>
+                    <span className="text-sm font-medium">
+                      There is no faqs for this product
+                    </span>
+                  </div>
+                )}
               </div>
-            ))}
+              {FAQs?.map((faq: any, index: any) => (
+                <div className="product-accordion" key={index}>
+                  <Accordion
+                    key={index}
+                    className="accordion-item"
+                    expanded={expanded === `panel-${index}`}
+                    onChange={handleChange(`panel-${index}`)}
+                  >
+                    <AccordionSummary
+                      className="accordion-header"
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls={`panel-${index}-content`}
+                      id={`panel-${index}-header`}
+                    >
+                      <h6 className="heading">{faq.question}</h6>
+                    </AccordionSummary>
+                    <AccordionDetails className="accordion-body">
+                      <p className="desc">{faq.answer}</p>
+                    </AccordionDetails>
+                  </Accordion>
+                </div>
+              ))}
+            </div>
           </div>
         </DialogContent>
         <DialogActions className="modal-footer">
           <Button
-            className="btn-add"
+            className="btn-add w-[40%]"
             onClick={() => {
               const cartItem = {
                 ...data,

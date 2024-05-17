@@ -154,9 +154,13 @@ function HomePage() {
                   className="relative rounded-[0.625rem] bg-white px-2.5 pb-2.5 pt-4 md:px-3.5 md:pt-5"
                 >
                   <div>
-                    <button aria-label="Button to Click" type="button">
+                    <button
+                      aria-label="Button to Click"
+                      type="button"
+                      className="mx-auto w-full max-w-[360px]"
+                    >
                       <img
-                        className="mb-4 aspect-[4/3] w-full cursor-pointer object-contain md:mb-6"
+                        className="mx-auto mb-4 aspect-[4/3] h-full w-full cursor-pointer object-contain md:mb-6"
                         src={item.avatar}
                         alt=""
                       />

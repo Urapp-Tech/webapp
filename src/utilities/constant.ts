@@ -2,8 +2,8 @@ import { SignUpPayload } from '../types/auth.types';
 import { setItem } from './local-storage';
 
 // export const BASE_URL = import.meta.env.VITE_SERVICE_BASE_URL;
-export const HOST = 'https://dev.urapptech.com';
-// export const HOST = 'http://192.168.8.68:3200';
+// export const HOST = 'https://dev.urapptech.com';
+export const HOST = 'http://192.168.8.68:3200';
 // export const HOST = 'http://192.168.8.97:3200';
 export const BASE_URL = HOST;
 

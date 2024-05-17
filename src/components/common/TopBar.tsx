@@ -59,7 +59,7 @@ function TopBar({ setDrawerState }: Props) {
   return (
     <AppBar
       position="fixed"
-      className="z-[5000] !w-full !bg-primary !shadow-none"
+      className="z-[500] !w-full !bg-primary !shadow-none"
     >
       <Toolbar
         classes={{
