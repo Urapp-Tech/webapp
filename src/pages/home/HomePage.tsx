@@ -35,6 +35,7 @@ function HomePage() {
   } = useAlert();
 
   const [searchName, setSearchName] = useState('');
+  const { user } = useAppSelector((x) => x.authState);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { categories, selectedCategory } = useAppSelector(
@@ -80,6 +81,12 @@ function HomePage() {
     const cat = categoryItems.find((x) => x.id === itemId);
     if (cat) {
       dispatch(setSelectedCategoriesItem(cat));
+    }
+    if (!user || !user.id) {
+      navigate('/auth/login', {
+        state: { from: { pathname: '/dashboard/book-service' } },
+      });
+      return;
     }
     navigate('/dashboard/book-service');
   };

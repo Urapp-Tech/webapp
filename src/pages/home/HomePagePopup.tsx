@@ -28,8 +28,8 @@ type Props = {
 };
 
 function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
-  console.log('🚀 ~ HomePagePopup ~ FAQs:', FAQs);
-  console.log('data', data);
+  // console.log('🚀 ~ HomePagePopup ~ FAQs:', FAQs);
+  // console.log('data', data);
 
   const {
     alertMessage,

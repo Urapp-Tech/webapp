@@ -13,7 +13,7 @@ import Button from '@mui/material/Button';
 import InputLabel from '@mui/material/InputLabel';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import FastSpinner from '../../../components/common/CustomSpinner';
 import assets from '../../../assets';
 import AlertBox from '../../../components/common/SnackBar';
@@ -41,6 +41,8 @@ function LoginPage() {
     (state: any) => state.appState.systemConfig
   );
   const navigate = useNavigate();
+  const location = useLocation();
+  const { from } = location.state || { from: { pathname: null } };
   const [showPassword, setShowPassword] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
   const [greeting, setGreeting] = useState('');
@@ -120,7 +122,9 @@ function LoginPage() {
       return;
     }
     dispatch(login(loginResponse.data.data));
-    if (cartItem > 0) {
+    if (from && from.pathname) {
+      navigate(from, { replace: true });
+    } else if ((cartItem ?? []).length > 0) {
       navigate('/dashboard/my-basket');
     } else {
       navigate('/dashboard/home');
