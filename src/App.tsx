@@ -32,7 +32,7 @@ function App() {
   const persistedDeviceData = useAppSelector(
     (state) => state.deviceStates.deviceData
   );
-  const { user } = useAppSelector((x) => x.authState);
+  // const { user } = useAppSelector((x) => x.authState);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const client = new ClientJS();
@@ -129,11 +129,11 @@ function App() {
     initializeDeviceData();
   }, []);
 
-  useEffect(() => {
-    if (!user || !user.id) {
-      navigate('/auth/login');
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (!user || !user.id) {
+  //     navigate('/auth/login');
+  //   }
+  // }, [user]);
 
   if (process.env.NODE_ENV === 'production') {
     console.log = () => {};

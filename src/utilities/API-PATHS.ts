@@ -199,6 +199,9 @@ const API_PATHS = {
   getUserAppointmentsByDate: (date: string) =>
     new URL(`/api/v1/app/appointment/users/${date}`, BASE_URL).toString(),
 
+  getUserAppointmentsByMultipleDates: () =>
+    new URL(`/api/v1/app/appointment/users/multi-dates`, BASE_URL).toString(),
+
   getStoreEmployeeRating: () =>
     new URL(`/api/v1/app/store/appointment-ratings/list`, BASE_URL).toString(),
   updateEmployeeRating: (id: string) =>

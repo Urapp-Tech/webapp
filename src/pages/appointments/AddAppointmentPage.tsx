@@ -52,6 +52,7 @@ import {
 import { Category } from '../../interfaces/serviceCategory.interface';
 import { fetchCategoriesItems } from '../../redux/features/storeCategoryItemsSlice';
 import Loader from '../../components/common/Loader';
+import { getItem, removeItem, setItem } from '../../utilities/local-storage';
 
 // Extend dayjs with necessary plugins
 dayjs.extend(isBetween);
@@ -177,7 +178,8 @@ export default function AddAppointmentPage() {
     try {
       const resp = await storeAppointmentService.CheckEmployeeAvailable(
         id,
-        date
+        date,
+        { tenantId: systemConfig?.tenant }
       );
       return resp.data.data;
     } catch (error) {
@@ -199,7 +201,8 @@ export default function AddAppointmentPage() {
   const getUserBookedSlotsByDate = async () => {
     try {
       const response = await storeAppointmentService.getUserAppointmentsByDate(
-        dayjs(getValues('appointmentDate'))?.format('YYYY-MM-DD')
+        dayjs(getValues('appointmentDate'))?.format('YYYY-MM-DD'),
+        { tenantId: systemConfig?.tenant }
       );
 
       if (response.data && response.data.success) {
@@ -212,7 +215,9 @@ export default function AddAppointmentPage() {
   };
 
   const getBookedTimeSlots: any = async (id: any, date: any) => {
-    setUserAppointments(await getUserBookedSlotsByDate());
+    if (user && user.id) {
+      setUserAppointments(await getUserBookedSlotsByDate());
+    }
 
     const resll = await shopEvents(
       id,
@@ -230,7 +235,7 @@ export default function AddAppointmentPage() {
     }
     setDisabledButton(false);
     await storeAppointmentService
-      .getBarberBookedTimeSlots(id, date)
+      .getBarberBookedTimeSlots(id, date, { tenantId: systemConfig?.tenant })
       .then((res) => {
         if (res.data.success) {
           // const tempBookedTime = res.data.data.map((resp: any) => ({
@@ -402,6 +407,27 @@ export default function AddAppointmentPage() {
 
   useEffect(() => {
     dispatch(fetchCategories(systemConfig?.tenant));
+    const bookings: any = getItem('APPOINTMENT_BOOKINGS');
+    if (bookings && bookings.appointments && bookings.appointments.length > 0) {
+      bookings.appointments.forEach((booking: unknown) => append(booking));
+      if (bookings.gender) {
+        setValue('gender', bookings.gender);
+      }
+      if (bookings.note) {
+        setValue('note', bookings.note);
+      }
+      if (bookings.categoryId) {
+        setValue('categoryId', bookings.categoryId);
+      }
+      setTimeout(() => {
+        if (bookings.storeServiceCategoryItem) {
+          setValue(
+            'storeServiceCategoryItem',
+            bookings.storeServiceCategoryItem
+          );
+        }
+      }, 100);
+    }
   }, []);
 
   const getBarbers = async (id: any) => {
@@ -763,8 +789,90 @@ export default function AddAppointmentPage() {
     }
     return null;
   };
-  const onSubmit = (data: any) => {
+
+  const checkAppointmentCreatedBeforeByUser = async () => {
+    if (fields) {
+      const dates = fields.map((f: any) =>
+        dayjs(f.appointmentTime).format('YYYY-MM-DD')
+      );
+      try {
+        const response =
+          await storeAppointmentService.getUserAppointmentsByMultipleDates({
+            tenantId: systemConfig?.tenant,
+            dates,
+          });
+        if (response.data && response.data.success && response.data.data) {
+          let allBookedSlots: Appointment[] = [];
+          fields.forEach((item: any, i) => {
+            const ad = `${dayjs(item.appointmentTime)?.format(
+              'YYYY-MM-DD HH:mm'
+            )}`;
+
+            const bookedSlot = (response.data.data as Appointment[]).filter(
+              (x) => {
+                const startTime = dayjs(x.appointmentTime);
+                const endTime = startTime.add(
+                  parseInt(x.serviceTime, 10),
+                  'minute'
+                );
+
+                const isBetweenInSlot = dayjs(ad).isBetween(
+                  startTime,
+                  endTime,
+                  null,
+                  '[]'
+                );
+
+                return isBetweenInSlot;
+              }
+            );
+
+            allBookedSlots = [...allBookedSlots, ...bookedSlot];
+          });
+          if (allBookedSlots.length > 0) {
+            const t = allBookedSlots.map((x) => x.appointmentTime);
+            const formatted = t.map((x) => dayjs(x)?.format('hh:mm A'));
+            setIsNotify(true);
+            setNotifyMessage({
+              text: `You have another appointment scheduled for this time. (${formatted.join(
+                ', '
+              )})`,
+              type: 'error',
+            });
+            return true;
+          }
+        }
+      } catch (error) {
+        console.log('checkAppointmentCreatedBeforeByUser ~ error:', error);
+      }
+    }
+
+    return false;
+  };
+
+  const onSubmit = async (data: any) => {
+    let isFieldsBeforeLogin = false;
+    if (!(user && user.id)) {
+      setItem('APPOINTMENT_BOOKINGS', data);
+      navigate('/auth/login', {
+        state: { from: { pathname: '/dashboard/book-service' } },
+      });
+      return;
+    }
+
+    const bookings: any = getItem('APPOINTMENT_BOOKINGS');
+    if (bookings && bookings.appointments && bookings.appointments.length > 0) {
+      isFieldsBeforeLogin = true;
+    }
     setIsLoader(true);
+
+    if (isFieldsBeforeLogin && (await checkAppointmentCreatedBeforeByUser())) {
+      setIsLoader(false);
+      return;
+    }
+
+    removeItem('APPOINTMENT_BOOKINGS');
+
     delete data.storeServiceCategoryItem;
     delete data.storeServiceCategory;
     delete data.categoryId;

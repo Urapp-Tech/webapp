@@ -35,6 +35,7 @@ function HomePage() {
   } = useAlert();
 
   const [searchName, setSearchName] = useState('');
+  const { user } = useAppSelector((x) => x.authState);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { categories, selectedCategory } = useAppSelector(

@@ -124,7 +124,7 @@ const links = [
   // },
 ];
 
-const InSecureRouts: string[] = [];
+const InSecureRouts: string[] = ['Appointments', 'Products'];
 
 type Props = {
   openDrawer: boolean;
