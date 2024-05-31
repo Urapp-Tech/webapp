@@ -8,6 +8,7 @@
 /* eslint-disable no-restricted-syntax */
 
 import CloseIcon from '@mui/icons-material/Close';
+import { CircularProgress, useMediaQuery, useTheme } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
@@ -17,6 +18,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
+import isBetween from 'dayjs/plugin/isBetween';
+import utcPlugin from 'dayjs/plugin/utc';
 import { useEffect, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -24,34 +27,28 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { CircularProgress, useMediaQuery, useTheme } from '@mui/material';
-import isBetween from 'dayjs/plugin/isBetween';
-import utcPlugin from 'dayjs/plugin/utc';
 import assets from '../../assets';
 import '../../assets/css/PopupStyle.css';
 import CustomButton from '../../components/common/CustomButton';
 import CustomDropDown from '../../components/common/CustomDropDown';
 import CustomInputBox from '../../components/common/CustomInputBox';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
+import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TimePicker from '../../components/common/TimePicker';
-import TopBar from '../../components/common/TopBar';
+import useAlert from '../../hooks/alert.hook';
 import {
   AddAppointmentForm,
   Appointment,
 } from '../../interfaces/app.appointment';
-import storeAppointmentService from '../../services/store-appointment.service';
-import AlertBox from '../../components/common/SnackBar';
-import useAlert from '../../hooks/alert.hook';
-import { PATTERN, MAX_LENGTH_EXCEEDED, GENDER } from '../../utilities/constant';
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import { fetchCategoriesItems } from '../../redux/features/storeCategoryItemsSlice';
 import {
   fetchCategories,
   setSelectedCategory,
 } from '../../redux/features/storeCategorySlice';
-import { Category } from '../../interfaces/serviceCategory.interface';
-import { fetchCategoriesItems } from '../../redux/features/storeCategoryItemsSlice';
-import Loader from '../../components/common/Loader';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import storeAppointmentService from '../../services/store-appointment.service';
+import { GENDER, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utilities/constant';
 import { getItem, removeItem, setItem } from '../../utilities/local-storage';
 
 // Extend dayjs with necessary plugins
@@ -502,7 +499,7 @@ export default function AddAppointmentPage() {
       getValues('storeServiceCategoryItem') !== undefined &&
       getValues('storeServiceCategoryItem') !== 'none'
     ) {
-      getBarbers(watch('storeServiceCategoryItem'));
+      getBarbers(watch('storeServiceCategoryItem')).then();
     }
   }, [watch('storeServiceCategoryItem')]);
 

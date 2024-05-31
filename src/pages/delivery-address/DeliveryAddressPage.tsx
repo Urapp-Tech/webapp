@@ -181,7 +181,7 @@ function DeliveryAddressPage() {
         setActiveAddress(tempActiveAddress);
       }
     }
-    getUserAddress();
+    getUserAddress().then();
   }, []);
 
   const handleAddressClick = async (index: number) => {

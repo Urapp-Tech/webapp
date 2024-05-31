@@ -1,8 +1,6 @@
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
-import DateRangeIcon from '@mui/icons-material/DateRange';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import Button from '@mui/material/Button';
@@ -107,7 +105,7 @@ function OrderDetailsPage() {
 
   useEffect(() => {
     if (user) {
-      getOrderDetails();
+      getOrderDetails().then();
     }
   }, []);
 

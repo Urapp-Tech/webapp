@@ -67,7 +67,7 @@ function AccountProfilePage() {
       setValue('postalCode', getUserProfileResult.data.data.postalCode);
       setValue('phoneNumber', getUserProfileResult.data.data.phone);
     }
-    userProfile();
+    userProfile().then();
   }, []);
   const onSubmitSuccess = async (data: FieldValues) => {
     const newData = data as AccountProfileType;

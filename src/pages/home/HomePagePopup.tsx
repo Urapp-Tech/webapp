@@ -1,7 +1,7 @@
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
 import ClearIcon from '@mui/icons-material/Clear';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -114,7 +114,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
   }, [cartItems]);
 
   useEffect(() => {
-    updateCart();
+    updateCart().then();
   }, []);
 
   const onCloseHandler = (event: object, reason: string) => {

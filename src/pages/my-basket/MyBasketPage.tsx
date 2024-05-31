@@ -273,7 +273,7 @@ function MyBasketPage() {
   }, [cartItems]);
 
   useEffect(() => {
-    updateCart();
+    updateCart().then();
   }, [cartItems]);
 
   const handleRemoveFromCart = async (id: string) => {
@@ -318,10 +318,8 @@ function MyBasketPage() {
   }, [user]);
 
   useEffect(() => {
-    getUserAddress();
+    getUserAddress().then();
   }, [user]);
-
-  console.log('cartItems', cartItems);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -419,7 +417,7 @@ function MyBasketPage() {
                   </p>
                   <FormControl variant="standard" size="small">
                     <Input
-                      className="min-w-60 min-h-[10px] rounded-[0.625rem] border border-solid border-[var(--light-400)] p-2 text-xs font-normal text-faded"
+                      className="min-h-[10px] min-w-60 rounded-[0.625rem] border border-solid border-[var(--light-400)] p-2 text-xs font-normal text-faded"
                       disableUnderline
                       inputProps={{
                         placeholder: 'Enter Promo Code',

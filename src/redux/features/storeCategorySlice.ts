@@ -25,6 +25,9 @@ export const fetchCategories = createAsyncThunk(
   'store/fetchCategories',
   async (tenant: string | undefined, { rejectWithValue }) => {
     try {
+      if (!tenant) {
+        throw new Error('No Tenant');
+      }
       const response = await service.getCategories(tenant);
       return response.data;
     } catch (error: any) {
@@ -63,6 +66,7 @@ export const storeCategorySlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchCategories.fulfilled, (state, action) => {
+        console.log('action.payload :>> ', action.payload);
         state.loading = false;
         state.categories = action.payload.data.list;
       })

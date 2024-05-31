@@ -67,7 +67,7 @@ function NotificationPopover({
 
   useEffect(() => {
     if (user) {
-      getNotificationList();
+      getNotificationList().then();
     }
   }, [user]);
   return (

@@ -15,15 +15,15 @@ export const categoryAPI = createApi({
   }),
   endpoints: (builder) => ({
     getAllCategory: builder.query({
-      query: () => `/api/v1/app/homemenu/list/${getTenantId()}`,
+      query: () => `homemenu/list/${getTenantId()}`,
     }),
     getSubCategory: builder.query({
       query: ({ menuId }: { menuId: string }) =>
-        `api/v1/app/homemenu/view/${getTenantId()}/${menuId}`,
+        `homemenu/view/${getTenantId()}/${menuId}`,
     }),
     getSubCategoryItem: builder.query({
       query: ({ menuId, itemId }: { menuId: string; itemId: string }) =>
-        `/api/v1/app/homemenu/view/submenu/${getTenantId()}/${menuId}/${itemId}`,
+        `homemenu/view/submenu/${getTenantId()}/${menuId}/${itemId}`,
     }),
   }),
 });

@@ -7,7 +7,6 @@ import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
 import notificationService from '../../services/notification.service';
 import cn from '../../utilities/class-names';
@@ -50,7 +49,7 @@ function TopBar({ setDrawerState }: Props) {
 
   useEffect(() => {
     if (user) {
-      getNotificationList();
+      getNotificationList().then();
     }
   }, [user]);
 

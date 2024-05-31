@@ -1,9 +1,8 @@
 import { SignUpPayload } from '../types/auth.types';
 import { setItem } from './local-storage';
 
-const HOST = 'https://dev.urapptech.com';
-export const BASE_URL =
-  import.meta.env.VITE_BASE_URL || `${HOST}/api/v1/admin/`;
+export const HOST = 'https://dev.urapptech.com';
+export const BASE_URL = import.meta.env.VITE_BASE_URL || `${HOST}/api/v1/app/`;
 export const BASE_SYSTEM_URL =
   import.meta.env.VITE_SYSTEM_BASE_URL || `${HOST}/api/v1/system/config/`;
 
@@ -221,19 +220,19 @@ export const ORDER_STATUSES = new Map([
 
 // patterns
 export const PATTERN = {
-  // CHAR_NUM_DOT_AT: /^[A-Za-z0-9\s.@]+$/,
-  CHAR_NUM_DOT_AT: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/, // used for email fields
   CHAR_SPACE_DASH: /^[A-Za-z\s-]+$/, // used for textfield fields
-  CHAR_NUM_SPACE_DASH: /^[A-Za-z0-9\s-]+$/, // used for textfield fields
   ADDRESS_ONLY: /^[A-Za-z0-9\s@.,#()-]+$/, // used for textfield address
-  CHAR_NUM_DASH: /^[A-Za-z0-9-]+$/, // used for only num,chars,dash like; postal code
-  NUM_PLUS_MINUS: /^[+-\d\s]+$/,
   ACTION_WITHOUT_SPACE: /^[a-zA-Z0-9/-]+$/,
   PASSWORD: /^[^\s]+$/,
+  ALLOW_ALL: /^[\s\S]+$/, // used for allowed all
+  // CHAR_NUM_DOT_AT: /^[A-Za-z0-9\s.@]+$/,
+  NUM_PLUS_MINUS: /^[+-\d\s]+$/,
   NUM_DASH: /^[0-9-]+$/, // used for num,dash type text
   PHONE: /^[\d()+-]*\d[\d()+-]*$/, // used for phone type text
+  CHAR_NUM_DOT_AT: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/, // used for email fields
+  CHAR_NUM_SPACE_DASH: /^[A-Za-z0-9\s-]+$/, // used for textfield fields
+  CHAR_NUM_DASH: /^[A-Za-z0-9-]+$/, // used for only num,chars,dash like; postal code
   ONLY_NUM: /^\d+$/, // used for string type text
-  ALLOW_ALL: /^[\s\S]+$/, // userd for allowed all
   POINT_NUM: /^[+-]?([0-9]*[.])?[0-9]+$/,
   CHAR_NUM_MINUS_AT_SPACE: /^[a-zA-Z0-9@ -]+$/,
   CHAR_NUM_MIN_AT_HASH_COM_DOT_SPA: /^[a-zA-Z0-9@,\-.# ]+$/,

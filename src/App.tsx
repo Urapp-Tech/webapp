@@ -18,6 +18,7 @@ import { routeObjects } from './routes/AppRoutes';
 import appService from './services/app.service';
 import network from './services/network';
 import tenantService from './services/tenant.service';
+import { getItem } from './utilities/local-storage';
 import promiseHandler from './utilities/promise-handler';
 
 function App() {
@@ -74,7 +75,7 @@ function App() {
       }
       dispatch(setSystemConfig(getSystemConfigResult.data.data));
     }
-    getSystemConfig();
+    getSystemConfig().then();
 
     async function initializeDeviceData() {
       if (persistedDeviceData) {
@@ -102,6 +103,11 @@ function App() {
       }
       dispatch(setTenantConfig(getTenantResult.data.data.tenantConfig));
       dispatch(setTenant(getTenantResult.data.data));
+      const oldDeviceData = getItem<any>('DEVICE_DATA');
+      if (oldDeviceData) {
+        dispatch(setDeviceData(oldDeviceData));
+        return;
+      }
       const deviceRegistrationPromise = tenantService.deviceRegistration({
         deviceId: fingerprint.toString(),
         deviceType: 'Web',
@@ -126,7 +132,7 @@ function App() {
       }
       dispatch(setDeviceData(deviceRegistrationResult.data.data));
     }
-    initializeDeviceData();
+    initializeDeviceData().then();
   }, []);
 
   // useEffect(() => {

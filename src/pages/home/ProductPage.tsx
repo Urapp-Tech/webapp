@@ -7,6 +7,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CategoriesCard from '../../components/common/CategoriesCard';
 import Loader from '../../components/common/Loader';
+import ProductOfferSwiper from '../../components/common/ProductOfferSwiper';
 import AlertBox from '../../components/common/SnackBar';
 import useAlert from '../../hooks/alert.hook';
 import { setCartData, setCartItems } from '../../redux/features/cartStateSlice';
@@ -19,8 +20,6 @@ import cartService from '../../services/cart.service';
 import categoryService from '../../services/category.service';
 import promiseHandler from '../../utilities/promise-handler';
 import HomePagePopup from './HomePagePopup';
-import ProductOfferSwiper from '../../components/common/ProductOfferSwiper';
-import { fetchBanners } from '../../redux/features/bannerSlice';
 
 function getCategoryClasses(isActive: boolean) {
   const classes = 'item';
@@ -128,7 +127,7 @@ function ProductPage() {
       dispatch(setCartData(getAnonymousCartResult.data.data.cart));
       dispatch(setCartItems(getAnonymousCartResult.data.data.cartItems));
     }
-    fetchAnonymousCart();
+    fetchAnonymousCart().then();
   }, [persistedDeviceData]);
 
   useEffect(() => {

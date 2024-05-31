@@ -28,6 +28,9 @@ export const fetchCategoriesItems = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
+      if (!data.tenant) {
+        throw new Error('No Tenant');
+      }
       const response = await service.getCategoriesItem(data.tenant, data);
       return response.data;
     } catch (error: any) {
