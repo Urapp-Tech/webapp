@@ -5,6 +5,7 @@ import { Banner } from '../../interfaces/banner';
 
 type InitialState = {
   banners: Banner[];
+  single_banner?: Banner;
   loading: boolean;
   notify: boolean;
   total_count: number;
@@ -38,6 +39,9 @@ export const bannerSlice = createSlice({
     setBanners: (state, action: PayloadAction<Banner[]>) => {
       state.banners = action.payload;
     },
+    setSingleBanners: (state, action: PayloadAction<Banner>) => {
+      state.single_banner = action.payload;
+    },
     setNotifyState: (state, action: PayloadAction<boolean>) => {
       state.notify = action.payload;
     },
@@ -70,7 +74,11 @@ export const bannerSlice = createSlice({
   },
 });
 
-export const { setBanners, setNotifyState, showNotifyMessage } =
-  bannerSlice.actions;
+export const {
+  setBanners,
+  setNotifyState,
+  showNotifyMessage,
+  setSingleBanners,
+} = bannerSlice.actions;
 
 export default bannerSlice.reducer;

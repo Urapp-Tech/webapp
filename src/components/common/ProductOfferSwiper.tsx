@@ -3,18 +3,29 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination, Autoplay } from 'swiper/modules';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { fetchBanners } from '../../redux/features/bannerSlice';
+import { Banner } from '../../interfaces/banner';
 
 function ProductOfferSwiper() {
   const { banners } = useAppSelector((s) => s.bannerState);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const pagination = {
     clickable: true,
     renderBullet(index: number, className: any) {
       return `<span class="${className}"></span>`;
     },
+  };
+
+  const handleSlideClick = (banner: Banner) => {
+    if (banner.link && banner.link.length > 0) {
+      window.open(banner.link, '_blank');
+    } else if (banner.pageDetail && banner.pageDetail.length > 0) {
+      navigate(`/dashboard/products/offer/${banner.id}`);
+    }
   };
 
   useEffect(() => {
@@ -36,11 +47,20 @@ function ProductOfferSwiper() {
       {banners
         .filter((x) => x.bannerType === 'Slider')
         .map((banner) => (
-          <SwiperSlide key={banner.id}>
+          <SwiperSlide
+            key={banner.id}
+            className={`${
+              (banner.link && banner.link.length > 0) ||
+              (banner.pageDetail && banner.pageDetail.length > 0)
+                ? ' cursor-pointer'
+                : ''
+            }`}
+            onClick={() => handleSlideClick(banner)}
+          >
             <img
               src={banner.banner}
               alt={banner.name}
-              className="rounded-3xl"
+              className="h-[400px] rounded-3xl"
             />
           </SwiperSlide>
         ))}

@@ -79,6 +79,8 @@ const RescheduleAppointmentPage = lazy(
   () => import('../pages/appointments/RescheduleAppointmentPage')
 );
 
+const OfferDetails = lazy(() => import('../pages/offer/OfferDetails'));
+
 export const routeObjects: Array<RouteObject> = [
   {
     index: true,
@@ -185,6 +187,14 @@ export const routeObjects: Array<RouteObject> = [
         element: (
           <Suspense fallback={<Loader />}>
             <ProductPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'products/offer/:id',
+        element: (
+          <Suspense fallback={<Loader />}>
+            <OfferDetails />
           </Suspense>
         ),
       },
