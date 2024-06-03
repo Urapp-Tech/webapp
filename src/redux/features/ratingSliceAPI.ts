@@ -24,13 +24,12 @@ export const ratingAPI = createApi({
         page: any;
         size: any;
       }) => ({
-        url: `api/v1/app/rating/reviews/${itemId}`,
+        url: `rating/reviews/${itemId}`,
         params: { page, size },
       }),
     }),
     getRatingStarList: builder.query({
-      query: (homeCatId: string) =>
-        `api/v1/app/rating/distinct/star/list/${homeCatId}`,
+      query: (homeCatId: string) => `rating/distinct/star/list/${homeCatId}`,
     }),
   }),
 });

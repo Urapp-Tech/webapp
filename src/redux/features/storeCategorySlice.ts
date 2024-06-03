@@ -66,7 +66,6 @@ export const storeCategorySlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchCategories.fulfilled, (state, action) => {
-        console.log('action.payload :>> ', action.payload);
         state.loading = false;
         state.categories = action.payload.data.list;
       })

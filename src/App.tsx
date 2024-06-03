@@ -3,8 +3,9 @@
 import { ClientJS } from 'clientjs';
 import { useEffect } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
-import { useNavigate, useRoutes } from 'react-router-dom';
+import { useRoutes } from 'react-router-dom';
 import 'swiper/css';
+import Loader from './components/common/Loader';
 import AlertBox from './components/common/SnackBar';
 import useAlert from './hooks/alert.hook';
 import { setSystemConfig } from './redux/features/appStateSlice';
@@ -18,7 +19,6 @@ import { routeObjects } from './routes/AppRoutes';
 import appService from './services/app.service';
 import network from './services/network';
 import tenantService from './services/tenant.service';
-import { getItem } from './utilities/local-storage';
 import promiseHandler from './utilities/promise-handler';
 
 function App() {
@@ -33,9 +33,8 @@ function App() {
   const persistedDeviceData = useAppSelector(
     (state) => state.deviceStates.deviceData
   );
-  // const { user } = useAppSelector((x) => x.authState);
+  const systemConfig = useAppSelector((state) => state.appState.systemConfig);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const client = new ClientJS();
   const agent = client.getUserAgent();
   const fingerprint = client.getFingerprint();
@@ -76,8 +75,13 @@ function App() {
       dispatch(setSystemConfig(getSystemConfigResult.data.data));
     }
     getSystemConfig().then();
+  }, []);
 
+  useEffect(() => {
     async function initializeDeviceData() {
+      if (!systemConfig) {
+        return;
+      }
       if (persistedDeviceData) {
         return;
       }
@@ -103,11 +107,6 @@ function App() {
       }
       dispatch(setTenantConfig(getTenantResult.data.data.tenantConfig));
       dispatch(setTenant(getTenantResult.data.data));
-      const oldDeviceData = getItem<any>('DEVICE_DATA');
-      if (oldDeviceData) {
-        dispatch(setDeviceData(oldDeviceData));
-        return;
-      }
       const deviceRegistrationPromise = tenantService.deviceRegistration({
         deviceId: fingerprint.toString(),
         deviceType: 'Web',
@@ -133,13 +132,7 @@ function App() {
       dispatch(setDeviceData(deviceRegistrationResult.data.data));
     }
     initializeDeviceData().then();
-  }, []);
-
-  // useEffect(() => {
-  //   if (!user || !user.id) {
-  //     navigate('/auth/login');
-  //   }
-  // }, [user]);
+  }, [systemConfig]);
 
   if (process.env.NODE_ENV === 'production') {
     console.log = () => {};
@@ -147,6 +140,8 @@ function App() {
     console.warn = () => {};
   }
   const routes = useRoutes(routeObjects);
+
+  if (!systemConfig) return <Loader />;
 
   return (
     <>
@@ -156,6 +151,7 @@ function App() {
         alertOpen={showAlert}
         setAlertOpen={setShowAlert}
       />
+
       {routes}
     </>
   );

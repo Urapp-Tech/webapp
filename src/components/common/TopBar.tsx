@@ -53,8 +53,6 @@ function TopBar({ setDrawerState }: Props) {
     }
   }, [user]);
 
-  console.log('error Notification List is ', notificationElement);
-
   return (
     <AppBar
       position="fixed"
