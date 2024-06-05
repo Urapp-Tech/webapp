@@ -1,55 +1,52 @@
 /* eslint-disable react/no-children-prop */
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import FacebookIcon from '@mui/icons-material/Facebook';
-import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import YouTubeIcon from '@mui/icons-material/YouTube';
+import { useMediaQuery, useTheme } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import HistoryIcon from '@mui/icons-material/History';
-import { useMediaQuery, useTheme } from '@mui/material';
 import { setDropOff, setPickup } from '../../redux/features/DateAndTime';
 import { logout } from '../../redux/features/authStateSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import cn from '../../utilities/class-names';
 
 const links = [
-  {
-    name: 'Appointments',
-    path: 'home',
-    icon: (isActive: boolean) => (
-      <HomeOutlinedIcon
-        className={cn(
-          'h-auto w-5 text-foreground transition-all duration-[0.3s]',
-          !isActive && 'opacity-75'
-        )}
-        fontSize="inherit"
-      />
-    ),
-  },
-  {
-    name: 'Appointments History',
-    path: 'appointments-history',
-    icon: (isActive: boolean) => (
-      <HistoryIcon
-        className={cn(
-          'h-auto w-5 text-foreground transition-all duration-[0.3s]',
-          !isActive && 'opacity-75'
-        )}
-        fontSize="inherit"
-      />
-    ),
-  },
+  // {
+  //   name: 'Appointments',
+  //   path: 'home',
+  //   icon: (isActive: boolean) => (
+  //     <HomeOutlinedIcon
+  //       className={cn(
+  //         'h-auto w-5 text-foreground transition-all duration-[0.3s]',
+  //         !isActive && 'opacity-75'
+  //       )}
+  //       fontSize="inherit"
+  //     />
+  //   ),
+  // },
+  // {
+  //   name: 'Appointments History',
+  //   path: 'appointments-history',
+  //   icon: (isActive: boolean) => (
+  //     <HistoryIcon
+  //       className={cn(
+  //         'h-auto w-5 text-foreground transition-all duration-[0.3s]',
+  //         !isActive && 'opacity-75'
+  //       )}
+  //       fontSize="inherit"
+  //     />
+  //   ),
+  // },
   {
     name: 'Products',
     path: 'products',

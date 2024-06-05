@@ -154,7 +154,7 @@ export const routeObjects: Array<RouteObject> = [
         path: 'home',
         element: (
           <Suspense fallback={<Loader />}>
-            <HomePage />
+            <ProductPage />
           </Suspense>
         ),
       },
