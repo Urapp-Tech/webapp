@@ -1,20 +1,18 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
+import { Button } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import InputLabel from '@mui/material/InputLabel';
-import { Controller, useForm } from 'react-hook-form';
-import { NavLink, useNavigate } from 'react-router-dom';
-import * as z from 'zod';
-import { Button } from '@mui/material';
 import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import * as z from 'zod';
 import assets from '../../../assets';
+import FastSpinner from '../../../components/common/CustomSpinner';
 import AlertBox from '../../../components/common/SnackBar';
 import useAlert from '../../../hooks/alert.hook';
+import { useAppSelector } from '../../../redux/redux-hooks';
 import authService from '../../../services/auth.service';
 import promiseHandler from '../../../utilities/promise-handler';
-import { useAppSelector } from '../../../redux/redux-hooks';
-import FastSpinner from '../../../components/common/CustomSpinner';
 
 const forgotPasswordSchema = z.object({
   email: z
@@ -198,7 +196,7 @@ function ForgotPasswordPage() {
                       <FormControl className="my-1 w-full" variant="standard">
                         <Input
                           type="email"
-                          placeholder="salon@urapptech.com"
+                          placeholder="example@mail.com"
                           className="h-[30px] rounded-md border-[1px] border-solid border-[#949EAE] bg-white px-1 text-[11px]"
                           id={field.name}
                           name={field.name}

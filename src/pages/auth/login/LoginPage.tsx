@@ -1,21 +1,16 @@
-import FacebookLogin, {
-  SuccessResponse,
-} from '@greatsumini/react-facebook-login';
-import Checkbox from '@mui/material/Checkbox';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import IconButton from '@mui/material/IconButton';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
+import { SuccessResponse } from '@greatsumini/react-facebook-login';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
-import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
+import Input from '@mui/material/Input';
+import InputAdornment from '@mui/material/InputAdornment';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import FastSpinner from '../../../components/common/CustomSpinner';
 import assets from '../../../assets';
+import FastSpinner from '../../../components/common/CustomSpinner';
 import AlertBox from '../../../components/common/SnackBar';
 import useAlert from '../../../hooks/alert.hook';
 import { login } from '../../../redux/features/authStateSlice';
@@ -326,7 +321,7 @@ function LoginPage() {
                     <FormControl className="my-1 w-full" variant="standard">
                       <Input
                         className="input-with-icon h-[30px] text-[11px]"
-                        placeholder="salon@gmail.com"
+                        placeholder="example@mail.com"
                         id="email"
                         type="email"
                         onChange={email.onChange}
