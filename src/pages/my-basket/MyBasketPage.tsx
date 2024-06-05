@@ -11,6 +11,7 @@ import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateRangeIcon } from '@mui/x-date-pickers/icons';
 import dayjs from 'dayjs';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -30,6 +31,7 @@ import addressService from '../../services/address.service';
 import cartService, { UpdateCartPayload } from '../../services/cart.service';
 import orderService from '../../services/order.service';
 import promiseHandler from '../../utilities/promise-handler';
+import DatePickerButton from './DatePickerButton';
 import PayFastForm from './PayFastForm';
 import PaymentOptionPopup from './PaymentOptionPopup';
 
@@ -43,6 +45,7 @@ function MyBasketPage() {
     setAlertSeverity,
   } = useAlert();
 
+  const { dropOff, pickUp } = useAppSelector((state) => state.dateState);
   const { cartItems, cartData } = useAppSelector((state) => state.cartState);
   const tenant = useAppSelector((state) => state.deviceStates.tenant);
   const tenantConfig = useAppSelector(
@@ -75,10 +78,8 @@ function MyBasketPage() {
 
   const onCheckoutPayFast = async () => {
     const tempAddress = userAddress[0] ? userAddress[0].id : null;
-    const pickupDateTime = dayjs(new Date()).toISOString();
-    const dropDateTime = dayjs(pickupDateTime)
-      .add(tenantConfig?.minimumDeliveryTime ?? 3, 'day')
-      .toISOString();
+    const pickupDateTime = pickUp;
+    const dropDateTime = dropOff;
     const updateCartPayload: UpdateCartPayload = {
       appUser: user?.id,
       appUserAddress: tempAddress,
@@ -172,10 +173,8 @@ function MyBasketPage() {
 
   const onCheckoutCash = async () => {
     const tempAddress = userAddress[0] ? userAddress[0].id : null;
-    const pickupDateTime = dayjs(new Date()).toISOString();
-    const dropDateTime = dayjs(pickupDateTime)
-      .add(tenantConfig?.minimumDeliveryTime ?? 3, 'day')
-      .toISOString();
+    const pickupDateTime = pickUp;
+    const dropDateTime = dropOff;
     const updateCartPayload: UpdateCartPayload = {
       appUser: user?.id,
       appUserAddress: tempAddress,
@@ -417,7 +416,7 @@ function MyBasketPage() {
                   </p>
                   <FormControl variant="standard" size="small">
                     <Input
-                      className="min-w-60 min-h-[10px] rounded-[0.625rem] border border-solid border-[var(--light-400)] p-2 text-xs font-normal text-faded"
+                      className="min-h-[10px] min-w-60 rounded-[0.625rem] border border-solid border-[var(--light-400)] p-2 text-xs font-normal text-faded"
                       disableUnderline
                       inputProps={{
                         placeholder: 'Enter Promo Code',
@@ -450,23 +449,19 @@ function MyBasketPage() {
           </div>
           <div className="col-span-12 md:col-span-5">
             <div className="cart-checkout-card">
-              <div className="w-full text-end text-sm ">
-                minimum time is
-                <span className="font-bold"> {minimumDeliveryTime}</span> days
-              </div>
-              {/*   <div className="mb-5 grid grid-cols-1 sm:grid-cols-2">
+              <div className="mb-5 grid grid-cols-1 sm:grid-cols-2">
                 <div className="select-date-time sm:pr-4 lg:pr-7">
                   <DatePickerButton
                     onChange={handlePickUpTimeChange}
                     id="pick-up-date-time-picker"
                     icon={<DateRangeIcon />}
                     text="Pick up time"
-                    initialValue={dayjs(PickUp ?? new Date())}
+                    initialValue={dayjs(pickUp ?? new Date())}
                   />
                   <div className="mb-2 flex items-center">
                     <p className="selected-value">
-                      {PickUp
-                        ? dayjs(PickUp).format('ddd, MMM D, YYYY HH:mm a')
+                      {pickUp
+                        ? dayjs(pickUp).format('ddd, MMM D, YYYY HH:mm a')
                         : 'Select a date'}
                     </p>
                   </div>
@@ -477,12 +472,12 @@ function MyBasketPage() {
                     id="drop-off-date-time-picker"
                     icon={<DateRangeIcon />}
                     text="Urgent time"
-                    initialValue={dayjs(DropOff)}
+                    initialValue={dayjs(dropOff)}
                   />
                   <div className="mb-2 flex flex-col items-center">
                     <p className="selected-value w-full">
-                      {DropOff && dayjs(DropOff).isValid()
-                        ? dayjs(DropOff).format('ddd, MMM D, YYYY HH:mm a')
+                      {dropOff && dayjs(dropOff).isValid()
+                        ? dayjs(dropOff).format('ddd, MMM D, YYYY HH:mm a')
                         : null}
                     </p>
                     <br />
@@ -491,7 +486,7 @@ function MyBasketPage() {
                     </div>
                   </div>
                 </div>
-              </div> */}
+              </div>
               {user ? (
                 <div className="address-card">
                   <div className="key" style={{ width: '500px' }}>
@@ -542,12 +537,12 @@ function MyBasketPage() {
                     setShowAlert(true);
                     return;
                   }
-                  /* if (!PickUp && !DropOff) {
+                  if (!pickUp && !dropOff) {
                     setAlertSeverity('error');
                     setAlertMessage('Pickup Date time is Required');
                     setShowAlert(true);
                     return;
-                  } */
+                  }
                   setOpenPaymentSelectPopup(true);
                 }}
                 color="inherit"

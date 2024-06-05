@@ -53,6 +53,8 @@ function ProductPage() {
     (state) => state.deviceStates.deviceData
   );
 
+  const banners = useAppSelector((s) => s.bannerState.banners);
+
   const user = useAppSelector((state) => state.authState.user);
 
   const cartData = useAppSelector((state) => state.cartState.cartData);
@@ -197,18 +199,20 @@ function ProductPage() {
         FAQs={FAQs}
       />
 
-      <div className="mb-10 grid grid-cols-12 bg-background px-4 pt-6 sm:px-5 sm:pt-4 xl:px-7">
-        <div className="col-span-12">
-          <h4 className="mb-5 text-2xl font-semibold leading-tight text-secondary sm:mb-7 md:text-[1.375rem] md:font-bold">
-            Offers
-          </h4>
-          <ProductOfferSwiper />
+      {banners && banners.length ? (
+        <div className="mb-10 grid grid-cols-12 bg-background px-4 pt-6 sm:px-5 sm:pt-4 xl:px-7">
+          <div className="col-span-12">
+            <h4 className="mb-5 text-2xl font-semibold leading-tight text-secondary sm:mb-7 md:text-[1.375rem] md:font-bold">
+              Offers
+            </h4>
+            <ProductOfferSwiper banners={banners} />
+          </div>
         </div>
-      </div>
+      ) : null}
 
       <div className="bg-background px-4 pt-6 sm:px-5 sm:pt-4 xl:px-7">
         <div className="all-categories mb-8">
-          <h4 className="mb-5 text-2xl font-semibold leading-tight text-secondary sm:mb-7 md:text-[1.375rem] md:font-bold">
+          <h4 className="my-5 text-2xl font-semibold leading-tight text-secondary sm:mb-7  md:font-semibold">
             Categories
           </h4>
           {categoryList()}

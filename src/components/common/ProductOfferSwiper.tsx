@@ -1,15 +1,18 @@
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import { Pagination, Autoplay } from 'swiper/modules';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import { fetchBanners } from '../../redux/features/bannerSlice';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import { Autoplay, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { Banner } from '../../interfaces/banner';
+import { fetchBanners } from '../../redux/features/bannerSlice';
+import { useAppDispatch } from '../../redux/redux-hooks';
 
-function ProductOfferSwiper() {
-  const { banners } = useAppSelector((s) => s.bannerState);
+type ProductOfferSwiperProps = {
+  banners: Array<Banner>;
+};
+
+function ProductOfferSwiper({ banners }: ProductOfferSwiperProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
