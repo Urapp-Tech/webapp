@@ -184,11 +184,19 @@ function SignUpOTPVerificationPage() {
           </div>
           <div className="col-span-12 px-3 py-10 md:col-span-8 md:py-2 lg:col-span-8">
             <div className="mx-auto  flex max-h-[834px] items-center justify-center overflow-hidden rounded-lg max-[1560px]:max-h-[96vh]">
-              <img
-                src={assets.images.forgotBg}
-                alt="urlaundry"
-                className="h-full w-full object-contain"
-              />
+              {systemConfigData?.logoffImage ? (
+                <img
+                  src={systemConfigData?.logoffImage || assets.images.bgLogin}
+                  alt="urlaundry"
+                  className="h-full w-full object-contain"
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center">
+                  <p className="text-xl font-semibold">
+                    Image is not uploaded yet
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
