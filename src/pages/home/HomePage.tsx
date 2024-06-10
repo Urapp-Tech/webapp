@@ -82,12 +82,6 @@ function HomePage() {
     if (cat) {
       dispatch(setSelectedCategoriesItem(cat));
     }
-    if (!user || !user.id) {
-      navigate('/auth/login', {
-        state: { from: { pathname: '/dashboard/book-service' } },
-      });
-      return;
-    }
     navigate('/dashboard/book-service');
   };
 

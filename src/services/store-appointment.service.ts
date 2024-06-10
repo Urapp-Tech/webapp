@@ -64,6 +64,12 @@ const getUserAppointmentsByDate = (date: any, body?: any) => {
   });
 };
 
+const getUserAppointmentsByMultipleDates = (body?: any) => {
+  return network.post(API_PATHS.getUserAppointmentsByMultipleDates(), body, {
+    headers: getHeaders(),
+  });
+};
+
 export default {
   getBarbersList,
   getBarberBookedTimeSlots,
@@ -73,4 +79,5 @@ export default {
   rescheduleAppointment,
   CheckEmployeeAvailable,
   getUserAppointmentsByDate,
+  getUserAppointmentsByMultipleDates,
 };
