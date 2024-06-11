@@ -32,7 +32,9 @@ function ProductOfferSwiper({ banners }: ProductOfferSwiperProps) {
   };
 
   useEffect(() => {
-    dispatch(fetchBanners());
+    if (banners.length === 0) {
+      dispatch(fetchBanners());
+    }
   }, []);
   return (
     <Swiper

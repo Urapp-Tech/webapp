@@ -20,6 +20,7 @@ import cartService from '../../services/cart.service';
 import categoryService from '../../services/category.service';
 import promiseHandler from '../../utilities/promise-handler';
 import HomePagePopup from './HomePagePopup';
+import { fetchBanners } from '../../redux/features/bannerSlice';
 
 function getCategoryClasses(isActive: boolean) {
   const classes = 'item';
@@ -53,9 +54,8 @@ function ProductPage() {
     (state) => state.deviceStates.deviceData
   );
 
-  const banners = useAppSelector((s) => s.bannerState.banners);
-
   const user = useAppSelector((state) => state.authState.user);
+  const { banners } = useAppSelector((s) => s.bannerState);
 
   const cartData = useAppSelector((state) => state.cartState.cartData);
 
@@ -184,6 +184,12 @@ function ProductPage() {
     return <div>Error Occurred</div>;
   }, [categoryData, isCategoryLoading, subCategoryTrigger]);
 
+  useEffect(() => {
+    if (banners.length === 0) {
+      dispatch(fetchBanners());
+    }
+  }, []);
+
   return (
     <>
       <AlertBox
@@ -199,16 +205,19 @@ function ProductPage() {
         FAQs={FAQs}
       />
 
-      {banners && banners.length ? (
-        <div className="mb-10 grid grid-cols-12 bg-background px-4 pt-6 sm:px-5 sm:pt-4 xl:px-7">
-          <div className="col-span-12">
-            <h4 className="mb-5 text-2xl font-semibold leading-tight text-secondary sm:mb-7 md:text-[1.375rem] md:font-bold">
-              Offers
-            </h4>
-            <ProductOfferSwiper banners={banners} />
+      {user &&
+        user.id &&
+        banners &&
+        banners.filter((x) => x.bannerType === 'Slider').length !== 0 && (
+          <div className="mb-10 grid grid-cols-12 bg-background px-4 pt-6 sm:px-5 sm:pt-4 xl:px-7">
+            <div className="col-span-12">
+              <h4 className="mb-5 text-2xl font-semibold leading-tight text-secondary sm:mb-7 md:text-[1.375rem] md:font-bold">
+                Offers
+              </h4>
+              <ProductOfferSwiper banners={banners} />
+            </div>
           </div>
-        </div>
-      ) : null}
+        )}
 
       <div className="bg-background px-4 pt-6 sm:px-5 sm:pt-4 xl:px-7">
         <div className="all-categories mb-8">
