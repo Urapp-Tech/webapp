@@ -63,7 +63,7 @@ function TableRow({ id, appOrderNumber, type, date, progress, item }: Props) {
       <td>
         <div
           className={cn(
-            'inline-flex min-h-8 min-w-32 items-center text-xs font-semibold',
+            'min-h-8 min-w-32 inline-flex items-center text-xs font-semibold',
             ORDER_STATUSES.get(type)?.color
           )}
         >
