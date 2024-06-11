@@ -214,7 +214,7 @@ function ProductPage() {
               <h4 className="mb-5 text-2xl font-semibold leading-tight text-secondary sm:mb-7 md:text-[1.375rem] md:font-bold">
                 Offers
               </h4>
-              <ProductOfferSwiper />
+              <ProductOfferSwiper banners={banners} />
             </div>
           </div>
         )}

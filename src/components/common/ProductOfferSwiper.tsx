@@ -8,8 +8,11 @@ import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { fetchBanners } from '../../redux/features/bannerSlice';
 import { Banner } from '../../interfaces/banner';
 
-function ProductOfferSwiper() {
-  const { banners } = useAppSelector((s) => s.bannerState);
+type ProductOfferSwiperProps = {
+  banners: Array<Banner>;
+};
+
+function ProductOfferSwiper({ banners }: ProductOfferSwiperProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
