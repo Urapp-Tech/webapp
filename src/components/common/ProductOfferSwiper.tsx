@@ -29,7 +29,9 @@ function ProductOfferSwiper() {
   };
 
   useEffect(() => {
-    dispatch(fetchBanners());
+    if (banners.length === 0) {
+      dispatch(fetchBanners());
+    }
   }, []);
   return (
     <Swiper
