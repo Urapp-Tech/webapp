@@ -172,7 +172,7 @@ function HomePage() {
                       {item.name}
                     </h5>
                     <h6 className="mb-3 flex-1 basis-full text-center text-base font-semibold text-secondary sm:mb-0 sm:flex sm:basis-0 sm:text-left">
-                      $ {item.price}
+                      {import.meta.env.VITE_CURRENCY_SYMBOL} {item.price}
                     </h6>
                     <Button
                       className="btn-add w-full rounded-[0.625rem] bg-primary text-sm font-semibold text-foreground sm:w-auto"

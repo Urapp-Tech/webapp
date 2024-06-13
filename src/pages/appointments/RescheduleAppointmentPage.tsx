@@ -501,7 +501,7 @@ export default function RescheduleAppointmentPage() {
         _appointmentData?.storeServiceCategoryItem?.id
       );
     }
-  }, [_appointmentData, catItemsLovlist]);
+  }, []);
 
   useEffect(() => {
     if (
@@ -868,11 +868,14 @@ export default function RescheduleAppointmentPage() {
           <IconButton
             onClick={() => navigate(-1)}
             color="inherit"
-            className="p-1"
+            className="px-2"
           >
             <ArrowBackIcon />
           </IconButton>
-          <h4 className="page-heading">Fill Reschedule Appointment Form</h4>
+          <span className="text-base font-bold text-[#1A1A1A]">
+            Fill Reschedule Appointment Form
+          </span>
+          {/* <h4 className="page-heading">Fill Reschedule Appointment Form</h4> */}
         </div>
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="p-3">

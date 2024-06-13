@@ -8,6 +8,7 @@
     "dev": "vite --port 3004 --host",
     "dev:development": "vite --mode development --port 3004 --host",
     "dev:development-local": "vite --mode development-local --port 3004 --host",
+    "dev:staging": "vite --mode staging --port 3004 --host",
     "dev:production": "vite --mode production --port 3004 --host",
     "build": "tsc && vite build",
     "build:development": "tsc && vite build --mode development",
