@@ -174,7 +174,7 @@ function StoreAppointmentsList() {
             <thead>
               <tr>
                 <th className="font-bold">Appointment Number</th>
-                <th className="font-bold">Barber Name</th>
+                <th className="font-bold">Employee Name</th>
                 <th className="font-bold">Service</th>
                 <th className="font-bold">Time</th>
                 <th className="font-bold">Status</th>
