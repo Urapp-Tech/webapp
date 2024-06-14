@@ -98,6 +98,11 @@ export default function AddAppointmentPage() {
   const { categoryItems: catItemsLovlist, selectedCategoryItems } =
     useAppSelector((state) => state.storeCategoryItemState);
 
+  console.log('🚀 ~ AddAppointmentPage ~ catItemsLovlist:', catItemsLovlist);
+  console.log(
+    '🚀 ~ AddAppointmentPage ~ selectedCategoryItems:',
+    selectedCategoryItems
+  );
   // const [catItemsLovlist, setCatItemsLovList] = useState<any>([]);
   const [usedCatItemsLovlist, setusedCatItemsLovList] = useState<any>([]);
   const [barberList, setBarberList] = useState<any>([]);
@@ -314,15 +319,6 @@ export default function AddAppointmentPage() {
         setActiveBarber(null);
         setActiveBarberData(null);
         setBookingList(null);
-        // let newFilter = [];
-        // if (tempAppointmentBookedTime.length > 0) {
-        //   newFilter = tempAppointmentBookedTime.filter(
-        //     (itemFilter: any) =>
-        //       itemFilter.storeEmployee === item.storeEmployee.id
-        //   );
-        // }
-        // console.log('item.storeEmployee.id:::::::', item.storeEmployee.id);
-        // console.log('newFilter:::::::', newFilter);
         setAppointmentBookedTime([]);
       } else {
         setBookingList(item.storeEmployeeSchedule);
@@ -368,10 +364,9 @@ export default function AddAppointmentPage() {
         <div className="my-6 text-center">
           <div className="flex items-center justify-center">
             {item.storeEmployee.avatar ? (
-              <img
-                className="my-2 h-[55px] w-[55px]"
+              <Avatar
                 src={item.storeEmployee.avatar}
-                alt="avatar-img"
+                className="my-2 h-[55px] w-[55px] object-contain"
               />
             ) : (
               <Avatar className="my-2 h-[55px] w-[55px]">
@@ -475,7 +470,7 @@ export default function AddAppointmentPage() {
     ) {
       setValue('storeServiceCategoryItem', selectedCategoryItems?.id);
     }
-  }, [selectedCategoryItems, catItemsLovlist]);
+  }, []);
 
   useEffect(() => {
     if (
@@ -494,12 +489,14 @@ export default function AddAppointmentPage() {
     }
   }, [watch('categoryId')]);
 
+  console.log('barberList', barberList, watch('storeServiceCategoryItem'));
+
   useEffect(() => {
     if (
       getValues('storeServiceCategoryItem') !== undefined &&
       getValues('storeServiceCategoryItem') !== 'none'
     ) {
-      getBarbers(watch('storeServiceCategoryItem')).then();
+      getBarbers(watch('storeServiceCategoryItem'));
     }
   }, [watch('storeServiceCategoryItem')]);
 
@@ -1142,7 +1139,7 @@ export default function AddAppointmentPage() {
                           }
                         >
                           <Swiper
-                            slidesPerView={isMobile ? 1.5 : 6}
+                            slidesPerView={isMobile ? 1.5 : 4}
                             spaceBetween={30}
                             pagination={pagination}
                             modules={[Pagination]}

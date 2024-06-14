@@ -34,16 +34,12 @@ function OrderDetailsPage() {
   const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [orderItemDetail, setOrderItemDetail] = useState<any>();
-  const [pickUpTime, setPickUpTime] = useState<dayjs.Dayjs | null>(null);
-  const [dropOffTime, setDropOffTime] = useState<dayjs.Dayjs | null>(null);
   const [orderCanceled, setOrderCanceled] = useState(false);
   const items = getItem<GetOrderListData>('ORDER_ITEM');
   const address = getItem<any>('ADDRESS');
+
   const addressList = address.map((el: any) => el);
   const { id } = useParams();
-  const userAddress = addressList?.find(
-    (tempAddress: any) => tempAddress.id === orderItemDetail?.appUserAddress
-  );
 
   const getOrderDetails = useCallback(async function () {
     if (!items) {
@@ -208,16 +204,17 @@ function OrderDetailsPage() {
                     </h6>
                   </div>
                 </div>
-                {orderItemDetail?.status === ORDER_STATUS.NEW && (
-                  <Button
-                    type="button"
-                    onClick={HandleCancelOrder}
-                    className="btn-cancel-order"
-                    color="inherit"
-                  >
-                    Cancel Order
-                  </Button>
-                )}
+                {orderItemDetail?.status === ORDER_STATUS.NEW &&
+                  !orderCanceled && (
+                    <Button
+                      type="button"
+                      onClick={HandleCancelOrder}
+                      className="btn-cancel-order"
+                      color="inherit"
+                    >
+                      Cancel Order
+                    </Button>
+                  )}
               </div>
               {/* <hr className="my-4" /> */}
               {/* <div className="grid grid-cols-1 sm:grid-cols-2">
@@ -267,9 +264,9 @@ function OrderDetailsPage() {
                         <div className="flex items-center gap-x-2">
                           <LocationOnOutlinedIcon className="text-xl" />
                           <p className="adress">
-                            {!userAddress
+                            {!orderItemDetail?.userAddress?.address
                               ? 'No Address Active'
-                              : userAddress?.address}
+                              : orderItemDetail?.userAddress?.address}
                           </p>
                         </div>
                       </td>

@@ -161,7 +161,7 @@ function StoreAppointmentsList() {
                 className="btn-black-fill btn-icon col-span-12 md:col-span-4"
               >
                 <SearchIcon />
-                Search Appointments
+                Search
               </Button>
             </form>
           </LocalizationProvider>
@@ -173,24 +173,22 @@ function StoreAppointmentsList() {
           <table className="orders-table w-full">
             <thead>
               <tr>
-                <th className="font-bold">Name</th>
-                <th className="font-bold">Email</th>
+                <th className="font-bold">Appointment Number</th>
+                <th className="font-bold">Employee Name</th>
                 <th className="font-bold">Service</th>
-                <th className="font-bold">Phone</th>
                 <th className="font-bold">Time</th>
                 <th className="font-bold">Status</th>
                 <th className="font-bold">{}</th>
               </tr>
             </thead>
             <tbody>
-              {appointments?.map((x) => (
+              {appointments?.map((x: any) => (
                 <tr key={x.id}>
                   <td className="font-bold capitalize text-primary">
-                    {x.name}
+                    {x.appointmentNumber}
                   </td>
-                  <td>{x.email}</td>
+                  <td>{x.storeEmployeeName}</td>
                   <td>{x.service}</td>
-                  <td>{x.phone}</td>
                   <td className="font-bold">
                     {dayjs(x.appointmentTime).format('MMM D, YYYY hh:mm A')}
                   </td>
