@@ -98,7 +98,7 @@ function HomePage() {
 
   useEffect(() => {
     handleSearch();
-  }, [categoryItems]);
+  }, [categoryItems, searchName]);
 
   return (
     <>
@@ -145,7 +145,7 @@ function HomePage() {
               />
             </FormControl>
           </div>
-          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+          <div className="mb-5 grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
             {isSubCategoryLoading ? (
               <Loader />
             ) : (
@@ -168,10 +168,10 @@ function HomePage() {
                     </button>
                   </div>
                   <div className="flex flex-wrap items-center justify-between">
-                    <h5 className="mb-2 basis-full text-center text-base font-semibold leading-none text-secondary sm:mb-3 sm:text-left">
+                    <h5 className="mb-2 basis-full text-center text-base font-semibold capitalize leading-none text-secondary sm:mb-3 sm:text-left">
                       {item.name}
                     </h5>
-                    <h6 className="mb-3 flex-1 basis-full text-center text-base font-semibold text-secondary sm:mb-0 sm:flex sm:basis-0 sm:text-left">
+                    <h6 className="mb-3 flex-1 basis-full text-center text-sm font-semibold text-secondary sm:mb-0 sm:flex sm:basis-0 sm:text-left">
                       {import.meta.env.VITE_CURRENCY_SYMBOL} {item.price}
                     </h6>
                     <Button
