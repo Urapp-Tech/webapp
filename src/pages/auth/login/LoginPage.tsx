@@ -321,7 +321,7 @@ function LoginPage() {
                     <FormControl className="my-1 w-full" variant="standard">
                       <Input
                         className="input-with-icon h-[30px] text-[11px]"
-                        placeholder="example@mail.com"
+                        placeholder="user@example.com"
                         id="email"
                         type="email"
                         onChange={email.onChange}
