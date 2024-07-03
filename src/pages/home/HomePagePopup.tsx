@@ -17,7 +17,7 @@ import { addToCart } from '../../redux/features/cartStateSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import cartService, { UpdateCartPayload } from '../../services/cart.service';
 import cn from '../../utilities/class-names';
-import { getTenantId } from '../../utilities/constant';
+import { CURRENCY_PREFIX, getTenantId } from '../../utilities/constant';
 import promiseHandler from '../../utilities/promise-handler';
 
 type Props = {
@@ -172,7 +172,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
                 <div className="flex-container flex items-center justify-between">
                   <div className="price">
                     <h3 className="number">
-                      $ <span>{data?.price.toFixed(2)}</span>
+                      {CURRENCY_PREFIX} <span>{data?.price.toFixed(2)}</span>
                     </h3>
                     <p className="text">&nbsp;/ item</p>
                   </div>
@@ -196,11 +196,11 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
               </div>
             </div>
             <div className="col-span-4">
-              <div className="px-3 py-1">
+              <div className="px-3 pt-6">
                 <span className="text-xl font-semibold">FAQS</span>
                 {FAQs === null && (
                   <div>
-                    <span className="text-sm font-medium">
+                    <span className="text-xs font-medium">
                       There is no faqs for this product
                     </span>
                   </div>
@@ -222,7 +222,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
                     >
                       <h6 className="heading">{faq.question}</h6>
                     </AccordionSummary>
-                    <AccordionDetails className="accordion-body">
+                    <AccordionDetails className="accordion-body px-3">
                       <p className="desc">{faq.answer}</p>
                     </AccordionDetails>
                   </Accordion>

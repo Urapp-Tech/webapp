@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface DateState {
-  DropOff: string | null;
-  PickUp: string | null;
+  dropOff: string | null;
+  pickUp: string | null;
 }
 
 const initialState: DateState = {
-  DropOff: null,
-  PickUp: null,
+  dropOff: null,
+  pickUp: null,
 };
 
 export const DateSliceReducer = createSlice({
@@ -15,10 +15,10 @@ export const DateSliceReducer = createSlice({
   initialState,
   reducers: {
     setPickup: (state: DateState, action: PayloadAction<string | null>) => {
-      state.PickUp = action.payload;
+      state.pickUp = action.payload;
     },
     setDropOff: (state: DateState, action: PayloadAction<string | null>) => {
-      state.DropOff = action.payload;
+      state.dropOff = action.payload;
     },
   },
 });
