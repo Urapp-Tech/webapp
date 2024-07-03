@@ -21,6 +21,7 @@ import categoryService from '../../services/category.service';
 import promiseHandler from '../../utilities/promise-handler';
 import HomePagePopup from './HomePagePopup';
 import { fetchBanners } from '../../redux/features/bannerSlice';
+import { CURRENCY_PREFIX } from '../../utilities/constant';
 
 function getCategoryClasses(isActive: boolean) {
   const classes = 'item';
@@ -280,7 +281,7 @@ function ProductPage() {
                       {item.name}
                     </h5>
                     <h6 className="mb-3 flex-1 basis-full text-center text-base font-semibold text-secondary sm:mb-0 sm:flex sm:basis-0 sm:text-left">
-                      $ {item.price.toFixed(2)}
+                      {CURRENCY_PREFIX} {item.price.toFixed(2)}
                     </h6>
                     <Button
                       className="btn-add w-full rounded-[0.625rem] bg-primary text-sm font-semibold text-foreground sm:w-auto"

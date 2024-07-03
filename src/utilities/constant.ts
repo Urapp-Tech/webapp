@@ -6,6 +6,7 @@ export const BASE_URL = import.meta.env.VITE_BASE_URL || `${HOST}/api/v1/app/`;
 export const BASE_SYSTEM_URL =
   import.meta.env.VITE_SYSTEM_BASE_URL || `${HOST}/api/v1/system/config/`;
 
+export const CURRENCY_PREFIX = import.meta.env.VITE_CURRENCY_SYMBOL || `PKR`;
 export const APP_USER_PREFIXES = 'app-user';
 
 let token = '';

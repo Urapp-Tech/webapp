@@ -34,6 +34,7 @@ import promiseHandler from '../../utilities/promise-handler';
 import DatePickerButton from './DatePickerButton';
 import PayFastForm from './PayFastForm';
 import PaymentOptionPopup from './PaymentOptionPopup';
+import { CURRENCY_PREFIX } from '../../utilities/constant';
 
 function MyBasketPage() {
   const {
@@ -230,8 +231,9 @@ function MyBasketPage() {
     setAlertMessage('Order Placed');
     setShowAlert(true);
   };
-
+  const [disabled, setDisabled] = useState(false);
   const updateCart = useCallback(async () => {
+    setDisabled(true);
     if (!cartData?.id) {
       return;
     }
@@ -268,6 +270,7 @@ function MyBasketPage() {
       setShowAlert(true);
       return;
     }
+    setDisabled(false);
     dispatch(setCartData(updateCartResult.data.data.cart));
   }, [cartItems]);
 
@@ -362,22 +365,26 @@ function MyBasketPage() {
                             >
                               <DeleteOutlineOutlinedIcon className="text-2xl" />
                             </IconButton>
-                            <div className="product">
+                            <div className="product px-2">
                               <img
                                 className="pic"
                                 src={item.image || item.icon}
                                 alt=""
                               />
-                              <p className="name">{item.name}</p>
+                              <p className="name mr-4">{item.name}</p>
                             </div>
                           </div>
                         </td>
 
-                        <td>${Number(item?.price ?? 0).toFixed(2)}</td>
+                        <td>
+                          {Number(item?.price ?? 0).toFixed(2)}{' '}
+                          {CURRENCY_PREFIX}
+                        </td>
                         <td>{Number(item?.buyCount ?? 0).toFixed(2)}</td>
                         <td>
                           <span className="flex w-full flex-row items-center justify-start">
                             <IconButton
+                              disabled={disabled}
                               className="p-0 text-neutral-900"
                               onClick={() =>
                                 dispatch(decrementQuantity(item.id))
@@ -388,6 +395,7 @@ function MyBasketPage() {
                             <span className="mx-2">{item?.buyCount}</span>
 
                             <IconButton
+                              disabled={disabled}
                               className="p-0 text-neutral-900"
                               onClick={() =>
                                 dispatch(incrementQuantity(item.id))
@@ -398,11 +406,11 @@ function MyBasketPage() {
                           </span>
                         </td>
                         <td>
-                          $
                           {(
                             Number(item?.price ?? 0) *
                             Number(item?.buyCount ?? 0)
-                          ).toFixed(2)}
+                          ).toFixed(2)}{' '}
+                          {CURRENCY_PREFIX}
                         </td>
                       </tr>
                     ))}
@@ -502,12 +510,13 @@ function MyBasketPage() {
                 <div className="mb-4 flex items-center justify-between">
                   <p className="key">Total Amount</p>
                   <p className="value">
-                    ${Number(cartData?.totalAmount ?? 0).toFixed(2)}
+                    {CURRENCY_PREFIX}{' '}
+                    {Number(cartData?.totalAmount ?? 0).toFixed(2)}
                   </p>
                 </div>
                 <div className="mb-4 flex items-center justify-between">
                   <p className="key">Discount</p>
-                  <p className="value">$0.00</p>
+                  <p className="value">{CURRENCY_PREFIX} 0.00</p>
                 </div>
                 <div className="mb-4 flex items-center justify-between">
                   <p className="key">
@@ -521,7 +530,8 @@ function MyBasketPage() {
               <div className="grand-total">
                 <p className="key">Grand Total</p>
                 <p className="value">
-                  ${Number(cartData?.grandTotal ?? 0).toFixed(2)}
+                  {CURRENCY_PREFIX}{' '}
+                  {Number(cartData?.grandTotal ?? 0).toFixed(2)}
                 </p>
               </div>
               <Button
