@@ -409,8 +409,8 @@ function MyBasketPage() {
                   </tbody>
                 </table>
               </div>
-              <div className="my-2.5 flex items-center justify-between px-5">
-                <div className="flex items-center">
+              <div className="my-2.5 flex items-center justify-end px-5">
+                {/* <div className="flex items-center">
                   <p className="mr-2 text-xs font-semibold text-[var(--dark-100)]">
                     Add Promo Code
                   </p>
@@ -434,7 +434,7 @@ function MyBasketPage() {
                       }
                     />
                   </FormControl>
-                </div>
+                </div> */}
                 <Button
                   className="flex items-center border-none text-xs font-semibold capitalize text-[var(--dark-100)]"
                   variant="outlined"

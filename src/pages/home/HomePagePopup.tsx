@@ -196,11 +196,11 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
               </div>
             </div>
             <div className="col-span-4">
-              <div className="px-3 py-1">
+              <div className="px-3 pt-6">
                 <span className="text-xl font-semibold">FAQS</span>
                 {FAQs === null && (
                   <div>
-                    <span className="text-sm font-medium">
+                    <span className="text-xs font-medium">
                       There is no faqs for this product
                     </span>
                   </div>
@@ -222,7 +222,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
                     >
                       <h6 className="heading">{faq.question}</h6>
                     </AccordionSummary>
-                    <AccordionDetails className="accordion-body">
+                    <AccordionDetails className="accordion-body px-3">
                       <p className="desc">{faq.answer}</p>
                     </AccordionDetails>
                   </Accordion>
