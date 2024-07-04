@@ -11,7 +11,6 @@ import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateRangeIcon } from '@mui/x-date-pickers/icons';
 import dayjs from 'dayjs';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -30,11 +29,10 @@ import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import addressService from '../../services/address.service';
 import cartService, { UpdateCartPayload } from '../../services/cart.service';
 import orderService from '../../services/order.service';
+import { CURRENCY_PREFIX } from '../../utilities/constant';
 import promiseHandler from '../../utilities/promise-handler';
-import DatePickerButton from './DatePickerButton';
 import PayFastForm from './PayFastForm';
 import PaymentOptionPopup from './PaymentOptionPopup';
-import { CURRENCY_PREFIX } from '../../utilities/constant';
 
 function MyBasketPage() {
   const {
@@ -46,7 +44,6 @@ function MyBasketPage() {
     setAlertSeverity,
   } = useAlert();
 
-  const { dropOff, pickUp } = useAppSelector((state) => state.dateState);
   const { cartItems, cartData } = useAppSelector((state) => state.cartState);
   const tenant = useAppSelector((state) => state.deviceStates.tenant);
   const tenantConfig = useAppSelector(
@@ -62,6 +59,7 @@ function MyBasketPage() {
   const [openPaymentSelectPopup, setOpenPaymentSelectPopup] = useState(false);
   const minimumDeliveryTime = tenant?.tenantConfig?.minimumDeliveryTime ?? 1;
   const formSubmitButtonRef = useRef<HTMLButtonElement>(null);
+  const [disabled, setDisabled] = useState(false);
 
   const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
     if (value) {
@@ -79,8 +77,10 @@ function MyBasketPage() {
 
   const onCheckoutPayFast = async () => {
     const tempAddress = userAddress[0] ? userAddress[0].id : null;
-    const pickupDateTime = pickUp;
-    const dropDateTime = dropOff;
+    const pickupDateTime = dayjs(new Date()).toISOString();
+    const dropDateTime = dayjs(pickupDateTime)
+      .add(tenantConfig?.minimumDeliveryTime ?? 3, 'day')
+      .toISOString();
     const updateCartPayload: UpdateCartPayload = {
       appUser: user?.id,
       appUserAddress: tempAddress,
@@ -162,7 +162,7 @@ function MyBasketPage() {
       items: addOrderResult.data.data.orderItems.map((item: any) => ({
         id: item.itemId,
         quantity: item.quantity,
-        price: item.unitPrice.replace('$', ''),
+        price: item.unitPrice.replace('PKR', ''),
       })),
       orderId: addOrderResult.data.data.order.id,
       currencyType: 'USD',
@@ -174,8 +174,10 @@ function MyBasketPage() {
 
   const onCheckoutCash = async () => {
     const tempAddress = userAddress[0] ? userAddress[0].id : null;
-    const pickupDateTime = pickUp;
-    const dropDateTime = dropOff;
+    const pickupDateTime = dayjs(new Date()).toISOString();
+    const dropDateTime = dayjs(pickupDateTime)
+      .add(tenantConfig?.minimumDeliveryTime ?? 3, 'day')
+      .toISOString();
     const updateCartPayload: UpdateCartPayload = {
       appUser: user?.id,
       appUserAddress: tempAddress,
@@ -231,7 +233,7 @@ function MyBasketPage() {
     setAlertMessage('Order Placed');
     setShowAlert(true);
   };
-  const [disabled, setDisabled] = useState(false);
+
   const updateCart = useCallback(async () => {
     setDisabled(true);
     if (!cartData?.id) {
@@ -270,7 +272,6 @@ function MyBasketPage() {
       setShowAlert(true);
       return;
     }
-    setDisabled(false);
     dispatch(setCartData(updateCartResult.data.data.cart));
   }, [cartItems]);
 
@@ -365,20 +366,20 @@ function MyBasketPage() {
                             >
                               <DeleteOutlineOutlinedIcon className="text-2xl" />
                             </IconButton>
-                            <div className="product px-2">
+                            <div className="product">
                               <img
                                 className="pic"
                                 src={item.image || item.icon}
                                 alt=""
                               />
-                              <p className="name mr-4">{item.name}</p>
+                              <p className="name">{item.name}</p>
                             </div>
                           </div>
                         </td>
 
                         <td>
-                          {Number(item?.price ?? 0).toFixed(2)}{' '}
-                          {CURRENCY_PREFIX}
+                          {CURRENCY_PREFIX}{' '}
+                          {Number(item?.price ?? 0).toFixed(2)}
                         </td>
                         <td>{Number(item?.buyCount ?? 0).toFixed(2)}</td>
                         <td>
@@ -406,19 +407,19 @@ function MyBasketPage() {
                           </span>
                         </td>
                         <td>
+                          {CURRENCY_PREFIX}
                           {(
                             Number(item?.price ?? 0) *
                             Number(item?.buyCount ?? 0)
-                          ).toFixed(2)}{' '}
-                          {CURRENCY_PREFIX}
+                          ).toFixed(2)}
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
-              <div className="my-2.5 flex items-center justify-end px-5">
-                {/* <div className="flex items-center">
+              <div className="my-2.5 flex items-center justify-between px-5">
+                <div className="flex items-center">
                   <p className="mr-2 text-xs font-semibold text-[var(--dark-100)]">
                     Add Promo Code
                   </p>
@@ -442,7 +443,7 @@ function MyBasketPage() {
                       }
                     />
                   </FormControl>
-                </div> */}
+                </div>
                 <Button
                   className="flex items-center border-none text-xs font-semibold capitalize text-[var(--dark-100)]"
                   variant="outlined"
@@ -457,19 +458,23 @@ function MyBasketPage() {
           </div>
           <div className="col-span-12 md:col-span-5">
             <div className="cart-checkout-card">
-              <div className="mb-5 grid grid-cols-1 sm:grid-cols-2">
+              <div className="w-full text-end text-sm ">
+                minimum time is
+                <span className="font-bold"> {minimumDeliveryTime}</span> days
+              </div>
+              {/*   <div className="mb-5 grid grid-cols-1 sm:grid-cols-2">
                 <div className="select-date-time sm:pr-4 lg:pr-7">
                   <DatePickerButton
                     onChange={handlePickUpTimeChange}
                     id="pick-up-date-time-picker"
                     icon={<DateRangeIcon />}
                     text="Pick up time"
-                    initialValue={dayjs(pickUp ?? new Date())}
+                    initialValue={dayjs(PickUp ?? new Date())}
                   />
                   <div className="mb-2 flex items-center">
                     <p className="selected-value">
-                      {pickUp
-                        ? dayjs(pickUp).format('ddd, MMM D, YYYY HH:mm a')
+                      {PickUp
+                        ? dayjs(PickUp).format('ddd, MMM D, YYYY HH:mm a')
                         : 'Select a date'}
                     </p>
                   </div>
@@ -480,12 +485,12 @@ function MyBasketPage() {
                     id="drop-off-date-time-picker"
                     icon={<DateRangeIcon />}
                     text="Urgent time"
-                    initialValue={dayjs(dropOff)}
+                    initialValue={dayjs(DropOff)}
                   />
                   <div className="mb-2 flex flex-col items-center">
                     <p className="selected-value w-full">
-                      {dropOff && dayjs(dropOff).isValid()
-                        ? dayjs(dropOff).format('ddd, MMM D, YYYY HH:mm a')
+                      {DropOff && dayjs(DropOff).isValid()
+                        ? dayjs(DropOff).format('ddd, MMM D, YYYY HH:mm a')
                         : null}
                     </p>
                     <br />
@@ -494,7 +499,7 @@ function MyBasketPage() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               {user ? (
                 <div className="address-card">
                   <div className="key" style={{ width: '500px' }}>
@@ -547,12 +552,12 @@ function MyBasketPage() {
                     setShowAlert(true);
                     return;
                   }
-                  if (!pickUp && !dropOff) {
+                  /* if (!PickUp && !DropOff) {
                     setAlertSeverity('error');
                     setAlertMessage('Pickup Date time is Required');
                     setShowAlert(true);
                     return;
-                  }
+                  } */
                   setOpenPaymentSelectPopup(true);
                 }}
                 color="inherit"

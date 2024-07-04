@@ -222,7 +222,7 @@ function ProductPage() {
 
       <div className="bg-background px-4 pt-6 sm:px-5 sm:pt-4 xl:px-7">
         <div className="all-categories mb-8">
-          <h4 className="my-5 text-2xl font-semibold leading-tight text-secondary sm:mb-7  md:font-semibold">
+          <h4 className="mb-5 text-2xl font-semibold leading-tight text-secondary sm:mb-7 md:text-[1.375rem] md:font-bold">
             Categories
           </h4>
           {categoryList()}
@@ -280,17 +280,19 @@ function ProductPage() {
                     <h5 className="mb-2 basis-full text-center text-base font-semibold leading-none text-secondary sm:mb-3 sm:text-left">
                       {item.name}
                     </h5>
-                    <h6 className="mb-3 flex-1 basis-full text-center text-base font-semibold text-secondary sm:mb-0 sm:flex sm:basis-0 sm:text-left">
-                      {CURRENCY_PREFIX} {item.price.toFixed(2)}
-                    </h6>
-                    <Button
-                      className="btn-add w-full rounded-[0.625rem] bg-primary text-sm font-semibold text-foreground sm:w-auto"
-                      variant="contained"
-                      endIcon={<ShoppingBagOutlinedIcon />}
-                      onClick={() => addItemHandler(item)}
-                    >
-                      Add
-                    </Button>
+                    <div className="flex items-center justify-between">
+                      <h6 className="mb-3 flex-1 basis-full text-center text-base font-semibold text-secondary sm:mb-0 sm:flex sm:basis-0 sm:text-left">
+                        {CURRENCY_PREFIX} {item.price.toFixed(2)}
+                      </h6>
+                      <Button
+                        className="btn-add w-full rounded-[0.625rem] bg-primary text-sm font-semibold text-foreground sm:w-auto"
+                        variant="contained"
+                        endIcon={<ShoppingBagOutlinedIcon />}
+                        onClick={() => addItemHandler(item)}
+                      >
+                        Add
+                      </Button>
+                    </div>
                   </div>
                 </div>
               ))
