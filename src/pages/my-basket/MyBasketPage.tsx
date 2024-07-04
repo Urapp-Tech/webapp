@@ -32,6 +32,7 @@ import orderService from '../../services/order.service';
 import promiseHandler from '../../utilities/promise-handler';
 import PayFastForm from './PayFastForm';
 import PaymentOptionPopup from './PaymentOptionPopup';
+import { CURRENCY_PREFIX } from '../../utilities/constant';
 
 function MyBasketPage() {
   const {
@@ -58,6 +59,7 @@ function MyBasketPage() {
   const [openPaymentSelectPopup, setOpenPaymentSelectPopup] = useState(false);
   const minimumDeliveryTime = tenant?.tenantConfig?.minimumDeliveryTime ?? 1;
   const formSubmitButtonRef = useRef<HTMLButtonElement>(null);
+  const [disabled, setDisabled] = useState(false);
 
   const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
     if (value) {
@@ -160,7 +162,7 @@ function MyBasketPage() {
       items: addOrderResult.data.data.orderItems.map((item: any) => ({
         id: item.itemId,
         quantity: item.quantity,
-        price: item.unitPrice.replace('$', ''),
+        price: item.unitPrice.replace('PKR', ''),
       })),
       orderId: addOrderResult.data.data.order.id,
       currencyType: 'USD',
@@ -233,6 +235,7 @@ function MyBasketPage() {
   };
 
   const updateCart = useCallback(async () => {
+    setDisabled(true);
     if (!cartData?.id) {
       return;
     }
@@ -374,11 +377,15 @@ function MyBasketPage() {
                           </div>
                         </td>
 
-                        <td>${Number(item?.price ?? 0).toFixed(2)}</td>
+                        <td>
+                          {CURRENCY_PREFIX}{' '}
+                          {Number(item?.price ?? 0).toFixed(2)}
+                        </td>
                         <td>{Number(item?.buyCount ?? 0).toFixed(2)}</td>
                         <td>
                           <span className="flex w-full flex-row items-center justify-start">
                             <IconButton
+                              disabled={disabled}
                               className="p-0 text-neutral-900"
                               onClick={() =>
                                 dispatch(decrementQuantity(item.id))
@@ -389,6 +396,7 @@ function MyBasketPage() {
                             <span className="mx-2">{item?.buyCount}</span>
 
                             <IconButton
+                              disabled={disabled}
                               className="p-0 text-neutral-900"
                               onClick={() =>
                                 dispatch(incrementQuantity(item.id))
@@ -399,7 +407,7 @@ function MyBasketPage() {
                           </span>
                         </td>
                         <td>
-                          $
+                          {CURRENCY_PREFIX}
                           {(
                             Number(item?.price ?? 0) *
                             Number(item?.buyCount ?? 0)
@@ -507,12 +515,13 @@ function MyBasketPage() {
                 <div className="mb-4 flex items-center justify-between">
                   <p className="key">Total Amount</p>
                   <p className="value">
-                    ${Number(cartData?.totalAmount ?? 0).toFixed(2)}
+                    {CURRENCY_PREFIX}{' '}
+                    {Number(cartData?.totalAmount ?? 0).toFixed(2)}
                   </p>
                 </div>
                 <div className="mb-4 flex items-center justify-between">
                   <p className="key">Discount</p>
-                  <p className="value">$0.00</p>
+                  <p className="value">{CURRENCY_PREFIX} 0.00</p>
                 </div>
                 <div className="mb-4 flex items-center justify-between">
                   <p className="key">
@@ -526,7 +535,8 @@ function MyBasketPage() {
               <div className="grand-total">
                 <p className="key">Grand Total</p>
                 <p className="value">
-                  ${Number(cartData?.grandTotal ?? 0).toFixed(2)}
+                  {CURRENCY_PREFIX}{' '}
+                  {Number(cartData?.grandTotal ?? 0).toFixed(2)}
                 </p>
               </div>
               <Button

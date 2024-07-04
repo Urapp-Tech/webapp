@@ -17,7 +17,7 @@ import { addToCart } from '../../redux/features/cartStateSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import cartService, { UpdateCartPayload } from '../../services/cart.service';
 import cn from '../../utilities/class-names';
-import { getTenantId } from '../../utilities/constant';
+import { CURRENCY_PREFIX, getTenantId } from '../../utilities/constant';
 import promiseHandler from '../../utilities/promise-handler';
 
 type Props = {
@@ -172,7 +172,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
                 <div className="flex-container flex items-center justify-between">
                   <div className="price">
                     <h3 className="number">
-                      $ <span>{data?.price.toFixed(2)}</span>
+                      {CURRENCY_PREFIX} <span>{data?.price.toFixed(2)}</span>
                     </h3>
                     <p className="text">&nbsp;/ item</p>
                   </div>
