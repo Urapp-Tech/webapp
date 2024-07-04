@@ -196,7 +196,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
               </div>
             </div>
             <div className="col-span-4">
-              <div className="px-3 py-1">
+              <div className="px-3 py-5">
                 <span className="text-xl font-semibold">FAQS</span>
                 {FAQs === null && (
                   <div>
