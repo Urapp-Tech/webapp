@@ -280,6 +280,12 @@
   }
 }
 
+@media (min-width: 430px) {
+  .swiper-navigation-container {
+    bottom: -5px;
+  }
+}
+
 .css-12i7wg6-MuiPaper-root-MuiDrawer-paper {
   margin-top: 10px !important;
 }

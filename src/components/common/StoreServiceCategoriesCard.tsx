@@ -39,8 +39,11 @@ function StoreServiceCategoriesCard({
             slidesPerView: 5,
           },
           // Laptop screens
-          700: {
+          1000: {
             slidesPerView: 4,
+          },
+          300: {
+            slidesPerView: 2,
           },
         }}
         modules={[Navigation]}
@@ -63,7 +66,7 @@ function StoreServiceCategoriesCard({
                 background: colorArray[index % colorArray.length],
               }}
             >
-              <h3 className="truncate text-left text-sm font-semibold capitalize">
+              <h3 className="xs:text-sm truncate px-2 text-left font-semibold capitalize">
                 {category.name}
               </h3>
               <div className="relative -right-2.5 w-[100px] max-w-[90px]">

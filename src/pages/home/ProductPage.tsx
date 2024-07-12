@@ -232,7 +232,7 @@ function ProductPage() {
             <h4 className="mb-4 text-2xl font-semibold leading-tight text-secondary sm:mb-0">
               {subCategoryData?.data?.name}
             </h4>
-            <FormControl className="w-full max-w-[350px] rounded-[0.625rem] bg-white shadow-[2px_4px_6px_rgba(0,0,0,0.06)]">
+            <FormControl className="xs:max-w-[400px] w-full max-w-[350px] rounded-[0.625rem] bg-white shadow-[2px_4px_6px_rgba(0,0,0,0.06)]">
               <Input
                 className="m-0 gap-x-3 px-5 py-2 text-sm font-normal text-faded"
                 id="search"

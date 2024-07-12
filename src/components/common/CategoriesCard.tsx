@@ -40,6 +40,9 @@ function CategoriesCard({ categories, onClick }: ICategoryProps) {
           1000: {
             slidesPerView: 4,
           },
+          300: {
+            slidesPerView: 2,
+          },
         }}
         modules={[Navigation]}
         className="mySwiper custom-swiper"
