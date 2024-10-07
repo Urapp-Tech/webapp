@@ -170,7 +170,7 @@ function SignUpOTPVerificationPage() {
                 </div>
                 <div className="mt-[100px] w-full">
                   <Button
-                    className="w-full rounded-[10px] bg-neutral-900 px-16 py-2 text-gray-50"
+                    className="w-full rounded-[10px] bg-primary px-16 py-2 text-gray-50"
                     variant="contained"
                     color="inherit"
                     title="get code"
