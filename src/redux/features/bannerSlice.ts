@@ -1,7 +1,7 @@
+/* eslint-disable import/no-cycle */
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-// eslint-disable-next-line import/no-cycle
-import bannerService from '../../services/banner.service';
 import { Banner } from '../../interfaces/banner';
+import bannerService from '../../services/banner.service';
 
 type InitialState = {
   banners: Banner[];

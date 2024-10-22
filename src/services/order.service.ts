@@ -4,6 +4,7 @@ import network from './network';
 
 export interface NewOrder {
   cartId: string;
+  branch: string;
 }
 
 export interface OrderStatus {

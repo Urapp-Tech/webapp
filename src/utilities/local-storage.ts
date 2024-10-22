@@ -9,7 +9,8 @@ type Key =
   | 'TENANT_CONFIG'
   | 'TENANT'
   | 'APPOINTMENT_BOOKINGS'
-  | 'USER';
+  | 'USER'
+  | 'BRANCH';
 
 function addKeyPrefix(key: string) {
   const prefix = 'WEB_APP';

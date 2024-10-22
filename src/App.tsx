@@ -7,6 +7,7 @@ import { useRoutes } from 'react-router-dom';
 import 'swiper/css';
 import Loader from './components/common/Loader';
 import AlertBox from './components/common/SnackBar';
+import WithBranch from './hoc/WithBranch';
 import useAlert from './hooks/alert.hook';
 import { setSystemConfig } from './redux/features/appStateSlice';
 import {
@@ -151,8 +152,7 @@ function App() {
         alertOpen={showAlert}
         setAlertOpen={setShowAlert}
       />
-
-      {routes}
+      <WithBranch>{routes}</WithBranch>
     </>
   );
 }

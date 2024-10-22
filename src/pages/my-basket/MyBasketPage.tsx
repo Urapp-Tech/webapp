@@ -16,6 +16,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AlertBox from '../../components/common/SnackBar';
 import useAlert from '../../hooks/alert.hook';
+import { Branch } from '../../interfaces/branch';
 import { setDropOff, setPickup } from '../../redux/features/DateAndTime';
 import {
   decrementQuantity,
@@ -29,10 +30,11 @@ import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import addressService from '../../services/address.service';
 import cartService, { UpdateCartPayload } from '../../services/cart.service';
 import orderService from '../../services/order.service';
+import { CURRENCY_PREFIX } from '../../utilities/constant';
+import { getItem } from '../../utilities/local-storage';
 import promiseHandler from '../../utilities/promise-handler';
 import PayFastForm from './PayFastForm';
 import PaymentOptionPopup from './PaymentOptionPopup';
-import { CURRENCY_PREFIX } from '../../utilities/constant';
 
 function MyBasketPage() {
   const {
@@ -110,8 +112,16 @@ function MyBasketPage() {
       return;
     }
     dispatch(setCartData(updateCartResult.data.data.cart));
+    const branch = getItem<Branch>('BRANCH');
+    if (!branch) {
+      setAlertSeverity('error');
+      setAlertMessage('no branch selected');
+      setShowAlert(true);
+      return;
+    }
     const addOrderPromise = orderService.addPayFastOrder({
       cartId: updateCartResult.data.data.cart.id,
+      branch: branch.id,
     });
     const [addOrderResult, addOrderError] =
       await promiseHandler(addOrderPromise);
@@ -165,7 +175,7 @@ function MyBasketPage() {
         price: item.unitPrice.replace('PKR', ''),
       })),
       orderId: addOrderResult.data.data.order.id,
-      currencyType: 'USD',
+      currencyType: 'PKR',
     });
     setTimeout(() => {
       formSubmitButtonRef?.current?.click();
@@ -208,8 +218,16 @@ function MyBasketPage() {
       return;
     }
     dispatch(setCartData(updateCartResult.data.data.cart));
+    const branch = getItem<Branch>('BRANCH');
+    if (!branch) {
+      setAlertSeverity('error');
+      setAlertMessage('branch not selected');
+      setShowAlert(true);
+      return;
+    }
     const addOrderPromise = orderService.addCashOrder({
       cartId: updateCartResult.data.data.cart.id,
+      branch: branch.id,
     });
     const [addOrderResult, addOrderError] =
       await promiseHandler(addOrderPromise);
@@ -425,7 +443,7 @@ function MyBasketPage() {
                   </p>
                   <FormControl variant="standard" size="small">
                     <Input
-                      className="min-w-60 min-h-[10px] rounded-[0.625rem] border border-solid border-[var(--light-400)] p-2 text-xs font-normal text-faded"
+                      className="min-h-[10px] min-w-60 rounded-[0.625rem] border border-solid border-[var(--light-400)] p-2 text-xs font-normal text-faded"
                       disableUnderline
                       inputProps={{
                         placeholder: 'Enter Promo Code',

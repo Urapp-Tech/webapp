@@ -11,7 +11,7 @@ type AppState = {
 function initializeSystemConfig() {
   const systemConfig = getItem<SystemConfigData>('SYSTEM_CONFIG');
   if (systemConfig) {
-    setTenantId(systemConfig.tenant);
+    setTenantId(systemConfig.tenant.id);
     return systemConfig;
   }
   return null;
@@ -27,7 +27,7 @@ export const appStateSlice = createSlice({
   reducers: {
     setSystemConfig: (state, action: PayloadAction<SystemConfigData>) => {
       setItem('SYSTEM_CONFIG', action.payload);
-      setTenantId(action.payload.tenant);
+      setTenantId(action.payload.tenant.id);
       setThemeColor(action.payload.theme.value.themeColor);
       state.systemConfig = action.payload;
     },

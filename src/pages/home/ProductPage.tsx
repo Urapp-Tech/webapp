@@ -10,6 +10,7 @@ import Loader from '../../components/common/Loader';
 import ProductOfferSwiper from '../../components/common/ProductOfferSwiper';
 import AlertBox from '../../components/common/SnackBar';
 import useAlert from '../../hooks/alert.hook';
+import { fetchBanners } from '../../redux/features/bannerSlice';
 import { setCartData, setCartItems } from '../../redux/features/cartStateSlice';
 import {
   useGetAllCategoryQuery,
@@ -18,10 +19,9 @@ import {
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import cartService from '../../services/cart.service';
 import categoryService from '../../services/category.service';
+import { CURRENCY_PREFIX } from '../../utilities/constant';
 import promiseHandler from '../../utilities/promise-handler';
 import HomePagePopup from './HomePagePopup';
-import { fetchBanners } from '../../redux/features/bannerSlice';
-import { CURRENCY_PREFIX } from '../../utilities/constant';
 
 function getCategoryClasses(isActive: boolean) {
   const classes = 'item';

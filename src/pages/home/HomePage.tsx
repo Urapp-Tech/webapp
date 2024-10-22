@@ -1,28 +1,24 @@
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
+import { IconButton } from '@mui/material';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IconButton } from '@mui/material';
 import Loader from '../../components/common/Loader';
 import AlertBox from '../../components/common/SnackBar';
-import useAlert from '../../hooks/alert.hook';
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import StoreServiceCategoriesCard from '../../components/common/StoreServiceCategoriesCard';
-import {
-  Category,
-  StoreService,
-} from '../../interfaces/serviceCategory.interface';
-import {
-  fetchCategories,
-  setSelectedCategory,
-} from '../../redux/features/storeCategorySlice';
+import useAlert from '../../hooks/alert.hook';
+import { StoreService } from '../../interfaces/serviceCategory.interface';
 import {
   fetchCategoriesItems,
   setSelectedCategoriesItem,
 } from '../../redux/features/storeCategoryItemsSlice';
+import {
+  fetchCategories,
+  setSelectedCategory,
+} from '../../redux/features/storeCategorySlice';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 
 function HomePage() {
   const {
@@ -57,14 +53,14 @@ function HomePage() {
   };
 
   useEffect(() => {
-    dispatch(fetchCategories(systemConfig?.tenant));
+    dispatch(fetchCategories(systemConfig?.tenant.id));
   }, []);
 
   useEffect(() => {
     if (selectedCategory?.id) {
       dispatch(
         fetchCategoriesItems({
-          tenant: systemConfig?.tenant,
+          tenant: systemConfig?.tenant.id,
           categoryId: selectedCategory.id,
         })
       );

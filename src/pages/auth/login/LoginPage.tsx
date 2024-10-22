@@ -1,29 +1,28 @@
-import FacebookLogin, {
-  SuccessResponse,
-} from '@greatsumini/react-facebook-login';
-import Checkbox from '@mui/material/Checkbox';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import IconButton from '@mui/material/IconButton';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
+import { SuccessResponse } from '@greatsumini/react-facebook-login';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
-import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
+import Input from '@mui/material/Input';
+import InputAdornment from '@mui/material/InputAdornment';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import FastSpinner from '../../../components/common/CustomSpinner';
 import assets from '../../../assets';
+import FastSpinner from '../../../components/common/CustomSpinner';
 import AlertBox from '../../../components/common/SnackBar';
 import useAlert from '../../../hooks/alert.hook';
+import { Branch } from '../../../interfaces/branch';
 import { login } from '../../../redux/features/authStateSlice';
 import { setUserAddressList } from '../../../redux/features/deviceState';
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
 import addressService from '../../../services/address.service';
 import authService from '../../../services/auth.service';
+import network from '../../../services/network';
 import { LoginPayload } from '../../../types/auth.types';
+import API_PATHS from '../../../utilities/API-PATHS';
+import { getItem } from '../../../utilities/local-storage';
 import promiseHandler from '../../../utilities/promise-handler';
 
 function LoginPage() {
@@ -76,7 +75,17 @@ function LoginPage() {
       setShowAlert(true);
       return;
     }
-    dispatch(login(loginResponse.data.data));
+    const branch = getItem<Branch>('BRANCH');
+    const tokenResult = await network.post(API_PATHS.createToken, {
+      tenant: systemConfigData.tenant.id,
+      branch: branch?.id,
+      user: loginResponse.data.data.id,
+    });
+    const userData = {
+      ...loginResponse.data.data,
+      token: tokenResult.data.data,
+    };
+    dispatch(login(userData));
     if (cartItem > 0) {
       navigate('/dashboard/my-basket');
     } else {
@@ -121,7 +130,17 @@ function LoginPage() {
       setIsLoader(false);
       return;
     }
-    dispatch(login(loginResponse.data.data));
+    const branch = getItem<Branch>('BRANCH');
+    const tokenResult = await network.post(API_PATHS.createToken, {
+      tenant: systemConfigData.tenant.id,
+      branch: branch?.id,
+      user: loginResponse.data.data.id,
+    });
+    const userData = {
+      ...loginResponse.data.data,
+      token: tokenResult.data.data,
+    };
+    dispatch(login(userData));
     if (from && from.pathname) {
       navigate(from, { replace: true });
     } else if ((cartItem ?? []).length > 0) {

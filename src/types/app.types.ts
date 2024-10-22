@@ -7,14 +7,14 @@ export type GetSystemConfigResponse = {
 
 export type SystemConfigData = {
   id: string;
-  tenant: string;
-  layout?: any;
+  tenant: SystemTenant;
+  logoffImage: null;
   createdDate: string;
   theme: SystemTheme;
-  domainWebapp: string;
-  domainAdminapp: string;
+  domain: string;
+  parent: null;
   tenantConfig: SystemTenantConfig;
-  banner: any[];
+  banners: Array<any>;
 };
 
 export type SystemTenantConfig = {
@@ -25,25 +25,31 @@ export type SystemTenantConfig = {
   updatedBy: string;
   createdDate: string;
   updatedDate: string;
-  logo?: any;
+  logo: string;
   gstPercentage: number;
-  email?: any;
-  minOrderAmount?: any;
-  deliveryFee?: any;
+  email: null;
+  minOrderAmount: number;
+  deliveryFee: number;
   facebook: string;
   instagram: string;
-  linkedin?: any;
-  twitter?: any;
-  youtube?: any;
-  whatsapp?: any;
-  banner?: any;
-  shopAddress?: any;
+  linkedin: string;
+  twitter: string;
+  youtube: string;
+  whatsapp: string;
+  banner: null;
+  shopAddress: string;
   enableLoyaltyProgram: boolean;
   loyaltyCoinConversionRate: number;
   requiredCoinsToRedeem: number;
   minimumDeliveryTime: number;
   deliveryUrgentFees: number;
   theme: string;
+  shopSchedule: null;
+  latitude: number;
+  longitude: number;
+  attendanceDistance: number;
+  officeTimeIn: string;
+  officeTimeOut: string;
 };
 
 export type SystemTheme = {
@@ -55,7 +61,7 @@ export type SystemTheme = {
 
 export type ThemeValue = {
   themeColor: ThemeColor;
-  categoryColor: string[];
+  categoryColor: Array<string>;
 };
 
 export type ThemeColor = {
@@ -65,4 +71,24 @@ export type ThemeColor = {
   background: string;
   foreground: string;
   secondary2: string;
+};
+
+export type SystemTenant = {
+  id: string;
+  name: string;
+  isActive: boolean;
+  createdDate: string;
+  updatedDate: string;
+  createdBy: string;
+  updatedBy: string;
+  tenantConfig: string;
+  desc: null;
+  parent: null;
+  trialMode: boolean;
+  trialStartDate: null;
+  maxUserLimit: number;
+  maxBranchLimit: number;
+  trialModeLimit: number;
+  userLimit: number;
+  tenantType: string;
 };

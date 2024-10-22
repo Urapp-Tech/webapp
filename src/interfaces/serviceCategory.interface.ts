@@ -25,4 +25,5 @@ export interface StoreService {
   avatar?: string;
   price?: string;
   isDeleted?: boolean;
+  serviceTime: string;
 }

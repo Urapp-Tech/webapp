@@ -444,7 +444,7 @@ export default function RescheduleAppointmentPage() {
   }, [user]);
 
   useEffect(() => {
-    dispatch(fetchCategories(systemConfig?.tenant));
+    dispatch(fetchCategories(systemConfig?.tenant.id));
     if (id) {
       getAppointment().then();
     }
@@ -453,7 +453,7 @@ export default function RescheduleAppointmentPage() {
   const getBarbers = async (id: any) => {
     setIsPageLoader(true);
     await storeAppointmentService
-      .getBarbersList(id, { tenant: systemConfig?.tenant })
+      .getBarbersList(id, { tenant: systemConfig?.tenant.id })
       .then((res: any) => {
         if (res.data.success) {
           setIsPageLoader(false);
@@ -513,7 +513,7 @@ export default function RescheduleAppointmentPage() {
       selectCategory(watch('categoryId'));
       dispatch(
         fetchCategoriesItems({
-          tenant: systemConfig?.tenant,
+          tenant: systemConfig?.tenant.id,
           categoryId: watch('categoryId'),
         })
       );
@@ -719,6 +719,12 @@ export default function RescheduleAppointmentPage() {
             }
           }
           // }
+          const storeServiceCategoryItemId = getValues(
+            'storeServiceCategoryItem'
+          );
+          const storeServiceCategoryItem = catItemsLovlist.find(
+            (catItem) => catItem.id === storeServiceCategoryItemId
+          );
           setTmpId((prevId: any) => prevId + 1);
           const newData = {
             id: tmpId,
@@ -728,14 +734,17 @@ export default function RescheduleAppointmentPage() {
             name: activeBarberData?.storeEmployee?.name ?? 'urapp',
             note: 'demo',
             phone: activeBarberData?.storeEmployee?.phone,
-            serviceTime: activeBarberData?.serviceTime,
+            serviceTime: storeServiceCategoryItem?.serviceTime,
             status: 'New',
             storeEmployee: activeBarberData?.storeEmployee?.id,
             storeServiceCategory: '12345',
+            amount: storeServiceCategoryItem?.price,
             storeServiceCategoryItem:
               activeBarberData?.storeServiceCategoryItem,
           };
           obj.id = tmpId;
+          obj.serviceTime = storeServiceCategoryItem?.serviceTime;
+          obj.amount = storeServiceCategoryItem?.price;
           setTempAppointmentBookedTime((prev: any) => [...prev, newData]);
           setAppointmentBookedTime((prev: any) => [...prev, newData]);
           // setPrevBookedAppointment(newData);
@@ -795,7 +804,7 @@ export default function RescheduleAppointmentPage() {
         _appointmentData.id,
         { ...data, status: 'New' },
         {
-          tenant: systemConfig?.tenant,
+          tenant: systemConfig?.tenant.id,
           app_user: user?.id,
         }
       )

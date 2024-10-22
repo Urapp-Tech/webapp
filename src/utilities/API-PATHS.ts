@@ -6,6 +6,13 @@ function getDomainName() {
 }
 
 const API_PATHS = {
+  // Branch
+
+  getBranches: (tenantId: string) =>
+    new URL(`branch/list/${tenantId}`, BASE_URL).toString(),
+
+  createToken: new URL(`app-user/create/token`, BASE_URL).toString(),
+
   // Address
   getUserAddress: new URL(`appUserAddress/list`, BASE_URL).toString(),
 
@@ -133,10 +140,7 @@ const API_PATHS = {
   findAppointment: (appointment_id: string) =>
     new URL(`store/appointment/get/${appointment_id}`, BASE_URL).toString(),
   rescheduleAppointment: (appointment_id: string) =>
-    new URL(
-      `store/appointment/re-schedule/${appointment_id}`,
-      BASE_URL
-    ).toString(),
+    new URL(`appointment/re-schedule/${appointment_id}`, BASE_URL).toString(),
   getBanners: () => new URL(`banner/list`, BASE_URL).toString(),
   CheckEmployeeAvailable: (employeeId: string, date: string) =>
     new URL(

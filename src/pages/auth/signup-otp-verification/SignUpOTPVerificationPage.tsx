@@ -4,13 +4,16 @@ import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import OTPInput from 'react18-otp-input';
 import assets from '../../../assets';
+import FastSpinner from '../../../components/common/CustomSpinner';
+import { Branch } from '../../../interfaces/branch';
 import { login } from '../../../redux/features/authStateSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
 import authService from '../../../services/auth.service';
+import network from '../../../services/network';
+import API_PATHS from '../../../utilities/API-PATHS';
 import { getTenantId } from '../../../utilities/constant';
 import { getItem, removeItem } from '../../../utilities/local-storage';
 import promiseHandler from '../../../utilities/promise-handler';
-import FastSpinner from '../../../components/common/CustomSpinner';
 
 function SignUpOTPVerificationPage() {
   const location = useLocation();
@@ -45,11 +48,20 @@ function SignUpOTPVerificationPage() {
       console.error('error :>> ', signUpResult.data.message);
       return;
     }
-    dispatch(login(signUpResult.data.data));
+    const branch = getItem<Branch>('BRANCH');
+    const tokenResult = await network.post(API_PATHS.createToken, {
+      tenant: systemConfigData.tenant.id,
+      branch: branch?.id,
+      user: signUpResult.data.data.id,
+    });
+    const userData = {
+      ...signUpResult.data.data,
+      token: tokenResult.data.data,
+    };
+    dispatch(login(userData));
     navigate('../../dashboard/home');
     setIsLoader(false);
   };
-  console.log('email', state);
 
   return (
     <>

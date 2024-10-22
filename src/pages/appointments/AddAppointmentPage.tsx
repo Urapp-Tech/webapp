@@ -66,6 +66,10 @@ const darkTheme = createTheme({
 
 export default function AddAppointmentPage() {
   const navigate = useNavigate();
+  const user = useAppSelector((x) => x.authState.user);
+  if (!user) {
+    navigate('/auth/login');
+  }
   const officeTimingOut = useAppSelector(
     (x) => x.deviceStates.tenantConfig?.officeTimeOut
   );
@@ -98,11 +102,6 @@ export default function AddAppointmentPage() {
   const { categoryItems: catItemsLovlist, selectedCategoryItems } =
     useAppSelector((state) => state.storeCategoryItemState);
 
-  console.log('🚀 ~ AddAppointmentPage ~ catItemsLovlist:', catItemsLovlist);
-  console.log(
-    '🚀 ~ AddAppointmentPage ~ selectedCategoryItems:',
-    selectedCategoryItems
-  );
   // const [catItemsLovlist, setCatItemsLovList] = useState<any>([]);
   const [usedCatItemsLovlist, setusedCatItemsLovList] = useState<any>([]);
   const [barberList, setBarberList] = useState<any>([]);
@@ -112,7 +111,6 @@ export default function AddAppointmentPage() {
     null
   );
   const { systemConfig } = useAppSelector((x) => x.appState);
-  const user = useAppSelector((state) => state.authState.user);
   const [appointmentBookedTime, setAppointmentBookedTime] = useState<
     Array<any>
   >([]);
@@ -181,7 +179,7 @@ export default function AddAppointmentPage() {
       const resp = await storeAppointmentService.CheckEmployeeAvailable(
         id,
         date,
-        { tenantId: systemConfig?.tenant }
+        { tenantId: systemConfig?.tenant.id }
       );
       return resp.data.data;
     } catch (error) {
@@ -204,7 +202,7 @@ export default function AddAppointmentPage() {
     try {
       const response = await storeAppointmentService.getUserAppointmentsByDate(
         dayjs(getValues('appointmentDate'))?.format('YYYY-MM-DD'),
-        { tenantId: systemConfig?.tenant }
+        { tenantId: systemConfig?.tenant.id }
       );
 
       if (response.data && response.data.success) {
@@ -237,7 +235,7 @@ export default function AddAppointmentPage() {
     }
     setDisabledButton(false);
     await storeAppointmentService
-      .getBarberBookedTimeSlots(id, date, { tenantId: systemConfig?.tenant })
+      .getBarberBookedTimeSlots(id, date, { tenantId: systemConfig?.tenant.id })
       .then((res) => {
         if (res.data.success) {
           // const tempBookedTime = res.data.data.map((resp: any) => ({
@@ -398,7 +396,7 @@ export default function AddAppointmentPage() {
   }, [user]);
 
   useEffect(() => {
-    dispatch(fetchCategories(systemConfig?.tenant));
+    dispatch(fetchCategories(systemConfig?.tenant.id));
     const bookings: any = getItem('APPOINTMENT_BOOKINGS');
     if (bookings && bookings.appointments && bookings.appointments.length > 0) {
       bookings.appointments.forEach((booking: unknown) => append(booking));
@@ -425,7 +423,7 @@ export default function AddAppointmentPage() {
   const getBarbers = async (id: any) => {
     setIsPageLoader(true);
     await storeAppointmentService
-      .getBarbersList(id, { tenant: systemConfig?.tenant })
+      .getBarbersList(id, { tenant: systemConfig?.tenant.id })
       .then((res: any) => {
         if (res.data.success) {
           setIsPageLoader(false);
@@ -482,7 +480,7 @@ export default function AddAppointmentPage() {
       selectCategory(watch('categoryId'));
       dispatch(
         fetchCategoriesItems({
-          tenant: systemConfig?.tenant,
+          tenant: systemConfig?.tenant.id,
           categoryId: watch('categoryId'),
         })
       );
@@ -731,6 +729,13 @@ export default function AddAppointmentPage() {
           }
           // }
           setTmpId((prevId: any) => prevId + 1);
+          const storeServiceCategoryItemId = getValues(
+            'storeServiceCategoryItem'
+          );
+          const storeServiceCategoryItem = catItemsLovlist.find(
+            (catItem) => catItem.id === storeServiceCategoryItemId
+          );
+
           const newData = {
             id: tmpId,
             appointmentTime: time,
@@ -739,14 +744,18 @@ export default function AddAppointmentPage() {
             name: activeBarberData?.storeEmployee?.name ?? 'urapp',
             note: 'demo',
             phone: activeBarberData?.storeEmployee?.phone,
-            serviceTime: activeBarberData?.serviceTime,
+            serviceTime: storeServiceCategoryItem?.serviceTime,
             status: 'New',
             storeEmployee: activeBarberData?.storeEmployee?.id,
             storeServiceCategory: '12345',
+            amount: storeServiceCategoryItem?.price,
             storeServiceCategoryItem:
               activeBarberData?.storeServiceCategoryItem,
           };
           obj.id = tmpId;
+          obj.serviceTime = storeServiceCategoryItem?.serviceTime;
+          obj.amount = storeServiceCategoryItem?.price;
+
           setTempAppointmentBookedTime((prev: any) => [...prev, newData]);
           setAppointmentBookedTime((prev: any) => [...prev, newData]);
           // setPrevBookedAppointment(newData);
@@ -792,7 +801,7 @@ export default function AddAppointmentPage() {
       try {
         const response =
           await storeAppointmentService.getUserAppointmentsByMultipleDates({
-            tenantId: systemConfig?.tenant,
+            tenantId: systemConfig?.tenant.id,
             dates,
           });
         if (response.data && response.data.success && response.data.data) {
@@ -886,7 +895,7 @@ export default function AddAppointmentPage() {
       .appointmentCreate(
         { ...data, status: 'New' },
         {
-          tenant: systemConfig?.tenant,
+          tenant: systemConfig?.tenant.id,
           app_user: user?.id,
         }
       )
@@ -1288,7 +1297,18 @@ export default function AddAppointmentPage() {
                           ?.map((item: any, index: number) => {
                             // console.log('APP ITEM TIME', item);
                             // dayjs();
-                            const servicetime = Number(item.serviceTime);
+                            const storeServiceCategoryItemId = getValues(
+                              'storeServiceCategoryItem'
+                            );
+                            const storeServiceCategoryItem =
+                              catItemsLovlist.find(
+                                (catItem) =>
+                                  catItem.id === storeServiceCategoryItemId
+                              );
+
+                            const servicetime = Number(
+                              storeServiceCategoryItem?.serviceTime
+                            );
                             const apptimeDayjs = dayjs(item.appointmentTime);
                             const endTime = apptimeDayjs.add(
                               servicetime,
