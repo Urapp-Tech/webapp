@@ -1,3 +1,4 @@
+import { GetUserProfileResponse } from '../interfaces/profile';
 import API_PATHS from '../utilities/API-PATHS';
 import { getHeaders } from '../utilities/constant';
 import network from './network';
@@ -18,7 +19,7 @@ const getUserProfileWithController = () => {
   return () => {
     getUserProfileController.abort();
     getUserProfileController = new AbortController();
-    return network.get(API_PATHS.getUserProfile, {
+    return network.get<GetUserProfileResponse>(API_PATHS.getUserProfile, {
       signal: getUserProfileController.signal,
       headers: getHeaders(),
     });

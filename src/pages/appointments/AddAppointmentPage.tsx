@@ -17,7 +17,7 @@ import createTheme from '@mui/material/styles/createTheme';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import utcPlugin from 'dayjs/plugin/utc';
 import { useEffect, useState } from 'react';
@@ -41,6 +41,8 @@ import {
   AddAppointmentForm,
   Appointment,
 } from '../../interfaces/app.appointment';
+import { Provider, StoreEmployeeSchedule } from '../../interfaces/appointment';
+import { StoreService } from '../../interfaces/serviceCategory.interface';
 import { fetchCategoriesItems } from '../../redux/features/storeCategoryItemsSlice';
 import {
   fetchCategories,
@@ -51,10 +53,8 @@ import storeAppointmentService from '../../services/store-appointment.service';
 import { GENDER, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utilities/constant';
 import { getItem, removeItem, setItem } from '../../utilities/local-storage';
 
-// Extend dayjs with necessary plugins
 dayjs.extend(isBetween);
 dayjs.extend(utcPlugin);
-// dayjs.extend(timezone);
 
 const darkTheme = createTheme({
   palette: {
@@ -76,50 +76,58 @@ export default function AddAppointmentPage() {
   const officeTimingIn = useAppSelector(
     (x) => x.deviceStates.tenantConfig?.officeTimeIn
   );
+  const catLovlist = useAppSelector(
+    (state) => state.storeCategoryState.categories
+  );
+  const selectedCategory = useAppSelector(
+    (state) => state.storeCategoryState.selectedCategory
+  );
+  const catItemsLovlist = useAppSelector(
+    (state) => state.storeCategoryItemState.categoryItems
+  );
+  const selectedCategoryItems = useAppSelector(
+    (state) => state.storeCategoryItemState.selectedCategoryItems
+  );
+  const systemConfig = useAppSelector((x) => x.appState.systemConfig);
+
+  const dispatch = useAppDispatch();
+
   const officeTimeIn = dayjs(officeTimingIn);
   const officeTimeOut = dayjs(officeTimingOut);
-  const dispatch = useAppDispatch();
   const [paymentMethod, setPaymentMethod] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
   const [isPageLoader, setIsPageLoader] = useState(false);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
   const [userAppointments, setUserAppointments] = useState<Appointment[]>([]);
-  const [disabledButton, setDisabledButton] = useState<any>([]);
-  const [activeBarber, setActiveBarber] = useState<any>();
+  const [disabledButton, setDisabledButton] = useState(false);
+  const [activeBarber, setActiveBarber] = useState<number | null>(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [selectedItem, setSelectedItem] = useState<{
     id: string;
     name: string;
   } | null>(null);
-  const [activeBarberData, setActiveBarberData] = useState<any>();
-  const [, /* bookingList */ setBookingList] = useState<any>();
-  // const [catLovlist, setCatLovList] = useState<any>();
-  const { categories: catLovlist, selectedCategory } = useAppSelector(
-    (state) => state.storeCategoryState
-  );
-  const { categoryItems: catItemsLovlist, selectedCategoryItems } =
-    useAppSelector((state) => state.storeCategoryItemState);
-
-  // const [catItemsLovlist, setCatItemsLovList] = useState<any>([]);
-  const [usedCatItemsLovlist, setusedCatItemsLovList] = useState<any>([]);
-  const [barberList, setBarberList] = useState<any>([]);
-  // const [prevBookedAppointment, setPrevBookedAppointment] = useState<any>([]);
-  const [empId, setEmpId] = useState<any>();
-  const [appointmentTime, setAppointmentTime] = useState<dayjs.Dayjs | any>(
+  const [activeBarberData, setActiveBarberData] = useState<Provider | null>(
     null
   );
-  const { systemConfig } = useAppSelector((x) => x.appState);
+  const [, /* bookingList */ setBookingList] =
+    useState<Array<StoreEmployeeSchedule> | null>(null);
+  const [usedCatItemsLovlist, setUsedCatItemsLovList] = useState<
+    Array<StoreService>
+  >([]);
+  const [barberList, setBarberList] = useState<Array<Provider>>([]);
+  const [empId, setEmpId] = useState<any>();
+  const [appointmentTime, setAppointmentTime] = useState<dayjs.Dayjs | null>(
+    null
+  );
   const [appointmentBookedTime, setAppointmentBookedTime] = useState<
     Array<any>
   >([]);
   const [tempAppointmentBookedTime, setTempAppointmentBookedTime] = useState<
     Array<any>
   >([]);
-
-  const [tmpId, setTmpId] = useState<any>(0);
-
+  const [tmpId, setTmpId] = useState(0);
   const [selectedScheduleTime, setSelectedScheduleTime] = useState<any>({
     startTime: undefined,
     endTime: undefined,
@@ -137,7 +145,7 @@ export default function AddAppointmentPage() {
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'appointments', // Name of the array field
+    name: 'appointments',
     keyName: 'key',
   });
 
@@ -145,26 +153,25 @@ export default function AddAppointmentPage() {
     setPaymentMethod(!paymentMethod);
   };
 
-  const checkIsSameDate = (date: any, appointmentDate: any) => {
+  const checkIsSameDate = (date: string, appointmentDate: Dayjs) => {
     return dayjs(date).isSame(appointmentDate, 'day');
   };
 
-  const checkIsAfterTime = (date: any, appointmentDate: any) => {
+  const checkIsAfterTime = (date: Dayjs, appointmentDate: Dayjs) => {
     return dayjs(date).isAfter(appointmentDate, 'minutes');
   };
 
   const checkIsBetweenTime = (
-    selectedTime: any,
-    beforeTime: any,
-    afterTime: any
+    selectedTime: Dayjs,
+    beforeTime: Dayjs,
+    afterTime: Dayjs
   ) => {
     return dayjs(selectedTime).isBetween(beforeTime, afterTime, 'minute');
   };
 
-  const getCatItemName = (id: any) => {
-    let tempAr: any[] = [];
-    tempAr = usedCatItemsLovlist;
-    return tempAr?.find((el: any) => el.id === id)?.name;
+  const getCatItemName = (id: string) => {
+    const tempAr = [...usedCatItemsLovlist];
+    return tempAr?.find((el) => el.id === id)?.name;
   };
 
   const pagination = {
@@ -184,8 +191,8 @@ export default function AddAppointmentPage() {
       return resp.data.data;
     } catch (error) {
       console.error('Error:', error);
-      // Handle error if necessary
-      return false; // or throw error if you want to propagate it
+
+      return false;
     }
   };
 
@@ -238,42 +245,11 @@ export default function AddAppointmentPage() {
       .getBarberBookedTimeSlots(id, date, { tenantId: systemConfig?.tenant.id })
       .then((res) => {
         if (res.data.success) {
-          // const tempBookedTime = res.data.data.map((resp: any) => ({
-          //   ...resp,
-          //   appointmentTime: dayjs(resp.appointmentTime),
-          // }));
-          // // setAppointmentBookedTime(tempBookedTime);
-          // // console.log('tempBookedTime:::::::', tempBookedTime);
-          // if (tempBookedTime.length > 0) {
-          //   setTempAppointmentBookedTime((prevArr: any) => [
-          //     ...prevArr,
-          //     tempBookedTime,
-          //   ]);
-          //   setAppointmentBookedTime(tempBookedTime);
-          // }
-          // const newArr = res.data.data;
-          // if (tempAppointmentBookedTime.length > 0) {
-          //   tempAppointmentBookedTime.filter((item: any) => {
-          //     if (
-          //       item.storeEmployee === id &&
-          //       checkIsSameDate(
-          //         getValues('appointmentDate'),
-          //         dayjs(item.appointmentTime)
-          //       )
-          //     ) {
-          //       newArr.push(item);
-          //       return item;
-          //     }
-          //     return false;
-          //   });
-          // }
-          // setAppointmentBookedTime(newArr);
           const newArr = res.data.data;
-          newArr.forEach((item: any) => {
+          newArr.forEach((item) => {
             const newAppTime = dayjs(item.appointmentTime)
               .set('hours', dayjs(item.appointmentTime).hour())
               .set('minute', dayjs(item.appointmentTime).minute());
-            delete item.appointmentTime;
             item.appointmentTime = newAppTime;
             return item;
           });
@@ -310,8 +286,9 @@ export default function AddAppointmentPage() {
       });
     return null;
   };
+
   // eslint-disable-next-line react/no-unstable-nested-components
-  function BarberCard(item: any, index: number) {
+  function BarberCard({ item, index }: { item: Provider; index: number }) {
     const onHandleBarber = async () => {
       if (index === activeBarber) {
         setActiveBarber(null);
@@ -335,7 +312,7 @@ export default function AddAppointmentPage() {
       return initials?.join('');
     };
 
-    // console.log('activeBarberData', activeBarberData);
+    // eslint-disable-next-line no-console
     console.log('tempAppointmentBookedTime', tempAppointmentBookedTime);
     return (
       <div
@@ -348,7 +325,6 @@ export default function AddAppointmentPage() {
           <span className="font-semibold text-[#003E80]">
             {getCatItemName(item.storeServiceCategoryItem)}{' '}
             <p className="text-xs">{`(${item.serviceTime} mints)`}</p>
-            {/* {`(${item.serviceTime} mints)`} */}
           </span>
           <div className="flex items-center">
             <img
@@ -383,7 +359,6 @@ export default function AddAppointmentPage() {
     const cat = catLovlist.find((x) => x.id === categoryId);
     if (cat) {
       dispatch(setSelectedCategory(cat));
-      // setSelectedItem(cat);
     }
   };
 
@@ -422,32 +397,34 @@ export default function AddAppointmentPage() {
 
   const getBarbers = async (id: any) => {
     setIsPageLoader(true);
-    await storeAppointmentService
+    const result = await storeAppointmentService
       .getBarbersList(id, { tenant: systemConfig?.tenant.id })
-      .then((res: any) => {
-        if (res.data.success) {
-          setIsPageLoader(false);
-          setBarberList(res.data.data);
-          setActiveBarberData(null);
-          setBookingList(null);
-          setActiveBarber(null);
-        } else {
-          setIsPageLoader(false);
-        }
-      })
-      .catch((error: any) => {
+      .catch((error) => {
         setIsPageLoader(false);
       });
+
+    if (!result) {
+      setIsPageLoader(false);
+      return;
+    }
+
+    if (result.data.success) {
+      setIsPageLoader(false);
+      setBarberList(result.data.data);
+      setActiveBarberData(null);
+      setBookingList(null);
+      setActiveBarber(null);
+      return;
+    }
+    setIsPageLoader(false);
   };
 
   useEffect(() => {
     const uniqueData = catItemsLovlist.filter(
-      (item: any) =>
-        !usedCatItemsLovlist.some(
-          (existingItem: any) => existingItem.id === item.id
-        )
+      (item) =>
+        !usedCatItemsLovlist.some((existingItem) => existingItem.id === item.id)
     );
-    setusedCatItemsLovList([...usedCatItemsLovlist, ...uniqueData]);
+    setUsedCatItemsLovList([...usedCatItemsLovlist, ...uniqueData]);
   }, [catItemsLovlist]);
 
   useEffect(() => {
@@ -487,8 +464,6 @@ export default function AddAppointmentPage() {
     }
   }, [watch('categoryId')]);
 
-  console.log('barberList', barberList, watch('storeServiceCategoryItem'));
-
   useEffect(() => {
     if (
       getValues('storeServiceCategoryItem') !== undefined &&
@@ -510,16 +485,16 @@ export default function AddAppointmentPage() {
           dayjs(getValues('appointmentDate')).format('YYYYMMDD') &&
         obj.storeServiceCategoryItem === targetCategoryItem
       ) {
-        return true; // Found a matching object
+        return true;
       }
     }
-    return false; // No matching object found
+    return false;
   }
 
   useEffect(() => {
     const currentDay = dayjs(getValues('appointmentDate')).format('dddd');
     const scheduleData = activeBarberData?.storeEmployeeSchedule.find(
-      (item: any) => item.workDay === currentDay
+      (item) => item.workDay === currentDay
     );
     setSelectedScheduleTime({
       startTime: dayjs(scheduleData?.startTime),
@@ -557,7 +532,6 @@ export default function AddAppointmentPage() {
   };
 
   const addAppointmentServices = () => {
-    // Check if the user has already added a service for this appointment time
     if (checkUserBookedOnTime()) {
       setIsNotify(true);
       setNotifyMessage({
@@ -574,7 +548,7 @@ export default function AddAppointmentPage() {
       barber: activeBarberData?.storeEmployee?.name,
       amount: activeBarberData?.amount,
       storeServiceCategory: watch('categoryId'),
-      serviceTime: activeBarber?.serviceTime,
+      serviceTime: activeBarberData?.serviceTime,
       storeServiceCategoryItem: watch('storeServiceCategoryItem'),
       storeEmployee: activeBarberData?.storeEmployee?.id,
       appointmentTime: `${dayjs(getValues('appointmentDate'))?.format(
@@ -590,7 +564,7 @@ export default function AddAppointmentPage() {
     ) {
       const currentDay = dayjs(getValues('appointmentDate')).format('dddd');
       const scheduleData = activeBarberData?.storeEmployeeSchedule.filter(
-        (item: any) => item.workDay === currentDay
+        (item) => item.workDay === currentDay
       );
       const time = dayjs(getValues('appointmentDate'))
         .set('hours', dayjs(appointmentTime).hour())
@@ -618,7 +592,10 @@ export default function AddAppointmentPage() {
         officeOutTime = officeOutTime.add(1, 'day');
       }
       let prevTime = startTime;
-      const addTime = dayjs(time).add(activeBarberData?.serviceTime, 'minutes');
+      const addTime = dayjs(time).add(
+        Number(activeBarberData?.serviceTime),
+        'minutes'
+      );
       if (scheduleData.length > 0) {
         if (
           !checkIsBetweenTime(time, startTime, endTime) ||
@@ -648,23 +625,6 @@ export default function AddAppointmentPage() {
                 'minute'
               );
 
-              // Check Barber engagements
-              // if (
-              //   dayjs(obj.appointmentTime).isBetween(
-              //     dayjs(tempEl.appointmentTime),
-              //     tempServiceTime,
-              //     null,
-              //     '[]'
-              //   )
-              // ) {
-              //   setIsNotify(true);
-              //   setNotifyMessage({
-              //     text: `Barber is engaged with another client`,
-              //     type: 'error',
-              //   });
-              //   return false;
-              // }
-              // END  OF Check Barber engagements
               if (time > dayjs(tempServiceTime)) {
                 prevTime = dayjs(tempServiceTime);
               } else if (
@@ -690,24 +650,6 @@ export default function AddAppointmentPage() {
               'minute'
             );
 
-            // Check Barber engagements
-            // if (
-            //   dayjs(obj.appointmentTime).isBetween(
-            //     dayjs(el.appointmentTime),
-            //     serviceTime,
-            //     null,
-            //     '[]'
-            //   )
-            // ) {
-            //   setIsNotify(true);
-            //   setNotifyMessage({
-            //     text: `Barber is engaged with another client`,
-            //     type: 'error',
-            //   });
-            //   return false;
-            // }
-            // END  OF Check Barber engagements
-
             if (
               time > dayjs(serviceTime) &&
               checkIsAfterTime(endTime, serviceTime)
@@ -717,18 +659,16 @@ export default function AddAppointmentPage() {
               !checkIsAfterTime(endTime, serviceTime) &&
               !checkIsBetweenTime(addTime, prevTime, dayjs(el.appointmentTime))
             ) {
-              // break;
               setIsNotify(true);
               setNotifyMessage({
                 text: `Barber is not available at this time`,
                 type: 'error',
               });
               return false;
-              // throw new Error('Error');
             }
           }
-          // }
-          setTmpId((prevId: any) => prevId + 1);
+
+          setTmpId((prevId) => prevId + 1);
           const storeServiceCategoryItemId = getValues(
             'storeServiceCategoryItem'
           );
@@ -758,23 +698,15 @@ export default function AddAppointmentPage() {
 
           setTempAppointmentBookedTime((prev: any) => [...prev, newData]);
           setAppointmentBookedTime((prev: any) => [...prev, newData]);
-          // setPrevBookedAppointment(newData);
+
           append(obj);
         } else {
-          // console.log("5");
           setIsNotify(true);
           setNotifyMessage({
             text: 'This service you already selected, Please select another service',
             type: 'error',
           });
         }
-        // } else {
-        //   setIsNotify(true);
-        //   setNotifyMessage({
-        //     text: `Barber is not avaiable at ${selectedAppointmentTime}`,
-        //     type: 'error',
-        //   });
-        // }
       } else {
         setIsNotify(true);
         setNotifyMessage({
@@ -783,7 +715,6 @@ export default function AddAppointmentPage() {
         });
       }
     } else {
-      // console.log("6");
       setIsNotify(true);
       setNotifyMessage({
         text: 'Please select your preferred barber, category , desired services, and appointment date & time for scheduling.',
@@ -945,7 +876,7 @@ export default function AddAppointmentPage() {
     }
   };
 
-  const removeBookinkList = (item: any) => {
+  const removeBookingList = (item: any) => {
     setTempAppointmentBookedTime((arr: any) =>
       arr.filter((filterItem: any) => filterItem.id !== item.id)
     );
@@ -967,10 +898,7 @@ export default function AddAppointmentPage() {
           <div className="p-3">
             <span className="text-base font-bold text-[#1A1A1A]">Add Info</span>
             <hr className="my-4 border-[#949EAE]" />
-            <form
-              // className="overflow-auto px-2"
-              onSubmit={handleSubmit(onSubmit)}
-            >
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div className="FormBody">
                 <div className="grid grid-cols-12 gap-4">
                   <div className="col-span-12 md:col-span-8">
@@ -1154,10 +1082,10 @@ export default function AddAppointmentPage() {
                             modules={[Pagination]}
                             className="mySwiper custom-swiper custom-swiper-slider"
                           >
-                            {barberList?.map((item: any, index: number) => {
+                            {barberList?.map((item, index) => {
                               return (
                                 <SwiperSlide key={index}>
-                                  {BarberCard(item, index)}
+                                  <BarberCard item={item} index={index} />
                                 </SwiperSlide>
                               );
                             })}
@@ -1179,7 +1107,7 @@ export default function AddAppointmentPage() {
                         <hr className="my-4 border-[#949EAE]" />
                         <div className="gaps-4 grid grid-cols-12">
                           {activeBarberData?.storeEmployeeSchedule?.map(
-                            (item: any, index: number) => {
+                            (item, index) => {
                               return (
                                 <div
                                   key={index}
@@ -1241,7 +1169,6 @@ export default function AddAppointmentPage() {
                                       onChange={(date) =>
                                         handleDateChange(date, field)
                                       }
-                                      // onChange={(date) => field.onChange(date)}
                                       value={field.value}
                                       minDate={dayjs()}
                                     />
@@ -1263,14 +1190,9 @@ export default function AddAppointmentPage() {
                                 >
                                   <TimePicker
                                     disabled={!activeBarberData}
-                                    // timePickerLabel="Appointment Time"
-                                    // timePickerSubLabel={"(Office in time)"}
                                     timePickerValue={appointmentTime}
                                     setTimePickerValue={setAppointmentTime}
-                                    // minTime={selectedScheduleTime.startTime}
-                                    // maxTime={selectedScheduleTime.endTime}
                                     id="startTime"
-                                    // setError={setError}
                                   />
                                 </FormControl>
                               </div>
@@ -1295,8 +1217,6 @@ export default function AddAppointmentPage() {
                               dayjs(b.appointmentTime).unix()
                           )
                           ?.map((item: any, index: number) => {
-                            // console.log('APP ITEM TIME', item);
-                            // dayjs();
                             const storeServiceCategoryItemId = getValues(
                               'storeServiceCategoryItem'
                             );
@@ -1315,7 +1235,6 @@ export default function AddAppointmentPage() {
                               'minute'
                             );
 
-                            // const formattedEndTime = endTime.format('h:mm A');
                             const formattedEndTime = dayjs(endTime).isValid()
                               ? dayjs(endTime)?.format('h:mm A')
                               : '--';
@@ -1359,7 +1278,7 @@ export default function AddAppointmentPage() {
                             <div
                               onClick={() => {
                                 remove(index);
-                                removeBookinkList(items);
+                                removeBookingList(items);
                               }}
                               className="flex w-[40%] cursor-pointer items-center justify-center rounded-2xl bg-background p-2"
                             >
@@ -1402,11 +1321,10 @@ export default function AddAppointmentPage() {
                   className={`btn-black-fill  ${
                     fields.length > 0 ? 'w-64' : ''
                   } `}
-                  // type={'submit'}
                   onclick={addAppointmentServices}
                   sx={{
                     padding: '0.375rem 2rem !important',
-                    // width: '20%',
+
                     marginRight: '15px',
                     height: '35px',
                   }}
@@ -1418,7 +1336,6 @@ export default function AddAppointmentPage() {
                   className="btn-black-outline"
                   type="submit"
                   iconRight={isLoader ? <CircularProgress size={14} /> : null}
-                  // onclick={handleFormClose}
                   sx={{
                     padding: '0.375rem 2rem !important',
                     width: '150px',

@@ -1,3 +1,4 @@
+import { GetItemFaqsResponse } from '../interfaces/product';
 import API_PATHS from '../utilities/API-PATHS';
 import { getHeaders } from '../utilities/constant';
 import network from './network';
@@ -11,9 +12,12 @@ const subCategory = (menuId: string) => {
 };
 
 const faqService = (menuId: string, submenuId: string) => {
-  return network.get(API_PATHS.faqService(menuId, submenuId), {
-    headers: getHeaders(),
-  });
+  return network.get<GetItemFaqsResponse>(
+    API_PATHS.faqService(menuId, submenuId),
+    {
+      headers: getHeaders(),
+    }
+  );
 };
 
 export default {

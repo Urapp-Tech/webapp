@@ -13,6 +13,7 @@ import IconButton from '@mui/material/IconButton';
 import { useCallback, useEffect, useState } from 'react';
 import AlertBox from '../../components/common/SnackBar';
 import useAlert from '../../hooks/alert.hook';
+import { Item, ItemFaq } from '../../interfaces/product';
 import { addToCart } from '../../redux/features/cartStateSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import cartService, { UpdateCartPayload } from '../../services/cart.service';
@@ -23,14 +24,11 @@ import promiseHandler from '../../utilities/promise-handler';
 type Props = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  data: any;
-  FAQs: any;
+  data: Item;
+  FAQs: Array<ItemFaq>;
 };
 
 function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
-  // console.log('🚀 ~ HomePagePopup ~ FAQs:', FAQs);
-  // console.log('data', data);
-
   const {
     alertMessage,
     setAlertMessage,
@@ -41,7 +39,8 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
   } = useAlert();
 
   const user = useAppSelector((state) => state.authState.user);
-  const { cartData, cartItems } = useAppSelector((state) => state.cartState);
+  const cartData = useAppSelector((state) => state.cartState.cartData);
+  const cartItems = useAppSelector((state) => state.cartState.cartItems);
   const deviceData = useAppSelector((state) => state.deviceStates.deviceData);
   const dispatch = useAppDispatch();
 
@@ -64,8 +63,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
     });
   };
 
-  const addToBasketHandler = (tempCartData: any) => {
-    console.log('tempCartData', tempCartData);
+  const addToBasketHandler = (tempCartData: Item & { buyCount: number }) => {
     dispatch(addToCart(tempCartData));
     setOpen(false);
     setCount(1);
@@ -162,17 +160,17 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
               <div className="product-img">
                 <img
                   className="aspect-square w-80 object-contain p-4"
-                  src={data?.icon}
+                  src={data.icon}
                   alt=""
                 />
               </div>
               <div className="p-4">
-                <h4 className="product-name">{data?.name}</h4>
-                <p className="product-desc">{data?.desc}</p>
+                <h4 className="product-name">{data.name}</h4>
+                <p className="product-desc">{data.desc}</p>
                 <div className="flex-container flex items-center justify-between">
                   <div className="price">
                     <h3 className="number">
-                      {CURRENCY_PREFIX} <span>{data?.price.toFixed(2)}</span>
+                      {CURRENCY_PREFIX} <span>{data.price.toFixed(2)}</span>
                     </h3>
                     <p className="text">&nbsp;/ item</p>
                   </div>
@@ -198,7 +196,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
             <div className="col-span-4">
               <div className="px-3 py-5">
                 <span className="text-xl font-semibold">FAQS</span>
-                {FAQs === null && (
+                {FAQs.length === 0 && (
                   <div>
                     <span className="text-sm font-medium">
                       There is no faqs for this product
@@ -206,7 +204,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
                   </div>
                 )}
               </div>
-              {FAQs?.map((faq: any, index: any) => (
+              {FAQs.map((faq, index) => (
                 <div className="product-accordion" key={index}>
                   <Accordion
                     key={index}
@@ -235,6 +233,9 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
           <Button
             className="btn-add w-[40%]"
             onClick={() => {
+              if (!data) {
+                return;
+              }
               const cartItem = {
                 ...data,
                 buyCount: count,

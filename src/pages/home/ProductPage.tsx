@@ -10,6 +10,7 @@ import Loader from '../../components/common/Loader';
 import ProductOfferSwiper from '../../components/common/ProductOfferSwiper';
 import AlertBox from '../../components/common/SnackBar';
 import useAlert from '../../hooks/alert.hook';
+import { Item, ItemFaq } from '../../interfaces/product';
 import { fetchBanners } from '../../redux/features/bannerSlice';
 import { setCartData, setCartItems } from '../../redux/features/cartStateSlice';
 import {
@@ -54,22 +55,20 @@ function ProductPage() {
   const persistedDeviceData = useAppSelector(
     (state) => state.deviceStates.deviceData
   );
-
   const user = useAppSelector((state) => state.authState.user);
-  const { banners } = useAppSelector((s) => s.bannerState);
-
+  const banners = useAppSelector((s) => s.bannerState.banners);
   const cartData = useAppSelector((state) => state.cartState.cartData);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [searchName, setSearchName] = useState('');
-  const [filteredSubCategory, setFilteredSubCategory] = useState<Array<any>>(
+  const [filteredSubCategory, setFilteredSubCategory] = useState<Array<Item>>(
     []
   );
-  const [FAQs, setFAQs] = useState(null);
+  const [FAQs, setFAQs] = useState<Array<ItemFaq>>([]);
 
   const { isLoading: isCategoryLoading, data: categoryData } =
     useGetAllCategoryQuery('');
@@ -85,11 +84,14 @@ function ProductPage() {
     }
   }, [isCategoryLoading, categoryData, subCategoryTrigger]);
 
-  const addItemHandler = async (item: any) => {
+  const addItemHandler = async (item: Item) => {
     setSelectedItem(item);
     setDialogOpen(true);
+    if (!subCategoryData) {
+      return;
+    }
     const faqPromise = categoryService.faqService(
-      subCategoryData?.data.id,
+      subCategoryData.data.id,
       item.id
     );
     const [faqResult, faqError] = await promiseHandler(faqPromise);
@@ -110,8 +112,8 @@ function ProductPage() {
         return;
       }
       const getAnonymousCartPromise = cartService.anonymousCart({
-        tenant: persistedDeviceData?.tenant,
-        appUserDevice: persistedDeviceData?.id,
+        tenant: persistedDeviceData.tenant,
+        appUserDevice: persistedDeviceData.id,
       });
       const [getAnonymousCartResult, getAnonymousCartError] =
         await promiseHandler(getAnonymousCartPromise);
@@ -152,20 +154,27 @@ function ProductPage() {
   }, [cartData, dispatch, persistedDeviceData, user]);
 
   useEffect(() => {
-    if (subCategoryData?.data?.homeCatItems?.length > 0) {
+    setFilteredSubCategory([]);
+    if (!subCategoryData) {
+      return;
+    }
+
+    if (!subCategoryData.data.homeCatItems) {
+      return;
+    }
+
+    if (subCategoryData.data.homeCatItems.length > 0) {
       if (!searchName) {
-        setFilteredSubCategory(subCategoryData?.data?.homeCatItems);
+        setFilteredSubCategory(subCategoryData.data.homeCatItems);
         return;
       }
-      const filteredItems = subCategoryData?.data?.homeCatItems.filter(
-        (item: any) => {
-          const priceString = item?.price?.toString() || '';
-          return (
-            item.name.toLowerCase().includes(searchName.toLowerCase()) ||
-            priceString.includes(searchName)
-          );
-        }
-      );
+      const filteredItems = subCategoryData.data.homeCatItems.filter((item) => {
+        const priceString = item.price.toString() || '';
+        return (
+          item.name.toLowerCase().includes(searchName.toLowerCase()) ||
+          priceString.includes(searchName)
+        );
+      });
       setFilteredSubCategory(filteredItems);
     }
   }, [searchName, subCategoryData]);
@@ -199,12 +208,15 @@ function ProductPage() {
         alertOpen={showAlert}
         setAlertOpen={setShowAlert}
       />
-      <HomePagePopup
-        open={dialogOpen}
-        setOpen={setDialogOpen}
-        data={selectedItem}
-        FAQs={FAQs}
-      />
+
+      {selectedItem && (
+        <HomePagePopup
+          open={dialogOpen}
+          setOpen={setDialogOpen}
+          data={selectedItem}
+          FAQs={FAQs}
+        />
+      )}
 
       {user &&
         user.id &&
@@ -230,7 +242,7 @@ function ProductPage() {
         <div>
           <div className="mb-4 items-center justify-between sm:flex">
             <h4 className="mb-4 text-2xl font-semibold leading-tight text-secondary sm:mb-0">
-              {subCategoryData?.data?.name}
+              {subCategoryData?.data.name}
             </h4>
             <FormControl className="xs:max-w-[400px] w-full max-w-[350px] rounded-[0.625rem] bg-white shadow-[2px_4px_6px_rgba(0,0,0,0.06)]">
               <Input
@@ -251,7 +263,7 @@ function ProductPage() {
             {isSubCategoryLoading ? (
               <Loader />
             ) : (
-              filteredSubCategory.map((item: any) => (
+              filteredSubCategory.map((item) => (
                 <div
                   key={item.id}
                   className="relative rounded-[0.625rem] bg-white px-2.5 pb-2.5 pt-4 md:px-3.5 md:pt-5"

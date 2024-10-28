@@ -1,5 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
+import { Item } from '../../interfaces/product';
 import { getItem, removeItem, setItem } from '../../utilities/local-storage';
 
 export type CartItem = {
@@ -66,7 +67,7 @@ export const cartSlice = createSlice({
       removeItem('REGISTERED_CART');
       removeItem('CART_ITEMS');
     },
-    addToCart: (state, action: PayloadAction<any>) => {
+    addToCart: (state, action: PayloadAction<Item & { buyCount: number }>) => {
       const cartItemIndex = state.cartItems.findIndex(
         (item) => item.id === action.payload.id
       );

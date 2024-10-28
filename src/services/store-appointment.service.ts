@@ -1,14 +1,21 @@
 /* eslint-disable import/no-cycle */
+import {
+  GetProviderBookedTimeSlotsResponse,
+  GetProviderListResponse,
+} from '../interfaces/appointment';
 import API_PATHS from '../utilities/API-PATHS';
 import { getHeaders } from '../utilities/constant';
 
 import network from './network';
 
 const getBarbersList = (storeServiceCatItemId: any, params?: object) => {
-  return network.get(API_PATHS.getBarbersList(storeServiceCatItemId), {
-    headers: getHeaders(),
-    params,
-  });
+  return network.get<GetProviderListResponse>(
+    API_PATHS.getBarbersList(storeServiceCatItemId),
+    {
+      headers: getHeaders(),
+      params,
+    }
+  );
 };
 
 const getBarberBookedTimeSlots = (
@@ -16,10 +23,13 @@ const getBarberBookedTimeSlots = (
   date: any,
   params?: object
 ) => {
-  return network.get(API_PATHS.getBarberBookedTimeSlots(storeEmp, date), {
-    headers: getHeaders(),
-    params,
-  });
+  return network.get<GetProviderBookedTimeSlotsResponse>(
+    API_PATHS.getBarberBookedTimeSlots(storeEmp, date),
+    {
+      headers: getHeaders(),
+      params,
+    }
+  );
 };
 
 const appointmentCreate = (data: any, params?: object) => {

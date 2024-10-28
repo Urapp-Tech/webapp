@@ -1,4 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import {
+  GetAllCategoryItemsResponse,
+  GetAllProductCategoriesResponse,
+} from '../../interfaces/product';
 import { BASE_URL, getTenantId, getToken } from '../../utilities/constant';
 
 export const categoryAPI = createApi({
@@ -14,10 +18,10 @@ export const categoryAPI = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getAllCategory: builder.query({
+    getAllCategory: builder.query<GetAllProductCategoriesResponse, any>({
       query: () => `homemenu/list/${getTenantId()}`,
     }),
-    getSubCategory: builder.query({
+    getSubCategory: builder.query<GetAllCategoryItemsResponse, any>({
       query: ({ menuId }: { menuId: string }) =>
         `homemenu/view/${getTenantId()}/${menuId}`,
     }),

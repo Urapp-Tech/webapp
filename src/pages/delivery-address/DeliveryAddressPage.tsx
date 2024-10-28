@@ -27,7 +27,10 @@ import {
 } from '../../redux/features/deviceState';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import addressService from '../../services/address.service';
-import { UpdateAddressStatusData } from '../../types/address.types';
+import {
+  UpdateAddressStatusData,
+  UserAddressData,
+} from '../../types/address.types';
 import loadGoogleMaps from '../../utilities/load-google-maps';
 import promiseHandler from '../../utilities/promise-handler';
 import DeleteAddressPopup from './DeleteAddressPopup';
@@ -42,6 +45,9 @@ const addNewAddressSchema = z.object({
 });
 
 type AddNewAddressType = z.infer<typeof addNewAddressSchema>;
+type AddNewAddressErrors = Partial<
+  Record<keyof AddNewAddressType, { message: string; type: string }>
+>;
 
 const formOptions = { resolver: zodResolver(addNewAddressSchema) };
 
@@ -109,13 +115,8 @@ function MapHeader({
 }
 
 function DeliveryAddressPage() {
-  const {
-    handleSubmit,
-    getValues,
-    setValue,
-    control,
-    formState: { errors },
-  } = useForm<AddNewAddressType>(formOptions);
+  const { handleSubmit, getValues, setValue, control } =
+    useForm<AddNewAddressType>(formOptions);
 
   const {
     alertMessage,
@@ -129,31 +130,18 @@ function DeliveryAddressPage() {
   const addressList = useAppSelector((state) => state.deviceStates.addressList);
   const user = useAppSelector((state) => state.authState.user);
   const [delAddress, setDelAddress] = useState<boolean>(false);
-  const [location, setLocation] = useState<any>({
-    lat: addressList?.length > 0 ? addressList[0]?.latitude : 0,
-    lng: addressList?.length > 0 ? addressList[0]?.longitude : 0,
+  const [location, setLocation] = useState({
+    lat: addressList.at(0)?.latitude ?? 0,
+    lng: addressList.at(0)?.longitude ?? 0,
   });
   const [activeAddress, setActiveAddress] =
     useState<UpdateAddressStatusData | null>(null);
-  const [addressObj, setAddressObj] = useState<any>('');
+  const [addressObj, setAddressObj] = useState<UserAddressData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [deleteItem, setDeleteItem] = useState<any>(null);
-  const draggedAddress = useAppSelector(
-    (state: any) => state.deviceStates.Address
-  );
+  const [deleteItem, setDeleteItem] = useState<UserAddressData | null>(null);
   const dispatch = useAppDispatch();
   useEffect(() => {
     async function getUserAddress() {
-      if (
-        draggedAddress &&
-        draggedAddress.latitude &&
-        draggedAddress.longitude
-      ) {
-        setLocation({
-          lat: draggedAddress.latitude,
-          lng: draggedAddress.longitude,
-        });
-      }
       setIsLoading(true);
       const getUserAddressPromise = addressService.getUserAddress();
       const [getUserAddressResult, getUserAddressError] = await promiseHandler(
@@ -175,7 +163,7 @@ function DeliveryAddressPage() {
 
       dispatch(setUserAddressList(getUserAddressResult.data.data));
       const tempActiveAddress = getUserAddressResult.data.data.find(
-        (item: any) => item.isActive
+        (item) => item.isActive
       );
       if (tempActiveAddress) {
         setActiveAddress(tempActiveAddress);
@@ -309,25 +297,28 @@ function DeliveryAddressPage() {
     return () => clearTimeout(timer);
   }, [getValues('location')]);
 
-  const addNewAddress = async (data: AddNewAddressType | any) => {
-    if (errors.name && errors.name.message) {
+  const addNewAddressError = (errors: any) => {
+    const typedErrors = errors as AddNewAddressErrors;
+    if (typedErrors.name && typedErrors.name.message) {
       setAlertSeverity('error');
-      setAlertMessage(errors.name.message);
+      setAlertMessage(typedErrors.name.message);
       setShowAlert(true);
       return;
     }
-    if (errors.location && errors.location.message) {
+    if (typedErrors.location && typedErrors.location.message) {
       setAlertSeverity('error');
-      setAlertMessage(errors.location.message);
+      setAlertMessage(typedErrors.location.message);
       setShowAlert(true);
       return;
     }
-    if (errors.type) {
+    if (typedErrors.type) {
       setAlertSeverity('error');
       setAlertMessage('type is required');
       setShowAlert(true);
-      return;
     }
+  };
+
+  const addNewAddress = async (data: AddNewAddressType | any) => {
     const addUserAddressPromise = addressService.addUserAddress({
       address: data.location,
       latitude: location.lat,
@@ -410,7 +401,7 @@ function DeliveryAddressPage() {
                   className="addresses-list"
                   style={{ maxHeight: '850px', overflow: 'auto' }}
                 >
-                  {addressList.map((item: any, index: any) => (
+                  {addressList.map((item, index) => (
                     <div
                       className={`item ${
                         item && item.isActive ? 'active' : ''
@@ -564,7 +555,7 @@ function DeliveryAddressPage() {
                 color="inherit"
                 className="btn-add-address"
                 onClick={() =>
-                  setTimeout(handleSubmit(addNewAddress, addNewAddress), 0)
+                  setTimeout(handleSubmit(addNewAddress, addNewAddressError), 0)
                 }
               >
                 Add Address

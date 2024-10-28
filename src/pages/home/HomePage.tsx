@@ -31,15 +31,21 @@ function HomePage() {
   } = useAlert();
 
   const [searchName, setSearchName] = useState('');
-  const { user } = useAppSelector((x) => x.authState);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { categories, selectedCategory } = useAppSelector(
-    (state) => state.storeCategoryState
+  const user = useAppSelector((x) => x.authState.user);
+  const categories = useAppSelector(
+    (state) => state.storeCategoryState.categories
   );
-  const { systemConfig } = useAppSelector((x) => x.appState);
-  const { categoryItems, loading: isSubCategoryLoading } = useAppSelector(
-    (state) => state.storeCategoryItemState
+  const selectedCategory = useAppSelector(
+    (state) => state.storeCategoryState.selectedCategory
+  );
+  const systemConfig = useAppSelector((x) => x.appState.systemConfig);
+  const categoryItems = useAppSelector(
+    (state) => state.storeCategoryItemState.categoryItems
+  );
+  const isSubCategoryLoading = useAppSelector(
+    (state) => state.storeCategoryItemState.loading
   );
   const [filteredCategoriesItems, setFilteredCategoriesItems] = useState<
     StoreService[]
@@ -68,7 +74,7 @@ function HomePage() {
   }, [selectedCategory]);
 
   useEffect(() => {
-    if (!selectedCategory?.id && categories.length > 0) {
+    if (!selectedCategory && categories.length > 0) {
       selectCategory(categories[0].id);
     }
   }, [categories]);
@@ -132,8 +138,7 @@ function HomePage() {
                 disableUnderline
                 endAdornment={
                   <IconButton onClick={handleSearch}>
-                    {' '}
-                    <SearchOutlinedIcon />{' '}
+                    <SearchOutlinedIcon />
                   </IconButton>
                 }
                 value={searchName}
