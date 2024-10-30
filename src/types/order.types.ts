@@ -55,7 +55,7 @@ export type OrderReviewItem = {
   createdDate: string;
   updatedDate: string;
   unitPrice: string;
-  appOrder: string;
+  appOrder: AppOrder;
   itemId: string;
   isRating: boolean;
   homeCatItem: HomeCatItem;
@@ -77,4 +77,10 @@ export type HomeCatItem = {
   quantity: number;
   isDeleted: boolean;
   loyaltyCoins: number;
+  branch: string;
+  tenant: string;
+};
+
+export type AppOrder = {
+  branch: string;
 };

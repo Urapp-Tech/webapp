@@ -45,6 +45,7 @@ function OrdersItemsReview({
       star: rating,
       review: comment,
       status: type,
+      branch: item.appOrder.branch,
     });
   };
 

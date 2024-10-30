@@ -13,7 +13,6 @@ import assets from '../../../assets';
 import FastSpinner from '../../../components/common/CustomSpinner';
 import AlertBox from '../../../components/common/SnackBar';
 import useAlert from '../../../hooks/alert.hook';
-import { Branch } from '../../../interfaces/branch';
 import { login } from '../../../redux/features/authStateSlice';
 import { setUserAddressList } from '../../../redux/features/deviceState';
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
@@ -22,7 +21,6 @@ import authService from '../../../services/auth.service';
 import network from '../../../services/network';
 import { LoginPayload } from '../../../types/auth.types';
 import API_PATHS from '../../../utilities/API-PATHS';
-import { getItem } from '../../../utilities/local-storage';
 import promiseHandler from '../../../utilities/promise-handler';
 
 function LoginPage() {
@@ -35,9 +33,10 @@ function LoginPage() {
     setAlertSeverity,
   } = useAlert();
 
-  const cartItem = useAppSelector((state: any) => state.cartState.cartItems);
+  const cartItem = useAppSelector((state) => state.cartState.cartItems);
+  const branch = useAppSelector((state) => state.branchState.branch);
   const systemConfigData = useAppSelector(
-    (state: any) => state.appState.systemConfig
+    (state) => state.appState.systemConfig
   );
   const navigate = useNavigate();
   const location = useLocation();
@@ -75,9 +74,9 @@ function LoginPage() {
       setShowAlert(true);
       return;
     }
-    const branch = getItem<Branch>('BRANCH');
+
     const tokenResult = await network.post(API_PATHS.createToken, {
-      tenant: systemConfigData.tenant.id,
+      tenant: systemConfigData?.tenant.id,
       branch: branch?.id,
       user: loginResponse.data.data.id,
     });
@@ -86,7 +85,7 @@ function LoginPage() {
       token: tokenResult.data.data,
     };
     dispatch(login(userData));
-    if (cartItem > 0) {
+    if (cartItem.length > 0) {
       navigate('/dashboard/my-basket');
     } else {
       navigate('/dashboard/home');
@@ -130,9 +129,8 @@ function LoginPage() {
       setIsLoader(false);
       return;
     }
-    const branch = getItem<Branch>('BRANCH');
     const tokenResult = await network.post(API_PATHS.createToken, {
-      tenant: systemConfigData.tenant.id,
+      tenant: systemConfigData?.tenant.id,
       branch: branch?.id,
       user: loginResponse.data.data.id,
     });
@@ -178,127 +176,6 @@ function LoginPage() {
 
   return (
     <>
-      {/* <AlertBox
-        msg={alertMessage}
-        setSeverity={alertSeverity}
-        alertOpen={showAlert}
-        setAlertOpen={setShowAlert}
-      />
-      <div className="fixed-at-top-left">
-        <img className="logo" src={assets.images.logo} alt="" />
-      </div>
-      <div className="auth-form">
-        <div className="custom-width">
-          <h4 className="heading">Sign in to Customer</h4>
-          <FormControl className="field mt-8 lg:mt-10" variant="standard">
-            <InputLabel className="label" htmlFor="email">
-              Email
-            </InputLabel>
-            <Input
-              className="input-container"
-              id="email"
-              type="email"
-              onChange={email.onChange}
-              onBlur={email.onBlur}
-              name={email.name}
-              ref={email.ref}
-            />
-            {errors.email && (
-              <span className="text-red-500">Email is required</span>
-            )}
-          </FormControl>
-
-          <FormControl className="field" variant="standard">
-            <InputLabel className="label" htmlFor="password">
-              Password
-            </InputLabel>
-            <Input
-              className="input-container"
-              id="password"
-              type={showPassword ? 'text' : 'password'}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    className="field-icon"
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              onChange={password.onChange}
-              onBlur={password.onBlur}
-              name={password.name}
-              ref={password.ref}
-            />
-            {errors.password && (
-              <span className="text-red-500">Password is required</span>
-            )}
-          </FormControl>
-
-          <div className="mt-2 flex items-center justify-between">
-            <FormControlLabel
-              control={
-                <Checkbox
-                  className="checkbox"
-                  id="remember-me"
-                  name="remember-me"
-                />
-              }
-              label="Remember me"
-              className="remember-me"
-            />
-            <NavLink className="forgot-pass-link" to="../forgot-password">
-              Forgot Password ?
-            </NavLink>
-          </div>
-          <button
-            type="button"
-            onClick={handleSubmit(submitHandler)}
-            className="btn-submit mt-8 lg:mt-10"
-          >
-            Login
-          </button>
-          <FacebookLogin
-            appId="246641688446576"
-            onSuccess={handleLoginWithFacebook}
-            render={({ onClick }) => (
-              <button onClick={onClick} type="button" className="btn-login-fb">
-                <img
-                  className="mr-2.5 w-2.5"
-                  src={assets.images.facebook}
-                  alt=""
-                />
-                Login with Facebook
-              </button>
-            )}
-          />
-
-          <div className="login-other-options mt-8 lg:mt-10">
-            <p className="text">
-              Don&apos;t have an account yet ?
-              <NavLink className="signup-link" to="../sign-up">
-                Sign Up
-              </NavLink>
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="join-community login-community">
-        <div className="content-container">
-          <div className="content">
-            <h1 className="heading">Join Our Community</h1>
-            <p className="desc">
-              Lorem ipusm dolor sit amet, coectetuer adipiscing elit sed diam
-              nonummy et nibh euismod
-            </p>
-          </div>
-          <img className="" src={assets.images.loginImage} alt="" />
-        </div>
-      </div> */}
       <AlertBox
         msg={alertMessage}
         setSeverity={alertSeverity}

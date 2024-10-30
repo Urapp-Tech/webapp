@@ -1,25 +1,26 @@
 /* eslint-disable react/no-children-prop */
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import FacebookIcon from '@mui/icons-material/Facebook';
-import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
+import HistoryIcon from '@mui/icons-material/History';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import StoreIcon from '@mui/icons-material/Store';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import YouTubeIcon from '@mui/icons-material/YouTube';
+import { useMediaQuery, useTheme } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import HistoryIcon from '@mui/icons-material/History';
-import { useMediaQuery, useTheme } from '@mui/material';
 import { setDropOff, setPickup } from '../../redux/features/DateAndTime';
 import { logout } from '../../redux/features/authStateSlice';
+import { setBranch } from '../../redux/features/branchSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import cn from '../../utilities/class-names';
 
@@ -134,6 +135,9 @@ function Sidebar({ openDrawer = true }: Props) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const user = useAppSelector((state) => state.authState.user);
+  const isBranchSingle = useAppSelector(
+    (state) => state.branchState.isBranchSingle
+  );
   const tenantConfig = useAppSelector(
     (state) => state.deviceStates.tenantConfig
   );
@@ -200,6 +204,19 @@ function Sidebar({ openDrawer = true }: Props) {
           }
           return null; // Skip rendering links other than Home & FAQs if user is not logged in
         })}
+        {!isBranchSingle && (
+          <button
+            type="button"
+            onClick={() => dispatch(setBranch(null))}
+            className="flex w-full items-center gap-x-3 bg-transparent px-6 py-3 text-base font-normal text-foreground transition-all duration-[0.3s] md:gap-x-4 md:px-7"
+          >
+            <StoreIcon
+              className="h-auto w-5 text-foreground transition-all duration-[0.3s]"
+              fontSize="inherit"
+            />
+            <span className="opacity-75">Branches</span>
+          </button>
+        )}
       </div>
       <div className="mt-auto">
         {tenantConfig && hasShopLinks() ? (

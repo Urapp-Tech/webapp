@@ -1,24 +1,80 @@
-import { Store } from '@mui/icons-material';
+import { HighlightOff, Loop, Store } from '@mui/icons-material';
+import Button from '@mui/material/Button';
 import { useEffect, useState } from 'react';
 import { Branch, GetBranchesResponse } from '../interfaces/branch';
+import { login } from '../redux/features/authStateSlice';
+import { setBranch, setIsBranchSingle } from '../redux/features/branchSlice';
+import { useAppDispatch, useAppSelector } from '../redux/redux-hooks';
 import network from '../services/network';
 import { SystemConfigData } from '../types/app.types';
 import API_PATHS from '../utilities/API-PATHS';
 import cn from '../utilities/class-names';
-import { getItem, setItem } from '../utilities/local-storage';
+import { getItem } from '../utilities/local-storage';
 
-function SelectBranchComponent({
-  branches,
-  setBranchSelected,
+function LoadingBranchesComponent() {
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background">
+      <Loop className="h-16 w-16 animate-spin text-primary" />
+      <h1 className="mt-4 text-2xl font-semibold text-primary">
+        Loading branches...
+      </h1>
+      <p className="mt-2 text-primary">
+        Please wait while we fetch the available branches.
+      </p>
+    </div>
+  );
+}
+
+function BranchesErrorComponent({
+  error,
+  reset,
 }: {
-  branches: Array<Branch>;
-  setBranchSelected: React.Dispatch<React.SetStateAction<boolean>>;
+  error: Error;
+  reset: () => void;
 }) {
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background">
+      <HighlightOff className="h-12 w-12 text-red-500" />
+      <h1 className="mt-4 text-2xl font-semibold text-primary">
+        Error Loading Branches
+      </h1>
+      <p className="text-muted-foreground mt-2 max-w-md text-center">
+        We encountered an error while fetching the branches. This could be due
+        to a network issue or a problem with the server.
+      </p>
+      <p className="text-destructive mt-2 text-sm">{error.message}</p>
+
+      <Button
+        onClick={reset}
+        type="button"
+        variant="contained"
+        className="text-normal mt-4 w-[120px] bg-black py-[14px] text-[14px] leading-[normal] text-white"
+      >
+        Try Again
+      </Button>
+    </div>
+  );
+}
+
+function SelectBranchComponent({ branches }: { branches: Array<Branch> }) {
+  const user = useAppSelector((state) => state.authState.user);
+  const dispatch = useAppDispatch();
   const [selectedBranch, setSelectedBranch] = useState<string | null>(null);
-  const confirmSelection = () => {
+  const confirmSelection = async () => {
     const branch = branches.find((b) => b.id === selectedBranch);
-    setItem('BRANCH', branch);
-    setBranchSelected(true);
+    if (user) {
+      const tokenResult = await network.post(API_PATHS.createToken, {
+        tenant: branch?.tenant,
+        branch: branch?.id,
+        user: user.id,
+      });
+      const userData = {
+        ...user,
+        token: tokenResult.data.data,
+      };
+      dispatch(login(userData));
+    }
+    dispatch(setBranch(branch));
   };
   return (
     <div className="container mx-auto p-4">
@@ -70,9 +126,17 @@ function SelectBranchComponent({
 function WithBranch({ children }: any) {
   const [isPending, setIsPending] = useState(false);
   const [data, setData] = useState<GetBranchesResponse | null>(null);
-  const [branchSelected, setBranchSelected] = useState(false);
+  const [error, setError] = useState<any>(null);
+  const isBranchSelected = useAppSelector(
+    (state) => state.branchState.isBranchSelected
+  );
+  const dispatch = useAppDispatch();
 
   const getBranches = async () => {
+    if (isBranchSelected) {
+      return;
+    }
+
     setIsPending(true);
     try {
       const systemConfig = getItem<SystemConfigData>('SYSTEM_CONFIG');
@@ -82,9 +146,10 @@ function WithBranch({ children }: any) {
       const result = await network.get<GetBranchesResponse>(
         API_PATHS.getBranches(systemConfig.tenant.id)
       );
-      setIsPending(false);
       setData(result.data);
-    } catch (error) {
+      setIsPending(false);
+    } catch (netError) {
+      setError(netError);
       setIsPending(false);
       throw error;
     }
@@ -94,24 +159,41 @@ function WithBranch({ children }: any) {
     getBranches();
   }, []);
 
-  if (isPending) return <div>Loading ...</div>;
+  useEffect(() => {
+    dispatch(setIsBranchSingle(false));
+    if (data && data.data.list.length === 1) {
+      const [branch] = data.data.list;
+      dispatch(setBranch(branch));
+      dispatch(setIsBranchSingle(true));
+    }
+  }, [data]);
 
-  if (!data) return <div>Error ...</div>;
+  if (isPending) return <LoadingBranchesComponent />;
 
-  if (!data.success) return <div>Error ...</div>;
-
-  if (data.data.list.length === 1 && !branchSelected) {
-    setItem('BRANCH', data.data.list[0]);
-    setBranchSelected(true);
-  }
-  if (!branchSelected) {
+  if (error && !isBranchSelected)
     return (
-      <SelectBranchComponent
-        branches={data.data.list}
-        setBranchSelected={setBranchSelected}
+      <BranchesErrorComponent
+        error={error}
+        reset={() => {
+          window.location.reload();
+        }}
       />
     );
+
+  if (data && !data.success && !isBranchSelected)
+    return (
+      <BranchesErrorComponent
+        error={new Error(data.message)}
+        reset={() => {
+          window.location.reload();
+        }}
+      />
+    );
+
+  if (data && !isBranchSelected) {
+    return <SelectBranchComponent branches={data.data.list} />;
   }
+
   return children;
 }
 

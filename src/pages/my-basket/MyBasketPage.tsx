@@ -16,7 +16,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AlertBox from '../../components/common/SnackBar';
 import useAlert from '../../hooks/alert.hook';
-import { Branch } from '../../interfaces/branch';
 import { setDropOff, setPickup } from '../../redux/features/DateAndTime';
 import {
   decrementQuantity,
@@ -31,7 +30,6 @@ import addressService from '../../services/address.service';
 import cartService, { UpdateCartPayload } from '../../services/cart.service';
 import orderService from '../../services/order.service';
 import { CURRENCY_PREFIX } from '../../utilities/constant';
-import { getItem } from '../../utilities/local-storage';
 import promiseHandler from '../../utilities/promise-handler';
 import PayFastForm from './PayFastForm';
 import PaymentOptionPopup from './PaymentOptionPopup';
@@ -53,6 +51,7 @@ function MyBasketPage() {
   );
   const user = useAppSelector((state) => state.authState.user);
   const userAddress = useAppSelector((state) => state.deviceStates.addressList);
+  const branch = useAppSelector((state) => state.branchState.branch);
   const dispatch = useAppDispatch();
   const [voucherCode, setVoucherCode] = useState('');
   const navigate = useNavigate();
@@ -61,7 +60,6 @@ function MyBasketPage() {
   const [openPaymentSelectPopup, setOpenPaymentSelectPopup] = useState(false);
   const minimumDeliveryTime = tenant?.tenantConfig?.minimumDeliveryTime ?? 1;
   const formSubmitButtonRef = useRef<HTMLButtonElement>(null);
-  const [disabled, setDisabled] = useState(false);
 
   const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
     if (value) {
@@ -112,7 +110,6 @@ function MyBasketPage() {
       return;
     }
     dispatch(setCartData(updateCartResult.data.data.cart));
-    const branch = getItem<Branch>('BRANCH');
     if (!branch) {
       setAlertSeverity('error');
       setAlertMessage('no branch selected');
@@ -218,7 +215,6 @@ function MyBasketPage() {
       return;
     }
     dispatch(setCartData(updateCartResult.data.data.cart));
-    const branch = getItem<Branch>('BRANCH');
     if (!branch) {
       setAlertSeverity('error');
       setAlertMessage('branch not selected');
@@ -253,7 +249,6 @@ function MyBasketPage() {
   };
 
   const updateCart = useCallback(async () => {
-    setDisabled(true);
     if (!cartData?.id) {
       return;
     }
@@ -276,8 +271,10 @@ function MyBasketPage() {
       }),
     };
     const updateCartPromise = cartService.updateCart(updateCartPayload);
+
     const [updateCartResult, updateCartError] =
       await promiseHandler(updateCartPromise);
+
     if (!updateCartResult) {
       setAlertSeverity('error');
       setAlertMessage(updateCartError.message);
@@ -294,7 +291,9 @@ function MyBasketPage() {
   }, [cartItems]);
 
   useEffect(() => {
-    updateCart().then();
+    updateCart().then((response) => {
+      console.log('updateCart response :>> ', response);
+    });
   }, [cartItems]);
 
   const handleRemoveFromCart = async (id: string) => {
@@ -403,7 +402,6 @@ function MyBasketPage() {
                         <td>
                           <span className="flex w-full flex-row items-center justify-start">
                             <IconButton
-                              disabled={disabled}
                               className="p-0 text-neutral-900"
                               onClick={() =>
                                 dispatch(decrementQuantity(item.id))
@@ -414,7 +412,6 @@ function MyBasketPage() {
                             <span className="mx-2">{item?.buyCount}</span>
 
                             <IconButton
-                              disabled={disabled}
                               className="p-0 text-neutral-900"
                               onClick={() =>
                                 dispatch(incrementQuantity(item.id))
@@ -480,44 +477,7 @@ function MyBasketPage() {
                 minimum time is
                 <span className="font-bold"> {minimumDeliveryTime}</span> days
               </div>
-              {/*   <div className="mb-5 grid grid-cols-1 sm:grid-cols-2">
-                <div className="select-date-time sm:pr-4 lg:pr-7">
-                  <DatePickerButton
-                    onChange={handlePickUpTimeChange}
-                    id="pick-up-date-time-picker"
-                    icon={<DateRangeIcon />}
-                    text="Pick up time"
-                    initialValue={dayjs(PickUp ?? new Date())}
-                  />
-                  <div className="mb-2 flex items-center">
-                    <p className="selected-value">
-                      {PickUp
-                        ? dayjs(PickUp).format('ddd, MMM D, YYYY HH:mm a')
-                        : 'Select a date'}
-                    </p>
-                  </div>
-                </div>
-                <div className="select-date-time sm:pl-4 lg:pl-7">
-                  <DatePickerButton
-                    onChange={handleDropOffTimeChange}
-                    id="drop-off-date-time-picker"
-                    icon={<DateRangeIcon />}
-                    text="Urgent time"
-                    initialValue={dayjs(DropOff)}
-                  />
-                  <div className="mb-2 flex flex-col items-center">
-                    <p className="selected-value w-full">
-                      {DropOff && dayjs(DropOff).isValid()
-                        ? dayjs(DropOff).format('ddd, MMM D, YYYY HH:mm a')
-                        : null}
-                    </p>
-                    <br />
-                    <div className="w-full text-end text-[0.625rem]">
-                      minimum time is {minimumDeliveryTime} days
-                    </div>
-                  </div>
-                </div>
-              </div> */}
+
               {user ? (
                 <div className="address-card">
                   <div className="key" style={{ width: '500px' }}>

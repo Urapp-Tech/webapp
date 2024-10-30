@@ -2,18 +2,19 @@
 import { configureStore } from '@reduxjs/toolkit';
 import dateStateReducer from './features/DateAndTime';
 import appStateReducer from './features/appStateSlice';
+import AppointmentSliceReducer from './features/appointmentSlice';
 import authStateReducer from './features/authStateSlice';
+import bannerSliceReducer from './features/bannerSlice';
+import branchSliceReducer from './features/branchSlice';
 import cartStateReducer from './features/cartStateSlice';
 import CategoryStateReducer from './features/categorySlice';
-import StoreCategoryStateReducer from './features/storeCategorySlice';
-import StoreCategoryItemStateReducer from './features/storeCategoryItemsSlice';
-import deviceStateReducer from './features/deviceState';
 import { categoryAPI } from './features/categorySliceAPI';
-import { ratingAPI } from './features/ratingSliceAPI';
-import { orderAPI } from './features/orderStateSliceAPI';
-import AppointmentSliceReducer from './features/appointmentSlice';
-import bannerSliceReducer from './features/bannerSlice';
+import deviceStateReducer from './features/deviceState';
 import employeeRatingSliceReducer from './features/employeeRatingSlice';
+import { orderAPI } from './features/orderStateSliceAPI';
+import { ratingAPI } from './features/ratingSliceAPI';
+import StoreCategoryItemStateReducer from './features/storeCategoryItemsSlice';
+import StoreCategoryStateReducer from './features/storeCategorySlice';
 
 export const store = configureStore({
   reducer: {
@@ -27,6 +28,7 @@ export const store = configureStore({
     dateState: dateStateReducer,
     appointmentState: AppointmentSliceReducer,
     bannerState: bannerSliceReducer,
+    branchState: branchSliceReducer,
     employeeRatingState: employeeRatingSliceReducer,
     [categoryAPI.reducerPath]: categoryAPI.reducer,
     [ratingAPI.reducerPath]: ratingAPI.reducer,

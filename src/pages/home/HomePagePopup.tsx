@@ -25,7 +25,7 @@ type Props = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   data: Item;
-  FAQs: Array<ItemFaq>;
+  FAQs: Array<ItemFaq> | null;
 };
 
 function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
@@ -196,7 +196,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
             <div className="col-span-4">
               <div className="px-3 py-5">
                 <span className="text-xl font-semibold">FAQS</span>
-                {FAQs.length === 0 && (
+                {(!FAQs || FAQs.length === 0) && (
                   <div>
                     <span className="text-sm font-medium">
                       There is no faqs for this product
@@ -204,28 +204,29 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
                   </div>
                 )}
               </div>
-              {FAQs.map((faq, index) => (
-                <div className="product-accordion" key={index}>
-                  <Accordion
-                    key={index}
-                    className="accordion-item"
-                    expanded={expanded === `panel-${index}`}
-                    onChange={handleChange(`panel-${index}`)}
-                  >
-                    <AccordionSummary
-                      className="accordion-header"
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls={`panel-${index}-content`}
-                      id={`panel-${index}-header`}
+              {FAQs &&
+                FAQs.map((faq, index) => (
+                  <div className="product-accordion" key={index}>
+                    <Accordion
+                      key={index}
+                      className="accordion-item"
+                      expanded={expanded === `panel-${index}`}
+                      onChange={handleChange(`panel-${index}`)}
                     >
-                      <h6 className="heading">{faq.question}</h6>
-                    </AccordionSummary>
-                    <AccordionDetails className="accordion-body">
-                      <p className="desc">{faq.answer}</p>
-                    </AccordionDetails>
-                  </Accordion>
-                </div>
-              ))}
+                      <AccordionSummary
+                        className="accordion-header"
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls={`panel-${index}-content`}
+                        id={`panel-${index}-header`}
+                      >
+                        <h6 className="heading">{faq.question}</h6>
+                      </AccordionSummary>
+                      <AccordionDetails className="accordion-body">
+                        <p className="desc">{faq.answer}</p>
+                      </AccordionDetails>
+                    </Accordion>
+                  </div>
+                ))}
             </div>
           </div>
         </DialogContent>
