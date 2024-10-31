@@ -2,7 +2,7 @@ import { BASE_URL, getTenantId } from './constant';
 
 function getDomainName() {
   const domain = window.location.hostname;
-  return domain.split('.')[0];
+  return domain;
 }
 
 const API_PATHS = {
