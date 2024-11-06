@@ -23,7 +23,6 @@ export const branchSlice = createSlice({
   initialState,
   reducers: {
     setBranch: (state, action: PayloadAction<Branch | null | undefined>) => {
-      console.log('action.payload :>> ', action.payload);
       setItem('BRANCH', action.payload);
       state.branch = action.payload;
       state.isBranchSelected = Boolean(action.payload);

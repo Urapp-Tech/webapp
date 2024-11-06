@@ -156,12 +156,13 @@ function WithBranch({ children }: any) {
   };
 
   useEffect(() => {
-    getBranches();
-  }, []);
+    if (!data) getBranches();
+  }, [isBranchSelected]);
 
   useEffect(() => {
+    if (!data) return;
     dispatch(setIsBranchSingle(false));
-    if (data && data.data.list.length === 1) {
+    if (data.data.list.length === 1) {
       const [branch] = data.data.list;
       dispatch(setBranch(branch));
       dispatch(setIsBranchSingle(true));
