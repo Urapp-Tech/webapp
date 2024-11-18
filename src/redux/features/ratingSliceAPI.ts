@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { Branch } from '../../interfaces/branch';
 import { BASE_URL, getToken } from '../../utilities/constant';
+import { getItem } from '../../utilities/local-storage';
 
 export const ratingAPI = createApi({
   reducerPath: 'rating-api',
@@ -23,13 +25,25 @@ export const ratingAPI = createApi({
         itemId: any;
         page: any;
         size: any;
-      }) => ({
-        url: `rating/reviews/${itemId}`,
-        params: { page, size },
-      }),
+      }) => {
+        const branch = getItem<Branch>('BRANCH');
+        if (!branch) {
+          throw new Error('branch not selected');
+        }
+        return {
+          url: `rating/reviews/${branch.tenant}/${branch.id}/${itemId}`,
+          params: { page, size },
+        };
+      },
     }),
     getRatingStarList: builder.query({
-      query: (homeCatId: string) => `rating/distinct/star/list/${homeCatId}`,
+      query: (homeCatId: string) => {
+        const branch = getItem<Branch>('BRANCH');
+        if (!branch) {
+          throw new Error('branch not selected');
+        }
+        return `rating/distinct/star/list/${branch.tenant}/${branch.id}/${homeCatId}`;
+      },
     }),
   }),
 });
