@@ -15,18 +15,18 @@ import Rating from '@mui/material/Rating';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import CustomHeader from '../../components/common/CustomHeader';
+import Loader from '../../components/common/Loader';
+import { addToCart } from '../../redux/features/cartStateSlice';
 import { useLazyGetSubCategoryItemQuery } from '../../redux/features/categorySliceAPI';
 import {
   useLazyGetAllRatingReviewsQuery,
   useLazyGetRatingStarListQuery,
 } from '../../redux/features/ratingSliceAPI';
-import HomeItemDetailAccordin from './HomeItemDetailAccordin';
 import { useAppDispatch } from '../../redux/redux-hooks';
-import { addToCart } from '../../redux/features/cartStateSlice';
-import Loader from '../../components/common/Loader';
-import CustomHeader from '../../components/common/CustomHeader';
+import HomeItemDetailAccordin from './HomeItemDetailAccordin';
 
 dayjs.extend(relativeTime);
 
@@ -106,7 +106,10 @@ function HomeItemDetail() {
     );
   };
 
-  const handleRatingText = (num: number) => {
+  const ratingText = useMemo(() => {
+    const numerator = ratingStarListData?.data?.total ?? 0;
+    const denominator = allRatingReviewData?.data?.total ?? 1;
+    const num = Number(numerator / denominator);
     switch (true) {
       case num > 4 && num <= 5:
         return 'Very Good';
@@ -119,9 +122,12 @@ function HomeItemDetail() {
       default:
         return null;
     }
-  };
+  }, [ratingStarListData, allRatingReviewData]);
 
-  const handleRatingValue = (num: any) => {
+  const ratingValue = useMemo(() => {
+    const numerator = ratingStarListData?.data?.total ?? 0;
+    const denominator = allRatingReviewData?.data?.total ?? 1;
+    const num = Number(numerator / denominator);
     switch (true) {
       case num > 4 && num <= 5:
         return 5;
@@ -134,7 +140,7 @@ function HomeItemDetail() {
       default:
         return null;
     }
-  };
+  }, [ratingStarListData, allRatingReviewData]);
 
   function LinearProgressWithLabel(
     props: LinearProgressProps & { value: number }
@@ -258,14 +264,7 @@ function HomeItemDetail() {
                         style={{ color: 'white' }}
                       />
                     </div>
-                    <span className="mx-2 text-sm">
-                      {handleRatingText(
-                        Number(
-                          ratingStarListData?.data?.total /
-                            allRatingReviewData?.data?.total
-                        )
-                      )}
-                    </span>
+                    <span className="mx-2 text-sm">{ratingText}</span>
                   </div>
                 </>
               ) : null}
@@ -273,12 +272,7 @@ function HomeItemDetail() {
             <div className="mt-2">
               <Rating
                 name="half-rating-read"
-                value={handleRatingValue(
-                  Number(
-                    ratingStarListData?.data?.total /
-                      allRatingReviewData?.data?.total
-                  )
-                )}
+                value={ratingValue}
                 precision={0.5}
                 readOnly
               />

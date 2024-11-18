@@ -1,5 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Branch } from '../../interfaces/branch';
+import {
+  GetAllRatingReviewsResponse,
+  GetRatingStarListResponse,
+} from '../../types/rating.types';
 import { BASE_URL, getToken } from '../../utilities/constant';
 import { getItem } from '../../utilities/local-storage';
 
@@ -16,7 +20,7 @@ export const ratingAPI = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getAllRatingReviews: builder.query({
+    getAllRatingReviews: builder.query<GetAllRatingReviewsResponse, unknown>({
       query: ({
         itemId,
         page,
@@ -36,7 +40,7 @@ export const ratingAPI = createApi({
         };
       },
     }),
-    getRatingStarList: builder.query({
+    getRatingStarList: builder.query<GetRatingStarListResponse, unknown>({
       query: (homeCatId: string) => {
         const branch = getItem<Branch>('BRANCH');
         if (!branch) {
