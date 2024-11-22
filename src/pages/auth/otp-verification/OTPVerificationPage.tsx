@@ -11,8 +11,10 @@ import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import OtpInput from 'react18-otp-input';
 import assets from '../../../assets';
+import FastSpinner from '../../../components/common/CustomSpinner';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
-import Notify from '../../../components/common/Notify';
+import AlertBox from '../../../components/common/SnackBar';
+import useAlert from '../../../hooks/alert.hook';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import authService from '../../../services/auth.service';
 import {
@@ -20,9 +22,6 @@ import {
   MAX_LENGTH_EXCEEDED,
   PATTERN,
 } from '../../../utilities/constant';
-import AlertBox from '../../../components/common/SnackBar';
-import useAlert from '../../../hooks/alert.hook';
-import FastSpinner from '../../../components/common/CustomSpinner';
 
 type Pass = {
   newPassword: string;
@@ -42,7 +41,6 @@ function OTPVerificationPage() {
     // eslint-disable-next-line @typescript-eslint/no-shadow
     (state: any) => state.appState.systemConfig
   );
-  // console.log("🚀 ~ OTPVerificationPage ~ OTP:", state)
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleClickShowNewPassword = () =>
     setShowNewPassword((newShow) => !newShow);
@@ -105,7 +103,6 @@ function OTPVerificationPage() {
             <div className="flex max-h-[29px] w-full max-w-[600px] items-center justify-center px-[25px] py-[40px]">
               {systemConfigData?.tenantConfig?.logo ? (
                 <img
-                  // src={systemConfig?.shopLogo ?? systemConfig?.shopName}
                   src={systemConfigData.tenantConfig.logo}
                   alt="urlaundry"
                   className="mt-10 h-auto w-[100px] object-contain"
@@ -115,7 +112,6 @@ function OTPVerificationPage() {
               )}
             </div>
             <div className="pt-[50px]">
-              {/* <h1 className='text-[36px] text-black leading-[normal] font-bold capitalize mb-4 text-center'>log in</h1> */}
               <div className=" text-center">
                 <img
                   src={assets.images.otpMSg}

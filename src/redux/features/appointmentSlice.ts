@@ -7,13 +7,13 @@ type InitialState = {
   appointments: Appointment[];
   loading: boolean;
   notify: boolean;
-  total_count: number;
+  totalCount: number;
   notifyMessage: { text?: string; type?: string };
 };
 
 const initialState: InitialState = {
   appointments: [],
-  total_count: 0,
+  totalCount: 0,
   loading: false,
   notify: false,
   notifyMessage: {},
@@ -69,7 +69,7 @@ export const appointmentSlice = createSlice({
       .addCase(fetchAppointments.fulfilled, (state, action) => {
         state.loading = false;
         state.appointments = action.payload?.data.appointments || [];
-        state.total_count =
+        state.totalCount =
           action.payload?.data?.totalCount ||
           action.payload?.data.appointments?.length ||
           0;

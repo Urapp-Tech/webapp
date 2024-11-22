@@ -98,18 +98,15 @@ export default function RescheduleAppointmentPage() {
     name: string;
   } | null>(null);
   const [activeBarberData, setActiveBarberData] = useState<any>();
-  const [, /* bookingList */ setBookingList] = useState<any>();
-  // const [catLovlist, setCatLovList] = useState<any>();
+  const [, setBookingList] = useState<any>();
   const { categories: catLovlist, selectedCategory } = useAppSelector(
     (state) => state.storeCategoryState
   );
   const { categoryItems: catItemsLovlist, selectedCategoryItems } =
     useAppSelector((state) => state.storeCategoryItemState);
 
-  // const [catItemsLovlist, setCatItemsLovList] = useState<any>([]);
   const [usedCatItemsLovlist, setusedCatItemsLovList] = useState<any>([]);
   const [barberList, setBarberList] = useState<any>([]);
-  // const [prevBookedAppointment, setPrevBookedAppointment] = useState<any>([]);
   const [empId, setEmpId] = useState<any>();
   const [appointmentTime, setAppointmentTime] = useState<dayjs.Dayjs | any>(
     null
@@ -183,7 +180,7 @@ export default function RescheduleAppointmentPage() {
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'appointments', // Name of the array field
+    name: 'appointments',
     keyName: 'key',
   });
 
@@ -218,8 +215,7 @@ export default function RescheduleAppointmentPage() {
       return resp.data.data;
     } catch (error) {
       console.error('Error:', error);
-      // Handle error if necessary
-      return false; // or throw error if you want to propagate it
+      return false;
     }
   };
 
@@ -276,36 +272,6 @@ export default function RescheduleAppointmentPage() {
       .getBarberBookedTimeSlots(id, date)
       .then((res) => {
         if (res.data.success) {
-          // const tempBookedTime = res.data.data.map((resp: any) => ({
-          //   ...resp,
-          //   appointmentTime: dayjs(resp.appointmentTime),
-          // }));
-          // // setAppointmentBookedTime(tempBookedTime);
-          // // console.log('tempBookedTime:::::::', tempBookedTime);
-          // if (tempBookedTime.length > 0) {
-          //   setTempAppointmentBookedTime((prevArr: any) => [
-          //     ...prevArr,
-          //     tempBookedTime,
-          //   ]);
-          //   setAppointmentBookedTime(tempBookedTime);
-          // }
-          // const newArr = res.data.data;
-          // if (tempAppointmentBookedTime.length > 0) {
-          //   tempAppointmentBookedTime.filter((item: any) => {
-          //     if (
-          //       item.storeEmployee === id &&
-          //       checkIsSameDate(
-          //         getValues('appointmentDate'),
-          //         dayjs(item.appointmentTime)
-          //       )
-          //     ) {
-          //       newArr.push(item);
-          //       return item;
-          //     }
-          //     return false;
-          //   });
-          // }
-          // setAppointmentBookedTime(newArr);
           const newArr = res.data.data;
           newArr.forEach((item: any) => {
             const newAppTime = dayjs(item.appointmentTime)
@@ -355,15 +321,6 @@ export default function RescheduleAppointmentPage() {
         setActiveBarber(null);
         setActiveBarberData(null);
         setBookingList(null);
-        // let newFilter = [];
-        // if (tempAppointmentBookedTime.length > 0) {
-        //   newFilter = tempAppointmentBookedTime.filter(
-        //     (itemFilter: any) =>
-        //       itemFilter.storeEmployee === item.storeEmployee.id
-        //   );
-        // }
-        // console.log('item.storeEmployee.id:::::::', item.storeEmployee.id);
-        // console.log('newFilter:::::::', newFilter);
         setAppointmentBookedTime([]);
       } else {
         setBookingList(item.storeEmployeeSchedule);
@@ -382,8 +339,6 @@ export default function RescheduleAppointmentPage() {
       return initials?.join('');
     };
 
-    // console.log('activeBarberData', activeBarberData);
-    console.log('tempAppointmentBookedTime', tempAppointmentBookedTime);
     return (
       <div
         onClick={onHandleBarber}
@@ -431,7 +386,6 @@ export default function RescheduleAppointmentPage() {
     const cat = catLovlist.find((x) => x.id === categoryId);
     if (cat) {
       dispatch(setSelectedCategory(cat));
-      // setSelectedItem(cat);
     }
   };
 
@@ -541,10 +495,10 @@ export default function RescheduleAppointmentPage() {
           dayjs(getValues('appointmentDate')).format('YYYYMMDD') &&
         obj.storeServiceCategoryItem === targetCategoryItem
       ) {
-        return true; // Found a matching object
+        return true;
       }
     }
-    return false; // No matching object found
+    return false;
   }
 
   useEffect(() => {
@@ -588,7 +542,6 @@ export default function RescheduleAppointmentPage() {
   };
 
   const addAppointmentServices = () => {
-    // Check if the user has already added a service for this appointment time
     if (checkUserBookedOnTime()) {
       setIsNotify(true);
       setNotifyMessage({
@@ -650,9 +603,6 @@ export default function RescheduleAppointmentPage() {
       const addTime = dayjs(time).add(activeBarberData?.serviceTime, 'minutes');
 
       if (scheduleData.length > 0) {
-        // for (let j = 0; j < shopScheduleWorkDays.length; i += 1++) {
-        //   const elShop = appointmentBookedTime[j];
-        // }
         if (!checkIsBetweenTime(time, startTime, endTime)) {
           setIsNotify(true);
           setNotifyMessage({
@@ -708,17 +658,14 @@ export default function RescheduleAppointmentPage() {
               !checkIsAfterTime(endTime, serviceTime) &&
               !checkIsBetweenTime(addTime, prevTime, dayjs(el.appointmentTime))
             ) {
-              // break;
               setIsNotify(true);
               setNotifyMessage({
                 text: `Barber is not available at this time`,
                 type: 'error',
               });
               return false;
-              // throw new Error('Error');
             }
           }
-          // }
           const storeServiceCategoryItemId = getValues(
             'storeServiceCategoryItem'
           );
@@ -747,23 +694,14 @@ export default function RescheduleAppointmentPage() {
           obj.amount = storeServiceCategoryItem?.price;
           setTempAppointmentBookedTime((prev: any) => [...prev, newData]);
           setAppointmentBookedTime((prev: any) => [...prev, newData]);
-          // setPrevBookedAppointment(newData);
           append(obj);
         } else {
-          // console.log("5");
           setIsNotify(true);
           setNotifyMessage({
             text: 'This service you already selected, Please select another service',
             type: 'error',
           });
         }
-        // } else {
-        //   setIsNotify(true);
-        //   setNotifyMessage({
-        //     text: `Barber is not avaiable at ${selectedAppointmentTime}`,
-        //     type: 'error',
-        //   });
-        // }
       } else {
         setIsNotify(true);
         setNotifyMessage({
@@ -772,7 +710,6 @@ export default function RescheduleAppointmentPage() {
         });
       }
     } else {
-      // console.log("6");
       setIsNotify(true);
       setNotifyMessage({
         text: 'Please select your preferred barber, category , desired services, and appointment date & time for scheduling.',
@@ -884,16 +821,12 @@ export default function RescheduleAppointmentPage() {
           <span className="text-base font-bold text-[#1A1A1A]">
             Fill Reschedule Appointment Form
           </span>
-          {/* <h4 className="page-heading">Fill Reschedule Appointment Form</h4> */}
         </div>
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="p-3">
             <span className="text-base font-bold text-[#1A1A1A]">Add Info</span>
             <hr className="my-4 border-[#949EAE]" />
-            <form
-              // className="overflow-auto px-2"
-              onSubmit={handleSubmit(onSubmit)}
-            >
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div className="FormBody">
                 <div className="grid grid-cols-12 gap-4">
                   <div className="col-span-12 md:col-span-8">
@@ -1151,7 +1084,6 @@ export default function RescheduleAppointmentPage() {
                           <div>
                             <ThemeProvider theme={darkTheme}>
                               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                {/* <DemoItem label="Desktop variant"> */}
                                 <div>
                                   <span className="text-sm">
                                     Select Appointment Date
@@ -1168,13 +1100,11 @@ export default function RescheduleAppointmentPage() {
                                       onChange={(date) =>
                                         handleDateChange(date, field)
                                       }
-                                      // onChange={(date) => field.onChange(date)}
                                       value={field.value}
                                       minDate={dayjs()}
                                     />
                                   )}
                                 />
-                                {/* </DemoItem> */}
                               </LocalizationProvider>
                             </ThemeProvider>
                           </div>
@@ -1190,14 +1120,9 @@ export default function RescheduleAppointmentPage() {
                                 >
                                   <TimePicker
                                     disabled={!activeBarberData}
-                                    // timePickerLabel="Appointment Time"
-                                    // timePickerSubLabel={"(Office in time)"}
                                     timePickerValue={appointmentTime}
                                     setTimePickerValue={setAppointmentTime}
-                                    // minTime={selectedScheduleTime.startTime}
-                                    // maxTime={selectedScheduleTime.endTime}
                                     id="startTime"
-                                    // setError={setError}
                                   />
                                 </FormControl>
                               </div>
@@ -1222,8 +1147,6 @@ export default function RescheduleAppointmentPage() {
                               dayjs(b.appointmentTime).unix()
                           )
                           ?.map((item: any, index: number) => {
-                            // console.log('APP ITEM TIME', item);
-                            // dayjs();
                             const servicetime = Number(item.serviceTime);
                             const apptimeDayjs = dayjs(item.appointmentTime);
                             const endTime = apptimeDayjs.add(
@@ -1231,7 +1154,6 @@ export default function RescheduleAppointmentPage() {
                               'minute'
                             );
 
-                            // const formattedEndTime = endTime.format('h:mm A');
                             const formattedEndTime = dayjs(endTime).isValid()
                               ? dayjs(endTime)?.format('h:mm A')
                               : '--';
@@ -1318,11 +1240,9 @@ export default function RescheduleAppointmentPage() {
                   className={`btn-black-fill  ${
                     fields.length > 0 ? 'w-64' : ''
                   } `}
-                  // type={'submit'}
                   onclick={addAppointmentServices}
                   sx={{
                     padding: '0.375rem 2rem !important',
-                    // width: '20%',
                     marginRight: '15px',
                     height: '35px',
                   }}
@@ -1334,7 +1254,6 @@ export default function RescheduleAppointmentPage() {
                   className="btn-black-outline"
                   iconRight={isLoader ? <CircularProgress size={14} /> : null}
                   type="submit"
-                  // onclick={handleFormClose}
                   sx={{
                     padding: '0.375rem 2rem !important',
                     width: '150px',

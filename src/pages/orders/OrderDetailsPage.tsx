@@ -13,9 +13,13 @@ import AlertBox from '../../components/common/SnackBar';
 import useAlert from '../../hooks/alert.hook';
 import { useAppSelector } from '../../redux/redux-hooks';
 import orderService from '../../services/order.service';
-import { GetOrderListData } from '../../types/order.types';
+import { GetOrderListData, OrderDetails } from '../../types/order.types';
 import cn from '../../utilities/class-names';
-import { ORDER_STATUS, ORDER_STATUSES } from '../../utilities/constant';
+import {
+  CURRENCY_PREFIX,
+  ORDER_STATUS,
+  ORDER_STATUSES,
+} from '../../utilities/constant';
 import { getItem } from '../../utilities/local-storage';
 import promiseHandler from '../../utilities/promise-handler';
 import OrderDetailsPagePopup from './OrderDetailsPagePopup';
@@ -33,12 +37,11 @@ function OrderDetailsPage() {
   const user = useAppSelector((state) => state.authState.user);
   const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [orderItemDetail, setOrderItemDetail] = useState<any>();
+  const [orderItemDetail, setOrderItemDetail] = useState<OrderDetails>();
   const [orderCanceled, setOrderCanceled] = useState(false);
   const items = getItem<GetOrderListData>('ORDER_ITEM');
   const address = getItem<any>('ADDRESS');
 
-  const addressList = address.map((el: any) => el);
   const { id } = useParams();
 
   const getOrderDetails = useCallback(async function () {
@@ -69,6 +72,10 @@ function OrderDetailsPage() {
   }, []);
 
   const cancelOrder = async () => {
+    if (!orderItemDetail) {
+      return;
+    }
+
     orderService
       .updateOrderStatus({
         app_order: orderItemDetail.id,
@@ -216,45 +223,6 @@ function OrderDetailsPage() {
                     </Button>
                   )}
               </div>
-              {/* <hr className="my-4" /> */}
-              {/* <div className="grid grid-cols-1 sm:grid-cols-2">
-                <div className="edit-date-time mb-5 sm:pr-4">
-                  <div className="mb-3.5 flex items-center justify-between">
-                    <p className="label">Pick Up Time</p>
-                  </div>
-                  <div className="mb-3 flex items-center gap-3">
-                    <DateRangeIcon className="text-xl" />
-                    <p className="selected-value">
-                      {orderItemDetail?.pickupDateTime}
-                    </p>
-                  </div>
-                  <div className="mb-5 flex items-center gap-3 sm:mb-0">
-                    <AccessTimeIcon className="text-xl" />
-                    <p className="selected-value">
-                      {dayjs()?.format('HH:mm')} -
-                      {dayjs()?.add(1, 'hours').format('HH:mm')}
-                    </p>
-                  </div>
-                </div>
-                <div className="edit-date-time sm:pl-6">
-                  <div className="mb-3.5 flex items-center justify-between">
-                    <p className="label">Drop Off Time</p>
-                  </div>
-                  <div className="mb-3 flex items-center gap-3">
-                    <DateRangeIcon className="text-xl" />
-                    <p className="selected-value">
-                      {orderItemDetail?.dropDateTime}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <AccessTimeIcon className="text-xl" />
-                    <p className="selected-value">
-                      {dayjs()?.format('HH:mm')} -
-                      {dayjs()?.add(1, 'hours').format('HH:mm')}
-                    </p>
-                  </div>
-                </div>
-              </div> */}
 
               <div className="overflow-x-auto">
                 <table className="ordered-items-table">
@@ -284,7 +252,14 @@ function OrderDetailsPage() {
                           </td>
                           <td>{el.quantity} Items</td>
                           <td>
-                            <p className="price">{el.unitPrice}</p>
+                            <p className="price">
+                              {CURRENCY_PREFIX}
+                              &nbsp;
+                              {Number(el.unitPrice ?? 0).toLocaleString(
+                                undefined,
+                                { minimumFractionDigits: 2 }
+                              )}
+                            </p>
                           </td>
                         </tr>
                       )
@@ -296,22 +271,65 @@ function OrderDetailsPage() {
               <div className="total-amount">
                 <div className="mb-4 flex items-center justify-between">
                   <p className="key">Total Amount</p>
-                  <p className="value">${orderItemDetail?.totalAmount}</p>
+                  <p className="value">
+                    {CURRENCY_PREFIX}
+                    &nbsp;
+                    {Number(orderItemDetail?.totalAmount ?? 0).toLocaleString(
+                      undefined,
+                      { minimumFractionDigits: 2 }
+                    )}
+                  </p>
                 </div>
                 <div className="mb-4 flex items-center justify-between">
                   <p className="key">Discount</p>
-                  <p className="value">$0.00</p>
+                  <p className="value">
+                    {CURRENCY_PREFIX}
+                    &nbsp;
+                    {Number(orderItemDetail?.discount ?? 0).toLocaleString(
+                      undefined,
+                      { minimumFractionDigits: 2 }
+                    )}
+                  </p>
                 </div>
                 <div className="mb-4 flex items-center justify-between">
-                  <p className="key">HST {orderItemDetail?.gstPercentage}%</p>
-                  <p className="value">${orderItemDetail?.gstAmount}</p>
+                  <p className="key">Loyalty Discount</p>
+                  <p className="value">
+                    {CURRENCY_PREFIX}
+                    &nbsp;
+                    {orderItemDetail?.discountLoyaltyCoins}
+                  </p>
+                </div>
+                <div className="mb-4 flex items-center justify-between">
+                  <p className="key">
+                    HST &nbsp;
+                    {Number(orderItemDetail?.gstPercentage ?? 0).toLocaleString(
+                      undefined,
+                      { minimumFractionDigits: 2 }
+                    )}
+                    %
+                  </p>
+                  <p className="value">
+                    {CURRENCY_PREFIX}
+                    &nbsp;
+                    {Number(orderItemDetail?.gstAmount ?? 0).toLocaleString(
+                      undefined,
+                      { minimumFractionDigits: 2 }
+                    )}
+                  </p>
                 </div>
               </div>
             </div>
 
             <div className="grand-total">
               <p className="key">Grand Total</p>
-              <p className="value">${orderItemDetail?.grandTotal}</p>
+              <p className="value">
+                {CURRENCY_PREFIX}
+                &nbsp;
+                {Number(orderItemDetail?.grandTotal ?? 0).toLocaleString(
+                  undefined,
+                  { minimumFractionDigits: 2 }
+                )}
+              </p>
             </div>
           </div>
 

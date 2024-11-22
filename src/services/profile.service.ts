@@ -8,7 +8,7 @@ export type UpdateUserProfilePayload = {
   firstName: string;
   lastName: string;
   postalCode: string;
-  phoneNumber: string;
+  phone: string;
   currentPassword?: string | undefined;
   newPassword?: string | undefined;
   verifyPassword?: string | undefined;

@@ -1,7 +1,4 @@
-import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
-import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import { NavLink, Outlet } from 'react-router-dom';
 
 function AccountPage() {
@@ -18,23 +15,23 @@ function AccountPage() {
               <PersonOutlineOutlinedIcon /> <span>Profile</span>
             </NavLink>
             {/* <NavLink
-              className={({ isActive }) => (isActive ? 'item active' : 'item')}
-              to="settings"
-            >
-              <SettingsOutlinedIcon /> <span>Settings</span>
-            </NavLink>
-            <NavLink
-              className={({ isActive }) => (isActive ? 'item active' : 'item')}
-              to="help-center"
-            >
-              <HeadphonesOutlinedIcon /> <span>Help Center</span>
-            </NavLink>
-            <NavLink
-              className={({ isActive }) => (isActive ? 'item active' : 'item')}
-              to="chat"
-            >
-              <CommentOutlinedIcon /> <span>Chat With Us</span>
-            </NavLink> */}
+                    className={({ isActive }) => (isActive ? 'item active' : 'item')}
+                    to="settings"
+                  >
+                    <SettingsOutlinedIcon /> <span>Settings</span>
+                  </NavLink>
+                  <NavLink
+                    className={({ isActive }) => (isActive ? 'item active' : 'item')}
+                    to="help-center"
+                  >
+                    <HeadphonesOutlinedIcon /> <span>Help Center</span>
+                  </NavLink>
+                  <NavLink
+                    className={({ isActive }) => (isActive ? 'item active' : 'item')}
+                    to="chat"
+                  >
+                    <CommentOutlinedIcon /> <span>Chat With Us</span>
+                  </NavLink> */}
           </div>
         </div>
         <div className="tab-content col-span-12 md:col-span-8">

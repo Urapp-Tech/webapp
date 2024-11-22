@@ -137,7 +137,6 @@ function MyBasketPage() {
     dispatch(setPickup(null));
     dispatch(setDropOff(null));
     dispatch(resetCart());
-    // window.location.replace(orderResponse.data.data.paymentUrl);
     const payFastTokenPromise = orderService.getPayFastToken();
     const [payFastTokenResult, payFastTokenError] =
       await promiseHandler(payFastTokenPromise);
@@ -395,10 +394,20 @@ function MyBasketPage() {
                         </td>
 
                         <td>
-                          {CURRENCY_PREFIX}{' '}
-                          {Number(item?.price ?? 0).toFixed(2)}
+                          {CURRENCY_PREFIX}
+                          &nbsp;{' '}
+                          {Number(item?.price ?? 0).toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                          })}
                         </td>
-                        <td>{Number(item?.buyCount ?? 0).toFixed(2)}</td>
+                        <td>
+                          {Number(item?.buyCount ?? 0).toLocaleString(
+                            undefined,
+                            {
+                              minimumFractionDigits: 0,
+                            }
+                          )}
+                        </td>
                         <td>
                           <span className="flex w-full flex-row items-center justify-start">
                             <IconButton
@@ -423,10 +432,13 @@ function MyBasketPage() {
                         </td>
                         <td>
                           {CURRENCY_PREFIX}
+                          &nbsp;
                           {(
                             Number(item?.price ?? 0) *
                             Number(item?.buyCount ?? 0)
-                          ).toFixed(2)}
+                          ).toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                          })}
                         </td>
                       </tr>
                     ))}
@@ -493,28 +505,64 @@ function MyBasketPage() {
                 <div className="mb-4 flex items-center justify-between">
                   <p className="key">Total Amount</p>
                   <p className="value">
-                    {CURRENCY_PREFIX}{' '}
-                    {Number(cartData?.totalAmount ?? 0).toFixed(2)}
+                    {CURRENCY_PREFIX}
+                    &nbsp;
+                    {Number(cartData?.totalAmount ?? 0).toLocaleString(
+                      undefined,
+                      { minimumFractionDigits: 2 }
+                    )}
                   </p>
                 </div>
                 <div className="mb-4 flex items-center justify-between">
                   <p className="key">Discount</p>
-                  <p className="value">{CURRENCY_PREFIX} 0.00</p>
+                  <p className="value">
+                    {CURRENCY_PREFIX}
+                    &nbsp;
+                    {Number(cartData?.discount ?? 0).toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                    })}
+                  </p>
+                </div>
+                <div className="mb-4 flex items-center justify-between">
+                  <p className="key">Loyalty Discount</p>
+                  <p className="value">
+                    {CURRENCY_PREFIX}
+                    &nbsp;
+                    {Number(cartData?.discountLoyaltyCoins ?? 0).toLocaleString(
+                      undefined,
+                      {
+                        minimumFractionDigits: 2,
+                      }
+                    )}
+                  </p>
                 </div>
                 <div className="mb-4 flex items-center justify-between">
                   <p className="key">
-                    HST {Number(cartData?.gstPercentage ?? 0).toFixed(0)}%
+                    HST
+                    {Number(cartData?.gstPercentage ?? 0).toLocaleString(
+                      undefined,
+                      { minimumFractionDigits: 0 }
+                    )}
+                    %
                   </p>
                   <p className="value">
-                    {Number(cartData?.gstAmount ?? 0).toFixed(2)}
+                    {CURRENCY_PREFIX}
+                    &nbsp;
+                    {Number(cartData?.gstAmount ?? 0).toLocaleString(
+                      undefined,
+                      { minimumFractionDigits: 0 }
+                    )}
                   </p>
                 </div>
               </div>
               <div className="grand-total">
                 <p className="key">Grand Total</p>
                 <p className="value">
-                  {CURRENCY_PREFIX}{' '}
-                  {Number(cartData?.grandTotal ?? 0).toFixed(2)}
+                  {CURRENCY_PREFIX}
+                  &nbsp;
+                  {Number(cartData?.grandTotal ?? 0).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                  })}
                 </p>
               </div>
               <Button
@@ -530,12 +578,6 @@ function MyBasketPage() {
                     setShowAlert(true);
                     return;
                   }
-                  /* if (!PickUp && !DropOff) {
-                    setAlertSeverity('error');
-                    setAlertMessage('Pickup Date time is Required');
-                    setShowAlert(true);
-                    return;
-                  } */
                   setOpenPaymentSelectPopup(true);
                 }}
                 color="inherit"

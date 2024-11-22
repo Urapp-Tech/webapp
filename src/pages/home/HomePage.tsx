@@ -178,7 +178,6 @@ function HomePage() {
                     <Button
                       className="btn-add w-full rounded-[0.625rem] bg-primary text-sm font-semibold text-foreground sm:w-auto"
                       variant="contained"
-                      // endIcon={<ShoppingBagOutlinedIcon />}
                       onClick={() => bookService(item.id)}
                     >
                       Book

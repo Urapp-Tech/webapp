@@ -1,18 +1,13 @@
 import { AlertColor } from '@mui/material/Alert';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Loader from '../../components/common/Loader';
-import {
-  useLazyOrderReviewItemsQuery,
-  useReviewItemMutation,
-} from '../../redux/features/orderStateSliceAPI';
-import { OrderReviewItem } from '../../types/order.types';
-import AppointmentRatingCard from './AppointmentRatingCard';
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import { EmployeeRatingData } from '../../interfaces/employee-ratings';
 import {
   fetchEmployeeRatingSlice,
   updateEmployeeRatingSlice,
 } from '../../redux/features/employeeRatingSlice';
-import { EmployeeRatingData } from '../../interfaces/employee-ratings';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import AppointmentRatingCard from './AppointmentRatingCard';
 
 type AppointmentReviewProps = {
   setAlertSeverity: React.Dispatch<React.SetStateAction<AlertColor>>;

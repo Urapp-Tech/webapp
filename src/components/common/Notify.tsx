@@ -21,7 +21,6 @@ function Notify({ isOpen, setIsOpen, displayMessage }: NotifyProps) {
       return;
     }
     setIsOpen(false);
-    // setOpen(isOpen);
   };
 
   return (
@@ -29,8 +28,7 @@ function Notify({ isOpen, setIsOpen, displayMessage }: NotifyProps) {
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       open={isOpen}
       autoHideDuration={2000}
-      // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
-      sx={{ zIndex: 9999999999999999999 }}
+      sx={{ zIndex: 999999 }}
       onClose={handleClose}
     >
       <Alert

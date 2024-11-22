@@ -16,18 +16,21 @@ export type CartData = {
   appUser: string | null;
   appUserAddress: string | null;
   appUserDevice: string;
+  branch: string | null;
   createdDate: string;
+  discount: string;
+  discountLoyaltyCoins: string;
   dropDateTime: string | null;
   grandTotal: string;
   gstAmount: string;
   gstPercentage: number;
   id: string;
   pickupDateTime: string | null;
-  voucherCode: string | null;
   status: string;
   tenant: string;
   totalAmount: string;
   updatedDate: string;
+  voucherCode: string | null;
 };
 export interface CartState {
   cartItems: Array<CartItem>;

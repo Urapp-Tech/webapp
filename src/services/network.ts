@@ -1,7 +1,7 @@
 import axios from 'axios';
 // eslint-disable-next-line import/no-cycle
-import { store } from '../redux/store';
 import { logout } from '../redux/features/authStateSlice';
+import { store } from '../redux/store';
 import { BASE_URL } from '../utilities/constant';
 
 const network = axios.create();

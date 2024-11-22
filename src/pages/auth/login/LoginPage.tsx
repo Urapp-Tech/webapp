@@ -106,7 +106,6 @@ function LoginPage() {
     }
     dispatch(setUserAddressList(addressResult.data.data));
   };
-  // console.log('login res', login);
 
   const email = register('email');
   const password = register('password');
@@ -188,7 +187,6 @@ function LoginPage() {
             <div className="flex max-h-[29px] w-full max-w-[600px] items-center justify-center px-[25px] py-[40px]">
               {systemConfigData?.tenantConfig?.logo ? (
                 <img
-                  // src={systemConfig?.shopLogo ?? systemConfig?.shopName}
                   src={systemConfigData.tenantConfig.logo}
                   alt="urlaundry"
                   className="mt-10 h-auto w-[100px] object-contain"

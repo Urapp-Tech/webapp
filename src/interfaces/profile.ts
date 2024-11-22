@@ -17,4 +17,5 @@ export interface UserData {
   lastName: string;
   postalCode: string;
   userType: string;
+  loyaltyCoins: string;
 }

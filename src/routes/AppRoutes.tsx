@@ -1,28 +1,9 @@
 /* eslint-disable import/prefer-default-export */
 import { lazy, Suspense } from 'react';
 import { Navigate, RouteObject } from 'react-router-dom';
-import AuthLayout from '../components/layout/AuthLayout';
-// import LoginPage from '../pages/auth/login/LoginPage';
-// import SignUpPage from '../pages/auth/sign-up/SignUpPage';
-// import ForgotPasswordPage from '../pages/auth/forgot-password/ForgotPasswordPage';
-// import OTPVerificationPage from '../pages/auth/otp-verification/OTPVerificationPage';
-// import ResetPasswordPage from '../pages/auth/reset-password/ResetPasswordPage';
-import MainLayout from '../components/layout/MainLayout';
-// import HomePage from '../pages/home/HomePage';
-// import OrdersPage from '../pages/orders/OrdersHistoryPage';
-// import PaymentSettingPage from '../pages/payment-setting/PaymentSettingPage';
-// import DeliveryAddressPage from '../pages/delivery-address/DeliveryAddressPage';
-// import AccountPage from '../pages/account/AccountPage';
-// import FAQSPage from '../pages/faqs/FAQSPage';
-// import TermsAndConditionPage from '../pages/terms-and-conditions/TermsAndConditionPage';
-// import PrivacyPolicyPage from '../pages/privacy-policy/PrivacyPolicyPage';
-// import MyBasketPage from '../pages/my-basket/MyBasketPage';
-// import OrderDetailsPage from '../pages/orders/OrderDetailsPage';
-// import AccountProfilePage from '../pages/account/AccountProfilePage';
-// import AccountChatPage from '../pages/account/AccountChatPage';
-// import AccountHelpPage from '../pages/account/AccountHelpPage';
-// import AccountSettingsPage from '../pages/account/AccountSettingPage';
 import Loader from '../components/common/Loader';
+import AuthLayout from '../components/layout/AuthLayout';
+import MainLayout from '../components/layout/MainLayout';
 import Page404 from '../pages/404/404';
 import AddAppointmentPage from '../pages/appointments/AddAppointmentPage';
 import HomeItemDetail from '../pages/home/HomeItemDetail';
@@ -69,9 +50,7 @@ const AccountHelpPage = lazy(() => import('../pages/account/AccountHelpPage'));
 const AccountSettingsPage = lazy(
   () => import('../pages/account/AccountSettingPage')
 );
-// const StoreAppointmentsList = lazy(
-//   () => import('../pages/appointments/StoreAppointmentsList')
-// );
+
 const AppointmentHistoryPage = lazy(
   () => import('../pages/appointments/AppointmentHistoryPage')
 );

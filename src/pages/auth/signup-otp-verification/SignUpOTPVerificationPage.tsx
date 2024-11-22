@@ -67,7 +67,6 @@ function SignUpOTPVerificationPage() {
           <div className="max-h-[29px] w-full max-w-[150px] px-[25px] py-[40px]">
             {systemConfigData?.tenantConfig?.logo ? (
               <img
-                // src={systemConfig?.shopLogo ?? systemConfig?.shopName}
                 src={systemConfigData.tenantConfig.logo}
                 alt="urlaundry"
                 className="h-auto w-full object-contain"

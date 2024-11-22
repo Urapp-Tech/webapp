@@ -84,3 +84,66 @@ export type HomeCatItem = {
 export type AppOrder = {
   branch: string;
 };
+
+export type GetOrderDetailsResponse = {
+  success: boolean;
+  code: number;
+  message: string;
+  data: OrderDetails;
+};
+
+export type OrderDetails = {
+  orderNumber: string;
+  createdDate: string;
+  discountLoyaltyCoins: string;
+  discount: string;
+  dropDateTime: string;
+  fulfillmentMethod: string;
+  grandTotal: string;
+  gstAmount: string;
+  gstPercentage: number;
+  id: string;
+  isCommission: boolean;
+  paymentStatus: string;
+  paymentType: string;
+  pickupDateTime: string;
+  status: string;
+  totalAmount: string;
+  updatedDate: string;
+  appOrderStatuses: AppOrderStatus[];
+  user: User;
+  userAddress: UserAddress;
+  driver: null;
+  orderItems: OrderItem[];
+};
+
+export type OrderItem = {
+  id: string;
+  quantity: number;
+  createdDate: string;
+  updatedDate: string;
+  unitPrice: number;
+  appOrder: string;
+  itemId: string;
+  isRating: boolean;
+  name: string;
+  icon: string;
+};
+
+export type UserAddress = {
+  address: string;
+};
+
+export type User = {
+  email: string;
+  firstName: string;
+  lastName: string;
+};
+
+export type AppOrderStatus = {
+  id: string;
+  appOrder: string;
+  createdDate: string;
+  status: string;
+  appUser: string;
+};

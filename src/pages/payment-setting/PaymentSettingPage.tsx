@@ -80,31 +80,31 @@ function PaymentSettingPage() {
             ) : null}
           </button>
           {/* <button
-            type="button"
-            onClick={() => setSelectedPaymentOption('CASH')}
-            className={genButtonClasses(selectedPaymentOption === 'CASH')}
-          >
-            {selectedPaymentOption === 'CASH' ? (
-              <div className="absolute -bottom-3 left-[calc(75%_+_1rem)] z-10 aspect-square w-5 rotate-45 border-2 border-t-0 border-l-0 border-solid border-neutral-900 bg-gray-50" />
-            ) : null}
+                  type="button"
+                  onClick={() => setSelectedPaymentOption('CASH')}
+                  className={genButtonClasses(selectedPaymentOption === 'CASH')}
+              >
+                  {selectedPaymentOption === 'CASH' ? (
+                    <div className="absolute -bottom-3 left-[calc(75%_+_1rem)] z-10 aspect-square w-5 rotate-45 border-2 border-t-0 border-l-0 border-solid border-neutral-900 bg-gray-50" />
+                  ) : null}
 
-            <img
-              src={assets.images.cash}
-              className="mr-4 aspect-square w-10 object-contain"
-              alt=""
-            />
-            <div className="flex-grow text-start">
-              <div className="font-open-sans text-base font-semibold text-neutral-900">
-                Cash Payment
-              </div>
-            </div>
-            {selectedPaymentOption === 'CASH' ? (
-              <CheckCircleOutlinedIcon
-                color="inherit"
-                className="text-neutral-900"
-              />
-            ) : null}
-          </button> */}
+                  <img
+                    src={assets.images.cash}
+                    className="mr-4 aspect-square w-10 object-contain"
+                    alt=""
+                  />
+                  <div className="flex-grow text-start">
+                    <div className="font-open-sans text-base font-semibold text-neutral-900">
+                        Cash Payment
+                    </div>
+                  </div>
+                  {selectedPaymentOption === 'CASH' ? (
+                    <CheckCircleOutlinedIcon
+                        color="inherit"
+                        className="text-neutral-900"
+                    />
+                  ) : null}
+              </button> */}
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div className="saved-cards">

@@ -15,6 +15,7 @@ type RegisteredUser = {
   postalCode: string;
   userType: string;
   token: string;
+  loyaltyCoins: string;
 };
 
 type AuthState = {

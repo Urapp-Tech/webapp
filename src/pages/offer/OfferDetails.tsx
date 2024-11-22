@@ -1,18 +1,17 @@
 /* eslint-disable react/no-danger */
 import { memo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import CustomHeader from '../../components/common/CustomHeader';
+import Loader from '../../components/common/Loader';
 import {
   fetchBanners,
   setSingleBanners,
 } from '../../redux/features/bannerSlice';
-import CustomHeader from '../../components/common/CustomHeader';
-import Loader from '../../components/common/Loader';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 
 function OfferDetails() {
   const { id } = useParams();
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  const { single_banner, banners, loading } = useAppSelector(
+  const { singleBanner, banners, loading } = useAppSelector(
     (x) => x.bannerState
   );
   const dispatch = useAppDispatch();
@@ -40,12 +39,12 @@ function OfferDetails() {
       <div className="grid grid-cols-12 gap-8 bg-white shadow-xl  xl:gap-4">
         <div className="col-span-12 rounded-xl p-10  md:col-span-7">
           <h1 className="h1 block text-6xl font-bold text-primary">
-            {single_banner?.name}
+            {singleBanner?.name}
           </h1>
-          <p>{single_banner?.shortDesc}</p>
+          <p>{singleBanner?.shortDesc}</p>
           <div
             className=""
-            dangerouslySetInnerHTML={{ __html: `${single_banner?.pageDetail}` }}
+            dangerouslySetInnerHTML={{ __html: `${singleBanner?.pageDetail}` }}
           />
         </div>
         <div className="col-span-5">
@@ -53,7 +52,7 @@ function OfferDetails() {
             <img
               alt="rating-detail"
               className="h-full w-full object-contain"
-              src={single_banner?.banner}
+              src={singleBanner?.banner}
             />
           </div>
         </div>

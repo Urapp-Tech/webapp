@@ -6,6 +6,8 @@ import * as z from 'zod';
 import Loader from '../../components/common/Loader';
 import AlertBox from '../../components/common/SnackBar';
 import useAlert from '../../hooks/alert.hook';
+import { login } from '../../redux/features/authStateSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import profileService from '../../services/profile.service';
 import promiseHandler from '../../utilities/promise-handler';
 
@@ -13,7 +15,7 @@ const accountProfileSchema = z.object({
   firstName: z.string().min(1, { message: 'First Name is required' }),
   lastName: z.string().min(1, { message: 'Last Name is required' }),
   email: z.string().min(1, { message: 'Email is required' }).email(),
-  phoneNumber: z.string().min(1, { message: 'Phone Number is required' }),
+  phone: z.string().min(1, { message: 'Phone Number is required' }),
   postalCode: z.string().min(1, { message: 'Postal Code is required' }),
   currentPassword: z.string().optional(),
   newPassword: z.string().optional(),
@@ -41,6 +43,9 @@ function AccountProfilePage() {
     formState: { errors },
   } = useForm(formOptions);
 
+  const user = useAppSelector((state) => state.authState.user);
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     async function userProfile() {
       setIsLoading(true);
@@ -61,14 +66,27 @@ function AccountProfilePage() {
         setShowAlert(true);
         return;
       }
+      if (user)
+        dispatch(
+          login({
+            ...user,
+            firstName: getUserProfileResult.data.data.firstName,
+            lastName: getUserProfileResult.data.data.lastName,
+            email: getUserProfileResult.data.data.email,
+            postalCode: getUserProfileResult.data.data.postalCode,
+            phone: getUserProfileResult.data.data.phone,
+            loyaltyCoins: getUserProfileResult.data.data.loyaltyCoins,
+          })
+        );
       setValue('firstName', getUserProfileResult.data.data.firstName);
       setValue('lastName', getUserProfileResult.data.data.lastName);
       setValue('email', getUserProfileResult.data.data.email);
       setValue('postalCode', getUserProfileResult.data.data.postalCode);
-      setValue('phoneNumber', getUserProfileResult.data.data.phone);
+      setValue('phone', getUserProfileResult.data.data.phone);
     }
-    userProfile().then();
+    userProfile().catch((error) => console.error('error :>> ', error));
   }, []);
+
   const onSubmitSuccess = async (data: FieldValues) => {
     const newData = data as AccountProfileType;
     if (newData.newPassword !== newData.verifyPassword) {
@@ -203,7 +221,7 @@ function AccountProfilePage() {
                 )}
               />
               <Controller
-                name="phoneNumber"
+                name="phone"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
@@ -219,9 +237,9 @@ function AccountProfilePage() {
                       ref={field.ref}
                       value={field.value}
                     />
-                    {errors.phoneNumber && (
+                    {errors.phone && (
                       <p className="font-open-sans text-xs text-red-500">
-                        {errors.phoneNumber.message?.toString()}
+                        {errors.phone.message?.toString()}
                       </p>
                     )}
                   </label>

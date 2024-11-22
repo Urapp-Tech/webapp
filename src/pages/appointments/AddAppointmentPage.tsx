@@ -71,10 +71,10 @@ export default function AddAppointmentPage() {
     navigate('/auth/login');
   }
   const officeTimingOut = useAppSelector(
-    (x) => x.deviceStates.tenantConfig?.officeTimeOut
+    (x) => x.branchState.branch?.officeTimeOut
   );
   const officeTimingIn = useAppSelector(
-    (x) => x.deviceStates.tenantConfig?.officeTimeIn
+    (x) => x.branchState.branch?.officeTimeIn
   );
   const catLovlist = useAppSelector(
     (state) => state.storeCategoryState.categories
@@ -312,8 +312,6 @@ export default function AddAppointmentPage() {
       return initials?.join('');
     };
 
-    // eslint-disable-next-line no-console
-    console.log('tempAppointmentBookedTime', tempAppointmentBookedTime);
     return (
       <div
         onClick={onHandleBarber}

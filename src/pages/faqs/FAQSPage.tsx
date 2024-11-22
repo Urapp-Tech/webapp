@@ -8,122 +8,122 @@ const faqs = [
   {
     question: 'What if there’s no care label on an item ?',
     answer: `  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officia
-              culpa est cumque aut unde, soluta aperiam illum. Alias saepe fuga
-              corporis nisi vitae asperiores magni, fugit, perferendis inventore
-              aspernatur quisquam veritatis voluptates sed amet atque ullam,
-              nobis quas minima error beatae reprehenderit animi minus cum
-              officia! Magnam officia libero quidem sint rerum labore ab
-              exercitationem corporis totam fugiat, corrupti quas asperiores
-              blanditiis, nobis dolor officiis pariatur, nam maxime. Facere
-              perferendis adipisci iure velit id nesciunt, quaerat nam
-              perspiciatis atque ratione culpa tenetur voluptatum necessitatibus
-              temporibus ex porro sint ut at dolorum quo aut odit officia? Sunt
-              necessitatibus asperiores harum nesciunt.`,
+                    culpa est cumque aut unde, soluta aperiam illum. Alias saepe fuga
+                    corporis nisi vitae asperiores magni, fugit, perferendis inventore
+                    aspernatur quisquam veritatis voluptates sed amet atque ullam,
+                    nobis quas minima error beatae reprehenderit animi minus cum
+                    officia! Magnam officia libero quidem sint rerum labore ab
+                    exercitationem corporis totam fugiat, corrupti quas asperiores
+                    blanditiis, nobis dolor officiis pariatur, nam maxime. Facere
+                    perferendis adipisci iure velit id nesciunt, quaerat nam
+                    perspiciatis atque ratione culpa tenetur voluptatum necessitatibus
+                    temporibus ex porro sint ut at dolorum quo aut odit officia? Sunt
+                    necessitatibus asperiores harum nesciunt.`,
   },
   {
     question: 'Will my items be hung or folded too ?',
     answer: `  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officia
-              culpa est cumque aut unde, soluta aperiam illum. Alias saepe fuga
-              corporis nisi vitae asperiores magni, fugit, perferendis inventore
-              aspernatur quisquam veritatis voluptates sed amet atque ullam,
-              nobis quas minima error beatae reprehenderit animi minus cum
-              officia! Magnam officia libero quidem sint rerum labore ab
-              exercitationem corporis totam fugiat, corrupti quas asperiores
-              blanditiis, nobis dolor officiis pariatur, nam maxime. Facere
-              perferendis adipisci iure velit id nesciunt, quaerat nam
-              perspiciatis atque ratione culpa tenetur voluptatum necessitatibus
-              temporibus ex porro sint ut at dolorum quo aut odit officia? Sunt
-              necessitatibus asperiores harum nesciunt.`,
+                    culpa est cumque aut unde, soluta aperiam illum. Alias saepe fuga
+                    corporis nisi vitae asperiores magni, fugit, perferendis inventore
+                    aspernatur quisquam veritatis voluptates sed amet atque ullam,
+                    nobis quas minima error beatae reprehenderit animi minus cum
+                    officia! Magnam officia libero quidem sint rerum labore ab
+                    exercitationem corporis totam fugiat, corrupti quas asperiores
+                    blanditiis, nobis dolor officiis pariatur, nam maxime. Facere
+                    perferendis adipisci iure velit id nesciunt, quaerat nam
+                    perspiciatis atque ratione culpa tenetur voluptatum necessitatibus
+                    temporibus ex porro sint ut at dolorum quo aut odit officia? Sunt
+                    necessitatibus asperiores harum nesciunt.`,
   },
   {
     question: 'What if there’s no care label on an item ?',
     answer: `  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officia
-              culpa est cumque aut unde, soluta aperiam illum. Alias saepe fuga
-              corporis nisi vitae asperiores magni, fugit, perferendis inventore
-              aspernatur quisquam veritatis voluptates sed amet atque ullam,
-              nobis quas minima error beatae reprehenderit animi minus cum
-              officia! Magnam officia libero quidem sint rerum labore ab
-              exercitationem corporis totam fugiat, corrupti quas asperiores
-              blanditiis, nobis dolor officiis pariatur, nam maxime. Facere
-              perferendis adipisci iure velit id nesciunt, quaerat nam
-              perspiciatis atque ratione culpa tenetur voluptatum necessitatibus
-              temporibus ex porro sint ut at dolorum quo aut odit officia? Sunt
-              necessitatibus asperiores harum nesciunt.`,
+                    culpa est cumque aut unde, soluta aperiam illum. Alias saepe fuga
+                    corporis nisi vitae asperiores magni, fugit, perferendis inventore
+                    aspernatur quisquam veritatis voluptates sed amet atque ullam,
+                    nobis quas minima error beatae reprehenderit animi minus cum
+                    officia! Magnam officia libero quidem sint rerum labore ab
+                    exercitationem corporis totam fugiat, corrupti quas asperiores
+                    blanditiis, nobis dolor officiis pariatur, nam maxime. Facere
+                    perferendis adipisci iure velit id nesciunt, quaerat nam
+                    perspiciatis atque ratione culpa tenetur voluptatum necessitatibus
+                    temporibus ex porro sint ut at dolorum quo aut odit officia? Sunt
+                    necessitatibus asperiores harum nesciunt.`,
   },
   {
     question: 'Will my items be hung or folded too ?',
     answer: `  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officia
-              culpa est cumque aut unde, soluta aperiam illum. Alias saepe fuga
-              corporis nisi vitae asperiores magni, fugit, perferendis inventore
-              aspernatur quisquam veritatis voluptates sed amet atque ullam,
-              nobis quas minima error beatae reprehenderit animi minus cum
-              officia! Magnam officia libero quidem sint rerum labore ab
-              exercitationem corporis totam fugiat, corrupti quas asperiores
-              blanditiis, nobis dolor officiis pariatur, nam maxime. Facere
-              perferendis adipisci iure velit id nesciunt, quaerat nam
-              perspiciatis atque ratione culpa tenetur voluptatum necessitatibus
-              temporibus ex porro sint ut at dolorum quo aut odit officia? Sunt
-              necessitatibus asperiores harum nesciunt.`,
+                    culpa est cumque aut unde, soluta aperiam illum. Alias saepe fuga
+                    corporis nisi vitae asperiores magni, fugit, perferendis inventore
+                    aspernatur quisquam veritatis voluptates sed amet atque ullam,
+                    nobis quas minima error beatae reprehenderit animi minus cum
+                    officia! Magnam officia libero quidem sint rerum labore ab
+                    exercitationem corporis totam fugiat, corrupti quas asperiores
+                    blanditiis, nobis dolor officiis pariatur, nam maxime. Facere
+                    perferendis adipisci iure velit id nesciunt, quaerat nam
+                    perspiciatis atque ratione culpa tenetur voluptatum necessitatibus
+                    temporibus ex porro sint ut at dolorum quo aut odit officia? Sunt
+                    necessitatibus asperiores harum nesciunt.`,
   },
   {
     question: 'What if there’s no care label on an item ?',
     answer: `  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officia
-              culpa est cumque aut unde, soluta aperiam illum. Alias saepe fuga
-              corporis nisi vitae asperiores magni, fugit, perferendis inventore
-              aspernatur quisquam veritatis voluptates sed amet atque ullam,
-              nobis quas minima error beatae reprehenderit animi minus cum
-              officia! Magnam officia libero quidem sint rerum labore ab
-              exercitationem corporis totam fugiat, corrupti quas asperiores
-              blanditiis, nobis dolor officiis pariatur, nam maxime. Facere
-              perferendis adipisci iure velit id nesciunt, quaerat nam
-              perspiciatis atque ratione culpa tenetur voluptatum necessitatibus
-              temporibus ex porro sint ut at dolorum quo aut odit officia? Sunt
-              necessitatibus asperiores harum nesciunt.`,
+                    culpa est cumque aut unde, soluta aperiam illum. Alias saepe fuga
+                    corporis nisi vitae asperiores magni, fugit, perferendis inventore
+                    aspernatur quisquam veritatis voluptates sed amet atque ullam,
+                    nobis quas minima error beatae reprehenderit animi minus cum
+                    officia! Magnam officia libero quidem sint rerum labore ab
+                    exercitationem corporis totam fugiat, corrupti quas asperiores
+                    blanditiis, nobis dolor officiis pariatur, nam maxime. Facere
+                    perferendis adipisci iure velit id nesciunt, quaerat nam
+                    perspiciatis atque ratione culpa tenetur voluptatum necessitatibus
+                    temporibus ex porro sint ut at dolorum quo aut odit officia? Sunt
+                    necessitatibus asperiores harum nesciunt.`,
   },
   {
     question: 'Will my items be hung or folded too ?',
     answer: `  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officia
-              culpa est cumque aut unde, soluta aperiam illum. Alias saepe fuga
-              corporis nisi vitae asperiores magni, fugit, perferendis inventore
-              aspernatur quisquam veritatis voluptates sed amet atque ullam,
-              nobis quas minima error beatae reprehenderit animi minus cum
-              officia! Magnam officia libero quidem sint rerum labore ab
-              exercitationem corporis totam fugiat, corrupti quas asperiores
-              blanditiis, nobis dolor officiis pariatur, nam maxime. Facere
-              perferendis adipisci iure velit id nesciunt, quaerat nam
-              perspiciatis atque ratione culpa tenetur voluptatum necessitatibus
-              temporibus ex porro sint ut at dolorum quo aut odit officia? Sunt
-              necessitatibus asperiores harum nesciunt.`,
+                    culpa est cumque aut unde, soluta aperiam illum. Alias saepe fuga
+                    corporis nisi vitae asperiores magni, fugit, perferendis inventore
+                    aspernatur quisquam veritatis voluptates sed amet atque ullam,
+                    nobis quas minima error beatae reprehenderit animi minus cum
+                    officia! Magnam officia libero quidem sint rerum labore ab
+                    exercitationem corporis totam fugiat, corrupti quas asperiores
+                    blanditiis, nobis dolor officiis pariatur, nam maxime. Facere
+                    perferendis adipisci iure velit id nesciunt, quaerat nam
+                    perspiciatis atque ratione culpa tenetur voluptatum necessitatibus
+                    temporibus ex porro sint ut at dolorum quo aut odit officia? Sunt
+                    necessitatibus asperiores harum nesciunt.`,
   },
   {
     question: 'What if there’s no care label on an item ?',
     answer: `  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officia
-              culpa est cumque aut unde, soluta aperiam illum. Alias saepe fuga
-              corporis nisi vitae asperiores magni, fugit, perferendis inventore
-              aspernatur quisquam veritatis voluptates sed amet atque ullam,
-              nobis quas minima error beatae reprehenderit animi minus cum
-              officia! Magnam officia libero quidem sint rerum labore ab
-              exercitationem corporis totam fugiat, corrupti quas asperiores
-              blanditiis, nobis dolor officiis pariatur, nam maxime. Facere
-              perferendis adipisci iure velit id nesciunt, quaerat nam
-              perspiciatis atque ratione culpa tenetur voluptatum necessitatibus
-              temporibus ex porro sint ut at dolorum quo aut odit officia? Sunt
-              necessitatibus asperiores harum nesciunt.`,
+                    culpa est cumque aut unde, soluta aperiam illum. Alias saepe fuga
+                    corporis nisi vitae asperiores magni, fugit, perferendis inventore
+                    aspernatur quisquam veritatis voluptates sed amet atque ullam,
+                    nobis quas minima error beatae reprehenderit animi minus cum
+                    officia! Magnam officia libero quidem sint rerum labore ab
+                    exercitationem corporis totam fugiat, corrupti quas asperiores
+                    blanditiis, nobis dolor officiis pariatur, nam maxime. Facere
+                    perferendis adipisci iure velit id nesciunt, quaerat nam
+                    perspiciatis atque ratione culpa tenetur voluptatum necessitatibus
+                    temporibus ex porro sint ut at dolorum quo aut odit officia? Sunt
+                    necessitatibus asperiores harum nesciunt.`,
   },
   {
     question: 'Will my items be hung or folded too ?',
     answer: `  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officia
-              culpa est cumque aut unde, soluta aperiam illum. Alias saepe fuga
-              corporis nisi vitae asperiores magni, fugit, perferendis inventore
-              aspernatur quisquam veritatis voluptates sed amet atque ullam,
-              nobis quas minima error beatae reprehenderit animi minus cum
-              officia! Magnam officia libero quidem sint rerum labore ab
-              exercitationem corporis totam fugiat, corrupti quas asperiores
-              blanditiis, nobis dolor officiis pariatur, nam maxime. Facere
-              perferendis adipisci iure velit id nesciunt, quaerat nam
-              perspiciatis atque ratione culpa tenetur voluptatum necessitatibus
-              temporibus ex porro sint ut at dolorum quo aut odit officia? Sunt
-              necessitatibus asperiores harum nesciunt.`,
+                    culpa est cumque aut unde, soluta aperiam illum. Alias saepe fuga
+                    corporis nisi vitae asperiores magni, fugit, perferendis inventore
+                    aspernatur quisquam veritatis voluptates sed amet atque ullam,
+                    nobis quas minima error beatae reprehenderit animi minus cum
+                    officia! Magnam officia libero quidem sint rerum labore ab
+                    exercitationem corporis totam fugiat, corrupti quas asperiores
+                    blanditiis, nobis dolor officiis pariatur, nam maxime. Facere
+                    perferendis adipisci iure velit id nesciunt, quaerat nam
+                    perspiciatis atque ratione culpa tenetur voluptatum necessitatibus
+                    temporibus ex porro sint ut at dolorum quo aut odit officia? Sunt
+                    necessitatibus asperiores harum nesciunt.`,
   },
 ];
 

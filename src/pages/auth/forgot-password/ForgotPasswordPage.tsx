@@ -1,20 +1,18 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
+import { Button } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import InputLabel from '@mui/material/InputLabel';
-import { Controller, useForm } from 'react-hook-form';
-import { NavLink, useNavigate } from 'react-router-dom';
-import * as z from 'zod';
-import { Button } from '@mui/material';
 import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import * as z from 'zod';
 import assets from '../../../assets';
+import FastSpinner from '../../../components/common/CustomSpinner';
 import AlertBox from '../../../components/common/SnackBar';
 import useAlert from '../../../hooks/alert.hook';
+import { useAppSelector } from '../../../redux/redux-hooks';
 import authService from '../../../services/auth.service';
 import promiseHandler from '../../../utilities/promise-handler';
-import { useAppSelector } from '../../../redux/redux-hooks';
-import FastSpinner from '../../../components/common/CustomSpinner';
 
 const forgotPasswordSchema = z.object({
   email: z
@@ -78,75 +76,6 @@ function ForgotPasswordPage() {
 
   return (
     <>
-      {/*      <AlertBox
-        msg={alertMessage}
-        setSeverity={alertSeverity}
-        alertOpen={showAlert}
-        setAlertOpen={setShowAlert}
-      />
-      <div className="fixed-at-top-left">
-        <NavLink to="../login" className="go-back">
-          <ArrowBackRoundedIcon className="icon-arrow" />
-        </NavLink>
-        <img className="logo" src={assets.images.logo} alt="" />
-      </div>
-      <div className="auth-form">
-        <div className="custom-width">
-          <h4 className="heading">Forgot Password</h4>
-          <p className="desc">
-            Enter registered email to receive password reset link
-          </p>
-          <Controller
-            name="email"
-            control={control}
-            defaultValue=""
-            rules={{ required: 'email is required' }}
-            render={({ field }) => (
-              <FormControl className="field mt-8 lg:mt-10" variant="standard">
-                <InputLabel className="label" htmlFor={field.name}>
-                  Email
-                </InputLabel>
-                <Input
-                  type="email"
-                  className="input-container"
-                  id={field.name}
-                  name={field.name}
-                  onBlur={field.onBlur}
-                  onChange={field.onChange}
-                  ref={field.ref}
-                  value={field.value}
-                />
-                {errors.email && (
-                  <p className="font-open-sans text-xs text-red-500">
-                    {errors.email.message?.toString()}
-                  </p>
-                )}
-              </FormControl>
-            )}
-          />
-
-          <button
-            onClick={handleSubmit(onSubmit)}
-            type="button"
-            className="btn-submit mt-8 lg:mt-10"
-          >
-            Submit
-          </button>
-        </div>
-      </div>
-
-      <div className="join-community forgot-pass-community">
-        <div className="content-container">
-          <div className="content">
-            <h1 className="heading">Join Our Community</h1>
-            <p className="desc">
-              Lorem ipusm dolor sit amet, coectetuer adipiscing elit sed diam
-              nonummy et nibh euismod
-            </p>
-          </div>
-          <img className="" src={assets.images.forgotPassImage} alt="" />
-        </div>
-                </div> */}
       <AlertBox
         msg={alertMessage}
         setSeverity={alertSeverity}
@@ -159,7 +88,6 @@ function ForgotPasswordPage() {
             <div className="flex max-h-[29px] w-full max-w-[600px] items-center justify-center px-[25px] py-[40px]">
               {systemConfigData?.tenantConfig?.logo ? (
                 <img
-                  // src={systemConfig?.shopLogo ?? systemConfig?.shopName}
                   src={systemConfigData.tenantConfig.logo}
                   alt="urlaundry"
                   className="mt-10 h-auto w-[100px] object-contain"
@@ -169,7 +97,6 @@ function ForgotPasswordPage() {
               )}
             </div>
             <div className="pt-[100px]">
-              {/* <h1 className='text-[36px] text-black leading-[normal] font-bold capitalize mb-4 text-center'>log in</h1> */}
               <div className=" text-center">
                 <img
                   src={assets.images.envelopeMsg}

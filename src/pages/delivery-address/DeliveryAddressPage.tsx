@@ -413,7 +413,7 @@ function DeliveryAddressPage() {
                           handleAddressClick(index);
                         }
                       }}
-                      role="button" // Add a role attribute
+                      role="button"
                       tabIndex={0}
                     >
                       {item.isActive ? (
@@ -540,7 +540,7 @@ function DeliveryAddressPage() {
                         handleAddressClick(index);
                       }
                     }}
-                    role="button" // Add a role attribute
+                    role="button"
                     tabIndex={0}
                   >
                     <input type="radio" name={el.name} />

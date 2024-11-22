@@ -169,7 +169,6 @@ function Sidebar({ openDrawer = true }: Props) {
 
   return (
     <Drawer
-      // variant="permanent"
       variant={isMobile ? 'temporary' : 'permanent'}
       open={openDrawer}
       PaperProps={{
@@ -179,7 +178,6 @@ function Sidebar({ openDrawer = true }: Props) {
     >
       <div className="mb-5">
         {links.map((link) => {
-          // If user exists, show all links, else show only Home link FAQs Link
           if (LoginUser || InSecureRouts.find((r) => r === link.name)) {
             return (
               <NavLink
@@ -202,7 +200,7 @@ function Sidebar({ openDrawer = true }: Props) {
               />
             );
           }
-          return null; // Skip rendering links other than Home & FAQs if user is not logged in
+          return null;
         })}
         {!isBranchSingle && (
           <button

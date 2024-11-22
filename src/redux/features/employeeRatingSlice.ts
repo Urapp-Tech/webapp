@@ -1,19 +1,19 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { EmployeeRatingData } from '../../interfaces/employee-ratings';
 // eslint-disable-next-line import/no-cycle
 import employeeRatingService from '../../services/employee-ratings.service';
-import { EmployeeRatingData } from '../../interfaces/employee-ratings';
 
 type InitialState = {
   employeeRatings: EmployeeRatingData[];
   loading: boolean;
   notify: boolean;
-  total_count: number;
+  totalCount: number;
   notifyMessage: { text?: string; type?: string };
 };
 
 const initialState: InitialState = {
   employeeRatings: [],
-  total_count: 0,
+  totalCount: 0,
   loading: false,
   notify: false,
   notifyMessage: {},
@@ -68,7 +68,7 @@ export const employeeRatingSlice = createSlice({
       .addCase(fetchEmployeeRatingSlice.fulfilled, (state, action) => {
         state.loading = false;
         state.employeeRatings = action.payload?.data || [];
-        state.total_count =
+        state.totalCount =
           action.payload?.data?.totalCount || action.payload?.data?.length || 0;
       })
       .addCase(fetchEmployeeRatingSlice.rejected, (state, action: any) => {

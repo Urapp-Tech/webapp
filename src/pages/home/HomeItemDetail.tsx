@@ -36,7 +36,6 @@ function HomeItemDetail() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  // RTK Quries
   const [allRatingReviewTrigger, allRatingReviewResult] =
     useLazyGetAllRatingReviewsQuery();
   const [ratingStarListTrigger, ratingStarListResult] =
@@ -44,7 +43,6 @@ function HomeItemDetail() {
   const [subCategoryItemTrigger, subCategoryItemResult] =
     useLazyGetSubCategoryItemQuery();
 
-  // response
   const { isLoading: isSubCategoryItemLoading, data: subCategoryItemData } =
     subCategoryItemResult;
   const { isLoading: isRatingStarListResult, data: ratingStarListData } =
@@ -180,7 +178,6 @@ function HomeItemDetail() {
 
   const addToBasketHandler = (tempCartData: any) => {
     dispatch(addToCart(tempCartData));
-    // navigate('../home');
   };
 
   return (
@@ -351,10 +348,7 @@ function HomeItemDetail() {
             })
           )}
         </div>
-        {list?.length < 1 ? (
-          <p>No Review Records</p>
-        ) : // <CustomText noroundedborders text="No Records Found" />
-        null}
+        {list?.length < 1 ? <p>No Review Records</p> : null}
         <div className="mt-3 flex w-[100%] justify-end py-3">
           {list?.length > size && (
             <Button

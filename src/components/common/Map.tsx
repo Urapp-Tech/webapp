@@ -9,16 +9,9 @@ type Props = {
   center: google.maps.LatLngLiteral;
   zoom: number;
   handleDragged?: (newPosition: google.maps.LatLngLiteral) => void;
-  // onAddressChange: (data: string) => void
 };
 
-function Map({
-  center,
-  zoom,
-  handleDragged,
-  // onAddressChange,
-  ...props
-}: Props) {
+function Map({ center, zoom, handleDragged, ...props }: Props) {
   const mapRef = useRef<HTMLDivElement>(null);
   const [geoCoder, setGeoCoder] = useState<google.maps.Geocoder | null>(null);
   const [address, setAddress] = useState<string | any>('');
@@ -114,7 +107,6 @@ function Map({
                   if (results && results[0]) {
                     const newFormattedAddress: string =
                       results[0].formatted_address;
-                    // onAddressChange(newFormattedAddress) // Call the callback to update the address in DeliveryAddressPage
                   }
                 }
               }

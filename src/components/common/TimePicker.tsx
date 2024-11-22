@@ -25,10 +25,8 @@ const darkTheme = createTheme({
 
 type TimePickerProps = {
   disabled?: boolean;
-  // errors?: any;
   id: string;
   isTrue?: boolean;
-  // setError?: any;
   setTimePickerValue: React.Dispatch<React.SetStateAction<dayjs.Dayjs | null>>;
   timePickerLabel?: string;
   timePickerSubLabel?: string;
@@ -38,7 +36,6 @@ type TimePickerProps = {
 };
 function TimePicker({
   disabled,
-  // errors,
   id,
   isTrue,
   setTimePickerValue,
@@ -52,12 +49,6 @@ function TimePicker({
   const buttonElement = useRef(null);
   const handleClick = () => {
     setTimePicker(buttonElement.current);
-    // if (timePickerValue?.format('HH:MM A') !== null) {
-    //     setError(id, {
-    //         type: 'manual',
-    //         message: '',
-    //     });
-    // }
   };
   const handleClose = () => {
     setTimePicker(null);

@@ -1,27 +1,16 @@
-import {
-  Button,
-  Divider,
-  IconButton,
-  MenuItem,
-  Select,
-  TablePagination,
-  TextField,
-} from '@mui/material';
-import { memo, useEffect, useState } from 'react';
-import dayjs, { Dayjs } from 'dayjs';
-import SearchIcon from '@mui/icons-material/Search';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Controller, useForm } from 'react-hook-form';
-import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
+import SearchIcon from '@mui/icons-material/Search';
+import { Button, Divider, IconButton, TablePagination } from '@mui/material';
+import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs, { Dayjs } from 'dayjs';
+import { memo, useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import TopBar from '../../components/common/TopBar';
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-// import { fetchAppointments } from '../../redux/features/AppointmentSlice';
-// import CustomText from '../../components/common/CustomText';
+import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
 import { fetchAppointments } from '../../redux/features/appointmentSlice';
-import CustomText from '../../components/common/CustomText';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 
 type QueryParams = {
   tenant: string | undefined;
@@ -37,20 +26,19 @@ type QueryParams = {
 function StoreAppointmentsList() {
   const {
     appointments,
-    total_count: total,
+    totalCount: total,
     loading,
   } = useAppSelector((s) => s.appointmentState);
   const { user } = useAppSelector((s) => s.authState);
   const dispatch = useAppDispatch();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [search, setSearch] = useState<string>('');
-  const [status, setStatus] = useState<string>('All');
+  const [search] = useState<string>('');
+  const [status] = useState<string>('All');
   const { control, handleSubmit, getValues } = useForm();
   const navigate = useNavigate();
 
   const fetchAppointmentsData = () => {
-    // const { startDate, endDate } = formData;
     const startDate = getValues('startDate');
     const endDate = getValues('endDate');
     const formattedStartDate = startDate
@@ -134,7 +122,6 @@ function StoreAppointmentsList() {
                     value={dayjs(field.value)}
                     defaultValue={dayjs().subtract(6, 'month')}
                     onChange={(date) => handleDateChange(date, field)}
-                    // renderInput={(params: any) => <TextField {...params} />}
                   />
                 )}
               />
@@ -151,7 +138,6 @@ function StoreAppointmentsList() {
                     value={dayjs(field.value)}
                     defaultValue={dayjs().add(6, 'month')}
                     onChange={(date) => handleDateChange(date, field)}
-                    // renderInput={(params: any) => <TextField {...params} />}
                   />
                 )}
               />

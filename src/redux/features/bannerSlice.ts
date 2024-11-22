@@ -5,16 +5,16 @@ import bannerService from '../../services/banner.service';
 
 type InitialState = {
   banners: Banner[];
-  single_banner?: Banner;
+  singleBanner?: Banner;
   loading: boolean;
   notify: boolean;
-  total_count: number;
+  totalCount: number;
   notifyMessage: { text?: string; type?: string };
 };
 
 const initialState: InitialState = {
   banners: [],
-  total_count: 0,
+  totalCount: 0,
   loading: false,
   notify: false,
   notifyMessage: {},
@@ -40,7 +40,7 @@ export const bannerSlice = createSlice({
       state.banners = action.payload;
     },
     setSingleBanners: (state, action: PayloadAction<Banner>) => {
-      state.single_banner = action.payload;
+      state.singleBanner = action.payload;
     },
     setNotifyState: (state, action: PayloadAction<boolean>) => {
       state.notify = action.payload;
@@ -58,7 +58,7 @@ export const bannerSlice = createSlice({
       .addCase(fetchBanners.fulfilled, (state, action) => {
         state.loading = false;
         state.banners = action.payload?.data || [];
-        state.total_count =
+        state.totalCount =
           action.payload?.data?.totalCount || action.payload?.data?.length || 0;
       })
       .addCase(fetchBanners.rejected, (state, action: any) => {

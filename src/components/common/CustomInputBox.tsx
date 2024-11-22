@@ -52,7 +52,6 @@ function CustomInputBox({
   typeImportant,
   value,
 }: CustomInputBoxProps) {
-  // console.log('error', error);
   return (
     <>
       <div className="flex">

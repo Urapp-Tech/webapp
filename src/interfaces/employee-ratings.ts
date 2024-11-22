@@ -2,7 +2,7 @@ export interface EmployeeRatingData {
   id: string;
   storeEmployee: string;
   storeAppointment: string;
-  review: null | any; // You might want to specify the type of review if it's not always null
+  review: null | any;
   star: number;
   status: string;
   isDeleted: boolean;
@@ -36,7 +36,7 @@ export interface EmployeeRatingData {
     storeServiceCategory: string;
     paymentStatus: string;
     code: string;
-    appUser: null | any; // You might want to specify the type of appUser if it's not always null
+    appUser: null | any;
   };
   categoryItem: {
     id: string;

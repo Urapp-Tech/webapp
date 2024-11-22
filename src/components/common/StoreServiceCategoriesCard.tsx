@@ -1,7 +1,7 @@
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { Category } from '../../interfaces/serviceCategory.interface';
 import cn from '../../utilities/class-names';
 
@@ -55,9 +55,6 @@ function StoreServiceCategoriesCard({
               type="button"
               onClick={() => onClick(category.id)}
               key={category.id}
-              //   className={cn(
-              //     'relative flex min-h-[150px] items-center justify-between rounded-[0.625rem] py-3 pl-3 transition-all duration-[0.2s] xl:pl-6'
-              //   )}
               className={cn(
                 'relative flex min-h-[150px] min-w-[200px] max-w-[210px] items-center justify-between rounded-[0.625rem] transition-all duration-[0.2s] xl:pl-6',
                 { 'active shadow-lg': selectedCategory?.id === category?.id }

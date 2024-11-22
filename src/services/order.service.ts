@@ -1,3 +1,4 @@
+import { GetOrderDetailsResponse } from '../types/order.types';
 import API_PATHS from '../utilities/API-PATHS';
 import { getHeaders } from '../utilities/constant';
 import network from './network';
@@ -41,7 +42,9 @@ const orderList = () => {
 };
 
 const orderDetail = (id: string) => {
-  return network.get(API_PATHS.orderDetail(id), { headers: getHeaders() });
+  return network.get<GetOrderDetailsResponse>(API_PATHS.orderDetail(id), {
+    headers: getHeaders(),
+  });
 };
 
 export default {
