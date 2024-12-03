@@ -1,6 +1,6 @@
-import { HighlightOff, Loop, Store } from '@mui/icons-material';
+import { HighlightOff, Loop } from '@mui/icons-material';
 import Button from '@mui/material/Button';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Branch, GetBranchesResponse } from '../interfaces/branch';
 import { login } from '../redux/features/authStateSlice';
 import { setBranch, setIsBranchSingle } from '../redux/features/branchSlice';
@@ -58,8 +58,15 @@ function BranchesErrorComponent({
 
 function SelectBranchComponent({ branches }: { branches: Array<Branch> }) {
   const user = useAppSelector((state) => state.authState.user);
+  const systemConfig = useAppSelector((state) => state.appState.systemConfig);
   const dispatch = useAppDispatch();
   const [selectedBranch, setSelectedBranch] = useState<string | null>(null);
+  const logo = useMemo(() => {
+    if (!systemConfig) {
+      return null;
+    }
+    return systemConfig.tenantConfig.logo;
+  }, [systemConfig]);
   const confirmSelection = async () => {
     const branch = branches.find((b) => b.id === selectedBranch);
     if (user) {
@@ -77,36 +84,48 @@ function SelectBranchComponent({ branches }: { branches: Array<Branch> }) {
     dispatch(setBranch(branch));
   };
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="mb-6 text-center text-2xl font-bold">Select a Branch</h1>
-      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="relative mx-auto min-h-screen w-screen overflow-hidden p-4">
+      <div className="absolute -right-[calc(50%-75vh)] top-[calc(50%-70vh)] -z-50 aspect-square h-[140vh] rounded-full bg-background" />
+      {logo ? (
+        <img
+          src={logo}
+          alt=""
+          className="mx-4 mb-10 h-auto w-32 object-contain"
+        />
+      ) : null}
+      <h1 className="mb-6 text-center text-2xl font-bold">
+        Select a branch to continue.
+      </h1>
+      {/* gap-8 sm:grid-cols-2 lg:grid-cols-4 */}
+      <div className="mx-4 grid grid-cols-1 gap-8 ">
         {branches.map((branch) => (
-          <button
-            type="button"
-            key={branch.id}
-            className={cn(
-              '`cursor-pointer rounded-md ring-2 ring-gray-400 transition-all hover:shadow-md',
-              selectedBranch === branch.id &&
-                'scale-105 shadow-lg ring-2 ring-primary hover:shadow-none'
-            )}
-            onClick={() => setSelectedBranch(branch.id)}
-          >
-            <div>
-              <div className="p-6 text-center text-2xl font-semibold">
-                {branch.name}
-              </div>
-            </div>
-            <div className="flex justify-center p-6 pt-0">
-              <Store className="h-16 w-16 text-primary" />
-            </div>
-            <div className="flex justify-center p-6 pt-0">
-              {selectedBranch === branch.id && (
-                <div className="text-sm font-semibold text-primary">
-                  Selected
-                </div>
+          <div key={branch.id} className="flex items-center justify-center">
+            <button
+              type="button"
+              className={cn(
+                'min-h-24 w-96 cursor-pointer rounded-lg bg-white px-6 py-4 shadow-md transition-all',
+                selectedBranch === branch.id &&
+                  'scale-105 shadow-lg ring-2 ring-primary'
               )}
-            </div>
-          </button>
+              onClick={() => setSelectedBranch(branch.id)}
+            >
+              <div className="flex items-center ">
+                <div className="grow text-start text-2xl font-semibold">
+                  {branch.name}
+                </div>
+                <div className="flex justify-center ">
+                  {/* <Store className="h-16 w-16 text-primary" /> */}
+                  {logo ? (
+                    <img
+                      src={logo}
+                      alt=""
+                      className="h-auto w-20 min-w-20 object-contain"
+                    />
+                  ) : null}
+                </div>
+              </div>
+            </button>
+          </div>
         ))}
       </div>
       <div className="mt-6 flex justify-center">
