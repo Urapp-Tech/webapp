@@ -140,6 +140,8 @@ export default function RescheduleAppointmentPage() {
   const params = useParams();
   const { id } = params;
 
+  const branch = useAppSelector((state) => state?.branchState?.branch);
+
   function capitalizeFirstLetter(s: string) {
     return s.charAt(0).toUpperCase() + s.toLowerCase().slice(1);
   }
@@ -157,7 +159,7 @@ export default function RescheduleAppointmentPage() {
           setValue('gender', capitalizeFirstLetter(res.data.data.gender));
           setAppointmentData(res.data.data);
           setBarberList(res.data.data);
-          console.log('getAppointment', res.data.data);
+          // console.log('getAppointment', res.data.data);
           setIsLoader(false);
         } else {
           setIsLoader(false);
@@ -468,6 +470,7 @@ export default function RescheduleAppointmentPage() {
       dispatch(
         fetchCategoriesItems({
           tenant: systemConfig?.tenant.id,
+          branch: branch?.id,
           categoryId: watch('categoryId'),
         })
       );

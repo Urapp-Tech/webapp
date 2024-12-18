@@ -26,7 +26,7 @@ export const fetchCategoriesItems = createAsyncThunk(
   async (
     data: {
       tenant: string | undefined;
-      branch: string | undefined;
+      branch: any | undefined;
       categoryId: string;
     },
     { rejectWithValue }
