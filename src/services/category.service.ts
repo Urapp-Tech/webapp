@@ -11,9 +11,9 @@ const subCategory = (menuId: string) => {
   return network.get(API_PATHS.subCategory(menuId), { headers: getHeaders() });
 };
 
-const faqService = (menuId: string, submenuId: string) => {
+const faqService = (branch: string, menuId: string, submenuId: string) => {
   return network.get<GetItemFaqsResponse>(
-    API_PATHS.faqService(menuId, submenuId),
+    API_PATHS.faqService(branch, menuId, submenuId),
     {
       headers: getHeaders(),
     }

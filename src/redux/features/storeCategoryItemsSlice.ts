@@ -24,14 +24,22 @@ const initialState: InitialState = {
 export const fetchCategoriesItems = createAsyncThunk(
   'store/fetchCategoriesItems',
   async (
-    data: { tenant: string | undefined; categoryId: string },
+    data: {
+      tenant: string | undefined;
+      branch: string | undefined;
+      categoryId: string;
+    },
     { rejectWithValue }
   ) => {
     try {
       if (!data.tenant) {
         throw new Error('No Tenant');
       }
-      const response = await service.getCategoriesItem(data.tenant, data);
+      const response = await service.getCategoriesItem(
+        data.tenant,
+        data.branch,
+        data
+      );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error);

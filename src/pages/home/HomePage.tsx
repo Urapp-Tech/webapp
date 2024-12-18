@@ -33,7 +33,9 @@ function HomePage() {
   const [searchName, setSearchName] = useState('');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const user = useAppSelector((x) => x.authState.user);
+  // const user = useAppSelector((x) => x.authState.user);
+  const branch = useAppSelector((state) => state?.branchState?.branch);
+
   const categories = useAppSelector(
     (state) => state.storeCategoryState.categories
   );
@@ -67,6 +69,7 @@ function HomePage() {
       dispatch(
         fetchCategoriesItems({
           tenant: systemConfig?.tenant.id,
+          branch: branch ? branch.id : undefined,
           categoryId: selectedCategory.id,
         })
       );

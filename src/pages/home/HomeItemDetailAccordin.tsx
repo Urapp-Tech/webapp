@@ -28,6 +28,7 @@ function HomeItemDetailAccordin({ data }: Props) {
                 className="boxShadow bg-transparent"
                 expanded={expanded === `panel${index}`}
                 onChange={handleChange(`panel${index}`)}
+                key={index}
               >
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}

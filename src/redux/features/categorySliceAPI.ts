@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
   GetAllCategoryItemsResponse,
@@ -22,12 +23,20 @@ export const categoryAPI = createApi({
       query: () => `homemenu/list/${getTenantId()}`,
     }),
     getSubCategory: builder.query<GetAllCategoryItemsResponse, any>({
-      query: ({ menuId }: { menuId: string }) =>
-        `homemenu/view/${getTenantId()}/${menuId}`,
+      query: ({ branch, menuId }: { branch: string; menuId: string }) =>
+        `homemenu/view/${getTenantId()}/${branch}/${menuId}`,
     }),
     getSubCategoryItem: builder.query({
-      query: ({ menuId, itemId }: { menuId: string; itemId: string }) =>
-        `homemenu/view/submenu/${getTenantId()}/${menuId}/${itemId}`,
+      query: ({
+        branch,
+        menuId,
+        itemId,
+      }: {
+        branch: string;
+        menuId: string;
+        itemId: string;
+      }) =>
+        `homemenu/view/submenu/${getTenantId()}/${branch}/${menuId}/${itemId}`,
     }),
   }),
 });

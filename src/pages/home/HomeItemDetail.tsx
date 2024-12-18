@@ -25,7 +25,7 @@ import {
   useLazyGetAllRatingReviewsQuery,
   useLazyGetRatingStarListQuery,
 } from '../../redux/features/ratingSliceAPI';
-import { useAppDispatch } from '../../redux/redux-hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import HomeItemDetailAccordin from './HomeItemDetailAccordin';
 
 dayjs.extend(relativeTime);
@@ -35,6 +35,7 @@ function HomeItemDetail() {
   const itemIdString = itemId?.toString();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const branch = useAppSelector((state) => state?.branchState?.branch);
 
   const [allRatingReviewTrigger, allRatingReviewResult] =
     useLazyGetAllRatingReviewsQuery();
@@ -61,7 +62,11 @@ function HomeItemDetail() {
 
   useEffect(() => {
     if (itemIdString) {
-      subCategoryItemTrigger({ menuId, itemId });
+      subCategoryItemTrigger({
+        branch: branch!.id,
+        menuId,
+        itemId,
+      });
       ratingStarListTrigger(itemId);
       const res = allRatingReviewTrigger({ itemId, page, size }).then(
         (resp) => {
@@ -92,10 +97,12 @@ function HomeItemDetail() {
     await allRatingReviewTrigger({ itemId, page: newPage, size }).then(
       (resp) => {
         if (resp.isSuccess) {
-          setList((prev: any) =>
-            prev?.filter(
-              (el: any) => !currentList.some((items: any) => items.id === el.id)
-            )
+          setList(
+            (prev: any) =>
+              prev?.filter(
+                (el: any) =>
+                  !currentList.some((items: any) => items.id === el.id)
+              )
           );
           setCurrentList(resp.data.data.list);
           setTotal(resp.data.data.total);

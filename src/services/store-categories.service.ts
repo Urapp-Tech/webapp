@@ -13,8 +13,12 @@ const getCategories = (
   });
 };
 
-const getCategoriesItem = (tenant: string | any, query = {}) => {
-  return network.get(API_PATHS.getStoreCategoriesItems(tenant), {
+const getCategoriesItem = (
+  tenant: string | any,
+  branch: string | any,
+  query = {}
+) => {
+  return network.get(API_PATHS.getStoreCategoriesItems(tenant, branch), {
     headers: getHeaders(),
     params: query,
   });

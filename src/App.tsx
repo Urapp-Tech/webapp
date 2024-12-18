@@ -59,6 +59,7 @@ function App() {
       const getSystemConfigPromise = appService.getSystemConfig();
       const [getSystemConfigResult, getSystemConfigError] =
         await promiseHandler(getSystemConfigPromise);
+
       if (!getSystemConfigResult) {
         setAlertSeverity('error');
         setAlertMessage(getSystemConfigError.message);

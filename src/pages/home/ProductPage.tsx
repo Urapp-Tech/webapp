@@ -58,6 +58,7 @@ function ProductPage() {
   const user = useAppSelector((state) => state.authState.user);
   const banners = useAppSelector((s) => s.bannerState.banners);
   const cartData = useAppSelector((state) => state.cartState.cartData);
+  const branch = useAppSelector((state) => state?.branchState?.branch);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -80,7 +81,10 @@ function ProductPage() {
 
   useEffect(() => {
     if (!isCategoryLoading && categoryData && categoryData.success) {
-      subCategoryTrigger({ menuId: categoryData.data[0].id });
+      subCategoryTrigger({
+        branch: branch ? branch.id : undefined,
+        menuId: categoryData.data[0].id,
+      });
     }
   }, [isCategoryLoading, categoryData, subCategoryTrigger]);
 
@@ -91,6 +95,7 @@ function ProductPage() {
       return;
     }
     const faqPromise = categoryService.faqService(
+      branch!.id,
       subCategoryData.data.id,
       item.id
     );
@@ -187,7 +192,12 @@ function ProductPage() {
       return (
         <CategoriesCard
           categories={categoryData.data}
-          onClick={(id: string) => subCategoryTrigger({ menuId: id })}
+          onClick={(id: string) =>
+            subCategoryTrigger({
+              branch: branch ? branch.id : undefined,
+              menuId: id,
+            })
+          }
         />
       );
     }
@@ -294,7 +304,7 @@ function ProductPage() {
                     </h5>
                     <div className="flex items-center justify-between">
                       <h6 className="mb-3 flex-1 basis-full text-center text-base font-semibold text-secondary sm:mb-0 sm:flex sm:basis-0 sm:text-left">
-                        {CURRENCY_PREFIX} {item.price.toFixed(2)}
+                        {CURRENCY_PREFIX} {item.price.toLocaleString()}
                       </h6>
                       <Button
                         className="btn-add w-full rounded-[0.625rem] bg-primary text-sm font-semibold text-foreground sm:w-auto"

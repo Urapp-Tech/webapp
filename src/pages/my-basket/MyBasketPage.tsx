@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import DiscountIcon from '@mui/icons-material/Discount';
@@ -256,6 +257,7 @@ function MyBasketPage() {
       .add(tenantConfig?.minimumDeliveryTime ?? 3, 'day')
       .toISOString();
     const tempAddress = userAddress[0] ? userAddress[0].id : null;
+    console.log('user::::::', user);
     const updateCartPayload: UpdateCartPayload = {
       appUser: user?.id,
       appUserAddress: tempAddress,
@@ -291,7 +293,7 @@ function MyBasketPage() {
 
   useEffect(() => {
     updateCart().then((response) => {
-      console.log('updateCart response :>> ', response);
+      // console.log('updateCart response :>> ', response);
     });
   }, [cartItems]);
 
@@ -452,7 +454,7 @@ function MyBasketPage() {
                   </p>
                   <FormControl variant="standard" size="small">
                     <Input
-                      className="min-h-[10px] min-w-60 rounded-[0.625rem] border border-solid border-[var(--light-400)] p-2 text-xs font-normal text-faded"
+                      className="min-w-60 min-h-[10px] rounded-[0.625rem] border border-solid border-[var(--light-400)] p-2 text-xs font-normal text-faded"
                       disableUnderline
                       inputProps={{
                         placeholder: 'Enter Promo Code',

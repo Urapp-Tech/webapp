@@ -67,7 +67,9 @@ const darkTheme = createTheme({
 export default function AddAppointmentPage() {
   const navigate = useNavigate();
   const user = useAppSelector((x) => x.authState.user);
+  const branch = useAppSelector((state) => state?.branchState?.branch);
   if (!user) {
+    setItem('LOCATION', 'appointment');
     navigate('/auth/login');
   }
   const officeTimingOut = useAppSelector(
@@ -456,6 +458,7 @@ export default function AddAppointmentPage() {
       dispatch(
         fetchCategoriesItems({
           tenant: systemConfig?.tenant.id,
+          branch: branch!.id,
           categoryId: watch('categoryId'),
         })
       );
@@ -599,7 +602,7 @@ export default function AddAppointmentPage() {
           !checkIsBetweenTime(time, startTime, endTime) ||
           !checkIsBetweenTime(time, officeInTime, officeOutTime)
         ) {
-          console.log('hello 1');
+          // console.log('hello 1');
 
           setIsNotify(true);
           setNotifyMessage({

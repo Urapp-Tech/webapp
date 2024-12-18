@@ -80,6 +80,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
       id: item.id,
       quantity: item.buyCount,
     }));
+
     const updateCartPayload: UpdateCartPayload = {
       appUser: user?.id ?? null,
       appUserDevice: deviceData?.id ?? null,

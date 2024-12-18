@@ -61,9 +61,9 @@ const API_PATHS = {
   subCategory: (menuId: string) =>
     new URL(`homemenu/view/${getTenantId()}/${menuId}`, BASE_URL).toString(),
 
-  faqService: (menuId: string, submenuId: string) =>
+  faqService: (branch: string, menuId: string, submenuId: string) =>
     new URL(
-      `homemenu/view/submenu/${getTenantId()}/${menuId}/${submenuId}`,
+      `homemenu/view/submenu/${getTenantId()}/${branch}/${menuId}/${submenuId}`,
       BASE_URL
     ).toString(),
 
@@ -120,8 +120,8 @@ const API_PATHS = {
     new URL(`rating/reviews/${homeCatItemId}`, BASE_URL).toString(),
   getStoreCategories: (tenant: string) =>
     new URL(`categories/list/${tenant}`, BASE_URL).toString(),
-  getStoreCategoriesItems: (tenant: string) =>
-    new URL(`categories/items/list/${tenant}`, BASE_URL).toString(),
+  getStoreCategoriesItems: (tenant: string, branch: string) =>
+    new URL(`categories/items/list/${tenant}/${branch}`, BASE_URL).toString(),
   // APPOINTMENTS REST API
   getBarbersList: (storeServiceCatItemId: string) =>
     new URL(

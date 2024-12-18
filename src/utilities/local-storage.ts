@@ -11,7 +11,8 @@ type Key =
   | 'APPOINTMENT_BOOKINGS'
   | 'USER'
   | 'BRANCH'
-  | 'IS_BRANCH_SINGLE';
+  | 'IS_BRANCH_SINGLE'
+  | 'LOCATION';
 
 function addKeyPrefix(key: string) {
   const prefix = 'WEB_APP';

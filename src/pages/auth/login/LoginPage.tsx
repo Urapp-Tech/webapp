@@ -21,6 +21,7 @@ import authService from '../../../services/auth.service';
 import network from '../../../services/network';
 import { LoginPayload } from '../../../types/auth.types';
 import API_PATHS from '../../../utilities/API-PATHS';
+import { getItem, removeItem } from '../../../utilities/local-storage';
 import promiseHandler from '../../../utilities/promise-handler';
 
 function LoginPage() {
@@ -138,6 +139,13 @@ function LoginPage() {
       token: tokenResult.data.data,
     };
     dispatch(login(userData));
+    const temp = getItem('LOCATION');
+    if (temp === 'appointment') {
+      navigate('/dashboard/book-service');
+      removeItem('LOCATION');
+      return;
+    }
+
     if (from && from.pathname) {
       navigate(from, { replace: true });
     } else if ((cartItem ?? []).length > 0) {
