@@ -143,6 +143,7 @@ function Sidebar({ openDrawer = true }: Props) {
   );
 
   const hasShopLinks = () => {
+    console.log(tenantConfig);
     if (!tenantConfig) {
       return false;
     }

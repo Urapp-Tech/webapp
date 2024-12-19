@@ -40,7 +40,7 @@ function OrderDetailsPage() {
   const [orderItemDetail, setOrderItemDetail] = useState<OrderDetails>();
   const [orderCanceled, setOrderCanceled] = useState(false);
   const items = getItem<GetOrderListData>('ORDER_ITEM');
-  const address = getItem<any>('ADDRESS');
+  // const address = getItem<any>('ADDRESS');
 
   const { id } = useParams();
 
@@ -68,6 +68,8 @@ function OrderDetailsPage() {
       setShowAlert(true);
       return;
     }
+
+    console.log("getOrderDetailsResult", getOrderDetailsResult.data.data);
     setOrderItemDetail(getOrderDetailsResult.data.data);
   }, []);
 
@@ -107,7 +109,9 @@ function OrderDetailsPage() {
   };
 
   useEffect(() => {
+    console.log("ORDER STATUSES :::::::::::::::", ORDER_STATUSES);
     if (user) {
+
       getOrderDetails().then();
     }
   }, []);
@@ -205,7 +209,7 @@ function OrderDetailsPage() {
                       Order Id:&nbsp;
                       <span>{orderItemDetail?.orderNumber}</span>
                     </p>
-                    <p className="order-date-time">08:35 , 05-01-2020</p>
+                    <p className="order-date-time">{dayjs(orderItemDetail?.createdDate).format('MMM DD, YY | hh:mm A')}</p>
                     <h6 className="order-status order-out-for-delivery">
                       {orderItemDetail?.status}
                     </h6>
@@ -341,8 +345,11 @@ function OrderDetailsPage() {
               <h6 className="heading">Your order is in progress...</h6>
             </div>
             <div className="body">
-              {[...ORDER_STATUSES.values()].map((el, index) => (
-                <div
+              {[...ORDER_STATUSES.values()].map((el, index) => {
+                const orderStatus = orderItemDetail?.appOrderStatuses.filter((filterItem) => filterItem.status === el.status);
+                const findStatus = orderStatus?.[0];
+                console.log("Item", orderStatus?.[0])
+                return (<div
                   className={cn('timeline-item', {
                     disabled: !orderItemDetail?.appOrderStatuses?.some(
                       (item: any) => item.status === el.status
@@ -379,13 +386,15 @@ function OrderDetailsPage() {
                     <h6 className={`status-title ${el.color}`}>{el.title}</h6>
                     <p className="status-desc">{el.text}</p>
                   </div>
-                  <p className="date">{dayjs().format('HH:mm, MMM DD, YY')}</p>
-                </div>
-              ))}
+                  {findStatus && (
+                    <p className="date">{dayjs(findStatus.createdDate).format('MMM DD, YY | hh:mm A')}</p>
+                  )}
+                </div>)
+              })}
             </div>
           </div>
         </div>
-      </div>
+      </div >
     </>
   );
 }

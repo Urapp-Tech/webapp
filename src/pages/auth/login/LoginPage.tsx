@@ -14,7 +14,7 @@ import FastSpinner from '../../../components/common/CustomSpinner';
 import AlertBox from '../../../components/common/SnackBar';
 import useAlert from '../../../hooks/alert.hook';
 import { login } from '../../../redux/features/authStateSlice';
-import { setUserAddressList } from '../../../redux/features/deviceState';
+import { setTenantConfig, setUserAddressList } from '../../../redux/features/deviceState';
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
 import addressService from '../../../services/address.service';
 import authService from '../../../services/auth.service';
@@ -23,6 +23,7 @@ import { LoginPayload } from '../../../types/auth.types';
 import API_PATHS from '../../../utilities/API-PATHS';
 import { getItem, removeItem } from '../../../utilities/local-storage';
 import promiseHandler from '../../../utilities/promise-handler';
+import tenantService from '../../../services/tenant.service';
 
 function LoginPage() {
   const {
@@ -58,55 +59,55 @@ function LoginPage() {
     formState: { errors },
   } = useForm<LoginPayload>();
 
-  const handleLoginWithFacebook = async (response: SuccessResponse) => {
-    const loginPromise = authService.loginWithFacebook({
-      accessToken: response.accessToken,
-    });
-    const [loginResponse, loginError] = await promiseHandler(loginPromise);
-    if (!loginResponse) {
-      setAlertSeverity('error');
-      setAlertMessage(loginError.message);
-      setShowAlert(true);
-      return;
-    }
-    if (!loginResponse.data.success) {
-      setAlertSeverity('error');
-      setAlertMessage(loginResponse.data.message);
-      setShowAlert(true);
-      return;
-    }
+  // const handleLoginWithFacebook = async (response: SuccessResponse) => {
+  //   const loginPromise = authService.loginWithFacebook({
+  //     accessToken: response.accessToken,
+  //   });
+  //   const [loginResponse, loginError] = await promiseHandler(loginPromise);
+  //   if (!loginResponse) {
+  //     setAlertSeverity('error');
+  //     setAlertMessage(loginError.message);
+  //     setShowAlert(true);
+  //     return;
+  //   }
+  //   if (!loginResponse.data.success) {
+  //     setAlertSeverity('error');
+  //     setAlertMessage(loginResponse.data.message);
+  //     setShowAlert(true);
+  //     return;
+  //   }
 
-    const tokenResult = await network.post(API_PATHS.createToken, {
-      tenant: systemConfigData?.tenant.id,
-      branch: branch?.id,
-      user: loginResponse.data.data.id,
-    });
-    const userData = {
-      ...loginResponse.data.data,
-      token: tokenResult.data.data,
-    };
-    dispatch(login(userData));
-    if (cartItem.length > 0) {
-      navigate('/dashboard/my-basket');
-    } else {
-      navigate('/dashboard/home');
-    }
-    const addressPromise = addressService.getUserAddress();
-    const [addressResult, addressError] = await promiseHandler(addressPromise);
-    if (!addressResult) {
-      setAlertSeverity('error');
-      setAlertMessage(addressError.message);
-      setShowAlert(true);
-      return;
-    }
-    if (!addressResult.data.success) {
-      setAlertSeverity('error');
-      setAlertMessage(addressResult.data.message);
-      setShowAlert(true);
-      return;
-    }
-    dispatch(setUserAddressList(addressResult.data.data));
-  };
+  //   const tokenResult = await network.post(API_PATHS.createToken, {
+  //     tenant: systemConfigData?.tenant.id,
+  //     branch: branch?.id,
+  //     user: loginResponse.data.data.id,
+  //   });
+  //   const userData = {
+  //     ...loginResponse.data.data,
+  //     token: tokenResult.data.data,
+  //   };
+  //   dispatch(login(userData));
+  //   if (cartItem.length > 0) {
+  //     navigate('/dashboard/my-basket');
+  //   } else {
+  //     navigate('/dashboard/home');
+  //   }
+  //   const addressPromise = addressService.getUserAddress();
+  //   const [addressResult, addressError] = await promiseHandler(addressPromise);
+  //   if (!addressResult) {
+  //     setAlertSeverity('error');
+  //     setAlertMessage(addressError.message);
+  //     setShowAlert(true);
+  //     return;
+  //   }
+  //   if (!addressResult.data.success) {
+  //     setAlertSeverity('error');
+  //     setAlertMessage(addressResult.data.message);
+  //     setShowAlert(true);
+  //     return;
+  //   }
+  //   dispatch(setUserAddressList(addressResult.data.data));
+  // };
 
   const email = register('email');
   const password = register('password');
@@ -169,6 +170,23 @@ function LoginPage() {
       return;
     }
     dispatch(setUserAddressList(addressResult.data.data));
+
+    const getTenantPromise = tenantService.getTenant();
+    const [getTenantResult, getTenantError] =
+      await promiseHandler(getTenantPromise);
+    if (!getTenantResult) {
+      setAlertSeverity('error');
+      setAlertMessage(getTenantError.message);
+      setShowAlert(true);
+      return;
+    }
+    if (!getTenantResult.data.success) {
+      setAlertSeverity('error');
+      setAlertMessage(getTenantResult.data.message);
+      setShowAlert(true);
+      return;
+    }
+    dispatch(setTenantConfig(getTenantResult.data.data.tenantConfig));
   };
 
   useEffect(() => {
