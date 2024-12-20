@@ -126,29 +126,34 @@ function HomePage() {
           />
         </div>
         <div>
-          <div className="mb-4 items-center justify-between sm:flex">
-            <h4 className="mb-4 text-2xl font-semibold capitalize leading-tight text-secondary sm:mb-0">
-              {selectedCategory?.name}
-            </h4>
-            <FormControl className="w-full max-w-[350px] rounded-[0.625rem] bg-white shadow-[2px_4px_6px_rgba(0,0,0,0.06)]">
-              <Input
-                className="m-0 gap-x-3 px-5 py-2 text-sm font-normal text-faded"
-                id="search"
-                type="text"
-                inputProps={{
-                  placeholder: 'Search',
-                }}
-                disableUnderline
-                endAdornment={
-                  <IconButton onClick={handleSearch}>
-                    <SearchOutlinedIcon />
-                  </IconButton>
-                }
-                value={searchName}
-                onChange={(e) => setSearchName(e.target.value)}
-              />
-            </FormControl>
-          </div>
+          {categories.length ? (
+            <div className="mb-4 items-center justify-between sm:flex">
+              <h4 className="mb-4 text-2xl font-semibold capitalize leading-tight text-secondary sm:mb-0">
+                {selectedCategory?.name}
+              </h4>
+              <FormControl className="w-full max-w-[350px] rounded-[0.625rem] bg-white shadow-[2px_4px_6px_rgba(0,0,0,0.06)]">
+                <Input
+                  className="m-0 gap-x-3 px-5 py-2 text-sm font-normal text-faded"
+                  id="search"
+                  type="text"
+                  inputProps={{
+                    placeholder: 'Search',
+                  }}
+                  disableUnderline
+                  endAdornment={
+                    <IconButton onClick={handleSearch}>
+                      <SearchOutlinedIcon />
+                    </IconButton>
+                  }
+                  value={searchName}
+                  onChange={(e) => setSearchName(e.target.value)}
+                />
+              </FormControl>
+            </div>
+          ) : (
+            ''
+          )}
+
           <div className="mb-5 grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
             {isSubCategoryLoading ? (
               <Loader />

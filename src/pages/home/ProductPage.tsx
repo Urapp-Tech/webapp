@@ -69,6 +69,7 @@ function ProductPage() {
   const [filteredSubCategory, setFilteredSubCategory] = useState<Array<Item>>(
     []
   );
+  const [categories, setCategories] = useState<any[]>([]);
   const [FAQs, setFAQs] = useState<Array<ItemFaq>>([]);
 
   const { isLoading: isCategoryLoading, data: categoryData } =
@@ -81,6 +82,7 @@ function ProductPage() {
 
   useEffect(() => {
     if (!isCategoryLoading && categoryData && categoryData.success) {
+      setCategories(categoryData.data);
       subCategoryTrigger({
         branch: branch ? branch.id : undefined,
         menuId: categoryData.data[0].id,
@@ -201,7 +203,7 @@ function ProductPage() {
         />
       );
     }
-    return <div>Error Occurred</div>;
+    return <div>Category not found</div>;
   }, [categoryData, isCategoryLoading, subCategoryTrigger]);
 
   useEffect(() => {
@@ -254,20 +256,24 @@ function ProductPage() {
             <h4 className="mb-4 text-2xl font-semibold leading-tight text-secondary sm:mb-0">
               {subCategoryData?.data.name}
             </h4>
-            <FormControl className="xs:max-w-[400px] w-full max-w-[350px] rounded-[0.625rem] bg-white shadow-[2px_4px_6px_rgba(0,0,0,0.06)]">
-              <Input
-                className="m-0 gap-x-3 px-5 py-2 text-sm font-normal text-faded"
-                id="search"
-                type="text"
-                inputProps={{
-                  placeholder: 'Search',
-                }}
-                disableUnderline
-                endAdornment={<SearchOutlinedIcon />}
-                value={searchName}
-                onChange={(e) => setSearchName(e.target.value)}
-              />
-            </FormControl>
+            {categories.length ? (
+              <FormControl className="xs:max-w-[400px] w-full max-w-[350px] rounded-[0.625rem] bg-white shadow-[2px_4px_6px_rgba(0,0,0,0.06)]">
+                <Input
+                  className="m-0 gap-x-3 px-5 py-2 text-sm font-normal text-faded"
+                  id="search"
+                  type="text"
+                  inputProps={{
+                    placeholder: 'Search',
+                  }}
+                  disableUnderline
+                  endAdornment={<SearchOutlinedIcon />}
+                  value={searchName}
+                  onChange={(e) => setSearchName(e.target.value)}
+                />
+              </FormControl>
+            ) : (
+              ''
+            )}
           </div>
           <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
             {isSubCategoryLoading ? (

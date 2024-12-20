@@ -26,6 +26,7 @@ import {
   useLazyGetRatingStarListQuery,
 } from '../../redux/features/ratingSliceAPI';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import { CURRENCY_PREFIX } from '../../utilities/constant';
 import HomeItemDetailAccordin from './HomeItemDetailAccordin';
 
 dayjs.extend(relativeTime);
@@ -213,7 +214,8 @@ function HomeItemDetail() {
             <div className="flex items-center justify-between">
               <div className="price">
                 <span className="number">
-                  $ <span>{subCategoryItemData?.data?.price}</span>
+                  {CURRENCY_PREFIX}{' '}
+                  <span>{subCategoryItemData?.data?.price}</span>
                 </span>
                 <span className="text">&nbsp;/ item</span>
               </div>

@@ -10,7 +10,6 @@ import { useLazyOrderListQuery } from '../../redux/features/orderStateSliceAPI';
 import { setItem } from '../../utilities/local-storage';
 import OrdersTable from './OrdersHistoryTable';
 
-
 type OrdersHistoryProps = {
   setAlertSeverity: React.Dispatch<React.SetStateAction<AlertColor>>;
   setAlertMessage: React.Dispatch<React.SetStateAction<string>>;
@@ -109,7 +108,7 @@ function OrdersHistory({
         {orderListData?.data ? (
           <OrdersTable orderListData={orderListData} />
         ) : null}
-        <div>
+        <div className="item-center flex w-full justify-center">
           {orderListData?.data ? (
             <TablePagination
               component="div"

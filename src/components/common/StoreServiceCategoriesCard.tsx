@@ -73,10 +73,14 @@ function StoreServiceCategoriesCard({
           </SwiperSlide>
         ))}
       </Swiper>
-      <div className="swiper-navigation-container">
-        <div className="custom-swiper-button-prev">&#10094;</div>{' '}
-        <div className="custom-swiper-button-next">&#10095;</div>{' '}
-      </div>
+      {categories.length ? (
+        <div className="swiper-navigation-container">
+          <div className="custom-swiper-button-prev">&#10094;</div>{' '}
+          <div className="custom-swiper-button-next">&#10095;</div>{' '}
+        </div>
+      ) : (
+        'Service category not found'
+      )}
     </div>
   );
 }
