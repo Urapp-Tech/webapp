@@ -1,10 +1,19 @@
 import axios from 'axios';
-// eslint-disable-next-line import/no-cycle
 import { logout } from '../redux/features/authStateSlice';
+// eslint-disable-next-line import/no-cycle
 import { store } from '../redux/store';
 import { BASE_URL } from '../utilities/constant';
+import { setItem } from '../utilities/local-storage';
 
 const network = axios.create();
+
+network.interceptors.request.use(
+  (response) => {
+    setItem('LAST_ACTIVITY', Date.now());
+    return response;
+  },
+  (error) => error
+);
 
 network.interceptors.response.use(
   (response) => response,

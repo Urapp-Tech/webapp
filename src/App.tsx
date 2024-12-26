@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ClientJS } from 'clientjs';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 import { useEffect } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
 import { useRoutes } from 'react-router-dom';
@@ -20,7 +22,10 @@ import { routeObjects } from './routes/AppRoutes';
 import appService from './services/app.service';
 import network from './services/network';
 import tenantService from './services/tenant.service';
+import monitorIdleTime from './utilities/idle.function';
 import promiseHandler from './utilities/promise-handler';
+
+dayjs.extend(duration);
 
 function App() {
   const {
@@ -53,6 +58,15 @@ function App() {
     }
     return ipResult.data.ip;
   }
+
+  useEffect(() => {
+    const intervalTime = dayjs.duration(5, 'minutes').asMilliseconds();
+    const idleTime = dayjs.duration(15, 'minutes').asMilliseconds();
+    monitorIdleTime(intervalTime, idleTime, () => {
+      localStorage.clear();
+      window.location.replace('/');
+    });
+  }, []);
 
   useEffect(() => {
     async function getSystemConfig() {

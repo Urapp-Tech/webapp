@@ -12,7 +12,8 @@ type Key =
   | 'USER'
   | 'BRANCH'
   | 'IS_BRANCH_SINGLE'
-  | 'LOCATION';
+  | 'LOCATION'
+  | 'LAST_ACTIVITY';
 
 function addKeyPrefix(key: string) {
   const prefix = 'WEB_APP';
