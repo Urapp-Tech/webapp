@@ -371,6 +371,9 @@ function MyBasketPage() {
                       <th>Items</th>
                       <th>Quantity</th>
                       <th>Subtotal</th>
+                      <th scope="col" aria-label="Empty Header">
+                        &nbsp;
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -378,12 +381,6 @@ function MyBasketPage() {
                       <tr key={item.id}>
                         <td>
                           <div className="flex items-center gap-x-5">
-                            <IconButton
-                              className="btn-delete"
-                              onClick={() => handleRemoveFromCart(item.id)}
-                            >
-                              <DeleteOutlineOutlinedIcon className="text-2xl" />
-                            </IconButton>
                             <div className="product">
                               <img
                                 className="pic"
@@ -441,6 +438,16 @@ function MyBasketPage() {
                           ).toLocaleString(undefined, {
                             minimumFractionDigits: 2,
                           })}
+                        </td>
+                        <td>
+                          <div className="flex items-center gap-x-5">
+                            <IconButton
+                              className="btn-delete"
+                              onClick={() => handleRemoveFromCart(item.id)}
+                            >
+                              <DeleteOutlineOutlinedIcon className="text-2xl" />
+                            </IconButton>
+                          </div>
                         </td>
                       </tr>
                     ))}

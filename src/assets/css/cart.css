@@ -14,9 +14,9 @@
 .cart-products-table thead {
   @apply border-b border-solid border-[var(--light-400)];
 }
-.cart-products-table thead tr th:first-child {
+/* .cart-products-table thead tr th:first-child {
   @apply pl-16;
-}
+} */
 .cart-products-table thead tr th:last-child,
 .cart-products-table tbody tr td:last-child {
   @apply text-center font-semibold;
