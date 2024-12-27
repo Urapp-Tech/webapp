@@ -439,7 +439,7 @@ function MyBasketPage() {
                             minimumFractionDigits: 2,
                           })}
                         </td>
-                        <td>
+                        <td aria-label="Empty Header">
                           <div className="flex items-center gap-x-5">
                             <IconButton
                               className="btn-delete"
