@@ -1,4 +1,3 @@
-import { SuccessResponse } from '@greatsumini/react-facebook-login';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
@@ -14,16 +13,19 @@ import FastSpinner from '../../../components/common/CustomSpinner';
 import AlertBox from '../../../components/common/SnackBar';
 import useAlert from '../../../hooks/alert.hook';
 import { login } from '../../../redux/features/authStateSlice';
-import { setTenantConfig, setUserAddressList } from '../../../redux/features/deviceState';
+import {
+  setTenantConfig,
+  setUserAddressList,
+} from '../../../redux/features/deviceState';
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
 import addressService from '../../../services/address.service';
 import authService from '../../../services/auth.service';
 import network from '../../../services/network';
+import tenantService from '../../../services/tenant.service';
 import { LoginPayload } from '../../../types/auth.types';
 import API_PATHS from '../../../utilities/API-PATHS';
 import { getItem, removeItem } from '../../../utilities/local-storage';
 import promiseHandler from '../../../utilities/promise-handler';
-import tenantService from '../../../services/tenant.service';
 
 function LoginPage() {
   const {
@@ -237,7 +239,7 @@ function LoginPage() {
               <h1 className="mb-4 text-center text-[36px] font-bold capitalize leading-[normal] text-black">
                 {greeting}
               </h1>
-              <form>
+              <form onSubmit={handleSubmit(submitHandler)}>
                 <div className="">
                   <div className="form-group w-full">
                     <span className="text-[14px] font-medium leading-[normal] text-[#06152B]">
@@ -253,6 +255,7 @@ function LoginPage() {
                         onBlur={email.onBlur}
                         name={email.name}
                         ref={email.ref}
+                        required
                         disableUnderline
                       />
                       {errors.email && (
@@ -270,6 +273,7 @@ function LoginPage() {
                       <Input
                         className="input-with-icon h-[30px] text-[11px] after:border-b-secondary"
                         id="password"
+                        required
                         placeholder="*******"
                         type={showPassword ? 'text' : 'password'}
                         endAdornment={
@@ -281,9 +285,9 @@ function LoginPage() {
                               onMouseDown={handleMouseDownPassword}
                             >
                               {showPassword ? (
-                                <VisibilityOff />
-                              ) : (
                                 <Visibility />
+                              ) : (
+                                <VisibilityOff />
                               )}
                             </IconButton>
                           </InputAdornment>
@@ -321,12 +325,14 @@ function LoginPage() {
                   </div>
                   <div className="mt-10 w-full">
                     <Button
-                      disabled={!!isLoader}
+                      disabled={
+                        !!isLoader || !!errors.email || !!errors.password
+                      }
                       className="btn-black-fill w-full bg-neutral-900 px-16 py-2 text-gray-50"
                       variant="contained"
                       color="inherit"
                       title="Login"
-                      onClick={handleSubmit(submitHandler)}
+                      type="submit"
                     >
                       {isLoader ? <FastSpinner /> : 'Login'}
                     </Button>

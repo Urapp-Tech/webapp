@@ -60,16 +60,13 @@ function TopBar({ setDrawerState }: Props) {
     >
       <Toolbar
         classes={{
-          regular: cn(
-            'flex items-center justify-between px-4 py-4',
-            'lg:px-14 lg:py-7'
-          ),
+          regular: cn('flex items-center justify-between py-4'),
         }}
       >
         <NavLink to="/dashboard/home">
           {systemConfigData?.tenantConfig?.logo ? (
             <img
-              className="h-10 w-40"
+              className="h-16 min-w-40"
               src={systemConfigData.tenantConfig.logo}
               alt=""
             />
