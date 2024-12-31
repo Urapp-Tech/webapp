@@ -1,91 +1,125 @@
 function TermsAndConditionPage() {
   return (
-    <div className="general-page p-4 sm:p-5 xl:p-7">
-      <h4 className="page-heading mb-5">Terms & Conditions</h4>
-      <div className="general-card">
-        <h6 className="heading-sm">Last Update: 1 April, 2019</h6>
-        <p className="text">
-          Please read these terms and condition of use as set out below (the
-          `Terms&apos;) carefully before using the LaundrEZ application (the
-          `Services&apos;). These Terms govern your access to and use Services.,
-          including the message, information, data, text, software, images and
-          other contents that make up this site (the Content, which content is
-          part of this Services. These Terms exempt LaundrEZ ich. (“LaundrEZ”
-          “we” “or” “us”) and others from liability an/ or limit our and their
-          liability and contain other important provisions that apply to your
-          use of this site.
-        </p>
-        <h6 className="heading-sm">Terms of Use of Services</h6>
-        <p className="text">
-          Your use of this Services is conditional on your acceptance of these
-          Terms. By visiting or using this Services you agree on your own behalf
-          of any organization on whose behalf you may act (collectively referred
-          to herein as `you&apos;). to accept and abide by these Terms for each
-          use of and each visit to this Service. You also agree to comply with
-          our privacy statement available at
-          www.laundrez.co/privacystatement(the `Privacy Statement&apos;). <br />
-          <br /> If you do not agree to abide by these Terms, you cannot use
-          this Service or register to become a member of this Service. You agree
-          to have these Terms and any related information made available to you,
-          and to otherwise have communication between you and us occur,
-          electronically.
-        </p>
-        <p className="text">
-          We have the right, in our sole discretion, to add to, remove, modify
-          or otherwise change any part of these Terms, in whole aor in part , at
-          any time. If we exercise this right, the `Last Update&apos; notice at
-          the top of this document shall be amended to reflect the last date of
-          such change. Change will be effective as of the date change to these
-          Terms are posted to this Services. It is your responsibility to check
-          these Terms each time you access this Services immediately. We have
-          the right, in our sole discretion, to add to, remove, modify or
-          otherwise change any part of these Terms, in whole aor in part , at
-          any time. If we exercise this right, the `Last Update&apos; notice at
-          the top of this document shall be amended to reflect the last date of
-          such change. notice at the top of this document shall be amended to
-          reflect the last date of such change. Change will be effective as of
-          the date change to these Terms are posted to this Services.
-        </p>
-        <p className="text">
-          We may, at any time without notice or liability, and for any reason
-          whatsoever, terminate, change, suspend or discontinue any aspect of
-          this Services, including: (i) changing the availability of restricting
-          access to...or imposing limits on any or all features or services on,
-          or links to, this Services. (ii) removing adding modifying or
-          otherwise changing any fees We may, at any time without notice or
-          liability, and for any reason whatsoever, terminate, change, suspend
-          or discontinue any aspect of this Services, including: (iii) changing
-          the availability of, or imposing limits restricting access to, or
-          imposing limits on any or all features or features or services on, or
-          links to, this Services.
-        </p>
-        <p className="text">
-          You must be 18 years of age or older and at least the age of majority
-          in the jurisdiction in which you side as of the time you register with
-          us.
-        </p>
-        <p className="text">
-          Any mobile application download via third party store, such as Tunes
-          or Google Play. may be subject to additional terms and conditions
-          applicable to such store. You acknowledge and agree that the owner of
-          such third party store is not a party to these Terms.
-        </p>
-        <h6 className="heading-sm">Limited Licenses</h6>
-        <p className="text">
-          Subject to these terms, you are granted a non-exclusive, non-
-          sub-Scannable, revocable, limited right and license to use this
-          Services, including the Content the accessible through this Services,
-          for information purposes and solely your own personal use of your
-          internal business use if you are an Organization (as defined below).
-        </p>
-        <p className="text">
-          You may not or may you cause or assist another to.
-        </p>
-        <p className="text">
-          resell any Content or include any Content in or with any product that
-          you create or distribute.
-        </p>
+    <div
+      className="terms text-sm"
+      style={{ padding: '25px 15px', color: 'gray' }}
+    >
+      <div className="font-bold" style={{ color: 'black' }}>
+        Last Update: 1, April, 2019
       </div>
+      <br />
+      <span style={{ color: 'black' }}>
+        Please read these Terms and Conditions ("Terms") carefully before
+        accessing or using the services provided by Ilyas Salon ("Salon," "we,"
+        "us," or "our"). By accessing or using our services, you agree to be
+        bound by these Terms. If you do not agree to these Terms, you may not
+        access or use our services.
+      </span>
+      <br />
+      <br />
+      <section>
+        <h2 className="font-bold" style={{ color: 'black' }}>
+          Services:
+        </h2>
+        <p style={{ color: 'black' }}>
+          Ilyas Salon provides hair styling, grooming, and related services
+          ("Services") to customers at our salon location.
+        </p>
+      </section>
+      <section>
+        <h2 className="font-bold" style={{ color: 'black' }}>
+          Appointments:
+        </h2>
+        <p style={{ color: 'black' }}>
+          Appointments for Services may be booked online through our website or
+          by contacting us directly. We recommend booking appointments in
+          advance to ensure availability, especially for peak times and popular
+          services. If you need to cancel or reschedule an appointment, please
+          notify us at least hours in advance.
+        </p>
+      </section>
+      <section>
+        <h2 className="font-bold" style={{ color: 'black' }}>
+          Payments:
+        </h2>
+        <p style={{ color: 'black' }}>
+          Payment for Services is due at the time of service. We accept cash,
+          credit/debit cards, and other forms of electronic payment.
+        </p>
+      </section>
+      <section>
+        <h2 className="font-bold" style={{ color: 'black' }}>
+          Cancellation Policy:
+        </h2>
+        <p style={{ color: 'black' }}>
+          If you need to cancel or reschedule an appointment, please notify us
+          at least [insert timeframe] hours in advance. Failure to cancel or
+          reschedule within the specified timeframe may result in a cancellation
+          fee.
+        </p>
+      </section>
+      <section>
+        <h2 className="font-bold" style={{ color: 'black' }}>
+          Customer Conduct:
+        </h2>
+        <p style={{ color: 'black' }}>
+          We strive to maintain a positive and respectful environment for all
+          customers and staff. We reserve the right to refuse service to anyone
+          who engages in disruptive or inappropriate behavior.
+        </p>
+      </section>
+      <section>
+        <h2 className="font-bold" style={{ color: 'black' }}>
+          Safety and Hygiene:
+        </h2>
+        <p style={{ color: 'black' }}>
+          We prioritize the health and safety of our customers and staff. We
+          adhere to strict sanitation protocols and safety measures to ensure a
+          clean and hygienic environment.
+        </p>
+      </section>
+      <section>
+        <h2 className="font-bold" style={{ color: 'black' }}>
+          Liability:
+        </h2>
+        <p style={{ color: 'black' }}>
+          Ilyas Salon is not liable for any damages, losses, or injuries
+          resulting from the use of our Services. Customers use our Services at
+          their own risk.
+        </p>
+      </section>
+      <section>
+        <h2 className="font-bold" style={{ color: 'black' }}>
+          Intellectual Property:
+        </h2>
+        <p style={{ color: 'black' }}>
+          All content, including but not limited to logos, trademarks, and
+          images, displayed on our website and in our salon is the property of
+          Ilyas Salon and may not be reproduced or used without permission.
+        </p>
+      </section>
+      <section>
+        <h2 className="font-bold" style={{ color: 'black' }}>
+          Changes to Terms:
+        </h2>
+        <p style={{ color: 'black' }}>
+          We reserve the right to update or modify these Terms at any time
+          without prior notice. By continuing to access or use our services
+          after any revisions become effective, you agree to be bound by the
+          updated Terms.
+        </p>
+      </section>
+      <section>
+        <h2 className="font-bold" style={{ color: 'black' }}>
+          Contact Us:
+        </h2>
+        <p style={{ color: 'black' }}>
+          If you have any questions or concerns about these Terms or our
+          services, please contact us at [insert contact information]. These
+          Terms are effective as of [insert effective date] and apply to all
+          customers accessing or using the services provided by Ilyas Salon.
+        </p>
+      </section>
     </div>
   );
 }
