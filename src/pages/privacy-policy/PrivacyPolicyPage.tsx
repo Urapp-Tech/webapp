@@ -5,12 +5,6 @@ function PrivacyPolicyPage() {
           className="privacy text-sm"
           style={{ color: 'var(--color-font-grey)', padding: '25px 15px' }}
         >
-          <div
-            className="font-bold"
-            style={{ color: 'var(--color-font-dark)' }}
-          >
-            Last Update: 1, April, 2019
-          </div>
           <br />
           <span className="font-bold" style={{ color: 'black' }}>
             Privacy Policy for Ilyas Salon:
