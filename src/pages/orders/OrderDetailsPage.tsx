@@ -69,7 +69,7 @@ function OrderDetailsPage() {
       return;
     }
 
-    console.log("getOrderDetailsResult", getOrderDetailsResult.data.data);
+    console.log('getOrderDetailsResult', getOrderDetailsResult.data.data);
     setOrderItemDetail(getOrderDetailsResult.data.data);
   }, []);
 
@@ -89,7 +89,7 @@ function OrderDetailsPage() {
             getOrderDetails();
           }
           setAlertSeverity('success');
-          setAlertMessage(response.data.message);
+          setAlertMessage('order canceled successfully');
           setShowAlert(true);
         } else {
           setAlertSeverity('error');
@@ -109,9 +109,8 @@ function OrderDetailsPage() {
   };
 
   useEffect(() => {
-    console.log("ORDER STATUSES :::::::::::::::", ORDER_STATUSES);
+    console.log('ORDER STATUSES :::::::::::::::', ORDER_STATUSES);
     if (user) {
-
       getOrderDetails().then();
     }
   }, []);
@@ -209,7 +208,11 @@ function OrderDetailsPage() {
                       Order Id:&nbsp;
                       <span>{orderItemDetail?.orderNumber}</span>
                     </p>
-                    <p className="order-date-time">{dayjs(orderItemDetail?.createdDate).format('MMM DD, YY | hh:mm A')}</p>
+                    <p className="order-date-time">
+                      {dayjs(orderItemDetail?.createdDate).format(
+                        'MMM DD, YY | hh:mm A'
+                      )}
+                    </p>
                     <h6 className="order-status order-out-for-delivery">
                       {orderItemDetail?.status}
                     </h6>
@@ -346,55 +349,63 @@ function OrderDetailsPage() {
             </div>
             <div className="body">
               {[...ORDER_STATUSES.values()].map((el, index) => {
-                const orderStatus = orderItemDetail?.appOrderStatuses.filter((filterItem) => filterItem.status === el.status);
+                const orderStatus = orderItemDetail?.appOrderStatuses.filter(
+                  (filterItem) => filterItem.status === el.status
+                );
                 const findStatus = orderStatus?.[0];
-                console.log("Item", orderStatus?.[0])
-                return (<div
-                  className={cn('timeline-item', {
-                    disabled: !orderItemDetail?.appOrderStatuses?.some(
-                      (item: any) => item.status === el.status
-                    ),
-                  })}
-                  key={el.status}
-                >
-                  <div className="dot">
-                    {orderItemDetail?.appOrderStatuses?.some(
-                      (item: any) => item.status === el.status
-                    ) ? (
-                      <CheckCircleOutlineOutlinedIcon />
-                    ) : (
-                      <CircleOutlinedIcon />
+                console.log('Item', orderStatus?.[0]);
+                return (
+                  <div
+                    className={cn('timeline-item', {
+                      disabled: !orderItemDetail?.appOrderStatuses?.some(
+                        (item: any) => item.status === el.status
+                      ),
+                    })}
+                    key={el.status}
+                  >
+                    <div className="dot">
+                      {orderItemDetail?.appOrderStatuses?.some(
+                        (item: any) => item.status === el.status
+                      ) ? (
+                        <CheckCircleOutlineOutlinedIcon />
+                      ) : (
+                        <CircleOutlinedIcon />
+                      )}
+                    </div>
+                    <div className="order-placed relative inline-flex">
+                      <CircularProgress
+                        thickness={1.5}
+                        className={cn('circular-icon', el.color)}
+                        variant="determinate"
+                        value={100}
+                      />
+                      <div
+                        className={cn(
+                          'absolute inset-0 flex items-center justify-center',
+                          el.color
+                        )}
+                      >
+                        <CheckCircleOutlineOutlinedIcon />
+                      </div>
+                    </div>
+                    <div className="flex-grow">
+                      <h6 className={`status-title ${el.color}`}>{el.title}</h6>
+                      <p className="status-desc">{el.text}</p>
+                    </div>
+                    {findStatus && (
+                      <p className="date">
+                        {dayjs(findStatus.createdDate).format(
+                          'MMM DD, YY | hh:mm A'
+                        )}
+                      </p>
                     )}
                   </div>
-                  <div className="order-placed relative inline-flex">
-                    <CircularProgress
-                      thickness={1.5}
-                      className={cn('circular-icon', el.color)}
-                      variant="determinate"
-                      value={100}
-                    />
-                    <div
-                      className={cn(
-                        'absolute inset-0 flex items-center justify-center',
-                        el.color
-                      )}
-                    >
-                      <CheckCircleOutlineOutlinedIcon />
-                    </div>
-                  </div>
-                  <div className="flex-grow">
-                    <h6 className={`status-title ${el.color}`}>{el.title}</h6>
-                    <p className="status-desc">{el.text}</p>
-                  </div>
-                  {findStatus && (
-                    <p className="date">{dayjs(findStatus.createdDate).format('MMM DD, YY | hh:mm A')}</p>
-                  )}
-                </div>)
+                );
               })}
             </div>
           </div>
         </div>
-      </div >
+      </div>
     </>
   );
 }

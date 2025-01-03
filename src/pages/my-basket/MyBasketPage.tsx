@@ -10,6 +10,7 @@ import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
+import debounce from '@mui/material/utils/debounce';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
@@ -289,13 +290,13 @@ function MyBasketPage() {
       return;
     }
     dispatch(setCartData(updateCartResult.data.data.cart));
-  }, [cartItems]);
+  }, [cartItems, voucherCode]);
 
   useEffect(() => {
-    updateCart().then((response) => {
-      // console.log('updateCart response :>> ', response);
+    updateCart().catch((error) => {
+      console.error('error :>> ', error);
     });
-  }, [cartItems]);
+  }, [cartItems, voucherCode]);
 
   const handleRemoveFromCart = async (id: string) => {
     dispatch(removeFromCart(id));
@@ -341,6 +342,14 @@ function MyBasketPage() {
   useEffect(() => {
     getUserAddress().then();
   }, [user]);
+
+  const onVoucherCodeChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    setVoucherCode(event.target.value);
+  };
+
+  const voucherCodeDelayed = debounce(onVoucherCodeChange, 500);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -461,14 +470,14 @@ function MyBasketPage() {
                   </p>
                   <FormControl variant="standard" size="small">
                     <Input
-                      className="min-w-60 min-h-[10px] rounded-[0.625rem] border border-solid border-[var(--light-400)] p-2 text-xs font-normal text-faded"
+                      className="min-h-[10px] min-w-60 rounded-[0.625rem] border border-solid border-[var(--light-400)] p-2 text-xs font-normal text-faded"
                       disableUnderline
                       inputProps={{
                         placeholder: 'Enter Promo Code',
                         className: 'p-[initial]',
                       }}
-                      value={voucherCode}
-                      onChange={(e) => setVoucherCode(e.target.value)}
+                      defaultValue={voucherCode}
+                      onChange={voucherCodeDelayed}
                       startAdornment={
                         <InputAdornment
                           className="text-orange-100"
@@ -587,7 +596,11 @@ function MyBasketPage() {
                     setShowAlert(true);
                     return;
                   }
-                  setOpenPaymentSelectPopup(true);
+
+                  // perform cash payment
+                  onCheckoutCash();
+                  // stop payment selection popup
+                  // setOpenPaymentSelectPopup(true);
                 }}
                 color="inherit"
                 className="btn-checkout"

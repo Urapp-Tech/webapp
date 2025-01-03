@@ -259,11 +259,15 @@
   @apply text-primary;
   cursor: pointer;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow */
-}
+  user-select: none;
+  &.swiper-button-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 
-.custom-swiper-button-next:hover,
-.custom-swiper-button-prev:hover {
-  background-color: rgba(0, 0, 0, 0.1); /* Hover effect */
+  &:hover:not(.swiper-button-disabled) {
+    background-color: rgba(0, 0, 0, 0.1); /* Hover effect */
+  }
 }
 
 /* Optional: Adjust arrow position and size based on screen size */

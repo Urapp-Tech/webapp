@@ -35,8 +35,10 @@ export const fetchAppointments = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
+      const { tenant } = data;
+      delete data.tenant;
       const response = await appointmentService.fetchAllAppointments(
-        data.tenant,
+        tenant,
         data
       );
       return response.data;

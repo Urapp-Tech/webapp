@@ -3,7 +3,8 @@ import { getItem, setItem } from './local-storage';
 export default function monitorIdleTime(
   intervalTime: number,
   idleTime: number,
-  callback: () => void
+  callback: () => void,
+  initialTrigger = false
 ) {
   let intervalId: NodeJS.Timeout | string | number | undefined;
 
@@ -24,6 +25,8 @@ export default function monitorIdleTime(
       callback();
     }
   };
+
+  if (initialTrigger) checkIdleTime();
 
   intervalId = setInterval(checkIdleTime, intervalTime);
 }

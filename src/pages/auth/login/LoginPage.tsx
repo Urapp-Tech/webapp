@@ -115,6 +115,7 @@ function LoginPage() {
   const password = register('password');
 
   const submitHandler = async (data: LoginPayload) => {
+    if (errors.email || errors.password) return;
     setIsLoader(true);
     const loginPromise = authService.loginService(data);
     const [loginResponse, loginError] = await promiseHandler(loginPromise);

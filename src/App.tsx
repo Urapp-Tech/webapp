@@ -61,11 +61,16 @@ function App() {
 
   useEffect(() => {
     const intervalTime = dayjs.duration(5, 'minutes').asMilliseconds();
-    const idleTime = dayjs.duration(15, 'minutes').asMilliseconds();
-    monitorIdleTime(intervalTime, idleTime, () => {
-      localStorage.clear();
-      window.location.replace('/');
-    });
+    const idleTime = dayjs.duration(10, 'minutes').asMilliseconds();
+    monitorIdleTime(
+      intervalTime,
+      idleTime,
+      () => {
+        localStorage.clear();
+        window.location.replace('/');
+      },
+      true
+    );
   }, []);
 
   useEffect(() => {

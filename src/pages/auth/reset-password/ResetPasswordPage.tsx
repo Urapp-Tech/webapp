@@ -132,6 +132,7 @@ function ResetPasswordPage() {
                       className="input-with-icon px-4 after:border-b-neutral-900"
                       id="password"
                       type=""
+                      placeholder="*******"
                       name="password"
                       endAdornment={
                         <InputAdornment position="end">
@@ -157,6 +158,7 @@ function ResetPasswordPage() {
                       className="input-with-icon px-4 after:border-b-neutral-900"
                       id="password"
                       type=""
+                      placeholder="*******"
                       name="password"
                       endAdornment={
                         <InputAdornment position="end">

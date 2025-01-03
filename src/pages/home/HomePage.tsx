@@ -116,7 +116,7 @@ function HomePage() {
 
       <div className="bg-background px-4 pt-6 sm:px-5 sm:pt-4 xl:px-7">
         <div className="all-categories mb-8">
-          <h4 className="mb-5 text-2xl font-semibold leading-tight text-secondary sm:mb-7 md:text-[1.375rem] md:font-bold">
+          <h4 className="mb-5 mt-2 text-2xl font-semibold leading-tight text-secondary sm:mb-7 md:text-[1.375rem] md:font-bold">
             Services
           </h4>
           <StoreServiceCategoriesCard

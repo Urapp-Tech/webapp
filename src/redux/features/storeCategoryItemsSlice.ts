@@ -35,11 +35,10 @@ export const fetchCategoriesItems = createAsyncThunk(
       if (!data.tenant) {
         throw new Error('No Tenant');
       }
-      const response = await service.getCategoriesItem(
-        data.tenant,
-        data.branch,
-        data
-      );
+      const { tenant, branch } = data;
+      delete data.tenant;
+      delete data.branch;
+      const response = await service.getCategoriesItem(tenant, branch, data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error);
