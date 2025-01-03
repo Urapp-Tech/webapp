@@ -9,11 +9,12 @@ function TermsAndConditionPage() {
       </div>
       <br />
       <span style={{ color: 'black' }}>
-        Please read these Terms and Conditions ("Terms") carefully before
-        accessing or using the services provided by Ilyas Salon ("Salon," "we,"
-        "us," or "our"). By accessing or using our services, you agree to be
-        bound by these Terms. If you do not agree to these Terms, you may not
-        access or use our services.
+        Please read these Terms and Conditions (&apos;Terms&apos;) carefully
+        before accessing or using the services provided by Ilyas Salon
+        (&apos;Salon,&apos; &apos;we,&apos; &apos;us,&apos; or &apos;our&apos;).
+        By accessing or using our services, you agree to be bound by these
+        Terms. If you do not agree to these Terms, you may not access or use our
+        services.
       </span>
       <br />
       <br />
@@ -23,7 +24,7 @@ function TermsAndConditionPage() {
         </h2>
         <p style={{ color: 'black' }}>
           Ilyas Salon provides hair styling, grooming, and related services
-          ("Services") to customers at our salon location.
+          (&apos;Services&apos;) to customers at our salon location.
         </p>
       </section>
       <section>

@@ -98,12 +98,10 @@ function HomeItemDetail() {
     await allRatingReviewTrigger({ itemId, page: newPage, size }).then(
       (resp) => {
         if (resp.isSuccess) {
-          setList(
-            (prev: any) =>
-              prev?.filter(
-                (el: any) =>
-                  !currentList.some((items: any) => items.id === el.id)
-              )
+          setList((prev: any) =>
+            prev?.filter(
+              (el: any) => !currentList.some((items: any) => items.id === el.id)
+            )
           );
           setCurrentList(resp.data.data.list);
           setTotal(resp.data.data.total);

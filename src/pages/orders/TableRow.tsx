@@ -34,7 +34,7 @@ function TableRow({ id, appOrderNumber, type, date, progress, item }: Props) {
                       colorPrimary: cn('relative inline-flex', status.color),
                     }}
                     value={ORDER_STATUSES.get(type)?.progress}
-                  // color={getColorFromCode(status.color)}
+                    // color={getColorFromCode(status.color)}
                   />
                   <CircularProgress
                     thickness={2}
