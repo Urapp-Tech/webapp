@@ -4,9 +4,6 @@ function PrivacyPolicyPage() {
       className="privacy text-sm"
       style={{ color: 'var(--color-font-grey)', padding: '25px 15px' }}
     >
-      <div className="font-bold" style={{ color: 'var(--color-font-dark)' }}>
-        Last Update: 1, April, 2019
-      </div>
       <br />
       <span className="font-bold" style={{ color: 'black' }}>
         Privacy Policy for Ilyas Salon:
@@ -15,11 +12,11 @@ function PrivacyPolicyPage() {
       <br />
       <span style={{ color: 'black' }}>
         At Ilyas Salon, we are committed to protecting the privacy and security
-        of our customers&#39; personal information. This Privacy Policy outlines
-        how we collect, use, disclose, and safeguard your information when you
-        visit our salon, use our services, or interact with us online. By
-        accessing our website or using our services, you consent to the terms of
-        this Privacy Policy.
+        of our customers&apos; personal information. This Privacy Policy
+        outlines how we collect, use, disclose, and safeguard your information
+        when you visit our salon, use our services, or interact with us online.
+        By accessing our website or using our services, you consent to the terms
+        of this Privacy Policy.
       </span>
       <br />
       <br />
@@ -93,7 +90,7 @@ function PrivacyPolicyPage() {
       <br />
       <br />
       <span className="font-bold" style={{ color: 'black' }}>
-        Children&#39;s Privacy:
+        Children&apos;s Privacy:
       </span>
       <br />
       <br />

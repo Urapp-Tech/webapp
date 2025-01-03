@@ -4,9 +4,6 @@ function TermsAndConditionPage() {
       className="terms text-sm"
       style={{ padding: '25px 15px', color: 'gray' }}
     >
-      <div className="font-bold" style={{ color: 'black' }}>
-        Last Update: 1, April, 2019
-      </div>
       <br />
       <span style={{ color: 'black' }}>
         Please read these Terms and Conditions (&apos;Terms&apos;) carefully
@@ -27,6 +24,7 @@ function TermsAndConditionPage() {
           (&apos;Services&apos;) to customers at our salon location.
         </p>
       </section>
+      <br />
       <section>
         <h2 className="font-bold" style={{ color: 'black' }}>
           Appointments:
@@ -39,6 +37,7 @@ function TermsAndConditionPage() {
           notify us at least hours in advance.
         </p>
       </section>
+      <br />
       <section>
         <h2 className="font-bold" style={{ color: 'black' }}>
           Payments:
@@ -48,6 +47,7 @@ function TermsAndConditionPage() {
           credit/debit cards, and other forms of electronic payment.
         </p>
       </section>
+      <br />
       <section>
         <h2 className="font-bold" style={{ color: 'black' }}>
           Cancellation Policy:
@@ -59,6 +59,7 @@ function TermsAndConditionPage() {
           fee.
         </p>
       </section>
+      <br />
       <section>
         <h2 className="font-bold" style={{ color: 'black' }}>
           Customer Conduct:
@@ -69,6 +70,7 @@ function TermsAndConditionPage() {
           who engages in disruptive or inappropriate behavior.
         </p>
       </section>
+      <br />
       <section>
         <h2 className="font-bold" style={{ color: 'black' }}>
           Safety and Hygiene:
@@ -79,6 +81,7 @@ function TermsAndConditionPage() {
           clean and hygienic environment.
         </p>
       </section>
+      <br />
       <section>
         <h2 className="font-bold" style={{ color: 'black' }}>
           Liability:
@@ -89,6 +92,7 @@ function TermsAndConditionPage() {
           their own risk.
         </p>
       </section>
+      <br />
       <section>
         <h2 className="font-bold" style={{ color: 'black' }}>
           Intellectual Property:
@@ -99,6 +103,7 @@ function TermsAndConditionPage() {
           Ilyas Salon and may not be reproduced or used without permission.
         </p>
       </section>
+      <br />
       <section>
         <h2 className="font-bold" style={{ color: 'black' }}>
           Changes to Terms:
@@ -110,6 +115,7 @@ function TermsAndConditionPage() {
           updated Terms.
         </p>
       </section>
+      <br />
       <section>
         <h2 className="font-bold" style={{ color: 'black' }}>
           Contact Us:
