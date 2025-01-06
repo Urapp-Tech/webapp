@@ -9,6 +9,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAppSelector } from '../../redux/redux-hooks';
 import notificationService from '../../services/notification.service';
+import { Notification } from '../../types/notification.types';
 import cn from '../../utilities/class-names';
 import promiseHandler from '../../utilities/promise-handler';
 import NotificationPopover from './NotificationPopover';
@@ -29,7 +30,9 @@ function TopBar({ setDrawerState }: Props) {
   const handleClick = () => {
     setNotificationElement(notificationIconButtonElement.current);
   };
-  const [notificationList, setNotificationList] = useState([]);
+  const [notificationList, setNotificationList] = useState<Array<Notification>>(
+    []
+  );
 
   const getNotificationList = useCallback(async () => {
     const getNotificationListPromise = notificationService.notificationList();
@@ -44,12 +47,12 @@ function TopBar({ setDrawerState }: Props) {
       console.error('error2', getNotificationListResult.data.message);
       return;
     }
-    setNotificationList(getNotificationListResult.data.data.notifications);
+    setNotificationList(getNotificationListResult.data.data);
   }, []);
 
   useEffect(() => {
     if (user) {
-      getNotificationList().then();
+      getNotificationList().catch((error) => console.log('error :>> ', error));
     }
   }, [user]);
 
@@ -85,33 +88,38 @@ function TopBar({ setDrawerState }: Props) {
           >
             <MenuIcon />
           </IconButton>
-          <Badge
-            badgeContent={notificationList?.length}
-            max={99}
-            classes={{
-              badge: cn(
-                '!pointer-events-none !right-1 !top-1 !h-5 !w-5 !rounded-full !bg-[#FF4848] !font-open-sans !text-[.625rem] !font-semibold !text-white'
-              ),
-            }}
-          >
-            <IconButton
-              ref={notificationIconButtonElement}
-              onClick={handleClick}
-              className="p-0 text-gray-50"
-              aria-label="notifications-button"
-              component="button"
-            >
-              <NotificationsNoneOutlinedIcon />
-            </IconButton>
-          </Badge>
-          <NotificationPopover
-            notification={notificationElement}
-            setNotification={setNotificationElement}
-            anchorElement={notificationIconButtonElement.current}
-          />
-          <div className="ml-4 mr-3 h-7 w-[1px] bg-neutral-300 md:ml-5 md:mr-4">
-            {' '}
-          </div>
+
+          {Boolean(user) && (
+            <>
+              <Badge
+                badgeContent={notificationList?.length}
+                max={99}
+                classes={{
+                  badge: cn(
+                    '!pointer-events-none !right-1 !top-1 !h-5 !w-5 !rounded-full !bg-[#FF4848] !font-open-sans !text-[.625rem] !font-semibold !text-white'
+                  ),
+                }}
+              >
+                <IconButton
+                  ref={notificationIconButtonElement}
+                  onClick={handleClick}
+                  className="p-0 text-gray-50"
+                  aria-label="notifications-button"
+                  component="button"
+                >
+                  <NotificationsNoneOutlinedIcon />
+                </IconButton>
+              </Badge>
+              <NotificationPopover
+                notificationList={notificationList}
+                notification={notificationElement}
+                setNotification={setNotificationElement}
+                anchorElement={notificationIconButtonElement.current}
+              />
+              <div className="ml-4 mr-3 h-7 w-[1px] bg-neutral-300 md:ml-5 md:mr-4" />
+            </>
+          )}
+
           <NavLink to="./my-basket">
             <Badge
               badgeContent={cartItems.length}

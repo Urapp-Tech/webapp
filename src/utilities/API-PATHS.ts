@@ -68,7 +68,7 @@ const API_PATHS = {
     ).toString(),
 
   // Notification
-  notificationList: new URL(`appNotification/list`, BASE_URL).toString(),
+  notificationList: new URL(`notifications/list`, BASE_URL).toString(),
 
   // Order
   addOrder: new URL(`appOrder/newOrder`, BASE_URL).toString(),

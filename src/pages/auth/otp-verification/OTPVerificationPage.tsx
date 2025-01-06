@@ -189,9 +189,9 @@ function OTPVerificationPage() {
                                   onClick={handleClickShowPassword}
                                 >
                                   {showPassword ? (
-                                    <VisibilityOff />
-                                  ) : (
                                     <Visibility />
+                                  ) : (
+                                    <VisibilityOff />
                                   )}
                                 </IconButton>
                               </InputAdornment>
@@ -244,9 +244,9 @@ function OTPVerificationPage() {
                                   onClick={handleClickShowNewPassword}
                                 >
                                   {showNewPassword ? (
-                                    <VisibilityOff />
-                                  ) : (
                                     <Visibility />
+                                  ) : (
+                                    <VisibilityOff />
                                   )}
                                 </IconButton>
                               </InputAdornment>
