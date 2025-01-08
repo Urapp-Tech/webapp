@@ -544,18 +544,189 @@ export default function RescheduleAppointmentPage() {
     return false;
   };
 
-  const addAppointmentServices = () => {
-    if (checkUserBookedOnTime()) {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: `You have another appointment scheduled for this time. (${dayjs(
-          appointmentTime
-        )?.format('hh:mm A')})`,
-        type: 'error',
-      });
-      return;
-    }
+  const checkIsBeforeTime = (appointmentDate: any, date: any) => {
+    return dayjs(appointmentDate).isBefore(date, 'minute');
+  };
 
+  // const addAppointmentServices = () => {
+  //   if (checkUserBookedOnTime()) {
+  //     setIsNotify(true);
+  //     setNotifyMessage({
+  //       text: `You have another appointment scheduled for this time. (${dayjs(
+  //         appointmentTime
+  //       )?.format('hh:mm A')})`,
+  //       type: 'error',
+  //     });
+  //     return;
+  //   }
+
+  //   const obj = {
+  //     id: 0,
+  //     barber: activeBarberData?.storeEmployee?.name,
+  //     amount: activeBarberData?.amount,
+  //     storeServiceCategory: watch('categoryId'),
+  //     serviceTime: activeBarber?.serviceTime,
+  //     storeServiceCategoryItem: watch('storeServiceCategoryItem'),
+  //     storeEmployee: activeBarberData?.storeEmployee?.id,
+  //     appointmentTime: `${dayjs(getValues('appointmentDate'))?.format(
+  //       'YYYY-MM-DD'
+  //     )} ${dayjs(appointmentTime)?.format('HH:mm:ss')}`,
+  //   };
+
+  //   if (
+  //     watch('storeServiceCategoryItem') &&
+  //     activeBarberData &&
+  //     getValues('appointmentDate') &&
+  //     appointmentTime
+  //   ) {
+  //     const currentDay = dayjs(getValues('appointmentDate')).format('dddd');
+  //     const scheduleData = activeBarberData?.storeEmployeeSchedule.filter(
+  //       (item: any) => item.workDay === currentDay
+  //     );
+  //     const time = dayjs(appointmentTime);
+  //     const startTime = dayjs(scheduleData[0]?.startTime)
+  //       .set('date', time.date())
+  //       .set('month', time.month())
+  //       .set('year', time.year());
+  //     let endTime = dayjs(scheduleData[0]?.endTime)
+  //       .set('date', time.date())
+  //       .set('month', time.month())
+  //       .set('year', time.year());
+  //     if (startTime.hour() > endTime.hour()) {
+  //       endTime = endTime.add(1, 'day');
+  //     }
+  //     const officeInTime = officeTimeIn
+  //       .set('date', time.date())
+  //       .set('month', time.month())
+  //       .set('year', time.year());
+  //     let officeOutTime = officeTimeOut
+  //       .set('date', time.date())
+  //       .set('month', time.month())
+  //       .set('year', time.year());
+  //     if (officeInTime.hour() > officeOutTime.hour()) {
+  //       officeOutTime = officeOutTime.add(1, 'day');
+  //     }
+  //     let prevTime = startTime;
+  //     const addTime = dayjs(time).add(activeBarberData?.serviceTime, 'minutes');
+
+  //     if (scheduleData.length > 0) {
+  //       if (!checkIsBetweenTime(time, startTime, endTime)) {
+  //         setIsNotify(true);
+  //         setNotifyMessage({
+  //           text: 'Barber is not available at this time',
+  //           type: 'error',
+  //         });
+  //         return false;
+  //       }
+
+  //       const isDuplicate = checkDuplicateServices(
+  //         fields,
+  //         activeBarberData?.storeEmployee?.id,
+  //         watch('storeServiceCategoryItem')
+  //       );
+  //       if (!isDuplicate) {
+  //         if (tempAppointmentBookedTime.length > 0) {
+  //           for (let i = 0; i < tempAppointmentBookedTime.length; i += 1) {
+  //             const tempEl = tempAppointmentBookedTime[i];
+  //             const tempServiceTime = dayjs(tempEl.appointmentTime).add(
+  //               tempEl.serviceTime,
+  //               'minute'
+  //             );
+  //             if (time > dayjs(tempServiceTime)) {
+  //               prevTime = dayjs(tempServiceTime);
+  //             } else if (
+  //               !checkIsBetweenTime(
+  //                 addTime,
+  //                 prevTime,
+  //                 dayjs(tempEl.appointmentTime)
+  //               )
+  //             ) {
+  //               setIsNotify(true);
+  //               setNotifyMessage({
+  //                 text: `Barber is engaged with another client`,
+  //                 type: 'error',
+  //               });
+  //               return false;
+  //             }
+  //           }
+  //         }
+  //         for (let i = 0; i < appointmentBookedTime.length; i += 1) {
+  //           const el = appointmentBookedTime[i];
+  //           const serviceTime = dayjs(el.appointmentTime).add(
+  //             el.serviceTime,
+  //             'minute'
+  //           );
+  //           if (
+  //             time > dayjs(serviceTime) &&
+  //             checkIsAfterTime(endTime, serviceTime)
+  //           ) {
+  //             prevTime = dayjs(serviceTime);
+  //           } else if (
+  //             !checkIsAfterTime(endTime, serviceTime) &&
+  //             !checkIsBetweenTime(addTime, prevTime, dayjs(el.appointmentTime))
+  //           ) {
+  //             setIsNotify(true);
+  //             setNotifyMessage({
+  //               text: `Barber is not available at this time`,
+  //               type: 'error',
+  //             });
+  //             return false;
+  //           }
+  //         }
+  //         const storeServiceCategoryItemId = getValues(
+  //           'storeServiceCategoryItem'
+  //         );
+  //         const storeServiceCategoryItem = catItemsLovlist.find(
+  //           (catItem) => catItem.id === storeServiceCategoryItemId
+  //         );
+  //         setTmpId((prevId: any) => prevId + 1);
+  //         const newData = {
+  //           id: tmpId,
+  //           appointmentTime,
+  //           email: activeBarberData?.storeEmployee?.email ?? 'abc@gmail.com',
+  //           gender: 'male',
+  //           name: activeBarberData?.storeEmployee?.name ?? 'urapp',
+  //           note: 'demo',
+  //           phone: activeBarberData?.storeEmployee?.phone,
+  //           serviceTime: storeServiceCategoryItem?.serviceTime,
+  //           status: 'New',
+  //           storeEmployee: activeBarberData?.storeEmployee?.id,
+  //           storeServiceCategory: '12345',
+  //           amount: storeServiceCategoryItem?.price,
+  //           storeServiceCategoryItem:
+  //             activeBarberData?.storeServiceCategoryItem,
+  //         };
+  //         obj.id = tmpId;
+  //         obj.serviceTime = storeServiceCategoryItem?.serviceTime;
+  //         obj.amount = storeServiceCategoryItem?.price;
+  //         setTempAppointmentBookedTime((prev: any) => [...prev, newData]);
+  //         setAppointmentBookedTime((prev: any) => [...prev, newData]);
+  //         append(obj);
+  //       } else {
+  //         setIsNotify(true);
+  //         setNotifyMessage({
+  //           text: 'This service you already selected, Please select another service',
+  //           type: 'error',
+  //         });
+  //       }
+  //     } else {
+  //       setIsNotify(true);
+  //       setNotifyMessage({
+  //         text: `Barber is not available at ${currentDay}`,
+  //         type: 'error',
+  //       });
+  //     }
+  //   } else {
+  //     setIsNotify(true);
+  //     setNotifyMessage({
+  //       text: 'Please select your preferred barber, category , desired services, and appointment date & time for scheduling.',
+  //       type: 'error',
+  //     });
+  //   }
+  //   return null;
+  // };
+
+  const addAppointmentServices = () => {
     const obj = {
       id: 0,
       barber: activeBarberData?.storeEmployee?.name,
@@ -568,7 +739,6 @@ export default function RescheduleAppointmentPage() {
         'YYYY-MM-DD'
       )} ${dayjs(appointmentTime)?.format('HH:mm:ss')}`,
     };
-
     if (
       watch('storeServiceCategoryItem') &&
       activeBarberData &&
@@ -579,7 +749,9 @@ export default function RescheduleAppointmentPage() {
       const scheduleData = activeBarberData?.storeEmployeeSchedule.filter(
         (item: any) => item.workDay === currentDay
       );
-      const time = dayjs(appointmentTime);
+      const time = dayjs(getValues('appointmentDate'))
+        .set('hours', dayjs(appointmentTime).hour())
+        .set('minute', dayjs(appointmentTime).minute());
       const startTime = dayjs(scheduleData[0]?.startTime)
         .set('date', time.date())
         .set('month', time.month())
@@ -591,22 +763,10 @@ export default function RescheduleAppointmentPage() {
       if (startTime.hour() > endTime.hour()) {
         endTime = endTime.add(1, 'day');
       }
-      const officeInTime = officeTimeIn
-        .set('date', time.date())
-        .set('month', time.month())
-        .set('year', time.year());
-      let officeOutTime = officeTimeOut
-        .set('date', time.date())
-        .set('month', time.month())
-        .set('year', time.year());
-      if (officeInTime.hour() > officeOutTime.hour()) {
-        officeOutTime = officeOutTime.add(1, 'day');
-      }
       let prevTime = startTime;
       const addTime = dayjs(time).add(activeBarberData?.serviceTime, 'minutes');
-
       if (scheduleData.length > 0) {
-        if (!checkIsBetweenTime(time, startTime, endTime)) {
+        if (!checkIsBeforeTime(startTime, time)) {
           setIsNotify(true);
           setNotifyMessage({
             text: 'Barber is not available at this time',
@@ -614,7 +774,6 @@ export default function RescheduleAppointmentPage() {
           });
           return false;
         }
-
         const isDuplicate = checkDuplicateServices(
           fields,
           activeBarberData?.storeEmployee?.id,
@@ -653,14 +812,16 @@ export default function RescheduleAppointmentPage() {
               'minute'
             );
             if (
-              time > dayjs(serviceTime) &&
-              checkIsAfterTime(endTime, serviceTime)
+              time > dayjs(serviceTime)
+              //  &&
+              // checkIsAfterTime(endTime, serviceTime)
             ) {
               prevTime = dayjs(serviceTime);
             } else if (
-              !checkIsAfterTime(endTime, serviceTime) &&
+              // !checkIsAfterTime(endTime, serviceTime) &&
               !checkIsBetweenTime(addTime, prevTime, dayjs(el.appointmentTime))
             ) {
+              // break;
               setIsNotify(true);
               setNotifyMessage({
                 text: `Barber is not available at this time`,
@@ -669,32 +830,23 @@ export default function RescheduleAppointmentPage() {
               return false;
             }
           }
-          const storeServiceCategoryItemId = getValues(
-            'storeServiceCategoryItem'
-          );
-          const storeServiceCategoryItem = catItemsLovlist.find(
-            (catItem) => catItem.id === storeServiceCategoryItemId
-          );
           setTmpId((prevId: any) => prevId + 1);
           const newData = {
             id: tmpId,
-            appointmentTime,
+            appointmentTime: time,
             email: activeBarberData?.storeEmployee?.email ?? 'abc@gmail.com',
             gender: 'male',
             name: activeBarberData?.storeEmployee?.name ?? 'urapp',
             note: 'demo',
             phone: activeBarberData?.storeEmployee?.phone,
-            serviceTime: storeServiceCategoryItem?.serviceTime,
+            serviceTime: activeBarberData?.serviceTime,
             status: 'New',
             storeEmployee: activeBarberData?.storeEmployee?.id,
             storeServiceCategory: '12345',
-            amount: storeServiceCategoryItem?.price,
             storeServiceCategoryItem:
               activeBarberData?.storeServiceCategoryItem,
           };
           obj.id = tmpId;
-          obj.serviceTime = storeServiceCategoryItem?.serviceTime;
-          obj.amount = storeServiceCategoryItem?.price;
           setTempAppointmentBookedTime((prev: any) => [...prev, newData]);
           setAppointmentBookedTime((prev: any) => [...prev, newData]);
           append(obj);
@@ -713,6 +865,7 @@ export default function RescheduleAppointmentPage() {
         });
       }
     } else {
+      // console.log("6");
       setIsNotify(true);
       setNotifyMessage({
         text: 'Please select your preferred barber, category , desired services, and appointment date & time for scheduling.',
