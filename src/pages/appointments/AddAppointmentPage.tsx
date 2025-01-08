@@ -434,17 +434,24 @@ export default function AddAppointmentPage() {
         getValues('categoryId') === 'none')
     ) {
       setValue('categoryId', selectedCategory?.id);
-    } else {
-      setValue('storeServiceCategoryItem', 'none');
     }
   }, [selectedCategory]);
+  console.log(
+    '🚀 ~ useEffect ~ selectedCategory:',
+    selectedCategory,
+    selectedCategoryItems,
+    getValues('categoryId'),
+    getValues('storeServiceCategoryItem')
+  );
 
   useEffect(() => {
     if (
+      watch('categoryId') !== selectedCategory?.id &&
       getValues('categoryId') !== undefined &&
       getValues('categoryId') !== 'none'
     ) {
       setBarberList([]);
+      setValue('storeServiceCategoryItem', 'none');
       selectCategory(watch('categoryId'));
       dispatch(
         fetchCategoriesItems({

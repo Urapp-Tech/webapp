@@ -156,7 +156,12 @@ export default function RescheduleAppointmentPage() {
           setValue('email', res.data.data.email);
           setValue('phone', res.data.data.phone);
           setValue('note', res.data.data.note);
-          setValue('gender', capitalizeFirstLetter(res.data.data.gender));
+          setValue(
+            'gender',
+            res.data.data.gender !== 'none'
+              ? capitalizeFirstLetter(res.data.data.gender)
+              : 'none'
+          );
           setAppointmentData(res.data.data);
           setBarberList(res.data.data);
           // console.log('getAppointment', res.data.data);
@@ -1013,8 +1018,6 @@ export default function RescheduleAppointmentPage() {
                           variant="standard"
                         >
                           <CustomDropDown
-                            disabled
-                            validateRequired
                             id="gender"
                             control={control}
                             error={errors}
