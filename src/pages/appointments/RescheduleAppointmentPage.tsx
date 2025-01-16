@@ -355,9 +355,9 @@ export default function RescheduleAppointmentPage() {
       >
         <div className="flex items-center justify-between">
           <span className="font-semibold text-[#003E80]">
-            {getCatItemName(item.storeServiceCategoryItem)}{' '}
-            <p className="text-xs">{`(${item.serviceTime} mints)`}</p>
-            {/* {`(${item.serviceTime} mints)`} */}
+            {getCatItemName(item.storeServiceCategoryItem)}
+            <p className="text-xs">{`(${item.serviceTime} min(s))`}</p>
+            {/* {`(${item.serviceTime} min(s))`} */}
           </span>
           <div className="flex items-center">
             <img

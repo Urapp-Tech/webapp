@@ -25,6 +25,7 @@ import {
   removeFromCart,
   resetCart,
   setCartData,
+  setCartItems,
 } from '../../redux/features/cartStateSlice';
 import { setUserAddressList } from '../../redux/features/deviceState';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
@@ -281,6 +282,18 @@ function MyBasketPage() {
       setAlertSeverity('error');
       setAlertMessage(updateCartError.message);
       setShowAlert(true);
+      return;
+    }
+    if (
+      updateCartResult.data.message ===
+      `Cart Does Not Exist Or Its Status Is Set To 'Processing'`
+    ) {
+      cartService.userCart().then((cartResponse) => {
+        if (cartResponse.data.success) {
+          dispatch(setCartData(cartResponse.data.data.cart));
+          dispatch(setCartItems(cartItems));
+        }
+      });
       return;
     }
     if (!updateCartResult.data.success) {

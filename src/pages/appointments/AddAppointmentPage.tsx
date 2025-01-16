@@ -323,8 +323,8 @@ export default function AddAppointmentPage() {
       >
         <div className="flex items-center justify-between">
           <span className="font-semibold text-[#003E80]">
-            {getCatItemName(item.storeServiceCategoryItem)}{' '}
-            <p className="text-xs">{`(${item.serviceTime} mints)`}</p>
+            {getCatItemName(item.storeServiceCategoryItem)}
+            <p className="text-xs">{`(${item.serviceTime} min(s))`}</p>
           </span>
           <div className="flex items-center">
             <img

@@ -113,7 +113,7 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
   }, [cartItems]);
 
   useEffect(() => {
-    updateCart().then();
+    updateCart().catch((error) => console.log('error :>> ', error));
   }, []);
 
   const onCloseHandler = (event: object, reason: string) => {
