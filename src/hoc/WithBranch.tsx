@@ -1,6 +1,7 @@
 import { HighlightOff, Loop } from '@mui/icons-material';
 import Button from '@mui/material/Button';
 import { useEffect, useMemo, useState } from 'react';
+import dayjs from 'dayjs';
 import { Branch, GetBranchesResponse } from '../interfaces/branch';
 import { login } from '../redux/features/authStateSlice';
 import { setBranch, setIsBranchSingle } from '../redux/features/branchSlice';
@@ -10,6 +11,9 @@ import { SystemConfigData } from '../types/app.types';
 import API_PATHS from '../utilities/API-PATHS';
 import cn from '../utilities/class-names';
 import { getItem } from '../utilities/local-storage';
+import { resetCart, setCartData } from '../redux/features/cartStateSlice';
+import cartService, { UpdateCartPayload } from '../services/cart.service';
+import promiseHandler from '../utilities/promise-handler';
 
 function LoadingBranchesComponent() {
   return (
@@ -59,6 +63,12 @@ function BranchesErrorComponent({
 function SelectBranchComponent({ branches }: { branches: Array<Branch> }) {
   const user = useAppSelector((state) => state.authState.user);
   const systemConfig = useAppSelector((state) => state.appState.systemConfig);
+  const { cartData } = useAppSelector((state) => state.cartState);
+  const userAddress = useAppSelector((state) => state.deviceStates.addressList);
+  const tenantConfig = useAppSelector(
+    (state) => state.deviceStates.tenantConfig
+  );
+
   const dispatch = useAppDispatch();
   const [selectedBranch, setSelectedBranch] = useState<string | null>(null);
   const logo = useMemo(() => {
@@ -67,6 +77,39 @@ function SelectBranchComponent({ branches }: { branches: Array<Branch> }) {
     }
     return systemConfig.tenantConfig.logo;
   }, [systemConfig]);
+
+  const emptyCart = async () => {
+    dispatch(resetCart());
+    if (!cartData?.id) {
+      return;
+    }
+    const pickupDateTime = dayjs(new Date()).toISOString();
+    const dropDateTime = dayjs(pickupDateTime)
+      .add(tenantConfig?.minimumDeliveryTime ?? 3, 'day')
+      .toISOString();
+    const tempAddress = userAddress[0] ? userAddress[0].id : null;
+
+    const updateCartPayload: UpdateCartPayload = {
+      appUser: user?.id,
+      appUserAddress: tempAddress,
+      appUserDevice: cartData?.appUserDevice,
+      cartId: cartData?.id,
+      dropDateTime,
+      pickupDateTime,
+      voucherCode: '',
+      tenant: cartData?.tenant,
+      products: [],
+    };
+
+    const updateCartPromise = cartService.updateCart(updateCartPayload);
+
+    const [updateCartResult, updateCartError] =
+      await promiseHandler(updateCartPromise);
+    if (updateCartResult?.data?.success) {
+      dispatch(setCartData(updateCartResult.data?.data?.cart));
+    }
+  };
+
   const confirmSelection = async () => {
     const branch = branches.find((b) => b.id === selectedBranch);
     if (user) {
@@ -82,7 +125,9 @@ function SelectBranchComponent({ branches }: { branches: Array<Branch> }) {
       dispatch(login(userData));
     }
     dispatch(setBranch(branch));
+    await emptyCart();
   };
+
   return (
     <div className="relative mx-auto min-h-screen w-screen overflow-hidden p-4">
       <div className="absolute -right-[calc(50%-75vh)] top-[calc(50%-70vh)] -z-50 aspect-square h-[140vh] rounded-full bg-background" />
