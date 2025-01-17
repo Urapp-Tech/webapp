@@ -214,12 +214,11 @@ function HomeItemDetail() {
                 <span className="number">
                   {CURRENCY_PREFIX}
                   <span>
-                    {Number(subCategoryItemData?.data?.price).toLocaleString(
-                      undefined,
-                      {
-                        minimumFractionDigits: 2,
-                      }
-                    )}
+                    {Number(
+                      subCategoryItemData?.data?.price ?? 0
+                    ).toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                    })}
                   </span>
                 </span>
                 <span className="text">&nbsp;/ item</span>
@@ -264,9 +263,9 @@ function HomeItemDetail() {
               {total !== 0 ? (
                 <>
                   <span className="text-4xl font-semibold">
-                    {(Number(ratingStarListData?.data?.total) / total).toFixed(
-                      2
-                    )}
+                    {(
+                      Number(ratingStarListData?.data?.total ?? 0) / total
+                    ).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </span>
                   <div className="mx-4 flex items-center rounded-full bg-black px-4 text-white">
                     <div className="mb-1">
