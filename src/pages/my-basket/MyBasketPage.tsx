@@ -32,10 +32,13 @@ import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import addressService from '../../services/address.service';
 import cartService, { UpdateCartPayload } from '../../services/cart.service';
 import orderService from '../../services/order.service';
+import voucherService from '../../services/voucher.service';
+import { Voucher } from '../../types/voucher.types';
 import { CURRENCY_PREFIX } from '../../utilities/constant';
 import promiseHandler from '../../utilities/promise-handler';
 import PayFastForm from './PayFastForm';
 import PaymentOptionPopup from './PaymentOptionPopup';
+import VouchersPopup from './VouchersPopup';
 
 function MyBasketPage() {
   const {
@@ -47,7 +50,8 @@ function MyBasketPage() {
     setAlertSeverity,
   } = useAlert();
 
-  const { cartItems, cartData } = useAppSelector((state) => state.cartState);
+  const cartItems = useAppSelector((state) => state.cartState.cartItems);
+  const cartData = useAppSelector((state) => state.cartState.cartData);
   const tenant = useAppSelector((state) => state.deviceStates.tenant);
   const tenantConfig = useAppSelector(
     (state) => state.deviceStates.tenantConfig
@@ -56,13 +60,35 @@ function MyBasketPage() {
   const userAddress = useAppSelector((state) => state.deviceStates.addressList);
   const branch = useAppSelector((state) => state.branchState.branch);
   const dispatch = useAppDispatch();
-  const [voucherCode, setVoucherCode] = useState('');
+  const [voucherCode, setVoucherCode] = useState(cartData?.voucherCode);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [payFastFormData, setPayFastFormData] = useState<any>(null);
   const [openPaymentSelectPopup, setOpenPaymentSelectPopup] = useState(false);
   const minimumDeliveryTime = tenant?.tenantConfig?.minimumDeliveryTime ?? 1;
   const formSubmitButtonRef = useRef<HTMLButtonElement>(null);
+  const [openVouchersPopup, setOpenVouchersPopup] = useState(false);
+  const [vouchers, setVouchers] = useState<Array<Voucher>>([]);
+  useEffect(() => {
+    async function getVouchers() {
+      const getVouchersPromise = voucherService.getVouchers();
+      const [getVouchersResult, getVouchersError] =
+        await promiseHandler(getVouchersPromise);
+      if (getVouchersError) {
+        return setVouchers([]);
+      }
+      if (!getVouchersResult.data.success) {
+        return setVouchers([]);
+      }
+      return setVouchers(getVouchersResult.data.data);
+    }
+    getVouchers().catch((error) => console.log('error :>> ', error));
+  }, [user]);
+
+  const handleVoucherSelect = (code: string) => {
+    setVoucherCode(code);
+    setOpenVouchersPopup(false);
+  };
 
   const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
     if (value) {
@@ -372,6 +398,12 @@ function MyBasketPage() {
         alertOpen={showAlert}
         setAlertOpen={setShowAlert}
       />
+      <VouchersPopup
+        vouchers={vouchers}
+        open={openVouchersPopup}
+        setOpen={setOpenVouchersPopup}
+        handleVoucherSelect={handleVoucherSelect}
+      />
       <PaymentOptionPopup
         handlePopupClose={handlePopupClose}
         open={openPaymentSelectPopup}
@@ -478,7 +510,7 @@ function MyBasketPage() {
               </div>
               <div className="my-2.5 flex items-center justify-between px-5">
                 <div className="flex items-center">
-                  {user && (
+                  {user && Boolean(vouchers.length) && (
                     <>
                       <p className="mr-2 text-xs font-semibold text-[var(--dark-100)]">
                         Add Promo Code
@@ -491,11 +523,12 @@ function MyBasketPage() {
                             placeholder: 'Enter Promo Code',
                             className: 'p-[initial]',
                           }}
-                          defaultValue={voucherCode}
-                          onChange={voucherCodeDelayed}
+                          value={voucherCode}
+                          readOnly
                           startAdornment={
                             <InputAdornment position="start">
                               <IconButton
+                                onClick={() => setOpenVouchersPopup(true)}
                                 size="small"
                                 className="text-orange-400"
                               >

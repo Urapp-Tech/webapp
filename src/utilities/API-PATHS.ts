@@ -283,7 +283,7 @@ const API_PATHS = {
     return url.toString();
   },
 
-  getVouchersPromotion: () => {
+  getVouchers: () => {
     const url = new URL(`/api/v1/app/vouchers/promotion/list`, BASE_URL);
     return url.toString();
   },
