@@ -212,8 +212,15 @@ function HomeItemDetail() {
             <div className="flex items-center justify-between">
               <div className="price">
                 <span className="number">
-                  {CURRENCY_PREFIX}{' '}
-                  <span>{subCategoryItemData?.data?.price}</span>
+                  {CURRENCY_PREFIX}
+                  <span>
+                    {Number(subCategoryItemData?.data?.price).toLocaleString(
+                      undefined,
+                      {
+                        minimumFractionDigits: 2,
+                      }
+                    )}
+                  </span>
                 </span>
                 <span className="text">&nbsp;/ item</span>
               </div>

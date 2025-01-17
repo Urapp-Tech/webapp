@@ -284,33 +284,35 @@ function ProductPage() {
                   key={item.id}
                   className="relative rounded-[0.625rem] bg-white px-2.5 pb-2.5 pt-4 md:px-3.5 md:pt-5"
                 >
-                  <div>
-                    <button
-                      type="button"
-                      aria-label="Navigate"
-                      onClick={() =>
-                        navigate(`../detail/${item.id}`, {
-                          state: {
-                            menuId: item.homeCategory,
-                            itemId: item.id,
-                          },
-                        })
-                      }
-                    >
-                      <img
-                        className="mb-4 aspect-[4/3] w-full cursor-pointer object-contain md:mb-6"
-                        src={item.icon}
-                        alt=""
-                      />
-                    </button>
-                  </div>
+                  <button
+                    className="w-[-webkit-fill-available]"
+                    type="button"
+                    aria-label="Navigate"
+                    onClick={() =>
+                      navigate(`../detail/${item.id}`, {
+                        state: {
+                          menuId: item.homeCategory,
+                          itemId: item.id,
+                        },
+                      })
+                    }
+                  >
+                    <img
+                      className="mb-4 aspect-[4/3] w-full cursor-pointer object-contain md:mb-6"
+                      src={item.icon}
+                      alt=""
+                    />
+                  </button>
                   <div className="">
                     <h5 className="mb-2 basis-full text-center text-base font-semibold leading-none text-secondary sm:mb-3 sm:text-left">
                       {item.name}
                     </h5>
                     <div className="flex items-center justify-between">
                       <h6 className="mb-3 flex-1 basis-full text-center text-base font-semibold text-secondary sm:mb-0 sm:flex sm:basis-0 sm:text-left">
-                        {CURRENCY_PREFIX} {item.price.toLocaleString()}
+                        {CURRENCY_PREFIX}
+                        {Number(item.price).toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                        })}
                       </h6>
                       <Button
                         className="btn-add w-full rounded-[0.625rem] bg-primary text-sm font-semibold text-foreground sm:w-auto"

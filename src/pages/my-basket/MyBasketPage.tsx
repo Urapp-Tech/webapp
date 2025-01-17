@@ -416,7 +416,7 @@ function MyBasketPage() {
 
                         <td>
                           {CURRENCY_PREFIX}
-                          &nbsp;{' '}
+                          &nbsp;
                           {Number(item?.price ?? 0).toLocaleString(undefined, {
                             minimumFractionDigits: 2,
                           })}

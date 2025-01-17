@@ -171,7 +171,12 @@ function HomePagePopup({ open, setOpen, data, FAQs }: Props) {
                 <div className="flex-container flex items-center justify-between">
                   <div className="price">
                     <h3 className="number">
-                      {CURRENCY_PREFIX} <span>{data.price.toFixed(2)}</span>
+                      {CURRENCY_PREFIX}
+                      <span>
+                        {Number(data.price).toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                        })}
+                      </span>
                     </h3>
                     <p className="text">&nbsp;/ item</p>
                   </div>

@@ -163,25 +163,26 @@ function HomePage() {
                   key={item.id}
                   className="relative rounded-[0.625rem] bg-white px-2.5 pb-2.5 pt-4 md:px-3.5 md:pt-5"
                 >
-                  <div>
-                    <button
-                      aria-label="Button to Click"
-                      type="button"
-                      className="mx-auto w-full max-w-[360px]"
-                    >
-                      <img
-                        className="mx-auto mb-4 aspect-[4/3] h-full w-full cursor-pointer object-contain md:mb-6"
-                        src={item.avatar}
-                        alt=""
-                      />
-                    </button>
-                  </div>
+                  <button
+                    aria-label="Button to Click"
+                    type="button"
+                    className="w-[-webkit-fill-available]"
+                  >
+                    <img
+                      className="mx-auto mb-4 aspect-[4/3] h-full w-full cursor-pointer object-contain md:mb-6"
+                      src={item.avatar}
+                      alt=""
+                    />
+                  </button>
                   <div className="flex flex-wrap items-center justify-between">
                     <h5 className="mb-2 basis-full text-center text-base font-semibold capitalize leading-none text-secondary sm:mb-3 sm:text-left">
                       {item.name}
                     </h5>
                     <h6 className="mb-3 flex-1 basis-full text-center text-sm font-semibold text-secondary sm:mb-0 sm:flex sm:basis-0 sm:text-left">
-                      {import.meta.env.VITE_CURRENCY_SYMBOL} {item.price}
+                      {import.meta.env.VITE_CURRENCY_SYMBOL}
+                      {Number(item.price).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                      })}
                     </h6>
                     <Button
                       className="btn-add w-full rounded-[0.625rem] bg-primary text-sm font-semibold text-foreground sm:w-auto"
