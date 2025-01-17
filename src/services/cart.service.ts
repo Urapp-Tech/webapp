@@ -27,7 +27,7 @@ const anonymousCartWithController = () => {
   return (data: AnonymousCartPayload) => {
     anonymousCartController.abort();
     anonymousCartController = new AbortController();
-    return network.post(API_PATHS.anonymousCart, data, {
+    return network.post(API_PATHS.anonymousCart(), data, {
       signal: anonymousCartController.signal,
       headers: getHeaders(),
     });
@@ -40,7 +40,7 @@ const userCartWithController = () => {
     userCartController.abort();
     userCartController = new AbortController();
     return network.post(
-      API_PATHS.userCart,
+      API_PATHS.userCart(),
       {},
       {
         signal: userCartController.signal,
@@ -55,7 +55,7 @@ const updateCartWithController = () => {
   return (data: UpdateCartPayload) => {
     updateCartController.abort();
     updateCartController = new AbortController();
-    return network.post(API_PATHS.updateCart, data, {
+    return network.post(API_PATHS.updateCart(), data, {
       signal: updateCartController.signal,
       headers: getHeaders(),
     });

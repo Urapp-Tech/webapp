@@ -10,15 +10,19 @@ import { getHeaders } from '../utilities/constant';
 import network from './network';
 
 const getUserAddress = () => {
-  return network.get<GetUserAddressResponse>(API_PATHS.getUserAddress, {
+  return network.get<GetUserAddressResponse>(API_PATHS.getUserAddress(), {
     headers: getHeaders(),
   });
 };
 
 const addUserAddress = (data: AddUserAddressPayload) => {
-  return network.post<AddUserAddressResponse>(API_PATHS.addUserAddress, data, {
-    headers: getHeaders(),
-  });
+  return network.post<AddUserAddressResponse>(
+    API_PATHS.addUserAddress(),
+    data,
+    {
+      headers: getHeaders(),
+    }
+  );
 };
 
 const updateAddressStatus = (id: string) => {

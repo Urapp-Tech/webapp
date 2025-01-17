@@ -1,18 +1,18 @@
 import { HighlightOff, Loop } from '@mui/icons-material';
 import Button from '@mui/material/Button';
-import { useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
+import { useEffect, useMemo, useState } from 'react';
 import { Branch, GetBranchesResponse } from '../interfaces/branch';
 import { login } from '../redux/features/authStateSlice';
 import { setBranch, setIsBranchSingle } from '../redux/features/branchSlice';
+import { resetCart, setCartData } from '../redux/features/cartStateSlice';
 import { useAppDispatch, useAppSelector } from '../redux/redux-hooks';
+import cartService, { UpdateCartPayload } from '../services/cart.service';
 import network from '../services/network';
 import { SystemConfigData } from '../types/app.types';
 import API_PATHS from '../utilities/API-PATHS';
 import cn from '../utilities/class-names';
 import { getItem } from '../utilities/local-storage';
-import { resetCart, setCartData } from '../redux/features/cartStateSlice';
-import cartService, { UpdateCartPayload } from '../services/cart.service';
 import promiseHandler from '../utilities/promise-handler';
 
 function LoadingBranchesComponent() {
@@ -113,7 +113,7 @@ function SelectBranchComponent({ branches }: { branches: Array<Branch> }) {
   const confirmSelection = async () => {
     const branch = branches.find((b) => b.id === selectedBranch);
     if (user) {
-      const tokenResult = await network.post(API_PATHS.createToken, {
+      const tokenResult = await network.post(API_PATHS.createToken(), {
         tenant: branch?.tenant,
         branch: branch?.id,
         user: user.id,

@@ -19,7 +19,7 @@ const getUserProfileWithController = () => {
   return () => {
     getUserProfileController.abort();
     getUserProfileController = new AbortController();
-    return network.get<GetUserProfileResponse>(API_PATHS.getUserProfile, {
+    return network.get<GetUserProfileResponse>(API_PATHS.getUserProfile(), {
       signal: getUserProfileController.signal,
       headers: getHeaders(),
     });
@@ -31,7 +31,7 @@ const updateUserProfileWithController = () => {
   return (data: UpdateUserProfilePayload) => {
     updateUserProfileController.abort();
     updateUserProfileController = new AbortController();
-    return network.post(API_PATHS.updateUserProfile, data, {
+    return network.post(API_PATHS.updateUserProfile(), data, {
       signal: updateUserProfileController.signal,
       headers: getHeaders(),
     });

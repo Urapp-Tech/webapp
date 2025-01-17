@@ -8,156 +8,285 @@ function getDomainName() {
 const API_PATHS = {
   // Branch
 
-  getBranches: (tenantId: string) =>
-    new URL(`branch/list/${tenantId}`, BASE_URL).toString(),
+  getBranches: (tenantId: string) => {
+    const url = new URL(`branch/list/${tenantId}`, BASE_URL);
 
-  createToken: new URL(`app-user/create/token`, BASE_URL).toString(),
+    return url.toString();
+  },
+
+  createToken: () => {
+    const url = new URL(`app-user/create/token`, BASE_URL);
+    return url.toString();
+  },
 
   // Address
-  getUserAddress: new URL(`appUserAddress/list`, BASE_URL).toString(),
+  getUserAddress: () => {
+    const url = new URL(`appUserAddress/list`, BASE_URL);
+    return url.toString();
+  },
 
-  addUserAddress: new URL(`appUserAddress/add`, BASE_URL).toString(),
+  addUserAddress: () => {
+    const url = new URL(`appUserAddress/add`, BASE_URL);
+    return url.toString();
+  },
 
-  updateAddressStatus: (id: string) =>
-    new URL(
+  updateAddressStatus: (id: string) => {
+    const url = new URL(
       `appUserAddress/update/status/${getTenantId()}/${id}`,
       BASE_URL
-    ).toString(),
+    );
+    return url.toString();
+  },
 
-  deleteUserAddress: (id: string) =>
-    new URL(
+  deleteUserAddress: (id: string) => {
+    const url = new URL(
       `appUserAddress/delete/${getTenantId()}/${id}`,
       BASE_URL
-    ).toString(),
+    );
+    return url.toString();
+  },
 
   // Auth
-  signUp: new URL(`app-user/sign-up/app`, BASE_URL).toString(),
+  signUp: () => {
+    const url = new URL(`app-user/sign-up/app`, BASE_URL);
+    return url.toString();
+  },
 
-  getOTP: () =>
-    new URL(`app-user/get-otp/${getTenantId()}`, BASE_URL).toString(),
+  getOTP: () => {
+    const url = new URL(`app-user/get-otp/${getTenantId()}`, BASE_URL);
+    return url.toString();
+  },
 
-  loginService: new URL(`app-user/sign-in/app`, BASE_URL).toString(),
+  loginService: () => {
+    const url = new URL(`app-user/sign-in/app`, BASE_URL);
+    return url.toString();
+  },
 
-  loginWithFacebook: new URL(
-    `app-user/sign-inapp/facebook`,
-    BASE_URL
-  ).toString(),
+  loginWithFacebook: () => {
+    const url = new URL(`app-user/sign-inapp/facebook`, BASE_URL);
+    return url.toString();
+  },
 
-  forgotPassword: new URL(`app-user/forgotPassword/app`, BASE_URL).toString(),
+  forgotPassword: () => {
+    const url = new URL(`app-user/forgotPassword/app`, BASE_URL);
+    return url.toString();
+  },
 
-  resetPassword: new URL(`app-user/resetPassword/app`, BASE_URL).toString(),
+  resetPassword: () => {
+    const url = new URL(`app-user/resetPassword/app`, BASE_URL);
+    return url.toString();
+  },
 
   // Cart
-  anonymousCart: new URL(`appUserCart/getCart/device`, BASE_URL).toString(),
+  anonymousCart: () => {
+    const url = new URL(`appUserCart/getCart/device`, BASE_URL);
+    return url.toString();
+  },
 
-  userCart: new URL(`appUserCart/getCart/user`, BASE_URL).toString(),
+  userCart: () => {
+    const url = new URL(`appUserCart/getCart/user`, BASE_URL);
+    return url.toString();
+  },
 
-  updateCart: new URL(`appUserCart/updateCart`, BASE_URL).toString(),
+  updateCart: () => {
+    const url = new URL(`appUserCart/updateCart`, BASE_URL);
+    return url.toString();
+  },
 
   // Category
-  categoryList: () =>
-    new URL(`homemenu/list/${getTenantId()}`, BASE_URL).toString(),
+  categoryList: () => {
+    const url = new URL(`homemenu/list/${getTenantId()}`, BASE_URL);
+    return url.toString();
+  },
 
-  subCategory: (menuId: string) =>
-    new URL(`homemenu/view/${getTenantId()}/${menuId}`, BASE_URL).toString(),
+  subCategory: (menuId: string) => {
+    const url = new URL(`homemenu/view/${getTenantId()}/${menuId}`, BASE_URL);
+    return url.toString();
+  },
 
-  faqService: (branch: string, menuId: string, submenuId: string) =>
-    new URL(
+  faqService: (branch: string, menuId: string, submenuId: string) => {
+    const url = new URL(
       `homemenu/view/submenu/${getTenantId()}/${branch}/${menuId}/${submenuId}`,
       BASE_URL
-    ).toString(),
+    );
+    return url.toString();
+  },
 
   // Notification
-  notificationList: new URL(`notifications/list`, BASE_URL).toString(),
+  notificationList: () => {
+    const url = new URL(`notifications/list`, BASE_URL);
+    return url.toString();
+  },
 
   // Order
-  addOrder: new URL(`appOrder/newOrder`, BASE_URL).toString(),
+  addOrder: () => {
+    const url = new URL(`appOrder/newOrder`, BASE_URL);
+    return url.toString();
+  },
 
-  addPayFastOrder: new URL(`appOrder/newPayFastOrder`, BASE_URL).toString(),
+  addPayFastOrder: () => {
+    const url = new URL(`appOrder/newPayFastOrder`, BASE_URL);
+    return url.toString();
+  },
 
-  addCashOrder: new URL(`appOrder/newCashOrder`, BASE_URL).toString(),
+  addCashOrder: () => {
+    const url = new URL(`appOrder/newCashOrder`, BASE_URL);
+    return url.toString();
+  },
 
-  updateOrderStatus: new URL(`appOrder/statuses/create`, BASE_URL).toString(),
+  updateOrderStatus: () => {
+    const url = new URL(`appOrder/statuses/create`, BASE_URL);
+    return url.toString();
+  },
 
-  getPayFastToken: new URL(
-    `appOrder/pay-fast/access-token`,
-    BASE_URL
-  ).toString(),
+  getPayFastToken: () => {
+    const url = new URL(`appOrder/pay-fast/access-token`, BASE_URL);
+    return url.toString();
+  },
 
-  orderList: new URL(`appOrder/webapp/list`, BASE_URL).toString(),
+  orderList: () => {
+    const url = new URL(`appOrder/webapp/list`, BASE_URL);
+    return url.toString();
+  },
 
-  orderDetail: (id: string) =>
-    new URL(`appOrder/webapp/detail/${id}`, BASE_URL).toString(),
+  orderDetail: (id: string) => {
+    const url = new URL(`appOrder/webapp/detail/${id}`, BASE_URL);
+    return url.toString();
+  },
 
   // Profile
-  getUserProfile: new URL(`app-user/profile`, BASE_URL).toString(),
-  updateUserProfile: new URL(`app-user/update`, BASE_URL).toString(),
+  getUserProfile: () => {
+    const url = new URL(`app-user/profile`, BASE_URL);
+    return url.toString();
+  },
+
+  updateUserProfile: () => {
+    const url = new URL(`app-user/update`, BASE_URL);
+    return url.toString();
+  },
 
   // Tenant
-  getTenant: () => new URL(`shop/view/${getTenantId()}`, BASE_URL).toString(),
-  getTenantConfig: () =>
-    new URL(`config/view/${getTenantId()}`, BASE_URL).toString(),
+  getTenant: () => {
+    const url = new URL(`shop/view/${getTenantId()}`, BASE_URL);
+    return url.toString();
+  },
 
-  deviceRegistration: new URL(
-    `app-user-device/register-device`,
-    BASE_URL
-  ).toString(),
+  getTenantConfig: () => {
+    const url = new URL(`config/view/${getTenantId()}`, BASE_URL);
+    return url.toString();
+  },
+
+  deviceRegistration: () => {
+    const url = new URL(`app-user-device/register-device`, BASE_URL);
+    return url.toString();
+  },
 
   // System Config
-  getSystemConfig: () =>
-    new URL(
+  getSystemConfig: () => {
+    const url = new URL(
       `/api/v1/system/config/get/theme/${getDomainName()}`,
       BASE_URL
-    ).toString(),
+    );
+    return url.toString();
+  },
 
-  ratingReviews: (homeCatItemId: string, page: string, size: string) =>
-    new URL(
+  ratingReviews: (homeCatItemId: string, page: string, size: string) => {
+    const url = new URL(
       `rating/reviews/${homeCatItemId}/${page}/${size}`,
       BASE_URL
-    ).toString(),
+    );
+    return url.toString();
+  },
 
-  ratingReviewStarList: (homeCatItemId: string) =>
-    new URL(`rating/reviews/${homeCatItemId}`, BASE_URL).toString(),
-  getStoreCategories: (tenant: string) =>
-    new URL(`categories/list/${tenant}`, BASE_URL).toString(),
-  getStoreCategoriesItems: (tenant: string, branch: string) =>
-    new URL(`categories/items/list/${tenant}/${branch}`, BASE_URL).toString(),
+  ratingReviewStarList: (homeCatItemId: string) => {
+    const url = new URL(`rating/reviews/${homeCatItemId}`, BASE_URL);
+    return url.toString();
+  },
+
+  getStoreCategories: (tenant: string) => {
+    const url = new URL(`categories/list/${tenant}`, BASE_URL);
+    return url.toString();
+  },
+
+  getStoreCategoriesItems: (tenant: string, branch: string) => {
+    const url = new URL(`categories/items/list/${tenant}/${branch}`, BASE_URL);
+    return url.toString();
+  },
+
   // APPOINTMENTS REST API
-  getBarbersList: (storeServiceCatItemId: string) =>
-    new URL(
+  getBarbersList: (storeServiceCatItemId: string) => {
+    const url = new URL(
       `store/appointment/employee/${storeServiceCatItemId}`,
       BASE_URL
-    ).toString(),
-  getBarberBookedTimeSlots: (storeEmp: any, date: any) =>
-    new URL(
+    );
+    return url.toString();
+  },
+
+  getBarberBookedTimeSlots: (storeEmp: any, date: any) => {
+    const url = new URL(
       `store/appointment/linedUp/${storeEmp}/${date}`,
       BASE_URL
-    ).toString(),
-  appointmentCreate: () =>
-    new URL(`store/appointment/create`, BASE_URL).toString(),
-  getAllPreviousAppointments: (tenant: string) =>
-    new URL(`store/appointment/list/${tenant}`, BASE_URL).toString(),
-  findAppointment: (appointment_id: string) =>
-    new URL(`store/appointment/get/${appointment_id}`, BASE_URL).toString(),
-  rescheduleAppointment: (appointment_id: string) =>
-    new URL(`appointment/re-schedule/${appointment_id}`, BASE_URL).toString(),
-  getBanners: () => new URL(`banner/list`, BASE_URL).toString(),
-  CheckEmployeeAvailable: (employeeId: string, date: string) =>
-    new URL(
+    );
+    return url.toString();
+  },
+
+  appointmentCreate: () => {
+    const url = new URL(`store/appointment/create`, BASE_URL);
+    return url.toString();
+  },
+
+  getAllPreviousAppointments: (tenant: string) => {
+    const url = new URL(`store/appointment/list/${tenant}`, BASE_URL);
+    return url.toString();
+  },
+
+  findAppointment: (appointment_id: string) => {
+    const url = new URL(`store/appointment/get/${appointment_id}`, BASE_URL);
+    return url.toString();
+  },
+
+  rescheduleAppointment: (appointment_id: string) => {
+    const url = new URL(`appointment/re-schedule/${appointment_id}`, BASE_URL);
+    return url.toString();
+  },
+
+  getBanners: () => {
+    const url = new URL(`banner/list`, BASE_URL);
+    return url.toString();
+  },
+
+  CheckEmployeeAvailable: (employeeId: string, date: string) => {
+    const url = new URL(
       `appointment/leave/management/${employeeId}/${date}`,
       BASE_URL
-    ).toString(),
+    );
+    return url.toString();
+  },
 
-  getUserAppointmentsByDate: (date: string) =>
-    new URL(`appointment/users/${date}`, BASE_URL).toString(),
+  getUserAppointmentsByDate: (date: string) => {
+    const url = new URL(`appointment/users/${date}`, BASE_URL);
+    return url.toString();
+  },
 
-  getUserAppointmentsByMultipleDates: () =>
-    new URL(`appointment/users/multi-dates`, BASE_URL).toString(),
+  getUserAppointmentsByMultipleDates: () => {
+    const url = new URL(`appointment/users/multi-dates`, BASE_URL);
+    return url.toString();
+  },
 
-  getStoreEmployeeRating: () =>
-    new URL(`store/appointment-ratings/list`, BASE_URL).toString(),
-  updateEmployeeRating: (id: string) =>
-    new URL(`store/appointment-ratings/update/${id}`, BASE_URL).toString(),
+  getStoreEmployeeRating: () => {
+    const url = new URL(`store/appointment-ratings/list`, BASE_URL);
+    return url.toString();
+  },
+
+  updateEmployeeRating: (id: string) => {
+    const url = new URL(`store/appointment-ratings/update/${id}`, BASE_URL);
+    return url.toString();
+  },
+
+  getVouchersPromotion: () => {
+    const url = new URL(`/api/v1/app/vouchers/promotion/list`, BASE_URL);
+    return url.toString();
+  },
 } as const;
 
 export default API_PATHS;

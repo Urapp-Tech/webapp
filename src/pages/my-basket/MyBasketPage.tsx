@@ -478,29 +478,35 @@ function MyBasketPage() {
               </div>
               <div className="my-2.5 flex items-center justify-between px-5">
                 <div className="flex items-center">
-                  <p className="mr-2 text-xs font-semibold text-[var(--dark-100)]">
-                    Add Promo Code
-                  </p>
-                  <FormControl variant="standard" size="small">
-                    <Input
-                      className="min-h-[10px] min-w-60 rounded-[0.625rem] border border-solid border-[var(--light-400)] p-2 text-xs font-normal text-faded"
-                      disableUnderline
-                      inputProps={{
-                        placeholder: 'Enter Promo Code',
-                        className: 'p-[initial]',
-                      }}
-                      defaultValue={voucherCode}
-                      onChange={voucherCodeDelayed}
-                      startAdornment={
-                        <InputAdornment
-                          className="text-orange-100"
-                          position="start"
-                        >
-                          <DiscountIcon />
-                        </InputAdornment>
-                      }
-                    />
-                  </FormControl>
+                  {user && (
+                    <>
+                      <p className="mr-2 text-xs font-semibold text-[var(--dark-100)]">
+                        Add Promo Code
+                      </p>
+                      <FormControl variant="standard" size="small">
+                        <Input
+                          className="min-h-[10px] min-w-60 rounded-[0.625rem] border border-solid border-[var(--light-400)] p-2 text-xs font-normal text-faded"
+                          disableUnderline
+                          inputProps={{
+                            placeholder: 'Enter Promo Code',
+                            className: 'p-[initial]',
+                          }}
+                          defaultValue={voucherCode}
+                          onChange={voucherCodeDelayed}
+                          startAdornment={
+                            <InputAdornment position="start">
+                              <IconButton
+                                size="small"
+                                className="text-orange-400"
+                              >
+                                <DiscountIcon />
+                              </IconButton>
+                            </InputAdornment>
+                          }
+                        />
+                      </FormControl>
+                    </>
+                  )}
                 </div>
                 <Button
                   className="flex items-center border-none text-xs font-semibold capitalize text-[var(--dark-100)]"

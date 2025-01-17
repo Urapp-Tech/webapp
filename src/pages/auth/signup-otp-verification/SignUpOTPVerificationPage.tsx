@@ -46,7 +46,7 @@ function SignUpOTPVerificationPage() {
       console.error('error :>> ', signUpResult.data.message);
       return;
     }
-    const tokenResult = await network.post(API_PATHS.createToken, {
+    const tokenResult = await network.post(API_PATHS.createToken(), {
       tenant: systemConfigData?.tenant.id,
       branch: branch?.id,
       user: signUpResult.data.data.id,

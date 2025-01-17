@@ -79,7 +79,7 @@ function LoginPage() {
   //     return;
   //   }
 
-  //   const tokenResult = await network.post(API_PATHS.createToken, {
+  //   const tokenResult = await network.post(API_PATHS.createToken(), {
   //     tenant: systemConfigData?.tenant.id,
   //     branch: branch?.id,
   //     user: loginResponse.data.data.id,
@@ -133,7 +133,7 @@ function LoginPage() {
       setIsLoader(false);
       return;
     }
-    const tokenResult = await network.post(API_PATHS.createToken, {
+    const tokenResult = await network.post(API_PATHS.createToken(), {
       tenant: systemConfigData?.tenant.id,
       branch: branch?.id,
       user: loginResponse.data.data.id,

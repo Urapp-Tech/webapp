@@ -10,7 +10,9 @@ import { getHeaders, getTenantId } from '../utilities/constant';
 import network from './network';
 
 const signUp = (signupData: SignUpPayload) => {
-  return network.post(API_PATHS.signUp, signupData, { headers: getHeaders() });
+  return network.post(API_PATHS.signUp(), signupData, {
+    headers: getHeaders(),
+  });
 };
 
 const getOTP = (data: OTPPayload) => {
@@ -19,7 +21,7 @@ const getOTP = (data: OTPPayload) => {
 
 const loginService = (data: LoginPayload) => {
   return network.post(
-    API_PATHS.loginService,
+    API_PATHS.loginService(),
     { ...data, tenant: getTenantId() },
     { headers: getHeaders() }
   );
@@ -27,7 +29,7 @@ const loginService = (data: LoginPayload) => {
 
 const loginWithFacebook = (data: FacebookLoginPayload) => {
   return network.post(
-    API_PATHS.loginWithFacebook,
+    API_PATHS.loginWithFacebook(),
     { ...data, tenant: getTenantId() },
     { headers: getHeaders() }
   );
@@ -35,7 +37,7 @@ const loginWithFacebook = (data: FacebookLoginPayload) => {
 
 const forgotPassword = (data: ForgotPasswordPayload) => {
   return network.post(
-    API_PATHS.forgotPassword,
+    API_PATHS.forgotPassword(),
     { ...data, tenant: getTenantId() },
     { headers: getHeaders() }
   );
@@ -43,7 +45,7 @@ const forgotPassword = (data: ForgotPasswordPayload) => {
 
 const resetPassword = (data: ForgotPasswordPayload) => {
   return network.post(
-    API_PATHS.resetPassword,
+    API_PATHS.resetPassword(),
     { ...data, tenant: getTenantId() },
     { headers: getHeaders() }
   );

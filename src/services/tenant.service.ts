@@ -36,7 +36,7 @@ const deviceRegistrationWithController = () => {
   return (deviceData: DeviceRegistration) => {
     deviceRegistrationController.abort();
     deviceRegistrationController = new AbortController();
-    return network.post(API_PATHS.deviceRegistration, deviceData, {
+    return network.post(API_PATHS.deviceRegistration(), deviceData, {
       signal: deviceRegistrationController.signal,
       headers: getHeaders(),
     });

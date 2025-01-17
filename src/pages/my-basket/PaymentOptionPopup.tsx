@@ -23,7 +23,7 @@ function PaymentOptionPopup({ open, setOpen, handlePopupClose }: Props) {
     <Dialog
       onClose={onCloseHandler}
       open={open}
-      classes={{ paper: cn('m-4 w-full max-w-sm rounded-xl shadow-md') }}
+      classes={{ paper: cn('m-4 w-full  max-w-sm rounded-xl shadow-md') }}
       slotProps={{
         backdrop: {
           classes: {

@@ -14,31 +14,37 @@ export interface OrderStatus {
 }
 
 const addOrder = (data: NewOrder) => {
-  return network.post(API_PATHS.addOrder, data, { headers: getHeaders() });
+  return network.post(API_PATHS.addOrder(), data, { headers: getHeaders() });
 };
 
 const addPayFastOrder = (data: NewOrder) => {
-  return network.post(API_PATHS.addPayFastOrder, data, {
+  return network.post(API_PATHS.addPayFastOrder(), data, {
     headers: getHeaders(),
   });
 };
 
 const addCashOrder = (data: NewOrder) => {
-  return network.post(API_PATHS.addCashOrder, data, { headers: getHeaders() });
+  return network.post(API_PATHS.addCashOrder(), data, {
+    headers: getHeaders(),
+  });
 };
 
 const updateOrderStatus = (data: OrderStatus) => {
-  return network.post(API_PATHS.updateOrderStatus, data, {
+  return network.post(API_PATHS.updateOrderStatus(), data, {
     headers: getHeaders(),
   });
 };
 
 const getPayFastToken = () => {
-  return network.post(API_PATHS.getPayFastToken, {}, { headers: getHeaders() });
+  return network.post(
+    API_PATHS.getPayFastToken(),
+    {},
+    { headers: getHeaders() }
+  );
 };
 
 const orderList = () => {
-  return network.get(API_PATHS.orderList, { headers: getHeaders() });
+  return network.get(API_PATHS.orderList(), { headers: getHeaders() });
 };
 
 const orderDetail = (id: string) => {
