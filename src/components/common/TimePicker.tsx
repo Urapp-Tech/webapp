@@ -33,6 +33,7 @@ type TimePickerProps = {
   timePickerValue: dayjs.Dayjs | null;
   minTime?: dayjs.Dayjs | undefined;
   maxTime?: dayjs.Dayjs | undefined;
+  minutesStep?: number | undefined;
 };
 function TimePicker({
   disabled,
@@ -44,6 +45,7 @@ function TimePicker({
   timePickerValue,
   minTime,
   maxTime,
+  minutesStep,
 }: TimePickerProps) {
   const [timePicker, setTimePicker] = useState<HTMLButtonElement | null>(null);
   const buttonElement = useRef(null);
@@ -124,6 +126,7 @@ function TimePicker({
               onAccept={handleChange}
               minTime={minTime}
               maxTime={maxTime}
+              minutesStep={minutesStep}
             />
           </LocalizationProvider>
         </ThemeProvider>

@@ -1196,6 +1196,8 @@ export default function AddAppointmentPage() {
                                     timePickerValue={appointmentTime}
                                     setTimePickerValue={setAppointmentTime}
                                     id="startTime"
+                                    minTime={dayjs().add(15, 'minutes')}
+                                    minutesStep={5}
                                   />
                                 </FormControl>
                               </div>
