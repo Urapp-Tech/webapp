@@ -63,6 +63,15 @@ function OTPVerificationPage() {
 
   const submitHandler = (data: Pass) => {
     setIsLoader(true);
+
+    if (OTP.length !== 4) {
+      setIsLoader(false);
+      setAlertMessage('invalid OTP');
+      setAlertSeverity('error');
+      setShowAlert(true);
+      return;
+    }
+
     const newPassObj = {
       password: data.newPassword,
       email: state?.email,
