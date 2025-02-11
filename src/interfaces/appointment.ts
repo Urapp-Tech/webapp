@@ -24,6 +24,7 @@ export interface Provider {
   storeEmployeeSchedule: Array<StoreEmployeeSchedule>;
   serviceTime: string;
   rating: number;
+  servicePrice: string;
 }
 
 export interface StoreEmployeeSchedule {

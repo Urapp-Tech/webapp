@@ -11,7 +11,7 @@ import { StaticTimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
-import { useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import '../../assets/css/PopupStyle.css';
 import ErrorSpanBox from './ErrorSpanBox';
 
@@ -34,6 +34,7 @@ type TimePickerProps = {
   minTime?: dayjs.Dayjs | undefined;
   maxTime?: dayjs.Dayjs | undefined;
   minutesStep?: number | undefined;
+  date?: dayjs.Dayjs | undefined;
 };
 function TimePicker({
   disabled,
@@ -46,6 +47,7 @@ function TimePicker({
   minTime,
   maxTime,
   minutesStep,
+  date,
 }: TimePickerProps) {
   const [timePicker, setTimePicker] = useState<HTMLButtonElement | null>(null);
   const buttonElement = useRef(null);
@@ -63,6 +65,31 @@ function TimePicker({
     setTimePickerValue(value);
     handleClose();
   };
+
+  const dateAndTime = useMemo(() => {
+    if (!date && timePickerValue) {
+      return dayjs()
+        .hour(timePickerValue.hour())
+        .minute(timePickerValue.minute());
+    }
+    if (date && !timePickerValue) {
+      return dayjs(date).hour(0).minute(0);
+    }
+    if (date && timePickerValue) {
+      return dayjs(date)
+        .hour(timePickerValue.hour())
+        .minute(timePickerValue.minute());
+    }
+    return dayjs();
+  }, [date, timePickerValue]);
+
+  useEffect(() => {
+    const minutes = Math.round(dayjs().minute() / 5) * 5;
+    const currentTime = dayjs().minute(minutes).add(15, 'minutes');
+    if (dateAndTime.isBefore(currentTime)) {
+      setTimePickerValue(currentTime);
+    }
+  }, [dateAndTime]);
 
   return (
     <>
@@ -121,12 +148,12 @@ function TimePicker({
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <StaticTimePicker
               displayStaticWrapperAs="desktop"
-              defaultValue={dayjs('2023-01-01T00:00')}
-              value={dayjs(timePickerValue) || null}
+              value={dateAndTime}
               onAccept={handleChange}
               minTime={minTime}
               maxTime={maxTime}
               minutesStep={minutesStep}
+              disableIgnoringDatePartForTimeValidation
             />
           </LocalizationProvider>
         </ThemeProvider>

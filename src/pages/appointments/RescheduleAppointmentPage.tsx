@@ -735,7 +735,7 @@ export default function RescheduleAppointmentPage() {
     const obj = {
       id: 0,
       barber: activeBarberData?.storeEmployee?.name,
-      amount: activeBarberData?.amount,
+      amount: activeBarberData?.servicePrice,
       storeServiceCategory: watch('categoryId'),
       serviceTime: activeBarber?.serviceTime,
       storeServiceCategoryItem: watch('storeServiceCategoryItem'),
@@ -1282,6 +1282,9 @@ export default function RescheduleAppointmentPage() {
                                     timePickerValue={appointmentTime}
                                     setTimePickerValue={setAppointmentTime}
                                     id="startTime"
+                                    minTime={dayjs().add(15, 'minutes')}
+                                    minutesStep={5}
+                                    date={getValues('appointmentDate')}
                                   />
                                 </FormControl>
                               </div>

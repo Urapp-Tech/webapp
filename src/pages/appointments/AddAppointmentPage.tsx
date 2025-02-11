@@ -450,13 +450,6 @@ export default function AddAppointmentPage() {
       setValue('categoryId', selectedCategory?.id);
     }
   }, [selectedCategory]);
-  console.log(
-    '🚀 ~ useEffect ~ selectedCategory:',
-    selectedCategory,
-    selectedCategoryItems,
-    getValues('categoryId'),
-    getValues('storeServiceCategoryItem')
-  );
 
   useEffect(() => {
     if (
@@ -523,7 +516,7 @@ export default function AddAppointmentPage() {
       startTime: dayjs(scheduleData?.startTime),
       endTime: dayjs(scheduleData?.endTime),
     });
-  }, [activeBarberData]);
+  }, [activeBarberData, getValues('appointmentDate')]);
 
   /**
    * Checks if a user has booked an appointment at a specified time.
@@ -562,7 +555,7 @@ export default function AddAppointmentPage() {
     const obj = {
       id: 0,
       barber: activeBarberData?.storeEmployee?.name,
-      amount: activeBarberData?.amount,
+      amount: activeBarberData?.servicePrice,
       storeServiceCategory: watch('categoryId'),
       serviceTime: activeBarberData?.serviceTime,
       storeServiceCategoryItem: watch('storeServiceCategoryItem'),
@@ -1198,6 +1191,7 @@ export default function AddAppointmentPage() {
                                     id="startTime"
                                     minTime={dayjs().add(15, 'minutes')}
                                     minutesStep={5}
+                                    date={getValues('appointmentDate')}
                                   />
                                 </FormControl>
                               </div>
