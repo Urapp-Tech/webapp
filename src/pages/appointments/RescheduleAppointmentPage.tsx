@@ -49,6 +49,7 @@ import {
   AddAppointmentForm,
   Appointment,
 } from '../../interfaces/app.appointment';
+import { Provider } from '../../interfaces/appointment';
 import { fetchCategoriesItems } from '../../redux/features/storeCategoryItemsSlice';
 import {
   fetchCategories,
@@ -322,7 +323,7 @@ export default function RescheduleAppointmentPage() {
     return null;
   };
   // eslint-disable-next-line react/no-unstable-nested-components
-  function BarberCard(item: any, index: number) {
+  function BarberCard({ item, index }: { item: Provider; index: number }) {
     const onHandleBarber = async () => {
       if (index === activeBarber) {
         setActiveBarber(null);
@@ -1176,7 +1177,7 @@ export default function RescheduleAppointmentPage() {
                             {barberList?.map((item: any, index: number) => {
                               return (
                                 <SwiperSlide key={index}>
-                                  {BarberCard(item, index)}
+                                  {BarberCard({ item, index })}
                                 </SwiperSlide>
                               );
                             })}

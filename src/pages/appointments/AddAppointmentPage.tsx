@@ -1080,8 +1080,8 @@ export default function AddAppointmentPage() {
                           >
                             {barberList?.map((item, index) => {
                               return (
-                                <SwiperSlide key={index}>
-                                  <BarberCard item={item} index={index} />
+                                <SwiperSlide key={item.id}>
+                                  {BarberCard({ item, index })}
                                 </SwiperSlide>
                               );
                             })}
