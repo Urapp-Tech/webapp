@@ -8,7 +8,7 @@ import cn from '../../utilities/class-names';
 
 interface ICategoryProps {
   categories: Array<ProductCategory>;
-  onClick: (item: any) => void;
+  onClick: (id: string) => void;
 }
 
 function CategoriesCard({ categories, onClick }: ICategoryProps) {

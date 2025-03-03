@@ -26,9 +26,9 @@ export const ratingAPI = createApi({
         page,
         size,
       }: {
-        itemId: any;
-        page: any;
-        size: any;
+        itemId: string;
+        page: number;
+        size: number;
       }) => {
         const branch = getItem<Branch>('BRANCH');
         if (!branch) {

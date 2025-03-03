@@ -222,7 +222,7 @@ const API_PATHS = {
     return url.toString();
   },
 
-  getBarberBookedTimeSlots: (storeEmp: any, date: any) => {
+  getBarberBookedTimeSlots: (storeEmp: string, date: string) => {
     const url = new URL(
       `store/appointment/linedUp/${storeEmp}/${date}`,
       BASE_URL

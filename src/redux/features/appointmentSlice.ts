@@ -76,7 +76,7 @@ export const appointmentSlice = createSlice({
           action.payload?.data.appointments?.length ||
           0;
       })
-      .addCase(fetchAppointments.rejected, (state, action: any) => {
+      .addCase(fetchAppointments.rejected, (state, action) => {
         state.loading = false;
         if (action.error) {
           state.notifyMessage = {

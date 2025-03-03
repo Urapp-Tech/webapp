@@ -3,6 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
   GetAllCategoryItemsResponse,
   GetAllProductCategoriesResponse,
+  GetCategoryItemDetailsResponse,
 } from '../../interfaces/product';
 import { BASE_URL, getTenantId, getToken } from '../../utilities/constant';
 
@@ -26,7 +27,7 @@ export const categoryAPI = createApi({
       query: ({ branch, menuId }: { branch: string; menuId: string }) =>
         `homemenu/view/${getTenantId()}/${branch}/${menuId}`,
     }),
-    getSubCategoryItem: builder.query({
+    getSubCategoryItem: builder.query<GetCategoryItemDetailsResponse, any>({
       query: ({
         branch,
         menuId,

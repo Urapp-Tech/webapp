@@ -14,7 +14,7 @@ export type TenantDetails = {
   createdBy: string;
   updatedBy: string;
   tenantConfig: TenantConfig;
-  desc?: any;
+  desc?: string;
   parent?: any;
   trialMode: boolean;
   trialStartDate?: any;

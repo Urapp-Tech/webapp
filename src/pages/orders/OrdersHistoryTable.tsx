@@ -1,10 +1,7 @@
-import { useEffect } from 'react';
+import { GetOrderListData } from '../../types/order.types';
 import TableRow from './TableRow';
 
-function OrdersTable({ orderListData }: Record<string, any>) {
-  useEffect(() => {
-    // console.log('orderListData?.data:::::::', orderListData?.data);
-  });
+function OrdersTable({ orderListData }: { orderListData: GetOrderListData }) {
   return (
     <table className="orders-table">
       <thead>
@@ -17,15 +14,14 @@ function OrdersTable({ orderListData }: Record<string, any>) {
         </tr>
       </thead>
       <tbody>
-        {orderListData?.data &&
-          orderListData.data.orders.map((row: any) => (
+        {orderListData &&
+          orderListData.orders.map((row) => (
             <TableRow
               key={row.id}
               id={row.id}
               appOrderNumber={row.appOrderNumber}
               type={row.status}
               date={row.createdDate}
-              progress={row.progress}
               item={row.items}
             />
           ))}

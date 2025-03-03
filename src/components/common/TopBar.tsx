@@ -20,9 +20,9 @@ type Props = {
 
 function TopBar({ setDrawerState }: Props) {
   const user = useAppSelector((state) => state.authState.user);
-  const { cartItems }: any = useAppSelector((state) => state.cartState);
+  const cartItems = useAppSelector((state) => state.cartState.cartItems);
   const systemConfigData = useAppSelector(
-    (state: any) => state.appState.systemConfig
+    (state) => state.appState.systemConfig
   );
   const [notificationElement, setNotificationElement] =
     useState<HTMLButtonElement | null>(null);

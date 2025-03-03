@@ -15,7 +15,7 @@ function Map({ center, zoom, handleDragged, ...props }: Props) {
   const mapRef = useRef<HTMLDivElement>(null);
   const [geoCoder, setGeoCoder] = useState<google.maps.Geocoder | null>(null);
   const [address, setAddress] = useState<string | any>('');
-  const markerRef: any = useRef<google.maps.Marker | undefined>(undefined);
+  const markerRef = useRef<google.maps.Marker | undefined>(undefined);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -93,26 +93,28 @@ function Map({ center, zoom, handleDragged, ...props }: Props) {
             }
           }
         );
-        google.event.addListener(markerRef.current, 'dragend', () => {
-          const newPosition = markerRef.current?.getPosition();
-          if (newPosition) {
-            handleDragged?.(newPosition.toJSON());
-            geoCoder.geocode(
-              { location: newPosition },
-              (
-                results: Array<google.maps.GeocoderResult> | null,
-                status: google.maps.GeocoderStatus
-              ) => {
-                if (status === google.GeocoderStatus.OK) {
-                  if (results && results[0]) {
-                    const newFormattedAddress: string =
-                      results[0].formatted_address;
+        if (markerRef.current) {
+          google.event.addListener(markerRef.current, 'dragend', () => {
+            const newPosition = markerRef.current?.getPosition();
+            if (newPosition) {
+              handleDragged?.(newPosition.toJSON());
+              geoCoder.geocode(
+                { location: newPosition },
+                (
+                  results: Array<google.maps.GeocoderResult> | null,
+                  status: google.maps.GeocoderStatus
+                ) => {
+                  if (status === google.GeocoderStatus.OK) {
+                    if (results && results[0]) {
+                      const newFormattedAddress: string =
+                        results[0].formatted_address;
+                    }
                   }
                 }
-              }
-            );
-          }
-        });
+              );
+            }
+          });
+        }
       }
     });
   }, [geoCoder, center, dispatch, handleDragged]);

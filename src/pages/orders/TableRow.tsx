@@ -2,19 +2,19 @@ import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutli
 import CircularProgress from '@mui/material/CircularProgress';
 import dayjs from 'dayjs';
 import { NavLink } from 'react-router-dom';
+import { OrderStatusType } from '../../types/order.types';
 import cn from '../../utilities/class-names';
 import { ORDER_STATUSES } from '../../utilities/constant';
 
 type Props = {
   id: string;
-  type: any;
-  date: Date;
-  progress: number;
-  item: Array<any>;
-  appOrderNumber: 'string';
+  type: OrderStatusType;
+  date: string;
+  item: string;
+  appOrderNumber: string;
 };
 
-function TableRow({ id, appOrderNumber, type, date, progress, item }: Props) {
+function TableRow({ id, appOrderNumber, type, date, item }: Props) {
   return (
     <tr>
       <td>

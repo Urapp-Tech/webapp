@@ -29,8 +29,9 @@ function LoginPage() {
   } = useAlert();
   const [isLoader, setIsLoader] = useState(false);
   const [greeting, setGreeting] = useState('');
-  const cartItem = useAppSelector((state: any) => state.cartState.cartItems);
-  const userData = useAppSelector((state: any) => state.appState.systemConfig);
+  const systemConfigData = useAppSelector(
+    (state) => state.appState.systemConfig
+  );
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const {
@@ -95,9 +96,9 @@ function LoginPage() {
         <div className="mx-auto  grid w-full grid-cols-12  items-center justify-around max-[1560px]:items-center">
           <div className="col-span-12  self-start  px-[30px] md:col-span-4 lg:col-span-4">
             <div className="flex max-h-[29px] w-full max-w-[600px] items-center justify-center px-[25px] py-[40px]">
-              {userData?.tenantConfig?.logo ? (
+              {systemConfigData?.tenantConfig?.logo ? (
                 <img
-                  src={userData.tenantConfig.logo}
+                  src={systemConfigData.tenantConfig.logo}
                   alt="urlaundry"
                   className="mt-10 h-auto w-[100px] object-contain"
                 />
@@ -293,9 +294,9 @@ function LoginPage() {
           <div className=" col-span-12 px-3 py-10 md:col-span-8 md:py-2 lg:col-span-8">
             {/* <div className="mx-auto max-w-[800px] overflow-hidden rounded-lg flex justify-center items-center min-h-[800px] min-[1600px]:max-w-[934px] "> */}
             <div className="mx-auto  flex max-h-[834px] items-center justify-center overflow-hidden rounded-lg max-[1560px]:max-h-[96vh]">
-              {userData?.logoffImage ? (
+              {systemConfigData?.logoffImage ? (
                 <img
-                  src={userData?.logoffImage || assets.images.bgLogin}
+                  src={systemConfigData?.logoffImage || assets.images.bgLogin}
                   alt="urlaundry"
                   className="h-full w-full object-contain"
                 />

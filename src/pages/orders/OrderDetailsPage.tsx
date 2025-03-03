@@ -120,7 +120,7 @@ function OrderDetailsPage() {
     setOrderCanceled(true);
   };
 
-  const getColorFromCode = (colorCode: any) => {
+  const getColorFromCode = (colorCode: string) => {
     if (colorCode.includes('blue')) {
       return 'primary';
     }
@@ -248,29 +248,27 @@ function OrderDetailsPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {orderItemDetail?.orderItems.map(
-                      (el: any, index: number) => (
-                        <tr key={index}>
-                          <td>
-                            <div className="flex items-center gap-x-2 sm:gap-x-4">
-                              <img className="order-pic" src={el.icon} alt="" />
-                              <p className="name">{el.name}</p>
-                            </div>
-                          </td>
-                          <td>{el.quantity} Items</td>
-                          <td>
-                            <p className="price">
-                              {CURRENCY_PREFIX}
-                              &nbsp;
-                              {Number(el.unitPrice ?? 0).toLocaleString(
-                                undefined,
-                                { minimumFractionDigits: 2 }
-                              )}
-                            </p>
-                          </td>
-                        </tr>
-                      )
-                    )}
+                    {orderItemDetail?.orderItems.map((item, index: number) => (
+                      <tr key={index}>
+                        <td>
+                          <div className="flex items-center gap-x-2 sm:gap-x-4">
+                            <img className="order-pic" src={item.icon} alt="" />
+                            <p className="name">{item.name}</p>
+                          </div>
+                        </td>
+                        <td>{item.quantity} Items</td>
+                        <td>
+                          <p className="price">
+                            {CURRENCY_PREFIX}
+                            &nbsp;
+                            {Number(item.unitPrice ?? 0).toLocaleString(
+                              undefined,
+                              { minimumFractionDigits: 2 }
+                            )}
+                          </p>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -358,14 +356,14 @@ function OrderDetailsPage() {
                   <div
                     className={cn('timeline-item', {
                       disabled: !orderItemDetail?.appOrderStatuses?.some(
-                        (item: any) => item.status === el.status
+                        (item) => item.status === el.status
                       ),
                     })}
                     key={el.status}
                   >
                     <div className="dot">
                       {orderItemDetail?.appOrderStatuses?.some(
-                        (item: any) => item.status === el.status
+                        (item) => item.status === el.status
                       ) ? (
                         <CheckCircleOutlineOutlinedIcon />
                       ) : (

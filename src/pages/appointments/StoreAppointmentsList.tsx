@@ -3,7 +3,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Button, Divider, IconButton, TablePagination } from '@mui/material';
 import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { memo, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -69,10 +69,6 @@ function StoreAppointmentsList() {
     dispatch(fetchAppointments(queryParams));
   };
 
-  const handleDateChange = (date: Dayjs | Date | null | any, field: any) => {
-    field.onChange(date);
-  };
-
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
@@ -121,7 +117,7 @@ function StoreAppointmentsList() {
                     format="YYYY-MM-DD"
                     value={dayjs(field.value)}
                     defaultValue={dayjs().subtract(6, 'month')}
-                    onChange={(date) => handleDateChange(date, field)}
+                    onChange={(date) => field.onChange(date)}
                   />
                 )}
               />
@@ -137,7 +133,7 @@ function StoreAppointmentsList() {
                     className="col-span-6 md:col-span-4"
                     value={dayjs(field.value)}
                     defaultValue={dayjs().add(6, 'month')}
-                    onChange={(date) => handleDateChange(date, field)}
+                    onChange={(date) => field.onChange(date)}
                   />
                 )}
               />
@@ -168,7 +164,7 @@ function StoreAppointmentsList() {
               </tr>
             </thead>
             <tbody>
-              {appointments?.map((x: any) => (
+              {appointments?.map((x) => (
                 <tr key={x.id}>
                   <td className="font-bold capitalize text-primary">
                     {x.appointmentNumber}

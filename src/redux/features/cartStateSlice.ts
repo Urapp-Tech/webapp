@@ -8,6 +8,7 @@ export type CartItem = {
   price: number;
   name: string;
   image: string;
+  icon: string;
   quantity: number;
   buyCount: number;
 };
@@ -80,6 +81,7 @@ export const cartSlice = createSlice({
           price: action.payload.price,
           name: action.payload.name,
           image: action.payload.banner,
+          icon: action.payload.banner,
           quantity: action.payload.quantity,
           buyCount: action.payload.buyCount,
         });

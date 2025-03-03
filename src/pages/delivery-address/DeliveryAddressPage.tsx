@@ -277,7 +277,7 @@ function DeliveryAddressPage() {
     loadGoogleMaps().then((google) => {
       const geocoder = new google.Geocoder();
       if (value) {
-        geocoder.geocode({ address: value }, (results: any, status: any) => {
+        geocoder.geocode({ address: value }, (results, status) => {
           if (status === google.GeocoderStatus.OK) {
             if (results && results[0]) {
               const newPosition = results[0].geometry.location.toJSON();
@@ -505,7 +505,7 @@ function DeliveryAddressPage() {
                           if (event.target.value) {
                             geocoder.geocode(
                               { address: event.target.value },
-                              (results: any, status: any) => {
+                              (results, status) => {
                                 if (status === google.GeocoderStatus.OK) {
                                   if (results && results[0]) {
                                     const newPosition =

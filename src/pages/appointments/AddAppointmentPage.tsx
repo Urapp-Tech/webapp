@@ -37,7 +37,6 @@ import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TimePicker from '../../components/common/TimePicker';
-import useAlert from '../../hooks/alert.hook';
 import {
   AddAppointmentForm,
   Appointment,
@@ -193,12 +192,12 @@ export default function AddAppointmentPage() {
 
   const pagination = {
     clickable: true,
-    renderBullet(index: number, className: any) {
+    renderBullet(index: number, className: string) {
       return `<span class="${className}"></span>`;
     },
   };
 
-  const shopEvents = async (id: any, date: any) => {
+  const shopEvents = async (id: string, date: string) => {
     try {
       const resp = await storeAppointmentService.CheckEmployeeAvailable(
         id,
@@ -212,15 +211,6 @@ export default function AddAppointmentPage() {
       return false;
     }
   };
-
-  const {
-    alertMessage,
-    setAlertMessage,
-    showAlert,
-    setShowAlert,
-    alertSeverity,
-    setAlertSeverity,
-  } = useAlert();
 
   const getUserBookedSlotsByDate = async () => {
     try {
@@ -238,7 +228,7 @@ export default function AddAppointmentPage() {
     }
   };
 
-  const getBookedTimeSlots: any = async (id: any, date: any) => {
+  const getBookedTimeSlots = async (id: string, date: any) => {
     if (user && user.id) {
       setUserAppointments(await getUserBookedSlotsByDate());
     }

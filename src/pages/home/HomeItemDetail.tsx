@@ -19,6 +19,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import CustomHeader from '../../components/common/CustomHeader';
 import Loader from '../../components/common/Loader';
+import { Item } from '../../interfaces/product';
 import { addToCart } from '../../redux/features/cartStateSlice';
 import { useLazyGetSubCategoryItemQuery } from '../../redux/features/categorySliceAPI';
 import {
@@ -26,8 +27,9 @@ import {
   useLazyGetRatingStarListQuery,
 } from '../../redux/features/ratingSliceAPI';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import { RatingReview } from '../../types/rating.types';
 import { CURRENCY_PREFIX } from '../../utilities/constant';
-import HomeItemDetailAccordin from './HomeItemDetailAccordin';
+import HomeItemDetailAccordion from './HomeItemDetailAccordin';
 
 dayjs.extend(relativeTime);
 
@@ -53,10 +55,8 @@ function HomeItemDetail() {
     allRatingReviewResult;
 
   const [count, setCount] = useState(1);
-  const [itemDetail, setItemDetail] = useState<any>(null);
-  const [list, setList] = useState<any>([]);
-  const [currentList, setCurrentList] = useState<any>([]);
-  const [search] = useState<any>('');
+  const [list, setList] = useState<Array<RatingReview>>([]);
+  const [currentList, setCurrentList] = useState<Array<RatingReview>>([]);
   const [page, setPage] = useState(0);
   const [size] = React.useState(10);
   const [total, setTotal] = useState(0);
@@ -69,14 +69,12 @@ function HomeItemDetail() {
         itemId,
       });
       ratingStarListTrigger(itemId);
-      const res = allRatingReviewTrigger({ itemId, page, size }).then(
-        (resp) => {
-          if (resp.isSuccess) {
-            setList(resp.data.data.list);
-            setTotal(resp.data.data.total);
-          }
+      allRatingReviewTrigger({ itemId, page, size }).then((resp) => {
+        if (resp.isSuccess) {
+          setList(resp.data.data.list);
+          setTotal(resp.data.data.total);
         }
-      );
+      });
     }
   }, []);
 
@@ -86,7 +84,7 @@ function HomeItemDetail() {
     await allRatingReviewTrigger({ itemId, page: newPage, size }).then(
       (resp) => {
         if (resp.isSuccess) {
-          setList((prev: any) => [...prev, ...resp.data.data.list]);
+          setList((prev) => [...prev, ...resp.data.data.list]);
         }
       }
     );
@@ -98,9 +96,9 @@ function HomeItemDetail() {
     await allRatingReviewTrigger({ itemId, page: newPage, size }).then(
       (resp) => {
         if (resp.isSuccess) {
-          setList((prev: any) =>
+          setList((prev) =>
             prev?.filter(
-              (el: any) => !currentList.some((items: any) => items.id === el.id)
+              (el) => !currentList.some((items) => items.id === el.id)
             )
           );
           setCurrentList(resp.data.data.list);
@@ -182,7 +180,7 @@ function HomeItemDetail() {
     });
   };
 
-  const addToBasketHandler = (tempCartData: any) => {
+  const addToBasketHandler = (tempCartData: Item & { buyCount: number }) => {
     dispatch(addToCart(tempCartData));
   };
 
@@ -238,8 +236,11 @@ function HomeItemDetail() {
                 className="btn-add rounded-[0.625rem] bg-primary text-sm font-semibold text-foreground sm:w-auto"
                 variant="contained"
                 onClick={() => {
-                  const cartItem = {
+                  if (!subCategoryItemData) return;
+                  const cartItem: Item & { buyCount: number } = {
                     ...subCategoryItemData.data,
+                    price: Number(subCategoryItemData.data.price),
+                    loyaltyCoins: Number(subCategoryItemData.data.loyaltyCoins),
                     buyCount: count,
                   };
                   addToBasketHandler(cartItem);
@@ -251,7 +252,7 @@ function HomeItemDetail() {
           </div>
         </div>
         <div className="col-span-12 rounded-xl bg-white p-3 shadow-md xl:col-span-5 2xl:col-span-4">
-          <HomeItemDetailAccordin
+          <HomeItemDetailAccordion
             data={subCategoryItemData?.data.homeCatItemFaq}
           />
         </div>
@@ -300,7 +301,7 @@ function HomeItemDetail() {
               {ratingStarListData?.data?.list
                 .slice(1)
                 ?.reverse()
-                ?.map((ratings: any, index: number) => {
+                ?.map((ratings, index: number) => {
                   return (
                     <div
                       className="mx-5 grid grid-cols-12 items-center"
@@ -331,30 +332,30 @@ function HomeItemDetail() {
             </div>
           ) : (
             list &&
-            list.map((items: any, index: number) => {
+            list.map((item, index: number) => {
               return (
                 <div key={index}>
-                  {index !== items.length - 1 && <Divider className="my-5" />}
+                  {index !== list.length - 1 && <Divider className="my-5" />}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
                       <Rating
                         name="half-rating-read"
-                        value={Number(items?.star)}
+                        value={Number(item?.star)}
                         precision={0.5}
                         readOnly
                       />
                       <span className="mx-3 text-sm font-normal text-[#6A6A6A]">
-                        {items.appUser?.firstName} {items.appUser?.lastName}
+                        {item.appUser?.firstName} {item.appUser?.lastName}
                       </span>
                     </div>
                     <div>
                       <span className="text-sm text-[#6A6A6A]">
-                        {dayjs(items.createdDate).fromNow()}
+                        {dayjs(item.createdDate).fromNow()}
                       </span>
                     </div>
                   </div>
                   <div className="my-1 w-[70%] text-sm font-normal">
-                    <span>{items.review}</span>
+                    <span>{item.review}</span>
                   </div>
                 </div>
               );

@@ -5,12 +5,13 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
+import { ItemFaq } from '../../interfaces/product';
 
 type Props = {
-  data: Array<object>;
+  data: Array<ItemFaq> | null | undefined;
 };
 
-function HomeItemDetailAccordin({ data }: Props) {
+function HomeItemDetailAccordion({ data }: Props) {
   const [expanded, setExpanded] = React.useState<string | false>(`panel0`);
 
   const handleChange =
@@ -20,8 +21,8 @@ function HomeItemDetailAccordin({ data }: Props) {
 
   return (
     <div>
-      {data?.length > 0 ? (
-        data?.map((item: any, index: number) => {
+      {data && data.length > 0 ? (
+        data.map((item, index: number) => {
           return (
             <>
               <Accordion
@@ -60,4 +61,4 @@ function HomeItemDetailAccordin({ data }: Props) {
   );
 }
 
-export default HomeItemDetailAccordin;
+export default HomeItemDetailAccordion;

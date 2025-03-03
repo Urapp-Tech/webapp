@@ -26,7 +26,7 @@ export const fetchCategoriesItems = createAsyncThunk(
   async (
     data: {
       tenant: string | undefined;
-      branch: any | undefined;
+      branch: string | undefined;
       categoryId: string;
     },
     { rejectWithValue }
@@ -34,6 +34,9 @@ export const fetchCategoriesItems = createAsyncThunk(
     try {
       if (!data.tenant) {
         throw new Error('No Tenant');
+      }
+      if (!data.tenant) {
+        throw new Error('No Branch');
       }
       const { tenant, branch } = data;
       delete data.tenant;

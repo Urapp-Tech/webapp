@@ -119,7 +119,7 @@ function MyBasketPage() {
       pickupDateTime,
       voucherCode,
       tenant: cartData?.tenant,
-      products: cartItems.map((item: any) => {
+      products: cartItems.map((item) => {
         return { id: item.id, quantity: item.buyCount };
       }),
     };
@@ -222,7 +222,7 @@ function MyBasketPage() {
       pickupDateTime,
       voucherCode,
       tenant: cartData?.tenant,
-      products: cartItems.map((item: any) => {
+      products: cartItems.map((item) => {
         return { id: item.id, quantity: item.buyCount };
       }),
     };
@@ -285,7 +285,6 @@ function MyBasketPage() {
       .add(tenantConfig?.minimumDeliveryTime ?? 3, 'day')
       .toISOString();
     const tempAddress = userAddress[0] ? userAddress[0].id : null;
-    console.log('user::::::', user);
     const updateCartPayload: UpdateCartPayload = {
       appUser: user?.id,
       appUserAddress: tempAddress,
@@ -295,7 +294,7 @@ function MyBasketPage() {
       pickupDateTime: dropDateTime,
       voucherCode,
       tenant: cartData?.tenant,
-      products: cartItems.map((item: any) => {
+      products: cartItems.map((item) => {
         return { id: item.id, quantity: item.buyCount };
       }),
     };
@@ -431,7 +430,7 @@ function MyBasketPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {cartItems.map((item: any) => (
+                    {cartItems.map((item) => (
                       <tr key={item.id}>
                         <td>
                           <div className="flex items-center gap-x-5">

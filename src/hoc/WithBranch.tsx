@@ -187,7 +187,7 @@ function SelectBranchComponent({ branches }: { branches: Array<Branch> }) {
   );
 }
 
-function WithBranch({ children }: any) {
+function WithBranch({ children }: { children: React.ReactNode }) {
   const [isPending, setIsPending] = useState(false);
   const [data, setData] = useState<GetBranchesResponse | null>(null);
   const [error, setError] = useState<any>(null);

@@ -18,7 +18,7 @@ function ProductOfferSwiper({ banners }: ProductOfferSwiperProps) {
 
   const pagination = {
     clickable: true,
-    renderBullet(index: number, className: any) {
+    renderBullet(index: number, className: string) {
       return `<span class="${className}"></span>`;
     },
   };

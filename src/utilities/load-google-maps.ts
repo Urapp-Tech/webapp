@@ -1,6 +1,17 @@
 import { Loader } from '@googlemaps/js-api-loader';
 
-let map: any = null;
+let map: Readonly<{
+  Map: typeof google.maps.Map;
+  Geocoder: typeof google.maps.Geocoder;
+  GeocoderStatus: typeof google.maps.GeocoderStatus;
+  Marker: typeof google.maps.Marker;
+  Animation: typeof google.maps.Animation;
+  LatLng: typeof google.maps.LatLng;
+  event: typeof google.maps.event;
+  TravelMode: typeof google.maps.TravelMode;
+  DirectionsService: typeof google.maps.DirectionsService;
+  DirectionsRenderer: typeof google.maps.DirectionsRenderer;
+}> | null = null;
 
 async function loadGoogleMaps() {
   if (!map) {
@@ -29,7 +40,7 @@ async function loadGoogleMaps() {
       routesPromise,
     ]);
 
-    map = {
+    map = Object.freeze({
       Map,
       Geocoder,
       GeocoderStatus,
@@ -40,7 +51,7 @@ async function loadGoogleMaps() {
       TravelMode,
       DirectionsService,
       DirectionsRenderer,
-    };
+    });
   }
 
   return map;

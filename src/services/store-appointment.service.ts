@@ -8,7 +8,7 @@ import { getHeaders } from '../utilities/constant';
 
 import network from './network';
 
-const getBarbersList = (storeServiceCatItemId: any, params?: object) => {
+const getBarbersList = (storeServiceCatItemId: string, params?: object) => {
   return network.get<GetProviderListResponse>(
     API_PATHS.getBarbersList(storeServiceCatItemId),
     {
@@ -19,8 +19,8 @@ const getBarbersList = (storeServiceCatItemId: any, params?: object) => {
 };
 
 const getBarberBookedTimeSlots = (
-  storeEmp: any,
-  date: any,
+  storeEmp: string,
+  date: string,
   params?: object
 ) => {
   return network.get<GetProviderBookedTimeSlotsResponse>(
@@ -39,35 +39,39 @@ const appointmentCreate = (data: any, params?: object) => {
   });
 };
 
-const fetchAllAppointments = (tenant: any, body: any) => {
+const fetchAllAppointments = (tenant: string, body: any) => {
   return network.get(API_PATHS.getAllPreviousAppointments(tenant), {
     headers: getHeaders(),
     params: body,
   });
 };
 
-const findAppointment = (appointment: any, body?: any) => {
+const findAppointment = (appointment: string, body?: any) => {
   return network.get(API_PATHS.findAppointment(appointment), {
     headers: getHeaders(),
     params: body,
   });
 };
 
-const rescheduleAppointment = (appointment: any, data: any, body?: any) => {
+const rescheduleAppointment = (appointment: string, data: any, body?: any) => {
   return network.post(API_PATHS.rescheduleAppointment(appointment), data, {
     headers: getHeaders(),
     params: body,
   });
 };
 
-const CheckEmployeeAvailable = (employeeId: any, date: any, body?: any) => {
+const CheckEmployeeAvailable = (
+  employeeId: string,
+  date: string,
+  body?: any
+) => {
   return network.get(API_PATHS.CheckEmployeeAvailable(employeeId, date), {
     headers: getHeaders(),
     params: body,
   });
 };
 
-const getUserAppointmentsByDate = (date: any, body?: any) => {
+const getUserAppointmentsByDate = (date: string, body?: any) => {
   return network.get(API_PATHS.getUserAppointmentsByDate(date), {
     headers: getHeaders(),
     params: body,

@@ -194,7 +194,7 @@ function ProductPage() {
       return (
         <CategoriesCard
           categories={categoryData.data}
-          onClick={(id: string) =>
+          onClick={(id) =>
             subCategoryTrigger({
               branch: branch ? branch.id : undefined,
               menuId: id,

@@ -27,7 +27,7 @@ const formOptions = { resolver: zodResolver(forgotPasswordSchema) };
 
 function ForgotPasswordPage() {
   const systemConfigData = useAppSelector(
-    (state: any) => state.appState.systemConfig
+    (state) => state.appState.systemConfig
   );
   const [isLoader, setIsLoader] = useState(false);
   const {

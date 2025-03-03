@@ -4,7 +4,7 @@ export interface AppointmentProvider {
   phone: string;
   cnic: string;
   password: string;
-  dob: any;
+  dob: string;
   note: string;
   startDateTime: string;
   endDateTime: string;
@@ -97,5 +97,13 @@ export interface Appointment {
   storeServiceCategory: string;
   paymentStatus: string;
   code: string;
+  appUser: string;
+  appointmentType: string;
+  guestType: string;
+  branch: string;
+  appointmentDiscount: string;
+  isManuel: boolean;
+  appointmentDiscountAmountType: string;
   service: string;
+  storeEmployeeName: string;
 }

@@ -1,3 +1,5 @@
+import { ORDER_STATUS } from '../utilities/constant';
+
 export type GetOrderListResponse = {
   success: boolean;
   code: number;
@@ -13,6 +15,8 @@ export type GetOrderListData = {
   totalResults: number;
 };
 
+export type OrderStatusType = (typeof ORDER_STATUS)[keyof typeof ORDER_STATUS];
+
 export type Order = {
   appOrderNumber: string;
   id: string;
@@ -20,7 +24,7 @@ export type Order = {
   updatedDate: string;
   appUser: string;
   tenant: string;
-  status: string;
+  status: OrderStatusType;
   paymentStatus: string;
   pickupDateTime: string;
   dropDateTime: string;

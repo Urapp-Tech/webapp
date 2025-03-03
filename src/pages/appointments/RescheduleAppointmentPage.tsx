@@ -148,8 +148,11 @@ export default function RescheduleAppointmentPage() {
   }
 
   const getAppointment = async () => {
+    if (!id) {
+      return;
+    }
     setIsLoader(true);
-    await storeAppointmentService
+    storeAppointmentService
       .findAppointment(id)
       .then((res: any) => {
         if (res.data.success) {

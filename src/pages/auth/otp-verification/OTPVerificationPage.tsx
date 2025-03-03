@@ -33,13 +33,12 @@ function OTPVerificationPage() {
 
   const [OTP, setOTP] = useState('');
   const location = useLocation();
-  const { state } = location;
+  const { state: locationState } = location;
   const [isLoader, setIsLoader] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const systemConfigData = useAppSelector(
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    (state: any) => state.appState.systemConfig
+    (state) => state.appState.systemConfig
   );
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleClickShowNewPassword = () =>
@@ -74,7 +73,7 @@ function OTPVerificationPage() {
 
     const newPassObj = {
       password: data.newPassword,
-      email: state?.email,
+      email: locationState?.email,
       otp: OTP,
     };
     authService
@@ -133,7 +132,7 @@ function OTPVerificationPage() {
                   An 4 digit code has been sent to
                 </span>
                 <span className="block text-center text-[12px] font-semibold leading-[normal] text-[#6A6A6A]">
-                  {state?.email}
+                  {locationState?.email}
                 </span>
                 <span className="mx-10 mt-2 block text-center text-[11px] font-normal leading-[normal] text-[#6A6A6A]">
                   Note : Please check your email for the OTP code and paste it

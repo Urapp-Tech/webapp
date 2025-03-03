@@ -71,7 +71,7 @@ export const employeeRatingSlice = createSlice({
         state.totalCount =
           action.payload?.data?.totalCount || action.payload?.data?.length || 0;
       })
-      .addCase(fetchEmployeeRatingSlice.rejected, (state, action: any) => {
+      .addCase(fetchEmployeeRatingSlice.rejected, (state, action) => {
         state.loading = false;
         if (action.error) {
           state.notifyMessage = {
@@ -92,7 +92,7 @@ export const employeeRatingSlice = createSlice({
           );
         }
       })
-      .addCase(updateEmployeeRatingSlice.rejected, (state, action: any) => {
+      .addCase(updateEmployeeRatingSlice.rejected, (state, action) => {
         state.loading = false;
         if (action.error) {
           state.notifyMessage = {

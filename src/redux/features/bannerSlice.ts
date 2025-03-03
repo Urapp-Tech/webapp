@@ -61,7 +61,7 @@ export const bannerSlice = createSlice({
         state.totalCount =
           action.payload?.data?.totalCount || action.payload?.data?.length || 0;
       })
-      .addCase(fetchBanners.rejected, (state, action: any) => {
+      .addCase(fetchBanners.rejected, (state, action) => {
         state.loading = false;
         if (action.error) {
           state.notifyMessage = {

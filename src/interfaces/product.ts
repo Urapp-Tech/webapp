@@ -107,3 +107,33 @@ export interface ItemFaq {
   tenant: string;
   updatedDate: string;
 }
+
+export interface GetCategoryItemDetailsResponse {
+  success: boolean;
+  code: number;
+  message: string;
+  data: ItemDetails;
+}
+
+export interface ItemDetails {
+  id: string;
+  name: string;
+  icon: string;
+  banner: string;
+  desc: string;
+  price: string;
+  isActive: boolean;
+  homeCategory: string;
+  createdBy: string;
+  updatedBy: string;
+  createdDate: string;
+  updatedDate: string;
+  quantity: number;
+  isDeleted: boolean;
+  loyaltyCoins: string;
+  branch: string;
+  tenant: string;
+  parent: null;
+  isOverwrite: boolean;
+  homeCatItemFaq: Array<ItemFaq> | null;
+}

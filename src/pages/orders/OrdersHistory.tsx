@@ -106,7 +106,7 @@ function OrdersHistory({
       </div>
       <div className="orders-card">
         {orderListData?.data ? (
-          <OrdersTable orderListData={orderListData} />
+          <OrdersTable orderListData={orderListData.data} />
         ) : null}
         <div className="item-center flex w-full justify-center">
           {orderListData?.data ? (
