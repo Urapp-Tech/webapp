@@ -25,35 +25,35 @@ import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import cn from '../../utilities/class-names';
 
 const links = [
+  // {
+  //   name: 'Appointments',
+  //   path: 'home',
+  //   icon: (isActive: boolean) => (
+  //     <HomeOutlinedIcon
+  //       className={cn(
+  //         'h-auto w-5 text-foreground transition-all duration-[0.3s]',
+  //         !isActive && 'opacity-75'
+  //       )}
+  //       fontSize="inherit"
+  //     />
+  //   ),
+  // },
+  // {
+  //   name: 'Appointments History',
+  //   path: 'appointments-history',
+  //   icon: (isActive: boolean) => (
+  //     <HistoryIcon
+  //       className={cn(
+  //         'h-auto w-5 text-foreground transition-all duration-[0.3s]',
+  //         !isActive && 'opacity-75'
+  //       )}
+  //       fontSize="inherit"
+  //     />
+  //   ),
+  // },
   {
-    name: 'Appointments',
+    name: 'Services',
     path: 'home',
-    icon: (isActive: boolean) => (
-      <HomeOutlinedIcon
-        className={cn(
-          'h-auto w-5 text-foreground transition-all duration-[0.3s]',
-          !isActive && 'opacity-75'
-        )}
-        fontSize="inherit"
-      />
-    ),
-  },
-  {
-    name: 'Appointments History',
-    path: 'appointments-history',
-    icon: (isActive: boolean) => (
-      <HistoryIcon
-        className={cn(
-          'h-auto w-5 text-foreground transition-all duration-[0.3s]',
-          !isActive && 'opacity-75'
-        )}
-        fontSize="inherit"
-      />
-    ),
-  },
-  {
-    name: 'Products',
-    path: 'products',
     icon: (isActive: boolean) => (
       <ShoppingCartIcon
         className={cn(

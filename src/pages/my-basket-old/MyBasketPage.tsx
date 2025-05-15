@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import DiscountIcon from '@mui/icons-material/Discount';
@@ -6,41 +5,35 @@ import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import Button from '@mui/material/Button';
-import { DateRangeIcon } from '@mui/x-date-pickers/icons';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import debounce from '@mui/material/utils/debounce';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateRangeIcon } from '@mui/x-date-pickers/icons';
 import dayjs from 'dayjs';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AlertBox from '../../components/common/SnackBar';
 import useAlert from '../../hooks/alert.hook';
-import { setPickup, setDropOff } from '../../redux/features/DateAndTime';
+import { setDropOff, setPickup } from '../../redux/features/DateAndTime';
 import {
   decrementQuantity,
   incrementQuantity,
   removeFromCart,
   resetCart,
   setCartData,
-  setCartItems,
 } from '../../redux/features/cartStateSlice';
 import { setUserAddressList } from '../../redux/features/deviceState';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import addressService from '../../services/address.service';
 import cartService, { UpdateCartPayload } from '../../services/cart.service';
 import orderService from '../../services/order.service';
-import voucherService from '../../services/voucher.service';
-import { Voucher } from '../../types/voucher.types';
-import { CURRENCY_PREFIX } from '../../utilities/constant';
 import promiseHandler from '../../utilities/promise-handler';
+import DatePickerButton from './DatePickerButton';
 import PayFastForm from './PayFastForm';
 import PaymentOptionPopup from './PaymentOptionPopup';
-import VouchersPopup from './VouchersPopup';
-import DatePickerButton from './DatePickerButton';
 
 function MyBasketPage() {
   const {
@@ -52,49 +45,22 @@ function MyBasketPage() {
     setAlertSeverity,
   } = useAlert();
 
-  const { DropOff, PickUp } = useAppSelector((state) => state.dateState);
-  // const [PickUp, setPickup] = useState<Date | null>(new Date());
-  // const [DropOff, setDropOff] = useState<Date | null>(new Date());
-
-  const cartItems = useAppSelector((state) => state.cartState.cartItems);
-  const cartData = useAppSelector((state) => state.cartState.cartData);
+  const { dropOff, pickUp } = useAppSelector((state) => state.dateState);
+  const { cartItems, cartData } = useAppSelector((state) => state.cartState);
   const tenant = useAppSelector((state) => state.deviceStates.tenant);
   const tenantConfig = useAppSelector(
     (state) => state.deviceStates.tenantConfig
   );
   const user = useAppSelector((state) => state.authState.user);
   const userAddress = useAppSelector((state) => state.deviceStates.addressList);
-  const branch = useAppSelector((state) => state.branchState.branch);
   const dispatch = useAppDispatch();
-  const [voucherCode, setVoucherCode] = useState(cartData?.voucherCode);
+  const [voucherCode, setVoucherCode] = useState('');
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [payFastFormData, setPayFastFormData] = useState<any>(null);
   const [openPaymentSelectPopup, setOpenPaymentSelectPopup] = useState(false);
   const minimumDeliveryTime = tenant?.tenantConfig?.minimumDeliveryTime ?? 1;
   const formSubmitButtonRef = useRef<HTMLButtonElement>(null);
-  const [openVouchersPopup, setOpenVouchersPopup] = useState(false);
-  const [vouchers, setVouchers] = useState<Array<Voucher>>([]);
-  useEffect(() => {
-    async function getVouchers() {
-      const getVouchersPromise = voucherService.getVouchers();
-      const [getVouchersResult, getVouchersError] =
-        await promiseHandler(getVouchersPromise);
-      if (getVouchersError) {
-        return setVouchers([]);
-      }
-      if (!getVouchersResult.data.success) {
-        return setVouchers([]);
-      }
-      return setVouchers(getVouchersResult.data.data);
-    }
-    getVouchers().catch((error) => console.log('error :>> ', error));
-  }, [user]);
-
-  const handleVoucherSelect = (code: string) => {
-    setVoucherCode(code);
-    setOpenVouchersPopup(false);
-  };
 
   const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
     if (value) {
@@ -112,10 +78,8 @@ function MyBasketPage() {
 
   const onCheckoutPayFast = async () => {
     const tempAddress = userAddress[0] ? userAddress[0].id : null;
-    const pickupDateTime = dayjs(new Date()).toISOString();
-    const dropDateTime = dayjs(pickupDateTime)
-      .add(tenantConfig?.minimumDeliveryTime ?? 3, 'day')
-      .toISOString();
+    const pickupDateTime = pickUp;
+    const dropDateTime = dropOff;
     const updateCartPayload: UpdateCartPayload = {
       appUser: user?.id,
       appUserAddress: tempAddress,
@@ -125,7 +89,7 @@ function MyBasketPage() {
       pickupDateTime,
       voucherCode,
       tenant: cartData?.tenant,
-      products: cartItems.map((item) => {
+      products: cartItems.map((item: any) => {
         return { id: item.id, quantity: item.buyCount };
       }),
     };
@@ -145,15 +109,8 @@ function MyBasketPage() {
       return;
     }
     dispatch(setCartData(updateCartResult.data.data.cart));
-    if (!branch) {
-      setAlertSeverity('error');
-      setAlertMessage('no branch selected');
-      setShowAlert(true);
-      return;
-    }
     const addOrderPromise = orderService.addPayFastOrder({
       cartId: updateCartResult.data.data.cart.id,
-      branch: branch.id,
     });
     const [addOrderResult, addOrderError] =
       await promiseHandler(addOrderPromise);
@@ -172,6 +129,7 @@ function MyBasketPage() {
     dispatch(setPickup(null));
     dispatch(setDropOff(null));
     dispatch(resetCart());
+    // window.location.replace(orderResponse.data.data.paymentUrl);
     const payFastTokenPromise = orderService.getPayFastToken();
     const [payFastTokenResult, payFastTokenError] =
       await promiseHandler(payFastTokenPromise);
@@ -203,10 +161,10 @@ function MyBasketPage() {
       items: addOrderResult.data.data.orderItems.map((item: any) => ({
         id: item.itemId,
         quantity: item.quantity,
-        price: item.unitPrice.replace('PKR', ''),
+        price: item.unitPrice.replace('$', ''),
       })),
       orderId: addOrderResult.data.data.order.id,
-      currencyType: 'PKR',
+      currencyType: 'USD',
     });
     setTimeout(() => {
       formSubmitButtonRef?.current?.click();
@@ -215,10 +173,8 @@ function MyBasketPage() {
 
   const onCheckoutCash = async () => {
     const tempAddress = userAddress[0] ? userAddress[0].id : null;
-    const pickupDateTime = dayjs(new Date()).toISOString();
-    const dropDateTime = dayjs(pickupDateTime)
-      .add(tenantConfig?.minimumDeliveryTime ?? 3, 'day')
-      .toISOString();
+    const pickupDateTime = pickUp;
+    const dropDateTime = dropOff;
     const updateCartPayload: UpdateCartPayload = {
       appUser: user?.id,
       appUserAddress: tempAddress,
@@ -228,7 +184,7 @@ function MyBasketPage() {
       pickupDateTime,
       voucherCode,
       tenant: cartData?.tenant,
-      products: cartItems.map((item) => {
+      products: cartItems.map((item: any) => {
         return { id: item.id, quantity: item.buyCount };
       }),
     };
@@ -249,15 +205,8 @@ function MyBasketPage() {
       return;
     }
     dispatch(setCartData(updateCartResult.data.data.cart));
-    if (!branch) {
-      setAlertSeverity('error');
-      setAlertMessage('branch not selected');
-      setShowAlert(true);
-      return;
-    }
     const addOrderPromise = orderService.addCashOrder({
       cartId: updateCartResult.data.data.cart.id,
-      branch: branch.id,
     });
     const [addOrderResult, addOrderError] =
       await promiseHandler(addOrderPromise);
@@ -300,31 +249,17 @@ function MyBasketPage() {
       pickupDateTime: dropDateTime,
       voucherCode,
       tenant: cartData?.tenant,
-      products: cartItems.map((item) => {
+      products: cartItems.map((item: any) => {
         return { id: item.id, quantity: item.buyCount };
       }),
     };
     const updateCartPromise = cartService.updateCart(updateCartPayload);
-
     const [updateCartResult, updateCartError] =
       await promiseHandler(updateCartPromise);
-
     if (!updateCartResult) {
       setAlertSeverity('error');
       setAlertMessage(updateCartError.message);
       setShowAlert(true);
-      return;
-    }
-    if (
-      updateCartResult.data.message ===
-      `Cart Does Not Exist Or Its Status Is Set To 'Processing'`
-    ) {
-      cartService.userCart().then((cartResponse) => {
-        if (cartResponse.data.success) {
-          dispatch(setCartData(cartResponse.data.data.cart));
-          dispatch(setCartItems(cartItems));
-        }
-      });
       return;
     }
     if (!updateCartResult.data.success) {
@@ -334,13 +269,11 @@ function MyBasketPage() {
       return;
     }
     dispatch(setCartData(updateCartResult.data.data.cart));
-  }, [cartItems, voucherCode]);
+  }, [cartItems]);
 
   useEffect(() => {
-    updateCart().catch((error) => {
-      console.error('error :>> ', error);
-    });
-  }, [cartItems, voucherCode]);
+    updateCart().then();
+  }, [cartItems]);
 
   const handleRemoveFromCart = async (id: string) => {
     dispatch(removeFromCart(id));
@@ -387,14 +320,6 @@ function MyBasketPage() {
     getUserAddress().then();
   }, [user]);
 
-  const onVoucherCodeChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    setVoucherCode(event.target.value);
-  };
-
-  const voucherCodeDelayed = debounce(onVoucherCodeChange, 500);
-
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <AlertBox
@@ -402,12 +327,6 @@ function MyBasketPage() {
         setSeverity={alertSeverity}
         alertOpen={showAlert}
         setAlertOpen={setShowAlert}
-      />
-      <VouchersPopup
-        vouchers={vouchers}
-        open={openVouchersPopup}
-        setOpen={setOpenVouchersPopup}
-        handleVoucherSelect={handleVoucherSelect}
       />
       <PaymentOptionPopup
         handlePopupClose={handlePopupClose}
@@ -430,16 +349,19 @@ function MyBasketPage() {
                       <th>Items</th>
                       <th>Quantity</th>
                       <th>Subtotal</th>
-                      <th scope="col" aria-label="Empty Header">
-                        &nbsp;
-                      </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {cartItems.map((item) => (
+                    {cartItems.map((item: any) => (
                       <tr key={item.id}>
                         <td>
                           <div className="flex items-center gap-x-5">
+                            <IconButton
+                              className="btn-delete"
+                              onClick={() => handleRemoveFromCart(item.id)}
+                            >
+                              <DeleteOutlineOutlinedIcon className="text-2xl" />
+                            </IconButton>
                             <div className="product">
                               <img
                                 className="pic"
@@ -451,21 +373,8 @@ function MyBasketPage() {
                           </div>
                         </td>
 
-                        <td>
-                          {CURRENCY_PREFIX}
-                          &nbsp;
-                          {Number(item?.price ?? 0).toLocaleString(undefined, {
-                            minimumFractionDigits: 2,
-                          })}
-                        </td>
-                        <td>
-                          {Number(item?.buyCount ?? 0).toLocaleString(
-                            undefined,
-                            {
-                              minimumFractionDigits: 0,
-                            }
-                          )}
-                        </td>
+                        <td>${Number(item?.price ?? 0).toFixed(2)}</td>
+                        <td>{Number(item?.buyCount ?? 0).toFixed(2)}</td>
                         <td>
                           <span className="flex w-full flex-row items-center justify-start">
                             <IconButton
@@ -489,24 +398,11 @@ function MyBasketPage() {
                           </span>
                         </td>
                         <td>
-                          {CURRENCY_PREFIX}
-                          &nbsp;
+                          $
                           {(
                             Number(item?.price ?? 0) *
                             Number(item?.buyCount ?? 0)
-                          ).toLocaleString(undefined, {
-                            minimumFractionDigits: 2,
-                          })}
-                        </td>
-                        <td aria-label="Empty Header">
-                          <div className="flex items-center gap-x-5">
-                            <IconButton
-                              className="btn-delete"
-                              onClick={() => handleRemoveFromCart(item.id)}
-                            >
-                              <DeleteOutlineOutlinedIcon className="text-2xl" />
-                            </IconButton>
-                          </div>
+                          ).toFixed(2)}
                         </td>
                       </tr>
                     ))}
@@ -515,36 +411,29 @@ function MyBasketPage() {
               </div>
               <div className="my-2.5 flex items-center justify-between px-5">
                 <div className="flex items-center">
-                  {user && Boolean(vouchers.length) && (
-                    <>
-                      <p className="mr-2 text-xs font-semibold text-[var(--dark-100)]">
-                        Add Promo Code
-                      </p>
-                      <FormControl variant="standard" size="small">
-                        <Input
-                          className="min-w-60 min-h-[10px] rounded-[0.625rem] border border-solid border-[var(--light-400)] p-2 text-xs font-normal text-faded"
-                          disableUnderline
-                          inputProps={{
-                            placeholder: 'Enter Promo Code',
-                            className: 'p-[initial]',
-                          }}
-                          value={voucherCode}
-                          readOnly
-                          startAdornment={
-                            <InputAdornment position="start">
-                              <IconButton
-                                onClick={() => setOpenVouchersPopup(true)}
-                                size="small"
-                                className="text-orange-400"
-                              >
-                                <DiscountIcon />
-                              </IconButton>
-                            </InputAdornment>
-                          }
-                        />
-                      </FormControl>
-                    </>
-                  )}
+                  <p className="mr-2 text-xs font-semibold text-[var(--dark-100)]">
+                    Add Promo Code
+                  </p>
+                  <FormControl variant="standard" size="small">
+                    <Input
+                      className="min-w-60 min-h-[10px] rounded-[0.625rem] border border-solid border-[var(--light-400)] p-2 text-xs font-normal text-faded"
+                      disableUnderline
+                      inputProps={{
+                        placeholder: 'Enter Promo Code',
+                        className: 'p-[initial]',
+                      }}
+                      value={voucherCode}
+                      onChange={(e) => setVoucherCode(e.target.value)}
+                      startAdornment={
+                        <InputAdornment
+                          className="text-orange-100"
+                          position="start"
+                        >
+                          <DiscountIcon />
+                        </InputAdornment>
+                      }
+                    />
+                  </FormControl>
                 </div>
                 <Button
                   className="flex items-center border-none text-xs font-semibold capitalize text-[var(--dark-100)]"
@@ -567,12 +456,12 @@ function MyBasketPage() {
                     id="pick-up-date-time-picker"
                     icon={<DateRangeIcon />}
                     text="Pick up time"
-                    initialValue={dayjs(PickUp ?? new Date())}
+                    initialValue={dayjs(pickUp ?? new Date())}
                   />
                   <div className="mb-2 flex items-center">
                     <p className="selected-value">
-                      {PickUp
-                        ? dayjs(PickUp).format('ddd, MMM D, YYYY HH:mm a')
+                      {pickUp
+                        ? dayjs(pickUp).format('ddd, MMM D, YYYY HH:mm a')
                         : 'Select a date'}
                     </p>
                   </div>
@@ -583,12 +472,12 @@ function MyBasketPage() {
                     id="drop-off-date-time-picker"
                     icon={<DateRangeIcon />}
                     text="Urgent time"
-                    initialValue={dayjs(DropOff)}
+                    initialValue={dayjs(dropOff)}
                   />
                   <div className="mb-2 flex flex-col items-center">
                     <p className="selected-value w-full">
-                      {DropOff && dayjs(DropOff).isValid()
-                        ? dayjs(DropOff).format('ddd, MMM D, YYYY HH:mm a')
+                      {dropOff && dayjs(dropOff).isValid()
+                        ? dayjs(dropOff).format('ddd, MMM D, YYYY HH:mm a')
                         : null}
                     </p>
                     <br />
@@ -598,11 +487,6 @@ function MyBasketPage() {
                   </div>
                 </div>
               </div>
-              {/* <div className="w-full text-end text-sm ">
-                minimum time is
-                <span className="font-bold"> {minimumDeliveryTime}</span> days
-              </div> */}
-
               {user ? (
                 <div className="address-card">
                   <div className="key" style={{ width: '500px' }}>
@@ -618,64 +502,26 @@ function MyBasketPage() {
                 <div className="mb-4 flex items-center justify-between">
                   <p className="key">Total Amount</p>
                   <p className="value">
-                    {CURRENCY_PREFIX}
-                    &nbsp;
-                    {Number(cartData?.totalAmount ?? 0).toLocaleString(
-                      undefined,
-                      { minimumFractionDigits: 2 }
-                    )}
+                    ${Number(cartData?.totalAmount ?? 0).toFixed(2)}
                   </p>
                 </div>
                 <div className="mb-4 flex items-center justify-between">
                   <p className="key">Discount</p>
-                  <p className="value">
-                    {CURRENCY_PREFIX}
-                    &nbsp;
-                    {Number(cartData?.discount ?? 0).toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                    })}
-                  </p>
-                </div>
-                <div className="mb-4 flex items-center justify-between">
-                  <p className="key">Loyalty Discount</p>
-                  <p className="value">
-                    {CURRENCY_PREFIX}
-                    &nbsp;
-                    {Number(cartData?.discountLoyaltyCoins ?? 0).toLocaleString(
-                      undefined,
-                      {
-                        minimumFractionDigits: 2,
-                      }
-                    )}
-                  </p>
+                  <p className="value">$0.00</p>
                 </div>
                 <div className="mb-4 flex items-center justify-between">
                   <p className="key">
-                    HST
-                    {Number(cartData?.gstPercentage ?? 0).toLocaleString(
-                      undefined,
-                      { minimumFractionDigits: 0 }
-                    )}
-                    %
+                    HST {Number(cartData?.gstPercentage ?? 0).toFixed(0)}%
                   </p>
                   <p className="value">
-                    {CURRENCY_PREFIX}
-                    &nbsp;
-                    {Number(cartData?.gstAmount ?? 0).toLocaleString(
-                      undefined,
-                      { minimumFractionDigits: 0 }
-                    )}
+                    {Number(cartData?.gstAmount ?? 0).toFixed(2)}
                   </p>
                 </div>
               </div>
               <div className="grand-total">
                 <p className="key">Grand Total</p>
                 <p className="value">
-                  {CURRENCY_PREFIX}
-                  &nbsp;
-                  {Number(cartData?.grandTotal ?? 0).toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                  })}
+                  ${Number(cartData?.grandTotal ?? 0).toFixed(2)}
                 </p>
               </div>
               <Button
@@ -691,15 +537,12 @@ function MyBasketPage() {
                     setShowAlert(true);
                     return;
                   }
-                  if (!PickUp && !DropOff) {
+                  if (!pickUp && !dropOff) {
                     setAlertSeverity('error');
                     setAlertMessage('Pickup Date time is Required');
                     setShowAlert(true);
                     return;
                   }
-                  // perform cash payment
-                  // onCheckoutCash();
-                  // stop payment selection popup
                   setOpenPaymentSelectPopup(true);
                 }}
                 color="inherit"

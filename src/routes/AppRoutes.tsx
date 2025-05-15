@@ -23,7 +23,7 @@ const SignOTPVerificationPage = lazy(
 const ResetPasswordPage = lazy(
   () => import('../pages/auth/reset-password/ResetPasswordPage')
 );
-const HomePage = lazy(() => import('../pages/home/HomePage'));
+const HomePage = lazy(() => import('../pages/home/ProductPage'));
 const ProductPage = lazy(() => import('../pages/home/ProductPage'));
 const OrdersPage = lazy(() => import('../pages/orders/OrdersPage'));
 const PaymentSettingPage = lazy(
@@ -145,24 +145,24 @@ export const routeObjects: Array<RouteObject> = [
           </Suspense>
         ),
       },
+      // {
+      //   path: 'reschedule-appointment/:id',
+      //   element: (
+      //     <Suspense fallback={<Loader />}>
+      //       <RescheduleAppointmentPage />
+      //     </Suspense>
+      //   ),
+      // },
+      // {
+      //   path: 'appointments-history',
+      //   element: (
+      //     <Suspense fallback={<Loader />}>
+      //       <AppointmentHistoryPage />
+      //     </Suspense>
+      //   ),
+      // },
       {
-        path: 'reschedule-appointment/:id',
-        element: (
-          <Suspense fallback={<Loader />}>
-            <RescheduleAppointmentPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: 'appointments-history',
-        element: (
-          <Suspense fallback={<Loader />}>
-            <AppointmentHistoryPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: 'products',
+        path: 'home',
         element: (
           <Suspense fallback={<Loader />}>
             <ProductPage />
