@@ -164,7 +164,7 @@ function SelectBranchComponent({ branches }: { branches: Array<Branch> }) {
                     <img
                       src={logo}
                       alt=""
-                      className="h-auto w-20 min-w-20 object-contain"
+                      className="min-w-20 h-auto w-20 object-contain"
                     />
                   ) : null}
                 </div>

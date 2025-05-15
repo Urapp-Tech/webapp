@@ -69,7 +69,7 @@ function TopBar({ setDrawerState }: Props) {
         <NavLink to="/dashboard/home">
           {systemConfigData?.tenantConfig?.logo ? (
             <img
-              className="h-16 min-w-40"
+              className="min-w-40 h-16"
               src={systemConfigData.tenantConfig.logo}
               alt=""
             />
